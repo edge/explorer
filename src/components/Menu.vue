@@ -11,6 +11,7 @@
       </router-link>
     </li>
   </ul>
+  <!-- search box here? -->
 </template>
 
 <script>

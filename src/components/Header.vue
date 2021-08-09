@@ -24,24 +24,22 @@
         showNav: false,
         mainNav: [
           {
-            link: "/overview",
-            text: "Overview"
+            link: "/",
+            text: "Summary"
+          },
+          {
+            link: "/blocks",
+            text: "Blocks"
           },
           {
             link: "/transactions",
             text: "Transactions"
           },
           {
-            link: "/staking",
-            text: "Staking",
-            disabled: true
-          },
-          {
-            link: "/governance",
-            text: "Governance",
-            disabled: true
-          },
-        ],
+            link: "/status",
+            text: "Status"
+          }
+        ]
       }
     },
     methods: {

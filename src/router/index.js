@@ -12,6 +12,7 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../views/Index.vue'
+import Summary from '@/views/Summary'
 import Transactions from '@/views/Transactions'
 import Overview from '@/views/Overview'
 
@@ -42,6 +43,11 @@ const routes = [
     path: '/transactions',
     name: 'Transactions',
     component: Transactions
+  },
+  {
+    path: '/summary',
+    name: 'Summary',
+    component: Summary
   }
 ]
 

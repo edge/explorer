@@ -24,7 +24,7 @@
         showNav: false,
         mainNav: [
           {
-            link: "/",
+            link: "/summary",
             text: "Summary"
           },
           {

@@ -12,6 +12,7 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../views/Index.vue'
+import Blocks from '@/views/Blocks'
 import Summary from '@/views/Summary'
 import Transactions from '@/views/Transactions'
 import Overview from '@/views/Overview'
@@ -33,6 +34,11 @@ const routes = [
     path: '/',
     name: 'Index',
     component: Index
+  },
+  {
+    path: '/blocks',
+    name: 'Blocks',
+    component: Blocks
   },
   {
     path: '/overview',

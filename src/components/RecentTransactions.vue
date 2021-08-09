@@ -1,32 +1,44 @@
 <template>
   <div class="w-full mb-25">
-    <h3>Recent Blocks</h3>
+    <h3>Recent Transcations</h3>
 
     <table class="w-full">
       <thead class="hidden lg:table-header-group">
         <tr>
-          <th width="15%">Height</th>
-          <th width="52%">Hash</th>
-          <th>Mined</th>
+          <th width="25%">Hash</th>
+          <th width="15%">From</th>
+          <th width="15%">To</th>
+          <th class="text-right">Amount</th>
         </tr>
       </thead>
       <tbody v-if="loading">
         <tr>
           <td colspan="3" class="py-35 bg-white w-full text-center">
-            Loading latest blocks...
+            Loading latest transactions...
           </td>
         </tr>
       </tbody>
-      <tbody v-if="blocks.length">
-        <tr v-for="block in blocks" :key="block.hash">
-          <td data-title="Height:">
-            {{ block.height }}
-          </td>
+      <tbody v-if="transactions.length">
+        <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
-            <span class="monospace">{{ block.hash.substr(0, 32) }}</span>
+            <span class="monospace">
+              <span class="monospace">
+                {{ sliceString(transaction.hash, 10) }}
+              </span>
+            </span>
           </td>
-          <td data-title="Mined:">
-            {{ timeSince(block.timestamp) }}
+          <td data-title="From:">
+            <span class="monospace">
+              {{ sliceString(transaction.sender, 10) }}
+            </span>
+          </td>
+          <td data-title="To:">
+            <span class="monospace">
+              {{ sliceString(transaction.recipient, 10) }}
+            </span>
+          </td>
+          <td class="text-right" data-title="Amount:">
+            {{ transaction.amount }} XE
           </td>
         </tr>
       </tbody>
@@ -36,32 +48,36 @@
 
 <script>
 import moment from 'moment'
-import { fetchBlocks } from '../utils/api'
+import { fetchTransactions } from '../utils/api'
 
 export default {
-  name: 'RecentBlocks',
+  name: 'RecentTransactions',
   data: function () {
     return {
       loading: false,
       polling: null,
-      blocks: []
+      transactions: []
     }
   },
   mounted() {
     this.loading = true
-    this.fetchBlocks()
+    this.fetchTransactions()
     this.pollData()
   },
   methods: {
-    async fetchBlocks() {
-      const { blocks } = await fetchBlocks({ limit: 5 })
-      this.blocks = blocks
+    async fetchTransactions() {
+      const { transactions, metadata } = await fetchTransactions('', { limit: 5 })
+console.log('transactions', transactions)
+      this.transactions = transactions
       this.loading = false
     },
     pollData() {
       this.polling = setInterval(() => {
-        this.fetchBlocks()
+        this.fetchTransactions()
       }, 10000)
+    },
+    sliceString(string, symbols) {
+      return string.length > symbols ? string.slice(0, symbols) : string
     },
     timeSince(ts) {
       return moment(ts).fromNow()

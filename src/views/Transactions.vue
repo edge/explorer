@@ -1,6 +1,7 @@
 <template>
-  <Header/>
-  <AccountPanel :wallet="this.wallet" />
+  <Header />
+  <SummaryHero />
+  <!-- <AccountPanel :wallet="this.wallet" /> -->
 
   <div class="bg-gray-200 py-35">
     <div class="container">
@@ -14,6 +15,7 @@ import Header from "@/components/Header"
 import TableItem from "@/components/TransactionsTableItem"
 import TransactionsTable from "@/components/TransactionsTable"
 import AccountPanel from "@/components/AccountPanel"
+import SummaryHero from "@/components/SummaryHero"
 
 import { fetchTransactions, fetchWallet } from '../utils/api'
 import { getWalletAddress } from '../utils/wallet'
@@ -36,11 +38,13 @@ export default {
     AccountPanel,
     TransactionsTable,
     TableItem,
-    Header
+    Header,
+    SummaryHero
   },
   mounted() {
-    this.loading = true
-    this.loadWallet()
+    // this.loading = true
+    // this.loadWallet()
+    this.fetchTransactions()
     this.pollData()
   },
   methods: {
@@ -48,10 +52,10 @@ export default {
       clearInterval(this.polling)
     },
     async fetchTransactions() {
-      const { transactions, metadata } = await fetchTransactions(this.wallet.address)
+      const { transactions, metadata } = await fetchTransactions('')
 
       this.transactions = transactions
-      this.metadata = metadata
+      // this.metadata = metadata
       this.loading = false
     },
     fetchWallet (address) {
@@ -66,12 +70,10 @@ export default {
       }
 
       this.wallet = await this.fetchWallet(walletAddress)
-      this.fetchTransactions()
     },
     pollData() {
       this.polling = setInterval(() => {
         this.fetchTransactions()
-        this.loadWallet()
       }, 10000)
     }
   }

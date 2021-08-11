@@ -12,6 +12,11 @@
         <button class="border-none rounded-l-none button button--success">Search</button>
       </div>
     </div>
+
+    <div class="text-white" v-if="block">
+      {{block}}
+    </div>
+
   </div>
 </template>
 
@@ -22,7 +27,10 @@ import {
 
 export default {
   name: "SummaryHero",
-  components: {SearchIcon}
+  components: {
+    SearchIcon
+  },
+  props: ['block']
 }
 </script>
 

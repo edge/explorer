@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <SummaryHero />
+  <SummaryHero :block="block" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">

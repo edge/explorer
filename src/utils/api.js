@@ -86,7 +86,11 @@ const fetchRates = async () => {
   return fetchData(`${INDEX_API_URL}/rates`)
 }
 
-const fetchTransactions = async (address, options = {}) => {
+const fetchTransactions = async ({ address, hash, options = {} }) => {
+  if (typeof address !== 'string') {
+    address = ''
+  }
+
   if (!options.page) {
     options.page = 1
   }
@@ -96,9 +100,28 @@ const fetchTransactions = async (address, options = {}) => {
   }
 
   const pendingTxUrl = `${BLOCKCHAIN_API_URL}/transactions/pending/${address}`
-  const txUrl = `${INDEX_API_URL}/transactions/${address}?page=${options.page}&limit=${options.limit}`
+  const txUrl = hash
+    ? `${INDEX_API_URL}/transaction/${hash}`
+    : `${INDEX_API_URL}/transactions/${address}?page=${options.page}&limit=${options.limit}`
 
   let txResults = []
+
+  if (hash) {
+    return fetchData(txUrl)
+      .then(tx => {
+        return {
+          amount: xeStringFromMicroXe(tx.amount),
+          date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
+          description: tx.data.memo || 'None',
+          hash: tx.hash,
+          recipient: tx.recipient,
+          sender: tx.sender,
+          timestamp: tx.timestamp,
+          confirmations: tx.confirmations,
+          pending: false
+        }
+      })
+  }
 
   // Fetch pending transactions first.
   return fetchData(pendingTxUrl)

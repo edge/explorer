@@ -1,10 +1,13 @@
 <template>
   <Header />
-  <SummaryHero />
+  <SummaryHero :transaction="transaction" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <TransactionsTable :transactions="transactions"/>
+      <div v-if="hash" class="bg-red-50">
+        {{transaction}}
+      </div>
+      <TransactionsTable :transactions="transactions" v-if="!transaction"/>
     </div>
   </div>
 </template>
@@ -26,9 +29,11 @@ export default {
   },
   data: function () {
     return {
+      hash: null,
       loading: false,
       metadata: {},
       polling: null,
+      transaction: null,
       transactions: [],
       wallet: {}
     }
@@ -43,15 +48,24 @@ export default {
   mounted() {
     // this.loading = true
     // this.loadWallet()
-    this.fetchTransactions()
+    this.fetchData()
     this.pollData()
   },
   methods: {
     beforeDestroy() {
       clearInterval(this.polling)
     },
+    async fetchData() {
+      this.hash = this.$route.params.hash
+
+      if (this.hash) {
+        this.transaction = await fetchTransactions({ hash: this.hash })
+      } else {
+        this.fetchTransactions()
+      }
+    },
     async fetchTransactions() {
-      const { transactions, metadata } = await fetchTransactions('')
+      const { transactions, metadata } = await fetchTransactions({})
 
       this.transactions = transactions
       // this.metadata = metadata
@@ -71,7 +85,7 @@ export default {
       this.wallet = await this.fetchWallet(walletAddress)
     },
     pollData() {
-      this.polling = setInterval(() => {
+      this.polling = this.hash && setInterval(() => {
         this.fetchTransactions()
       }, 10000)
     }

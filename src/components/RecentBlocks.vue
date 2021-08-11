@@ -12,7 +12,7 @@
       </thead>
       <tbody v-if="loading">
         <tr>
-          <td colspan="3" class="py-35 bg-white w-full text-center">
+          <td colspan="3" class="w-full text-center bg-white py-35">
             Loading latest blocks...
           </td>
         </tr>

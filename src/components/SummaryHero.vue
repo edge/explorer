@@ -16,6 +16,9 @@
     <div class="text-white" v-if="block">
       {{block}}
     </div>
+    <div class="text-white" v-if="transaction">
+      {{transaction}}
+    </div>
 
   </div>
 </template>
@@ -30,7 +33,7 @@ export default {
   components: {
     SearchIcon
   },
-  props: ['block']
+  props: ['block', 'transaction']
 }
 </script>
 

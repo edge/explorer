@@ -1,21 +1,17 @@
 <template>
   <Header />
-  <!-- <AccountPanel :wallet="this.wallet" /> -->
 
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
-        <NewsPromo />
+      <div class="row mb-25">
+        <Statistics />
         <NewsPromo />
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+
+      <div class="row mt-15">
         <RecentBlocks />
         <RecentTransactions />
       </div>
-
-      <!-- <div class="w-full text-right" v-if="transactions.length">
-        <a href="/transactions" class="button button--success">View all</a>
-      </div> -->
     </div>
   </div>
 </template>
@@ -26,6 +22,7 @@ import AccountPanel from "@/components/AccountPanel"
 import NewsPromo from "@/components/NewsPromo"
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
+import Statistics from "@/components/Statistics"
 
 import { getWalletAddress } from '../utils/wallet'
 
@@ -45,7 +42,8 @@ export default {
     Header,
     NewsPromo,
     RecentBlocks,
-    RecentTransactions
+    RecentTransactions,
+    Statistics
   },
   mounted() {
     // this.loading = true
@@ -66,3 +64,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .row {
+    @apply grid items-start grid-cols-1 gap-24;
+    @apply lg:grid-cols-2;
+  }
+</style>

@@ -34,7 +34,10 @@ import Pagination from "@/components/Pagination";
 
 export default {
   name: "TransactionsTable",
-  components: {Pagination, TransactionsTableItem},
+  components: {
+    Pagination, 
+    TransactionsTableItem
+  },
   props: ['transactions'],
   methods: {
   }

@@ -1,7 +1,6 @@
 <template>
   <Header />
   <SummaryHero />
-  <!-- <AccountPanel :wallet="this.wallet" /> -->
 
   <div class="bg-gray-200 py-35">
     <div class="container">

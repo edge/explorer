@@ -1,13 +1,13 @@
 <template>
   <div id="app" class="app">
-    <router-view/>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 
 <script>
 export default {
   title() {
-    return 'XE Wallet'
+    return 'XE Explorer'
   },
   methods: {
     setViewHeight: function() {

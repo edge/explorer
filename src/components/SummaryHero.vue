@@ -2,11 +2,13 @@
   <div class="hero-panel">
     <div class="container">
       <h1 class="hero-panel__title">The XE blockchain explorer</h1>
-      <div class="relative flex w-full lg:pr-24 lg:w-1/2">
-        <span class="absolute flex items-center flex-shrink-0 h-full text-gray-400 pointer-events-none left-10 w-18">
-          <SearchIcon />
-        </span>
-        <input class="input" type="text" placeholder="Search Tx or Block ID" />
+      <div class="flex w-full mb-0 form-group lg:pr-24 lg:w-1/2">
+        <div class="relative flex-1 input-wrap">
+          <span class="pointer-events-none icon">
+            <SearchIcon />
+          </span>
+          <input class="input" type="text" placeholder="Search Tx or Block ID" />
+        </div>
         <button class="border-none rounded-l-none button button--success">Search</button>
       </div>
     </div>
@@ -32,6 +34,6 @@ export default {
   @apply text-white text-xl font-normal leading-none mb-12;
 }
 .input {
-  @apply bg-white w-full text-black rounded-r-none border-none pl-32 !important;
+  @apply bg-white text-black rounded-r-none border-none !important;
 }
 </style>

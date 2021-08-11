@@ -2,11 +2,14 @@
   <nav class="pagination">
     <ol class="pagination__list">
       <li class="pagination__item">
+        <router-link to="/">First</router-link>
+      </li>
+      <li class="pagination__item">
         <router-link to="/">
           <ChevronLeftIcon/>
         </router-link>
       </li>
-      <li class="pagination__item">
+      <!-- <li class="pagination__item">
         <router-link to="/">1</router-link>
       </li>
       <li class="pagination__item">
@@ -20,11 +23,17 @@
       </li>
       <li class="pagination__item">
         <router-link to="/">5</router-link>
+      </li> -->
+      <li class="pagination__item">
+        Page 1 of 10,000
       </li>
       <li class="pagination__item">
         <router-link to="/">
           <ChevronRightIcon/>
         </router-link>
+      </li>
+      <li class="pagination__item">
+        <router-link to="/">Last</router-link>
       </li>
     </ol>
   </nav>
@@ -41,19 +50,19 @@ export default {
 
 <style scoped>
 .pagination {
-  @apply py-24;
+  @apply mt-10;
 }
 
 .pagination__list {
-  @apply flex items-center -mx-4 flex-wrap justify-center;
+  @apply flex items-center flex-wrap justify-center md:justify-end text-sm2 space-x-4;
 }
 
 .pagination__item {
-  @apply px-4 text-md;
+  @apply py-6 px-12 bg-white rounded text-gray-400;
 }
 
 .pagination__item a {
-  @apply text-md hover:text-green;
+  @apply hover:text-green;
 }
 
 .pagination__item .active {
@@ -61,6 +70,6 @@ export default {
 }
 
 .pagination__item svg {
-  @apply w-16;
+  @apply w-18;
 }
 </style>

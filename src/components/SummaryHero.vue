@@ -13,13 +13,6 @@
       </div>
     </div>
 
-    <div class="text-white" v-if="block">
-      {{block}}
-    </div>
-    <div class="text-white" v-if="transaction">
-      {{transaction}}
-    </div>
-
   </div>
 </template>
 
@@ -32,8 +25,7 @@ export default {
   name: "SummaryHero",
   components: {
     SearchIcon
-  },
-  props: ['block', 'transaction']
+  }
 }
 </script>
 

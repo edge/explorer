@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <SummaryHero :transaction="transaction" />
+  <SummaryHero />
 
   <div class="bg-gray-200 py-35">
     <div class="container">

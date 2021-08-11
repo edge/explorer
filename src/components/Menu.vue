@@ -1,6 +1,6 @@
 
 <template>
-  <ul class="main-nav">
+  <ul class="flex-1 pl-32 main-nav">
     <li
       v-for="(item, index) in mainNav"
       :key="index"
@@ -45,14 +45,14 @@ export default {
   }
   @screen lg {
     .main-nav__link {
-      @apply py-20 px-38;
+      @apply py-20 px-32;
     }
   }
 
   @screen xl {
     .main-nav__item {}
     .main-nav__link {
-      @apply py-20 px-50;
+      @apply py-20 px-32;
     }
   }
 </style>

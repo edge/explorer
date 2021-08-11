@@ -1,5 +1,5 @@
 <template>
-  <strong class="logo block w-52 md:w-38 flex-shrink-0">
+  <strong class="flex-shrink-0 block logo w-52 md:w-38">
     <router-link to="/overview">
       <img src="/assets/logo.svg" alt="XE Wallet">
     </router-link>

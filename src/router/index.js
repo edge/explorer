@@ -39,6 +39,11 @@ const routes = [
     component: Overview
   },
   {
+    path: '/transaction/:hash',
+    name: 'Transaction',
+    component: Transactions
+  },
+  {
     path: '/transactions',
     name: 'Transactions',
     component: Transactions

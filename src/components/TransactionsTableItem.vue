@@ -11,9 +11,9 @@
     </span>
   </td>
   <td data-title="Tx Hash:" :title="item.hash">
-    <!-- <router-link :to="{name: 'Transaction', params: {id}}"> -->
-    <span class="monospace">{{ sliceString(item.hash, 10) }}</span>
-    <!-- </router-link> -->
+    <router-link :to="{name: 'Transaction', params: {hash: item.hash}}">
+      <span class="monospace">{{ sliceString(item.hash, 10) }}</span>
+    </router-link>
   </td>
   <td data-title="Memo:" :class="item.description === 'None' ? 'text-gray-400' : ''">
     {{ item.description }}

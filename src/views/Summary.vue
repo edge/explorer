@@ -1,6 +1,6 @@
 <template>
   <Header />
-
+  <SummaryHero />
   <div class="bg-gray-200 py-35">
     <div class="container">
       <div class="row mb-25">
@@ -23,6 +23,7 @@ import NewsPromo from "@/components/NewsPromo"
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
+import SummaryHero from "@/components/SummaryHero"
 
 import { getWalletAddress } from '../utils/wallet'
 
@@ -43,7 +44,8 @@ export default {
     NewsPromo,
     RecentBlocks,
     RecentTransactions,
-    Statistics
+    Statistics,
+    SummaryHero
   },
   mounted() {
     // this.loading = true

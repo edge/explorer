@@ -17,23 +17,16 @@ import Summary from '@/views/Summary'
 import Transactions from '@/views/Transactions'
 import Overview from '@/views/Overview'
 
-// {
-//   path: '/governance',
-//   name: 'Governance',
-//   component: () => {}
-// },
-//
-// {
-//   path: '/staking',
-//   name: 'Staking',
-//   component: () => {}
-// },
-
 const routes = [
   {
     path: '/',
     name: 'Index',
     component: Index
+  },
+  {
+    path: '/block/:hash',
+    name: 'Block',
+    component: Blocks
   },
   {
     path: '/blocks',

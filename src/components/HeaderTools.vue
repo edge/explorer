@@ -2,30 +2,21 @@
 <template>
   <ul class="header-tools">
     <li class="header-tools__item">
-      <a href="https://edge.network/en/contact/" class="header-tools__link" target="_blank" rel="noreferrer">
+      <a href="https://wallet.xe.network/" class="header-tools__link" target="_blank" rel="noreferrer">
         <span class="header-tools__icon">
-          <SupportIcon/>
+          <CreditCardIcon/>
         </span>
-        Support
+        Wallet
       </a>
-    </li>
-    <li class="header-tools__item">
-      <router-link to="/" class="header-tools__link">
-        <span class="header-tools__icon">
-          <LockOpenIcon/>
-        </span>
-        Lock
-      </router-link>
     </li>
   </ul>
 </template>
 
 <script>
-  import {SupportIcon} from "@heroicons/vue/solid";
-  import {LockOpenIcon} from "@heroicons/vue/outline";
+  import {CreditCardIcon} from "@heroicons/vue/outline";
   export default {
     name: "HeaderTools",
-    components: {SupportIcon, LockOpenIcon}
+    components: {CreditCardIcon}
   }
 </script>
 
@@ -39,7 +30,7 @@
   }
 
   .header-tools__icon {
-    @apply block flex-shrink-0 mr-7 w-16;
+    @apply block flex-shrink-0 mr-7 w-20;
   }
 
   @screen md {

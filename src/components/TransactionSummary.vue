@@ -2,7 +2,7 @@
   <div class="flex flex-col h-full">
     <h3>Transaction Summary</h3>
     <div class="tile">
-      This block was mined on <span>date</span> at <span>tiimestamp</span>. A total of <span>amount XE</span> were sent in the block.
+      This transaction was mined on <span>{{new Date(transaction.timestamp).toLocaleString().split(',')[0]}}</span> at <span>{{new Date(transaction.timestamp).toLocaleString().split(',')[1]}}</span>. A total of <span>{{transaction.amount}} XE</span> were sent.
     </div>
   </div>
 </template>

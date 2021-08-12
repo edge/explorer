@@ -1,18 +1,19 @@
 <template>
   <div class="flex flex-col h-full">
     <h3>Transaction Overview</h3>
+
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
         <div class="transactionRow__label">To</div>
-        <div class="transactionRow__value">recipient</div>
+        <div class="transactionRow__value">{{transaction.recipient}}</div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">From</div>
-        <div class="transactionRow__value">sender</div>
+        <div class="transactionRow__value">{{transaction.sender}}</div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Completed</div>
-        <div class="transactionRow__value">date</div>
+        <div class="transactionRow__value">{{new Date(transaction.timestamp).toLocaleString()}}</div>
       </div>
     </div>
   </div>

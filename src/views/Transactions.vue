@@ -1,11 +1,11 @@
 <template>
   <Header />
-  <HeroPanel v-if="hash" :title="'Transactions'" :hash="hash" />
+  <HeroPanel v-if="hash" :title="'Transaction'" :hash="hash" />
   <HeroPanel v-else :title="'Transactions'" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div v-if="hash" class="row mb-25">
+      <div v-if="transaction" class="row mb-25">
         <TransactionOverview :transaction="transaction" />
         <TransactionSummary :transaction="transaction" />
       </div>

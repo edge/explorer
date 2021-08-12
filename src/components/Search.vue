@@ -1,11 +1,8 @@
 <template>
-  <div class="search">
-    <!-- <span class="search__icon">
-      <SearchIcon />
-    </span> -->
+  <div class="search" :class="size==='large' ? 'search--lge' : ''">
     <input class="search__input" type="text" placeholder="Search Tx or Block ID" />
-    <button class="h-full search__submit group">
-      <div class="w-16 text-green group-hover:text-green-100">
+    <button class="search__submit">
+      <div class="search__icon">
         <SearchIcon />
       </div>
     </button>
@@ -26,6 +23,11 @@ export default {
   components: {
     ArrowRightIcon,
     SearchIcon
+  },
+  props: {
+    size: {
+      type: String
+    }
   }
 }
 </script>
@@ -34,13 +36,23 @@ export default {
   .search {
     @apply relative bg-white rounded flex items-center h-40 py-8 md:max-w-sm mt-16 md:mt-0 w-full;
   }
+  .search--lge {
+    @apply h-50 lg:w-1/2 max-w-full;
+  }
   .search__input {
     @apply bg-transparent text-black rounded-r-none border-none h-full flex items-center w-full !important;
   }
   .search__submit {
-    @apply border-l border-gray-200 px-10;
+    @apply border-l border-gray-200 px-10 h-full text-green;
+    @apply hover:text-green-100
+  }
+  .search--lge .search__submit {
+    @apply px-18;
   }
   .search__icon {
-    @apply absolute w-16 text-gray-400 left-8 pointer-events-none;
+    @apply w-18;
+  }
+  .search--lge .search__icon {
+    @apply w-24;
   }
 </style>

@@ -2,7 +2,7 @@
   <div class="hero-panel">
     <div class="container">
       <h1 class="hero-panel__title">The XE blockchain explorer</h1>
-      <div class="flex w-full mb-0 form-group lg:pr-24 lg:w-1/2">
+      <!-- <div class="flex w-full mb-0 form-group lg:pr-24 lg:w-1/2">
         <div class="relative flex-1 input-wrap">
           <span class="pointer-events-none icon">
             <SearchIcon />
@@ -10,7 +10,8 @@
           <input class="input" type="text" placeholder="Search Tx or Block ID" />
         </div>
         <button class="border-none rounded-l-none button button--success">Search</button>
-      </div>
+      </div> -->
+      <Search :size="'large'" />
     </div>
 
   </div>
@@ -20,10 +21,12 @@
 import {
   SearchIcon
 } from '@heroicons/vue/solid'
+import Search from '@/components/Search'
 
 export default {
   name: "SummaryHero",
   components: {
+    Search,
     SearchIcon
   }
 }

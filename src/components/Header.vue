@@ -24,8 +24,8 @@
         showNav: false,
         mainNav: [
           {
-            link: "/summary",
-            text: "Summary"
+            link: "/overview",
+            text: "Overview"
           },
           {
             link: "/blocks",
@@ -36,8 +36,8 @@
             text: "Transactions"
           },
           {
-            link: "/status",
-            text: "Status"
+            link: "/stakes",
+            text: "Stakes"
           }
         ]
       }

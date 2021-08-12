@@ -36,7 +36,7 @@ const routes = [
   {
     path: '/overview',
     name: 'Overview',
-    component: Overview
+    component: Summary
   },
   {
     path: '/transaction/:hash',
@@ -47,11 +47,6 @@ const routes = [
     path: '/transactions',
     name: 'Transactions',
     component: Transactions
-  },
-  {
-    path: '/summary',
-    name: 'Summary',
-    component: Summary
   }
 ]
 

@@ -5,8 +5,9 @@
 
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div v-if="hash" class="bg-red-50">
-        {{transaction}}
+      <div v-if="hash" class="row mb-25">
+        <TransactionOverview :transaction="transaction" />
+        <TransactionSummary :transaction="transaction" />
       </div>
       <TransactionsTable :transactions="transactions" v-if="!transaction"/>
     </div>
@@ -16,6 +17,8 @@
 <script>
 import Header from "@/components/Header"
 import TableItem from "@/components/TransactionsTableItem"
+import TransactionOverview from "@/components/TransactionOverview"
+import TransactionSummary from "@/components/TransactionSummary"
 import TransactionsTable from "@/components/TransactionsTable"
 import AccountPanel from "@/components/AccountPanel"
 import HeroPanel from "@/components/HeroPanel"
@@ -41,6 +44,8 @@ export default {
   },
   components: {
     AccountPanel,
+    TransactionOverview,
+    TransactionSummary,
     TransactionsTable,
     TableItem,
     Header,
@@ -93,3 +98,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .row {
+    @apply grid items-start grid-cols-1 gap-24;
+    @apply lg:grid-cols-2;
+  }
+</style>

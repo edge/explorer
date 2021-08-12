@@ -1,7 +1,13 @@
 <template>
   <div class="hero-panel">
     <div class="container flex flex-col md:justify-between md:flex-row md:items-center">
-      <h1 class="hero-panel__title">{{ title }}</h1>
+      <div class="flex flex-col">
+        <h1 class="max-w-lg truncate hero-panel__title">{{ title }}</h1>
+        <div class="max-w-lg mt-10 font-mono text-white truncate" :class="hash ? '' : 'hidden'">
+          <span class="text-green">Hash: </span>
+          {{ hash }}
+        </div>
+      </div>
       <Search />
     </div>
   </div>
@@ -15,6 +21,9 @@ export default {
   name: "HeroPanel",
   props: {
     title: {
+      type: String
+    },
+    hash: {
       type: String
     }
   },

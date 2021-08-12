@@ -1,6 +1,7 @@
 <template>
   <Header />
-  <HeroPanel :title="'Blocks'" />
+  <HeroPanel v-if="hash" :title="'Blocks'" :hash="hash" />
+  <HeroPanel v-else :title="'Blocks'" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">

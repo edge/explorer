@@ -1,15 +1,15 @@
 <template>
   <div class="hero-panel">
-    <div class="container">
-      <h1 class="hero-panel__title">{{ title }}Blocks</h1>
+    <div class="container flex flex-col md:justify-between md:flex-row md:items-center">
+      <h1 class="hero-panel__title">{{ title }}</h1>
+      <Search />
     </div>
   </div>
 </template>
 
 <script>
-import {
-  SearchIcon
-} from '@heroicons/vue/solid'
+
+import Search from '@/components/Search'
 
 export default {
   name: "HeroPanel",
@@ -17,18 +17,18 @@ export default {
     title: {
       type: String
     }
-  }
+  },
+  components: {
+    Search
+  },
 }
 </script>
 
 <style scoped>
 .hero-panel {
-  @apply bg-black-100 pb-10 pt-50;
+  @apply bg-black-100 pb-20 pt-64;
 }
 .hero-panel__title {
-  @apply text-white text-2xl font-normal leading-none mb-12;
-}
-.input {
-  @apply bg-white text-black rounded-r-none border-none !important;
+  @apply text-white text-2xl font-normal leading-none mb-0;
 }
 </style>

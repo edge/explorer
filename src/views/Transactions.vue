@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <SummaryHero />
+  <HeroPanel :title="'Transactions'" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">
@@ -17,7 +17,7 @@ import Header from "@/components/Header"
 import TableItem from "@/components/TransactionsTableItem"
 import TransactionsTable from "@/components/TransactionsTable"
 import AccountPanel from "@/components/AccountPanel"
-import SummaryHero from "@/components/SummaryHero"
+import HeroPanel from "@/components/HeroPanel"
 
 import { fetchTransactions, fetchWallet } from '../utils/api'
 import { getWalletAddress } from '../utils/wallet'
@@ -43,7 +43,7 @@ export default {
     TransactionsTable,
     TableItem,
     Header,
-    SummaryHero
+    HeroPanel
   },
   mounted() {
     // this.loading = true

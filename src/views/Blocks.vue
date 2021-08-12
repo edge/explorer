@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <HeroPanel :heading="Blocks" />
+  <HeroPanel :title="'Blocks'" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">

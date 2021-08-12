@@ -18,7 +18,9 @@
       <tbody v-if="blocks.length">
         <tr v-for="block in blocks" :key="block.hash">
           <td data-title="Height:">
-            {{ block.height }}
+            <router-link :to="{name: 'Block', params: {hash: block.hash}}">
+              <span class="monospace">{{block.height}}</span>
+            </router-link>
           </td>
           <td data-title="Hash:">
             <span class="monospace">{{ block.hash.substr(0, 32) }}</span>
@@ -105,6 +107,10 @@ td:first-child {
 
 td:last-child {
   @apply rounded-r-4 pb-8 border-b-4 border-gray-200;
+}
+
+td a {
+  @apply text-green align-middle;
 }
 
 @screen lg {

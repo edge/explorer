@@ -1,12 +1,14 @@
 <template>
   <Header />
-  <SummaryHero />
+  <HeroPanel :heading="Blocks" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div v-if="hash" class="bg-red-50">
-        {{block}}
+      <div v-if="hash" class="row mb-25">
+        <BlockTransactionOverview :block=block />
+        <BlockTransactionSummary :block=block />
       </div>
+      <h3 v-if="hash">Block Transactions</h3>
       <BlocksTable />
     </div>
   </div>
@@ -15,7 +17,9 @@
 <script>
 import Header from "@/components/Header"
 import BlocksTable from "@/components/BlocksTable"
-import SummaryHero from "@/components/SummaryHero"
+import BlockTransactionOverview from "@/components/BlockTransactionOverview"
+import BlockTransactionSummary from "@/components/BlockTransactionSummary"
+import HeroPanel from "@/components/HeroPanel"
 
 import { fetchBlocks } from '../utils/api'
 // import { getWalletAddress } from '../utils/wallet'
@@ -40,8 +44,10 @@ export default {
   },
   components: {
     BlocksTable,
+    BlockTransactionOverview,
+    BlockTransactionSummary,
     Header,
-    SummaryHero
+    HeroPanel
   },
   mounted() {
     this.loading = true
@@ -90,3 +96,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .row {
+    @apply grid items-start grid-cols-1 gap-24;
+    @apply lg:grid-cols-2;
+  }
+</style>

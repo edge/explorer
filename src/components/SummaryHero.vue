@@ -34,7 +34,7 @@ export default {
   @apply bg-black-100 py-40;
 }
 .hero-panel__title {
-  @apply text-white text-xl font-normal leading-none mb-12;
+  @apply text-white text-2xl font-normal leading-none mb-12;
 }
 .input {
   @apply bg-white text-black rounded-r-none border-none !important;

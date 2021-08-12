@@ -2,38 +2,30 @@
   <nav class="pagination">
     <ol class="pagination__list">
       <li class="pagination__item">
-        <router-link to="/">First</router-link>
+        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { page: 1 }}">First</router-link>
+        <span v-else>First</span>
       </li>
       <li class="pagination__item">
-        <router-link to="/">
+        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { page: currentPage - 1 }}">
           <ChevronLeftIcon/>
         </router-link>
-      </li>
-      <!-- <li class="pagination__item">
-        <router-link to="/">1</router-link>
+        <span v-else><ChevronLeftIcon/></span>
       </li>
       <li class="pagination__item">
-        <router-link to="/">2</router-link>
+        <span v-if="totalPages">Page {{currentPage}} of {{totalPages}}</span>
+        <span v-else>&nbsp;</span>
       </li>
       <li class="pagination__item">
-        <span>...</span>
-      </li>
-      <li class="pagination__item">
-        <span class="active">4</span>
-      </li>
-      <li class="pagination__item">
-        <router-link to="/">5</router-link>
-      </li> -->
-      <li class="pagination__item">
-        Page 1 of 10,000
-      </li>
-      <li class="pagination__item">
-        <router-link to="/">
+        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { page: currentPage + 1 }}">
           <ChevronRightIcon/>
         </router-link>
+        <span v-else><ChevronRightIcon/></span>
       </li>
       <li class="pagination__item">
-        <router-link to="/">Last</router-link>
+        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { page: totalPages }}">
+          Last
+        </router-link>
+        <span v-else>Last</span>
       </li>
     </ol>
   </nav>
@@ -44,7 +36,8 @@ import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/vue/solid";
 
 export default {
   name: "Pagination",
-  components: {ChevronRightIcon, ChevronLeftIcon}
+  components: {ChevronRightIcon, ChevronLeftIcon},
+  props: ['baseRoute', 'currentPage', 'totalPages']
 }
 </script>
 

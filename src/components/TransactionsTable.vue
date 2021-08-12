@@ -24,18 +24,15 @@
         </tr>
       </tbody>
     </table>
-    <Pagination />
   </div>
 </template>
 
 <script>
 import TransactionsTableItem from "@/components/TransactionsTableItem";
-import Pagination from "@/components/Pagination";
 
 export default {
   name: "TransactionsTable",
   components: {
-    Pagination, 
     TransactionsTableItem
   },
   props: ['transactions'],

@@ -23,7 +23,9 @@
             {{ block.height }}
           </td>
           <td data-title="Hash:">
-            <span class="monospace">{{ block.hash.substr(0, 32) }}</span>
+            <router-link :to="{name: 'Block', params: {hash: block.hash}}">
+              <span class="monospace">{{ block.hash.substr(0, 32) }}</span>
+            </router-link>
           </td>
           <td data-title="Mined:">
             {{ timeSince(block.timestamp) }}

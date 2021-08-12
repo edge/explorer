@@ -21,11 +21,11 @@
       <tbody v-if="transactions.length">
         <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
-            <span class="monospace">
+            <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
               <span class="monospace">
                 {{ sliceString(transaction.hash, 10) }}
               </span>
-            </span>
+            </router-link>
           </td>
           <td data-title="From:">
             <span class="monospace">

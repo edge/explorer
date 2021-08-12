@@ -10,7 +10,7 @@
         <TransactionSummary :transaction="transaction" />
       </div>
       <TransactionsTable :transactions="transactions" v-if="!transaction"/>
-      <Pagination :baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+      <Pagination v-if="!transaction" :baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
     </div>
   </div>
 </template>

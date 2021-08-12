@@ -1,6 +1,7 @@
 <template>
   <Header />
-  <HeroPanel :title="'Transactions'" />
+  <HeroPanel v-if="hash" :title="'Transactions'" :hash="hash" />
+  <HeroPanel v-else :title="'Transactions'" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">

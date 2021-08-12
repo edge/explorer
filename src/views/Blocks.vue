@@ -6,8 +6,8 @@
   <div class="bg-gray-200 py-35">
     <div class="container">
       <div v-if="hash" class="row mb-25">
-        <BlockTransactionOverview :block=block />
-        <BlockTransactionSummary :block=block />
+        <BlockOverview :block=block />
+        <BlockSummary :block=block />
       </div>
       <h3 v-if="hash">Block Transactions</h3>
       <BlocksTable />
@@ -18,8 +18,8 @@
 <script>
 import Header from "@/components/Header"
 import BlocksTable from "@/components/BlocksTable"
-import BlockTransactionOverview from "@/components/BlockTransactionOverview"
-import BlockTransactionSummary from "@/components/BlockTransactionSummary"
+import BlockOverview from "@/components/BlockOverview"
+import BlockSummary from "@/components/BlockSummary"
 import HeroPanel from "@/components/HeroPanel"
 
 import { fetchBlocks } from '../utils/api'
@@ -45,8 +45,8 @@ export default {
   },
   components: {
     BlocksTable,
-    BlockTransactionOverview,
-    BlockTransactionSummary,
+    BlockOverview,
+    BlockSummary,
     Header,
     HeroPanel
   },

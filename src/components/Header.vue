@@ -24,7 +24,7 @@
         showNav: false,
         mainNav: [
           {
-            link: "/overview",
+            link: "/",
             text: "Overview"
           },
           {
@@ -37,7 +37,8 @@
           },
           {
             link: "/stakes",
-            text: "Stakes"
+            text: "Stakes",
+            disabled: true
           }
         ]
       }

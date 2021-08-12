@@ -11,17 +11,15 @@
 //   Technologies Ltd.   \______/
 
 import { createRouter, createWebHistory } from 'vue-router'
-import Index from '../views/Index.vue'
 import Blocks from '@/views/Blocks'
-import Summary from '@/views/Summary'
 import Transactions from '@/views/Transactions'
 import Overview from '@/views/Overview'
 
 const routes = [
   {
     path: '/',
-    name: 'Index',
-    component: Index
+    name: 'Overview',
+    component: Overview
   },
   {
     path: '/block/:hash',
@@ -32,11 +30,6 @@ const routes = [
     path: '/blocks',
     name: 'Blocks',
     component: Blocks
-  },
-  {
-    path: '/overview',
-    name: 'Overview',
-    component: Summary
   },
   {
     path: '/transaction/:hash',

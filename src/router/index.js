@@ -27,7 +27,7 @@ const routes = [
     component: Blocks
   },
   {
-    path: '/blocks',
+    path: '/blocks/:page(\\d+)?',
     name: 'Blocks',
     component: Blocks
   },

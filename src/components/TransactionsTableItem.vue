@@ -1,14 +1,10 @@
 <template>
   <td data-title="Date:">{{ item.date }}</td>
-  <td data-title="Address:">
-    <span v-if="item.type.toLowerCase() === 'received'">
-      <span class="icon icon-green mr-4"><ArrowDownIcon /></span>
-      <span class="monospace">{{ item.sender }}</span>
-    </span>
-    <span v-if="item.type.toLowerCase() === 'sent'">
-      <span class="icon icon-red mr-4"><ArrowUpIcon /></span>
-      <span class="monospace">{{ item.recipient }}</span>
-    </span>
+  <td data-title="From:">
+    <span class="monospace">{{ sliceString(item.sender, 20) }}</span>
+  </td>
+  <td data-title="To:">
+    <span class="monospace">{{ sliceString(item.recipient, 20) }}</span>
   </td>
   <td data-title="Tx Hash:" :title="item.hash">
     <router-link :to="{name: 'Transaction', params: {hash: item.hash}}">
@@ -19,7 +15,7 @@
     {{ item.description }}
   </td>
   <td data-title="Status:">
-    <span v-if="item.confirmations >= 10" class="icon icon-green mr-0 -mt-2"><CheckCircleIcon /></span>
+    <span v-if="item.confirmations >= 10 || !item.confirmations" class="icon icon-green mr-0 -mt-2"><CheckCircleIcon /></span>
     {{ formatStatus(item) }}
   </td>
   <td data-title="Amount:">
@@ -43,7 +39,7 @@ export default {
       }
     },
     sliceString(string, symbols) {
-      return string.length > symbols ? string.slice(0, symbols) : string;
+      return string.length > symbols ? string.slice(0, symbols) + '...' : string;
     },
     formatAmount(amount) {
       return formatXe(amount, true)

@@ -5,26 +5,48 @@ const {
 const BLOCKCHAIN_API_URL = process.env.VUE_APP_BLOCKCHAIN_API_URL
 const INDEX_API_URL = process.env.VUE_APP_INDEX_API_URL
 
-const fetchBlocks = async (hash, options = {}) => {
-  if (typeof hash === 'object') {
-    options = {
-      ...hash
-    }
-
-    hash = null
-  }
-
+const fetchBlocks = async ({ hash, options = {} }) => {
   if (!options.page) {
     options.page = 1
   }
 
   if (!options.limit) {
-    options.limit = 10
+    options.limit = 25
   }
 
   const url = hash
     ? `${INDEX_API_URL}/block/${hash}`
     : `${INDEX_API_URL}/blocks?page=${options.page}&limit=${options.limit}`
+
+  if (hash) {
+    return fetchData(url)
+      .then(block => {
+        const transactions = []
+        const blockTransactionData = {
+          ...block.data.transactions
+        }
+
+        Object.keys(blockTransactionData).forEach(address => {
+          const addressData = blockTransactionData[address]
+
+          Object.keys(addressData).forEach(tx => {
+            transactions.push(addressData[tx])
+          })
+        })
+
+        block.transactions = transactions.sort((a, b) => {
+          if (a.timestamp === b.timestamp) return 0
+          return a.timestamp < b.timestamp ? -1 : 1
+        })
+
+        block.transactions = formatTransactions(null, block.transactions)
+
+        return {
+          blocks: [block],
+          metadata: {}
+        }
+      })
+  }
 
   return fetchData(url)
     .then(response => {

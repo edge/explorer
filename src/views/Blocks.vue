@@ -1,16 +1,19 @@
 <template>
   <Header />
-  <HeroPanel v-if="hash" :title="'Blocks'" :hash="hash" />
+  <HeroPanel v-if="block" :title="'Blocks'" :hash="hash" />
   <HeroPanel v-else :title="'Blocks'" />
 
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div v-if="hash" class="row mb-25">
-        <BlockOverview :block=block />
-        <BlockSummary :block=block />
+      <div v-if="block" class="row mb-25">
+        <BlockOverview :block="block" />
+        <BlockSummary :block="block" />
       </div>
-      <h3 v-if="hash">Block Transactions</h3>
-      <BlocksTable />
+      <h3 v-if="block">Block Transactions</h3>
+      <BlocksTable v-if="blocks.length" :blocks="blocks" />
+      <Pagination v-if="!block" baseRoute="Blocks" :currentPage="page" :totalPages="metadata.totalCount ? Math.ceil(metadata.totalCount/metadata.limit) : 0" />
+
+      <TransactionsTable :transactions="transactions" v-if="transactions"/>
     </div>
   </div>
 </template>
@@ -21,7 +24,8 @@ import BlocksTable from "@/components/BlocksTable"
 import BlockOverview from "@/components/BlockOverview"
 import BlockSummary from "@/components/BlockSummary"
 import HeroPanel from "@/components/HeroPanel"
-
+import Pagination from "@/components/Pagination"
+import TransactionsTable from "@/components/TransactionsTable"
 import { fetchBlocks } from '../utils/api'
 // import { getWalletAddress } from '../utils/wallet'
 
@@ -34,65 +38,69 @@ export default {
   title() {
     return 'XE Wallet » Blocks'
   },
-  data: function () {
-    return {
-      block: null,
-      error: '',
-      hash: null,
-      loading: false,
-      polling: null
-    }
-  },
   components: {
     BlocksTable,
     BlockOverview,
     BlockSummary,
     Header,
-    HeroPanel
+    HeroPanel,
+    Pagination,
+    TransactionsTable
+  },
+  data: function () {
+    return {
+      block: null,
+      blocks: [],
+      error: '',
+      hash: null,
+      loading: false,
+      metadata: {},
+      page: 1,
+      polling: null,
+      transactions: null
+    }
   },
   mounted() {
-    this.loading = true
     this.fetchData()
-    this.pollData()
   },
   methods: {
-    async fetchBlocks() {
-      const { blocks } = await fetchBlocks({ limit: 5 })
+    async fetchBlocks(options) {
+      this.loading = true
+      
+      const { blocks, metadata } = await fetchBlocks({ options })
       this.blocks = blocks
+      this.metadata = metadata
       this.loading = false
     },
     async fetchData() {
       this.hash = this.$route.params.hash
+      this.page = parseInt(this.$route.params.page || 1)
       
       if (this.hash) {
-        // const { blocks } = await fetchBlocks(this.hash)
-        // this.block = blocks[0]
-        this.block = {
-          hash: this.hash,
-          transactions: 102,
-          confirmations: 4,
-          average: 2.427990,
-          completed: new Date(1628676371064).toLocaleDateString(),
-          "timestamp": 1628676371064,
-          "height": 72792,
-          "parent": "00000333af874399c49d42a0d7cb5cc7688c9de0befa0dafd5d74ebe1c175964",
-          "data": {
-              "transactions": {}
-          },
-          "ledgerHash": "78d81c1aa7504f82551ee2725c11e172ea2072bf736ffab8b9c6df04fd9da700",
-          "nonce": 5647426,
-          "difficulty": 5,
-          "dataHash": "afb26882aa9f57a14c9a8dc3becdea1cba25a0108936439bf6fe2600eaf58d66"
-        }
+        this.loading = true
+        const { blocks } = await fetchBlocks({ hash: this.hash })
+        this.block = blocks[0]
+        this.processBlock()
         this.loading = false
       } else {
-        this.fetchBlocks()
+        this.fetchBlocks({ page: this.page })
+        // this.pollData()
       }
     },
     pollData() {
-      this.polling = this.hash && setInterval(() => {
+      this.polling = this.block && setInterval(() => {
         this.fetchBlocks()
       }, 10000)
+    },
+    processBlock() {
+      this.transactions = this.block.transactions
+
+      this.block.total = this.transactions.reduce((accumulator, currentItem) => {
+        accumulator += Number(currentItem.amount)
+        return accumulator
+      }, 0)
+      
+      this.block.average = this.transactions.length ? this.block.total/this.transactions.length : 0
     }
   }
 }

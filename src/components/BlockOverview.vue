@@ -12,11 +12,11 @@
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Completed</div>
-        <div class="transactionRow__value">{{ block.completed }} at {{ block.timestamp }}</div>
+        <div class="transactionRow__value">{{new Date(block.timestamp).toLocaleString()}}</div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Transactions</div>
-        <div class="transactionRow__value">{{ block.transactions }}</div>
+        <div class="transactionRow__value">{{ block.transactions.length }}</div>
       </div>
     </div>
   </div>

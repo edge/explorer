@@ -42,29 +42,32 @@ import { fetchBlocks } from '../utils/api'
 
 export default {
   name: 'RecentBlocks',
+  props: ['blocks', 'loading'],
   data: function () {
-    return {
-      loading: false,
-      polling: null,
-      blocks: []
-    }
+    return {}
   },
   mounted() {
-    this.loading = true
-    this.fetchBlocks()
-    this.pollData()
+    // this.loading = true
+    // this.fetchBlocks()
+    // this.pollData()
+  },
+  watch: {
+    $route (to, from) {
+      // clearInterval(this.polling)
+      // this.polling = null
+    }
   },
   methods: {
-    async fetchBlocks() {
-      const { blocks } = await fetchBlocks({ limit: 5 })
-      this.blocks = blocks
-      this.loading = false
-    },
-    pollData() {
-      this.polling = setInterval(() => {
-        this.fetchBlocks()
-      }, 10000)
-    },
+    // async fetchBlocks() {
+    //   const { blocks } = await fetchBlocks({ options: { limit: 5 } })
+    //   this.blocks = blocks
+    //   this.loading = false
+    // },
+    // pollData() {
+    //   this.polling = setInterval(() => {
+    //     this.fetchBlocks()
+    //   }, 10000)
+    // },
     timeSince(ts) {
       return moment(ts).fromNow()
     }

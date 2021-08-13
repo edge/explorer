@@ -1,6 +1,6 @@
 <template>
   <div class="w-full mb-25">
-    <h3>Recent Transcations</h3>
+    <h3>Recent Transactions</h3>
 
     <table class="w-full">
       <thead class="hidden lg:table-header-group">
@@ -52,30 +52,32 @@ import { fetchTransactions } from '../utils/api'
 
 export default {
   name: 'RecentTransactions',
+  props: ['loading', 'transactions'],
   data: function () {
-    return {
-      loading: false,
-      polling: null,
-      transactions: []
-    }
+    return {}
   },
   mounted() {
-    this.loading = true
-    this.fetchTransactions()
-    this.pollData()
+    // this.loading = true
+    // this.fetchTransactions()
+    // this.pollData()
+  },
+  watch: {
+    $route (to, from) {
+      // clearInterval(this.polling)
+      // this.polling = null
+    }
   },
   methods: {
-    async fetchTransactions() {
-      const { transactions, metadata } = await fetchTransactions('', { limit: 5 })
-console.log('transactions', transactions)
-      this.transactions = transactions
-      this.loading = false
-    },
-    pollData() {
-      this.polling = setInterval(() => {
-        this.fetchTransactions()
-      }, 10000)
-    },
+    // async fetchTransactions() {
+    //   const { transactions } = await fetchTransactions({ options: { limit: 5 } })
+    //   this.transactions = transactions
+    //   this.loading = false
+    // },
+    // pollData() {
+    //   this.polling = setInterval(() => {
+    //     this.fetchTransactions()
+    //   }, 10000)
+    // },
     sliceString(string, symbols) {
       return string.length > symbols ? string.slice(0, symbols) : string
     },

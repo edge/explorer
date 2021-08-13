@@ -4,13 +4,13 @@
   <div class="bg-gray-200 py-35">
     <div class="container">
       <div class="row mb-25">
-        <Statistics />
+        <Statistics :blockMetadata="blockMetadata" :transactionMetadata="transactionMetadata" />
         <NewsPromo />
       </div>
 
       <div class="row mt-15">
-        <RecentBlocks />
-        <RecentTransactions />
+        <RecentBlocks :loading="loading" :blocks="blocks" />
+        <RecentTransactions :loading="loading" :transactions="transactions" />
       </div>
     </div>
   </div>
@@ -26,6 +26,7 @@ import Statistics from "@/components/Statistics"
 import SummaryHero from "@/components/SummaryHero"
 
 import { getWalletAddress } from '../utils/wallet'
+import { fetchBlocks, fetchTransactions } from '../utils/api'
 
 export default {
   name: 'Summary',
@@ -34,7 +35,11 @@ export default {
   },
   data: function () {
     return {
-      wallet: {},
+      blockMetadata: null,
+      blocks: [],
+      transactionMetadata: null,
+      transactions: [],
+      loading: false,
       polling: null
     }
   },
@@ -48,9 +53,16 @@ export default {
     SummaryHero
   },
   mounted() {
-    // this.loading = true
-    // this.loadWallet()
-    // this.pollData()
+    this.loading = true
+    this.fetchBlocks()
+    this.fetchTransactions()
+    this.pollData()
+  },
+  watch: {
+    $route (to, from) {
+      clearInterval(this.polling)
+      this.polling = null
+    }
   },
   methods: {
     async loadWallet() {
@@ -62,6 +74,24 @@ export default {
       }
 
       this.wallet = await this.fetchWallet(walletAddress)
+    },
+    async fetchBlocks() {
+      const { blocks, metadata } = await fetchBlocks({ options: { limit: 5 } })
+      this.blockMetadata = metadata
+      this.blocks = blocks
+      this.loading = false
+    },
+    async fetchTransactions() {
+      const { transactions, metadata } = await fetchTransactions({ options: { limit: 5 } })
+      this.transactionMetadata = metadata
+      this.transactions = transactions
+      this.loading = false
+    },
+    pollData() {
+      this.polling = setInterval(() => {
+        this.fetchBlocks()
+        this.fetchTransactions()
+      }, 10000)
     }
   }
 }

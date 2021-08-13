@@ -4,7 +4,8 @@
       <thead class="hidden lg:table-header-group">
       <tr>
         <th width="14%">Date</th>
-        <th width="33%">To/From</th>
+        <th width="16%">From</th>
+        <th width="16%">To</th>
         <th width="9%">Tx Hash</th>
         <th width="18%">Memo</th>
         <th width="10%">Status</th>

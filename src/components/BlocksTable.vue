@@ -8,13 +8,13 @@
           <th>Mined</th>
         </tr>
       </thead>
-      <tbody v-if="loading">
+      <!-- <tbody v-if="loading">
         <tr>
           <td colspan="3" class="w-full text-center bg-white py-35">
             Loading latest blocks...
           </td>
         </tr>
-      </tbody>
+      </tbody> -->
       <tbody v-if="blocks.length">
         <tr v-for="block in blocks" :key="block.hash">
           <td data-title="Height:">
@@ -31,43 +31,39 @@
         </tr>
       </tbody>
     </table>
-    <Pagination />
   </div>
 </template>
 
 <script>
-import { fetchBlocks } from '../utils/api'
 import moment from 'moment'
-import Pagination from "@/components/Pagination";
+// import { fetchBlocks } from '../utils/api'
 
 export default {
   name: 'BlocksTable',
-  components: {
-    Pagination
-  },
+  components: {},
+  props: ['blocks'],
   data: function () {
     return {
       loading: false,
-      polling: null,
-      blocks: []
+      polling: null
     }
   },
   mounted() {
-    this.loading = true
-    this.fetchBlocks()
-    this.pollData()
+    // this.loading = true
+    // this.fetchBlocks()
+    // this.pollData()
   },
   methods: {
-    async fetchBlocks() {
-      const { blocks } = await fetchBlocks()
-      this.blocks = blocks
-      this.loading = false
-    },
-    pollData() {
-      this.polling = setInterval(() => {
-        this.fetchBlocks()
-      }, 10000)
-    },
+    // async fetchBlocks() {
+    //   const { blocks } = await fetchBlocks({})
+    //   this.blocks = blocks
+    //   this.loading = false
+    // },
+    // pollData() {
+    //   this.polling = setInterval(() => {
+    //     this.fetchBlocks()
+    //   }, 10000)
+    // },
     timeSince(ts) {
       return moment(ts).fromNow()
     }

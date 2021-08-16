@@ -1,9 +1,9 @@
 <template>
   <div class="search" :class="size==='large' ? 'search--lge' : ''">
-    <input class="search__input" v-model="searchInput" type="text" placeholder="Search Tx or Block ID" />
+    <input @keyup.enter="search" class="search__input" v-model="searchInput" type="text" placeholder="Search Tx or Block ID" />
     <button
       class="search__submit"
-      @click="isSearching = true, search()"
+      @click="search"
       :class="isSearching ? 'pointer-events-none' : ''"
     >
       <div class="search__icon" :class="isSearching ? 'animate-spin' : ''">
@@ -61,19 +61,21 @@ export default {
   },
   methods: {
     async search () {
+      this.isSearching = true
+      
       const result = await search(this.searchInput)
+      
+      this.isSearching = false
 
-      if (result) {
-        const { blocks, transactions } = result
-        if (blocks && blocks[0]) {
-          this.$router.push(`/block/${blocks[0].height}`)
-        } else if (transactions && transactions[0]) {
-          this.$router.push(`/transaction/${transactions[0].hash}`)
-        }
+      const { blocks, transactions } = result
+      
+      if (blocks && blocks[0]) {
+        this.$router.push(`/block/${blocks[0].height}`)
+      } else if (transactions && transactions[0]) {
+        this.$router.push(`/transaction/${transactions[0].hash}`)
       } else {
         // No result.
         setTimeout(() => {
-          this.isSearching = false
           this.searchFeedback = "Come on man, that's not a valid Tx or Block ID."
           this.showFeedback = true
         }, 1000)

@@ -222,6 +222,8 @@ const search = input => {
   if (blockHeightRegex.test(input)) {
     return fetchBlocks({ hash: input })
   }
+
+  return Promise.resolve({})
 }
 
 const sendTransaction = tx => {

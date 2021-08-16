@@ -1,9 +1,28 @@
 <template>
   <div class="search" :class="size==='large' ? 'search--lge' : ''">
     <input class="search__input" type="text" placeholder="Search Tx or Block ID" />
-    <button class="search__submit">
-      <div class="search__icon">
-        <SearchIcon />
+    <button
+      class="search__submit"
+      @click="isSearching = true, search()"
+      :class="isSearching ? 'pointer-events-none' : ''"
+    >
+      <div class="search__icon" :class="isSearching ? 'animate-spin' : ''">
+        <span v-if="isSearching">
+          <svg class="w-full" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <line x1="12" y1="6" x2="12" y2="3" />
+            <line x1="16.25" y1="7.75" x2="18.4" y2="5.6" />
+            <line x1="18" y1="12" x2="21" y2="12" />
+            <line x1="16.25" y1="16.25" x2="18.4" y2="18.4" />
+            <line x1="12" y1="18" x2="12" y2="21" />
+            <line x1="7.75" y1="16.25" x2="5.6" y2="18.4" />
+            <line x1="6" y1="12" x2="3" y2="12" />
+            <line x1="7.75" y1="7.75" x2="5.6" y2="5.6" />
+          </svg>
+        </span>
+        <span v-else>
+          <SearchIcon />
+        </span>
       </div>
     </button>
   </div>
@@ -27,6 +46,17 @@ export default {
   props: {
     size: {
       type: String
+    }
+  },
+  data: function () {
+    return {
+      isSearching: false,
+      searchInput: ''
+    }
+  },
+  methods: {
+    async search () {
+      console.log('searching')
     }
   }
 }

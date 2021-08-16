@@ -22,8 +22,8 @@
         <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
             <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
-              <span class="hidden monospace md:block">{{ sliceString(transaction.hash, 10) }}</span>
-              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 28) }}</span>
+              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 10) }}</span>
+              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 20) }}</span>
             </router-link>
           </td>
           <td data-title="From:">

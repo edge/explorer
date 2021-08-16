@@ -37,7 +37,7 @@ export default {
     @apply relative bg-white rounded flex items-center h-40 py-8 md:max-w-sm mt-16 md:mt-0 w-full;
   }
   .search--lge {
-    @apply h-50 lg:w-1/2 max-w-full;
+    @apply md:h-50 lg:w-1/2 max-w-full;
   }
   .search__input {
     @apply bg-transparent text-black rounded-r-none border-none h-full flex items-center w-full !important;
@@ -47,12 +47,12 @@ export default {
     @apply hover:text-green-100
   }
   .search--lge .search__submit {
-    @apply px-18;
+    @apply md:px-18;
   }
   .search__icon {
     @apply w-18;
   }
   .search--lge .search__icon {
-    @apply w-24;
+    @apply md:w-24;
   }
 </style>

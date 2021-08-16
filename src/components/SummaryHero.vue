@@ -34,7 +34,7 @@ export default {
 
 <style scoped>
 .hero-panel {
-  @apply bg-black-100 py-40;
+  @apply bg-black-100 pb-24 pt-40 md:pb-40;
 }
 .hero-panel__title {
   @apply text-white text-2xl font-normal leading-none mb-12;

@@ -1,6 +1,6 @@
 <template>
   <div class="search" :class="size==='large' ? 'search--lge' : ''">
-    <input class="search__input" type="text" placeholder="Search Tx or Block ID" />
+    <input class="search__input" v-model="searchInput" type="text" placeholder="Search Tx or Block ID" />
     <button
       class="search__submit"
       @click="isSearching = true, search()"
@@ -36,12 +36,8 @@
 
 <script>
 
-import {
-  ArrowRightIcon
-} from '@heroicons/vue/solid'
-import {
-  SearchIcon
-} from '@heroicons/vue/solid'
+import { ArrowRightIcon, SearchIcon } from '@heroicons/vue/solid'
+import { search } from '../utils/api'
 
 export default {
   name: "Search",
@@ -62,7 +58,17 @@ export default {
   },
   methods: {
     async search () {
-      console.log('searching')
+      const result = await search(this.searchInput)
+      
+      const { blocks, transactions } = result
+
+      if (blocks && blocks[0]) {
+        this.$router.push(`/block/${blocks[0].height}`)
+      } else if (transactions && transactions[0]) {
+        this.$router.push(`/transaction/${transactions[0].hash}`)
+      } else {
+        // No result.
+      }
     }
   }
 }

@@ -82,15 +82,7 @@ const fetchData = (url, options = {}, payload) => {
 
       return res.json()
     })
-    .catch(err => {
-      console.log(err)
-
-      // if (err.json) {
-      // return err.json.then(json => {
-      // set the JSON response message
-      // this.error.message = json.message
-      // })
-      // }
+    .catch(() => {
       return {
         results: [],
         metdata: {}
@@ -130,17 +122,29 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
 
   if (hash) {
     return fetchData(txUrl)
-      .then(tx => {
+      .then(results => {
+        if (results.results && Array.isArray(results.results) && !results.results[0]) {
+          return {
+            transactions: [],
+            metdata: {}
+          }
+        }
+
+        const tx = { ...results }
+
         return {
-          amount: xeStringFromMicroXe(tx.amount),
-          date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
-          description: tx.data.memo || 'None',
-          hash: tx.hash,
-          recipient: tx.recipient,
-          sender: tx.sender,
-          timestamp: tx.timestamp,
-          confirmations: tx.confirmations,
-          pending: false
+          transactions: [{
+            amount: xeStringFromMicroXe(tx.amount),
+            date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
+            description: tx.data.memo || 'None',
+            hash: tx.hash,
+            recipient: tx.recipient,
+            sender: tx.sender,
+            timestamp: tx.timestamp,
+            confirmations: tx.confirmations,
+            pending: false
+          }],
+          metadata: {}
         }
       })
   }
@@ -207,6 +211,19 @@ const getNonce = async address => {
   return nonce
 }
 
+const search = input => {
+  const blockHeightRegex = /^[0-9]+$/
+  const txHashRegex = /[0-9a-f]{64}/
+
+  if (txHashRegex.test(input)) {
+    return fetchTransactions({ hash: input })
+  }
+
+  if (blockHeightRegex.test(input)) {
+    return fetchBlocks({ hash: input })
+  }
+}
+
 const sendTransaction = tx => {
   return fetchData(`${BLOCKCHAIN_API_URL}/transaction`, { method: 'post' }, tx)
 }
@@ -219,5 +236,6 @@ export {
   fetchWallet,
   formatTransactions,
   getNonce,
+  search,
   sendTransaction
 }

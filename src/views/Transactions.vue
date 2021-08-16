@@ -65,7 +65,8 @@ export default {
       this.page = parseInt(this.$route.params.page || 1)
 
       if (this.hash) {
-        this.transaction = await fetchTransactions({ hash: this.hash })
+        const { transactions } = await fetchTransactions({ hash: this.hash })
+        this.transaction = transactions[0]
       } else {
         this.fetchTransactions({ page: this.page })
       }
@@ -77,19 +78,6 @@ export default {
       this.metadata = metadata
       this.loading = false
     },
-    // fetchWallet (address) {
-    //   return fetchWallet(address)
-    // },
-    // async loadWallet() {
-    //   const walletAddress = await getWalletAddress()
-
-    //   if (!walletAddress) {
-    //     window.location = '/'
-    //     return
-    //   }
-
-    //   this.wallet = await this.fetchWallet(walletAddress)
-    // },
     pollData() {
       this.polling = this.hash && setInterval(() => {
         // this.fetchTransactions()

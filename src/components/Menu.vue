@@ -1,6 +1,6 @@
 
 <template>
-  <ul class="flex-1 pl-32 main-nav">
+  <ul class="flex-1 main-nav">
     <li
       v-for="(item, index) in mainNav"
       :key="index"
@@ -37,7 +37,7 @@ export default {
 
   @screen md {
     .main-nav {
-      @apply flex flex-wrap -my-20;
+      @apply flex flex-wrap -my-20 md:pl-32;
     }
     .main-nav__link {
       @apply py-20 px-24;

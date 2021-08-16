@@ -15,7 +15,7 @@
     {{ item.description }}
   </td>
   <td data-title="Status:">
-    <span v-if="item.confirmations >= 10 || !item.confirmations" class="icon icon-green mr-0 -mt-2"><CheckCircleIcon /></span>
+    <span v-if="item.confirmations >= 10 || !item.confirmations" class="mr-0 -mt-2 icon icon--confirmed icon-green"><CheckCircleIcon /></span>
     {{ formatStatus(item) }}
   </td>
   <td data-title="Amount:">
@@ -79,6 +79,9 @@ td:last-child {
 
 td .icon {
   @apply w-15 inline-block align-middle;
+}
+td .icon--confirmed {
+  @apply w-18;
 }
 
 td .icon-green {

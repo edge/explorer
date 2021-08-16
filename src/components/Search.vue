@@ -25,6 +25,12 @@
         </span>
       </div>
     </button>
+    <div
+      class="absolute left-0 text-sm2 text-red"
+      :class="size==='large' ? '-bottom-24' : '-top-24'"
+    >
+      Come on man, that's not a valid Tx or Block ID.
+    </div>
   </div>
 </template>
 

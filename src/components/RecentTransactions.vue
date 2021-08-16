@@ -7,7 +7,7 @@
         <tr>
           <th width="25%">Hash</th>
           <th width="15%">From</th>
-          <th width="15%">To</th>
+          <th width="15%"><span class="pl-5">To</span></th>
           <th class="right">Amount</th>
         </tr>
       </thead>
@@ -31,13 +31,14 @@
               {{ sliceString(transaction.sender, 10) }}
             </span>
           </td>
-          <td data-title="To:">
-            <span class="truncate monospace">
+          <td data-title="To:" class="relative">
+            <span class="arrow-icon"><ArrowRightIcon /></span>
+            <span class="truncate lg:pl-5 monospace">
               {{ sliceString(transaction.recipient, 10) }}
             </span>
           </td>
-          <td class="md:text-right" data-title="Amount:">
-            <span class="monospace md:font-sans">
+          <td class="lg:text-right" data-title="Amount:">
+            <span class="monospace lg:font-sans">
               {{ transaction.amount }} XE
             </span>
           </td>
@@ -50,6 +51,7 @@
 <script>
 import moment from 'moment'
 import { fetchTransactions } from '../utils/api'
+import { ArrowRightIcon } from "@heroicons/vue/outline"
 
 export default {
   name: 'RecentTransactions',
@@ -85,6 +87,9 @@ export default {
     timeSince(ts) {
       return moment(ts).fromNow()
     }
+  },
+  components: {
+    ArrowRightIcon
   }
 }
 </script>
@@ -128,6 +133,10 @@ td:last-child {
 
 td a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+td .arrow-icon {
+  @apply absolute hidden pt-1 lg:block w-12 h-12 -left-4 text-green;
 }
 
 @screen lg {

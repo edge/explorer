@@ -10,7 +10,7 @@
   </td>
   <td data-title="To:" class="relative">
     <span class="arrow-icon"><ArrowRightIcon /></span>
-    <span class="hidden pl-10 monospace md:block">{{ sliceString(item.recipient, 19) }}</span>
+    <span class="hidden lg:pl-10 monospace md:block">{{ sliceString(item.recipient, 19) }}</span>
     <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
   </td>
   <td data-title="Tx Hash:" :title="item.hash">
@@ -28,7 +28,7 @@
   </td>
   <td data-title="Amount:">
     <span v-if="item.type.toLowerCase() === 'sent'">-</span>
-    <span class="monospace md:font-sans">{{ formatAmount(item.amount) }} XE</span>
+    <span class="monospace lg:font-sans">{{ formatAmount(item.amount) }} XE</span>
   </td>
 </template>
 
@@ -101,7 +101,7 @@ td .icon-red {
 }
 
 td .arrow-icon {
-  @apply absolute hidden pt-px lg:block w-14 h-14 -left-6 icon-green text-green;
+  @apply absolute hidden pt-px lg:block w-14 h-14 -left-6 text-green;
 }
 
 td a {

@@ -24,7 +24,8 @@
           </td>
           <td class="" data-title="Hash:">
             <router-link :to="{name: 'Block', params: {hash: block.hash}}">
-              <span class="truncate monospace">{{ block.hash.substr(0, 32) }}</span>
+              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 32) }}</span>
+              <span class="monospace md:hidden">{{ block.hash.substr(0, 28) }}</span>
             </router-link>
           </td>
           <td data-title="Mined:">
@@ -99,12 +100,12 @@ tr {
 }
 
 td {
-  @apply bg-white text-sm font-normal px-10 break-all max-w-full flex flex-col justify-start items-start pb-6 leading-snug;
+  @apply bg-white text-sm2 font-normal flex items-center px-10 break-all max-w-full pb-4;
 }
 
 td::before {
   content: attr(data-title);
-  @apply font-normal mr-8 min-w-75 text-xs text-gray-600;
+  @apply font-normal mr-8 min-w-75 text-xs text-gray-600 pt-2;
 }
 
 td:first-child {

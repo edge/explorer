@@ -28,8 +28,9 @@
     <div
       class="absolute left-0 text-sm2 text-red"
       :class="size==='large' ? '-bottom-24' : '-top-24'"
+      v-if="showFeedback"
     >
-      Come on man, that's not a valid Tx or Block ID.
+      {{ searchFeedback }}
     </div>
   </div>
 </template>
@@ -53,21 +54,29 @@ export default {
   data: function () {
     return {
       isSearching: false,
-      searchInput: ''
+      searchFeedback: '',
+      searchInput: '',
+      showFeedback: false
     }
   },
   methods: {
     async search () {
       const result = await search(this.searchInput)
-      
-      const { blocks, transactions } = result
 
-      if (blocks && blocks[0]) {
-        this.$router.push(`/block/${blocks[0].height}`)
-      } else if (transactions && transactions[0]) {
-        this.$router.push(`/transaction/${transactions[0].hash}`)
+      if (result) {
+        const { blocks, transactions } = result
+        if (blocks && blocks[0]) {
+          this.$router.push(`/block/${blocks[0].height}`)
+        } else if (transactions && transactions[0]) {
+          this.$router.push(`/transaction/${transactions[0].hash}`)
+        }
       } else {
         // No result.
+        setTimeout(() => {
+          this.isSearching = false
+          this.searchFeedback = "Come on man, that's not a valid Tx or Block ID."
+          this.showFeedback = true
+        }, 1000)
       }
     }
   }

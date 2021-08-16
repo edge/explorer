@@ -8,8 +8,9 @@
     <span class="hidden monospace md:block">{{ sliceString(item.sender, 20) }}</span>
     <span class="monospace md:hidden">{{ sliceString(item.sender, 26) }}</span>
   </td>
-  <td data-title="To:">
-    <span class="hidden monospace md:block">{{ sliceString(item.recipient, 20) }}</span>
+  <td data-title="To:" class="relative">
+    <span class="arrow-icon"><ArrowRightIcon /></span>
+    <span class="hidden pl-10 monospace md:block">{{ sliceString(item.recipient, 19) }}</span>
     <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
   </td>
   <td data-title="Tx Hash:" :title="item.hash">
@@ -33,7 +34,7 @@
 
 <script>
 const { formatXe } = require('@edge/wallet-utils')
-import { ArrowDownIcon, ArrowUpIcon, CheckCircleIcon } from "@heroicons/vue/outline"
+import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon } from "@heroicons/vue/outline"
 
 export default {
   name: "TransactionsTableItem",
@@ -59,6 +60,7 @@ export default {
   },
   components: {
     ArrowDownIcon,
+    ArrowRightIcon,
     ArrowUpIcon,
     CheckCircleIcon
   }
@@ -96,6 +98,10 @@ td .icon-green {
 
 td .icon-red {
   @apply text-red;
+}
+
+td .arrow-icon {
+  @apply absolute hidden pt-px lg:block w-14 h-14 -left-6 icon-green text-green;
 }
 
 td a {

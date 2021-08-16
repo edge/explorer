@@ -43,8 +43,10 @@ export default {
   @apply p-12 bg-white rounded flex flex-col;
   @apply md:p-16 lg:p-20;
 }
-.stat__label {}
+.stat__label {
+  @apply truncate;
+}
 .stat__value {
-  @apply text-green text-3xl leading-none mt-1;
+  @apply text-green text-2xl md:text-3xl leading-none mt-1;
 }
 </style>

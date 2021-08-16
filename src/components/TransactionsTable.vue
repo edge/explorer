@@ -19,7 +19,7 @@
       </tbody>
       <tbody v-if="!transactions.length">
         <tr>
-          <td colspan="7" class="py-35 bg-white w-full text-center">
+          <td colspan="7" class="block w-full text-center bg-white md:table-cell py-35">
             No transactions.
           </td>
         </tr>

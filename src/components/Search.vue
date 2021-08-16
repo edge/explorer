@@ -65,7 +65,7 @@ export default {
       
       const result = await search(this.searchInput)
       
-      this.isSearching = false
+      this.isSearching = true
 
       const { blocks, transactions } = result
       
@@ -78,6 +78,7 @@ export default {
         setTimeout(() => {
           this.searchFeedback = "Come on man, that's not a valid Tx or Block ID."
           this.showFeedback = true
+          this.isSearching = false
         }, 1000)
       }
     }

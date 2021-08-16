@@ -1,6 +1,7 @@
 const { rem } = require('../utils')
 
 const spacing = {
+  0: rem(0),
   2: rem(2),
   3: rem(3),
   4: rem(4),

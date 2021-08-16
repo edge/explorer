@@ -20,15 +20,17 @@
       <tbody v-if="blocks.length">
         <tr v-for="block in blocks" :key="block.hash">
           <td data-title="Height:">
-            {{ block.height }}
+            <span class="monospace">{{ block.height }}</span>
           </td>
-          <td data-title="Hash:">
+          <td class="" data-title="Hash:">
             <router-link :to="{name: 'Block', params: {hash: block.hash}}">
-              <span class="monospace">{{ block.hash.substr(0, 32) }}</span>
+              <span class="truncate monospace">{{ block.hash.substr(0, 32) }}</span>
             </router-link>
           </td>
           <td data-title="Mined:">
-            {{ timeSince(block.timestamp) }}
+            <span class="monospace md:font-sans md:text-gray-400">
+              {{ timeSince(block.timestamp) }}
+            </span>
           </td>
         </tr>
       </tbody>
@@ -92,13 +94,17 @@ th:last-child {
   @apply rounded-r-4;
 }
 
+tr {
+  @apply overflow-hidden;
+}
+
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full;
+  @apply bg-white text-sm font-normal px-10 break-all max-w-full flex flex-col justify-start items-start pb-6 leading-snug;
 }
 
 td::before {
   content: attr(data-title);
-  @apply font-bold mr-8 min-w-100;
+  @apply font-normal mr-8 min-w-75 text-xs text-gray-600;
 }
 
 td:first-child {
@@ -107,6 +113,10 @@ td:first-child {
 
 td:last-child {
   @apply rounded-r-4 pb-8 border-b-4 border-gray-200;
+}
+
+td a {
+  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 @screen lg {

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full mb-25">
     <table class="w-full">
-      <thead class="hidden lg:table-header-group">
+      <thead class="sticky top-0 hidden lg:table-header-group">
         <tr>
           <th width="15%">Height</th>
           <th width="52%">Hash</th>
@@ -23,10 +23,12 @@
             </router-link>
           </td>
           <td data-title="Hash:">
-            <span class="monospace">{{ block.hash.substr(0, 32) }}</span>
+            <span class="truncate monospace">{{ block.hash.substr(0, 32) }}</span>
           </td>
           <td data-title="Mined:">
-            {{ timeSince(block.timestamp) }}
+            <span class="md:text-gray-400 monospace md:font-sans">
+              {{ timeSince(block.timestamp) }}
+            </span>
           </td>
         </tr>
       </tbody>
@@ -89,12 +91,12 @@ th:last-child {
 }
 
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full;
+  @apply bg-white text-sm2 font-normal flex items-center px-10 break-all max-w-full pb-4;
 }
 
 td::before {
   content: attr(data-title);
-  @apply font-bold mr-8 min-w-100;
+  @apply font-normal mr-8 min-w-75 text-xs text-gray-600 pt-2;
 }
 
 td:first-child {
@@ -106,7 +108,7 @@ td:last-child {
 }
 
 td a {
-  @apply text-green align-middle;
+  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 @screen lg {

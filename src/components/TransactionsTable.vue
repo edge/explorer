@@ -1,7 +1,7 @@
 <template>
   <div class="transaction-table">
     <table>
-      <thead class="hidden lg:table-header-group">
+      <thead class="sticky top-0 hidden lg:table-header-group">
       <tr>
         <th width="14%">Date</th>
         <th width="16%">From</th>

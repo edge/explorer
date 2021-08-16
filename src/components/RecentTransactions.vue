@@ -8,7 +8,7 @@
           <th width="25%">Hash</th>
           <th width="15%">From</th>
           <th width="15%">To</th>
-          <th class="text-right">Amount</th>
+          <th class="right">Amount</th>
         </tr>
       </thead>
       <tbody v-if="loading">
@@ -22,23 +22,24 @@
         <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
             <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
-              <span class="monospace">
-                {{ sliceString(transaction.hash, 10) }}
-              </span>
+              <span class="hidden monospace md:block">{{ sliceString(transaction.hash, 10) }}</span>
+              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 28) }}</span>
             </router-link>
           </td>
           <td data-title="From:">
-            <span class="monospace">
+            <span class="truncate monospace">
               {{ sliceString(transaction.sender, 10) }}
             </span>
           </td>
           <td data-title="To:">
-            <span class="monospace">
+            <span class="truncate monospace">
               {{ sliceString(transaction.recipient, 10) }}
             </span>
           </td>
-          <td class="text-right" data-title="Amount:">
-            {{ transaction.amount }} XE
+          <td class="md:text-right" data-title="Amount:">
+            <span class="monospace md:font-sans">
+              {{ transaction.amount }} XE
+            </span>
           </td>
         </tr>
       </tbody>
@@ -96,6 +97,9 @@ table, tbody, tr {
 th {
   @apply font-normal text-sm2 text-left text-black bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
 }
+th.right {
+  @apply text-right;
+}
 
 /* th:first-child {
   @apply pt-8;
@@ -106,12 +110,12 @@ th:last-child {
 }
 
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full;
+  @apply bg-white text-sm2 font-normal flex items-center px-10 break-all max-w-full pb-4;
 }
 
 td::before {
   content: attr(data-title);
-  @apply font-bold mr-8 min-w-100;
+  @apply font-normal mr-8 min-w-75 text-xs text-gray-600 pt-2;
 }
 
 td:first-child {
@@ -120,6 +124,10 @@ td:first-child {
 
 td:last-child {
   @apply rounded-r-4 pb-8 border-b-4 border-gray-200;
+}
+
+td a {
+  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 @screen lg {

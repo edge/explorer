@@ -75,6 +75,7 @@ module.exports = plugin.withOptions(
           },
           minWidth: {
             100: rem(100),
+            75: rem(75),
             48: rem(48)
           },
           borderWidth: {
@@ -103,7 +104,7 @@ module.exports = plugin.withOptions(
           },
           fontSize: {
             half: '50%',
-            xs: rem(10),
+            xs: rem(11),
             'base3': rem(14),
             '3xl': rem(30)
           },

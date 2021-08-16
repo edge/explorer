@@ -1,27 +1,33 @@
 <template>
-  <td data-title="Date:">{{ item.date }}</td>
+  <td data-title="Date:">
+    <span class="monospace md:font-sans">
+      {{ item.date }}
+    </span>
+  </td>
   <td data-title="From:">
-    <span class="monospace">{{ sliceString(item.sender, 20) }}</span>
+    <span class="hidden monospace md:block">{{ sliceString(item.sender, 20) }}</span>
+    <span class="monospace md:hidden">{{ sliceString(item.sender, 26) }}</span>
   </td>
   <td data-title="To:">
-    <span class="monospace">{{ sliceString(item.recipient, 20) }}</span>
+    <span class="hidden monospace md:block">{{ sliceString(item.recipient, 20) }}</span>
+    <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
   </td>
   <td data-title="Tx Hash:" :title="item.hash">
     <router-link :to="{name: 'Transaction', params: {hash: item.hash}}">
-      <span class="monospace">{{ sliceString(item.hash, 10) }}</span>
+      <span class="hidden monospace md:block">{{ sliceString(item.hash, 8) }}</span>
+      <span class="monospace md:hidden">{{ sliceString(item.hash, 26) }}</span>
     </router-link>
   </td>
   <td data-title="Memo:" :class="item.description === 'None' ? 'text-gray-400' : ''">
-    {{ item.description }}
+    <span class="monospace md:font-sans">{{ item.description }}</span>
   </td>
   <td data-title="Status:">
-    <span v-if="item.confirmations >= 10 || !item.confirmations" class="mr-0 -mt-2 icon icon--confirmed icon-green"><CheckCircleIcon /></span>
-    {{ formatStatus(item) }}
+    <span v-if="item.confirmations >= 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-green"><CheckCircleIcon /></span>
+    <span class="monospace md:font-sans">{{ formatStatus(item) }}</span>
   </td>
   <td data-title="Amount:">
     <span v-if="item.type.toLowerCase() === 'sent'">-</span>
-    {{ formatAmount(item.amount) }}
-    XE
+    <span class="monospace md:font-sans">{{ formatAmount(item.amount) }} XE</span>
   </td>
 </template>
 
@@ -61,12 +67,12 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full;
+  @apply bg-white text-sm2 font-normal flex items-center px-10 break-all max-w-full pb-4;
 }
 
 td::before {
   content: attr(data-title);
-  @apply font-bold mr-8 min-w-100;
+  @apply font-normal mr-8 min-w-75 text-xs text-gray-600 pt-2;
 }
 
 td:first-child {
@@ -81,7 +87,7 @@ td .icon {
   @apply w-15 inline-block align-middle;
 }
 td .icon--confirmed {
-  @apply w-18;
+  @apply w-16 md:w-18;
 }
 
 td .icon-green {
@@ -93,7 +99,7 @@ td .icon-red {
 }
 
 td a {
-  @apply text-green align-middle;
+  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 @screen lg {

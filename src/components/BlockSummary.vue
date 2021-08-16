@@ -24,6 +24,6 @@ export default {
     @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded md:pr-50;
   }
   .tile span {
-    @apply text-black font-medium;
+    @apply text-black font-medium font-mono;
   }
 </style>

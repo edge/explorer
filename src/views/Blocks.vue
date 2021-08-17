@@ -9,6 +9,12 @@
         <BlockOverview :block="block" />
         <BlockSummary :block="block" />
       </div>
+      
+      <a href="#">Click to expand raw data ></a>
+      <div class="mt-10">
+        <pre>{{rawData}}</pre>
+      </div>
+
       <h3 v-if="block">Block Transactions</h3>
       <BlocksTable v-if="blocks.length" :blocks="blocks" />
       <Pagination v-if="!block" baseRoute="Blocks" :currentPage="page" :totalPages="metadata.totalCount ? Math.ceil(metadata.totalCount/metadata.limit) : 0" />
@@ -36,7 +42,7 @@ import { fetchBlocks } from '../utils/api'
 export default {
   name: 'Overview',
   title() {
-    return 'XE Wallet » Blocks'
+    return 'XE Explorer » Blocks'
   },
   components: {
     BlocksTable,
@@ -57,6 +63,7 @@ export default {
       metadata: {},
       page: 1,
       polling: null,
+      rawData: {},
       transactions: null
     }
   },
@@ -93,6 +100,7 @@ export default {
       }, 10000)
     },
     processBlock() {
+      this.rawData = { ...this.block }
       this.transactions = this.block.transactions
 
       this.block.total = this.transactions.reduce((accumulator, currentItem) => {

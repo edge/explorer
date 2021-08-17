@@ -28,7 +28,7 @@ import { fetchTransactions, fetchWallet } from '../utils/api'
 export default {
   name: 'Transactions',
   title() {
-    return 'XE Wallet » Transactions'
+    return 'XE Explorer » Transactions'
   },
   data: function () {
     return {

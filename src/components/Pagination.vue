@@ -3,13 +3,13 @@
     <ol class="pagination__list">
       <li class="pagination__item">
         <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { page: 1 }}">First</router-link>
-        <span v-else>First</span>
+        <span class="not-link" v-else>First</span>
       </li>
       <li class="pagination__item">
         <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { page: currentPage - 1 }}">
           <ChevronLeftIcon/>
         </router-link>
-        <span v-else><ChevronLeftIcon/></span>
+        <span class="not-link" v-else><ChevronLeftIcon/></span>
       </li>
       <li class="pagination__item">
         <span v-if="totalPages">Page {{currentPage}} of {{totalPages}}</span>
@@ -19,13 +19,13 @@
         <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { page: currentPage + 1 }}">
           <ChevronRightIcon/>
         </router-link>
-        <span v-else><ChevronRightIcon/></span>
+        <span class="not-link" v-else><ChevronRightIcon/></span>
       </li>
       <li class="pagination__item">
         <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { page: totalPages }}">
           Last
         </router-link>
-        <span v-else>Last</span>
+        <span class="not-link" v-else>Last</span>
       </li>
     </ol>
   </nav>
@@ -51,11 +51,19 @@ export default {
 }
 
 .pagination__item {
-  @apply py-6 px-12 bg-white rounded text-gray-400;
+  @apply bg-white rounded text-gray-400;
+}
+
+.pagination__item a, .pagination__item span {
+  @apply py-6 px-12 block;
 }
 
 .pagination__item a {
   @apply hover:text-green;
+}
+
+.pagination__item span.not-link {
+  @apply opacity-25;
 }
 
 .pagination__item .active {

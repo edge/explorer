@@ -1,7 +1,7 @@
 <template>
   <div class="transaction-table">
     <table>
-      <thead class="sticky top-0 hidden lg:table-header-group">
+      <thead class="sticky top-0 z-10 hidden lg:table-header-group">
       <tr>
         <th width="14%">Date</th>
         <th width="16%">From</th>
@@ -19,7 +19,7 @@
       </tbody>
       <tbody v-if="!transactions.length">
         <tr>
-          <td colspan="7" class="block w-full text-center bg-white md:table-cell py-35">
+          <td colspan="7" class="block w-full text-center bg-white lg:table-cell py-35">
             No transactions.
           </td>
         </tr>

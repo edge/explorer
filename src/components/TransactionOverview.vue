@@ -39,6 +39,6 @@ export default {
     @apply col-span-5 md:col-span-4;
   }
   .transactionRow__value {
-    @apply font-mono col-span-7 md:col-span-8 text-black;
+    @apply font-mono col-span-7 md:col-span-8 text-black truncate;
   }
 </style>

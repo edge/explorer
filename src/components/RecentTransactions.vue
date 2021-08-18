@@ -27,13 +27,13 @@
             </router-link>
           </td>
           <td data-title="From:">
-            <span class="truncate monospace">
+            <span class="truncate monospace" :title="transaction.sender">
               {{ sliceString(transaction.sender, 18) }}&#8230;
             </span>
           </td>
           <td data-title="To:" class="relative">
             <span class="arrow-icon"><ArrowRightIcon /></span>
-            <span class="truncate lg:pl-5 monospace">
+            <span class="truncate lg:pl-5 monospace" :title="transaction.recipient">
               {{ sliceString(transaction.recipient, 20) }}&#8230;
             </span>
           </td>

@@ -33,6 +33,7 @@
             {{ block.total }}
           </td>
           <td data-title="Mined:">
+            <span class="mr-1 lg:-mt-2 icon"><ClockIcon /></span>
             <span class="md:text-gray-400 monospace md:font-sans">
               {{ timeSince(block.timestamp) }}
             </span>
@@ -45,6 +46,7 @@
 
 <script>
 import moment from 'moment'
+import { ClockIcon } from "@heroicons/vue/outline"
 
 export default {
   name: 'BlocksTable',
@@ -60,6 +62,9 @@ export default {
     timeSince(ts) {
       return moment(ts).fromNow()
     }
+  },
+  components: {
+    ClockIcon
   }
 }
 </script>
@@ -100,6 +105,10 @@ td:last-child {
 
 td a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+td .icon {
+  @apply w-13 lg:w-15 inline-block align-middle text-gray-600 lg:text-gray-400;
 }
 
 @screen lg {

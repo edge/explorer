@@ -101,7 +101,7 @@ td .icon-red {
 }
 
 td .arrow-icon {
-  @apply absolute hidden pt-px lg:block w-14 h-14 -left-6 text-green;
+  @apply absolute hidden pt-px lg:block w-14 h-14 -left-8 text-green;
 }
 
 td a {

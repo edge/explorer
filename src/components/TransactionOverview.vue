@@ -4,12 +4,20 @@
 
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
-        <div class="transactionRow__label">To</div>
-        <div class="transactionRow__value">{{transaction.recipient}}</div>
+        <div class="transactionRow__label">Block</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Block', params: {height: transaction.block.height}}">
+            {{transaction.block.height}}
+          </router-link>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">From</div>
         <div class="transactionRow__value">{{transaction.sender}}</div>
+      </div>
+      <div class="transactionRow">
+        <div class="transactionRow__label">To</div>
+        <div class="transactionRow__value">{{transaction.recipient}}</div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Completed</div>

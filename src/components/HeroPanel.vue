@@ -3,7 +3,7 @@
     <div class="container flex flex-col justify-end h-full md:justify-between md:flex-row md:items-end">
       <div class="flex flex-col">
         <h1 class="hero-panel__title">{{ title }}</h1>
-        <div class="max-w-md mt-5 font-mono text-white md:mt-10 lg:max-w-lg" :class="hash ? '' : 'hidden'">
+        <div class="max-w-md mt-5 font-mono text-white truncate md:mt-10 lg:max-w-lg" :class="hash ? '' : 'hidden'">
           <span class="text-green">Hash: </span>
           {{ hash }}
         </div>

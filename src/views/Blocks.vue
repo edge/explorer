@@ -6,13 +6,12 @@
   <div class="bg-gray-200 py-35">
     <div class="container">
       <div v-if="block" class="row mb-25">
-        <BlockOverview :block="block" />
+        <BlockOverview :block="block" :rawData="rawData" />
         <BlockSummary :block="block" />
       </div>
-      
-      <a href="#">Click to expand raw data ></a>
-      <div class="mt-10">
-        <pre>{{rawData}}</pre>
+
+      <div v-if="rawData" class="mb-25">
+        <RawData :rawData="rawData" />
       </div>
 
       <h3 v-if="block">Block Transactions</h3>
@@ -31,6 +30,7 @@ import BlockOverview from "@/components/BlockOverview"
 import BlockSummary from "@/components/BlockSummary"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination"
+import RawData from "@/components/RawData"
 import TransactionsTable from "@/components/TransactionsTable"
 import { fetchBlocks } from '../utils/api'
 // import { getWalletAddress } from '../utils/wallet'
@@ -51,6 +51,7 @@ export default {
     Header,
     HeroPanel,
     Pagination,
+    RawData,
     TransactionsTable
   },
   data: function () {

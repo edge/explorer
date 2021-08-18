@@ -16,9 +16,9 @@
         </tr>
       </tbody> -->
       <tbody v-if="blocks.length">
-        <tr v-for="block in blocks" :key="block.hash">
+        <tr v-for="block in blocks" :key="block.height">
           <td data-title="Height:">
-            <router-link :to="{name: 'Block', params: {hash: block.hash}}">
+            <router-link :to="{name: 'Block', params: {height: block.height}}">
               <span class="monospace">{{block.height}}</span>
             </router-link>
           </td>

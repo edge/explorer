@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <HeroPanel v-if="block" :title="'Blocks'" :hash="hash" />
+  <HeroPanel v-if="block" :title="'Block'" :height="height" />
   <HeroPanel v-else :title="'Blocks'" />
 
   <div class="bg-gray-200 py-35">
@@ -33,11 +33,6 @@ import Pagination from "@/components/Pagination"
 import RawData from "@/components/RawData"
 import TransactionsTable from "@/components/TransactionsTable"
 import { fetchBlocks } from '../utils/api'
-// import { getWalletAddress } from '../utils/wallet'
-
-// const dayjs = require('dayjs')
-// const relativeTime = require('dayjs/plugin/relativeTime')
-// dayjs.extend(relativeTime)
 
 export default {
   name: 'Overview',
@@ -59,7 +54,7 @@ export default {
       block: null,
       blocks: [],
       error: '',
-      hash: null,
+      height: null,
       loading: false,
       metadata: {},
       page: 1,
@@ -81,12 +76,12 @@ export default {
       this.loading = false
     },
     async fetchData() {
-      this.hash = this.$route.params.hash
+      this.height = this.$route.params.height
       this.page = parseInt(this.$route.params.page || 1)
       
-      if (this.hash) {
+      if (this.height) {
         this.loading = true
-        const { blocks } = await fetchBlocks({ hash: this.hash })
+        const { blocks } = await fetchBlocks({ height: this.height })
         this.block = blocks[0]
         this.processBlock()
         this.loading = false

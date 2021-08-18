@@ -22,7 +22,7 @@ const routes = [
     component: Overview
   },
   {
-    path: '/block/:hash',
+    path: '/block/:height',
     name: 'Block',
     component: Blocks
   },

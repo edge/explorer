@@ -5,7 +5,7 @@ const {
 const BLOCKCHAIN_API_URL = process.env.VUE_APP_BLOCKCHAIN_API_URL
 const INDEX_API_URL = process.env.VUE_APP_INDEX_API_URL
 
-const fetchBlocks = async ({ hash, options = {} }) => {
+const fetchBlocks = async ({ height, options = {} }) => {
   if (!options.page) {
     options.page = 1
   }
@@ -14,11 +14,11 @@ const fetchBlocks = async ({ hash, options = {} }) => {
     options.limit = 25
   }
 
-  const url = hash
-    ? `${INDEX_API_URL}/block/${hash}`
+  const url = height
+    ? `${INDEX_API_URL}/block/${height}`
     : `${INDEX_API_URL}/blocks?page=${options.page}&limit=${options.limit}`
 
-  if (hash) {
+  if (height) {
     return fetchData(url)
       .then(block => {
         const transactions = []
@@ -133,6 +133,9 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
         const tx = { ...results }
 
         return {
+          raw: {
+            ...tx
+          },
           transactions: [{
             amount: xeStringFromMicroXe(tx.amount),
             date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',

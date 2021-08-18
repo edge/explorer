@@ -20,13 +20,13 @@
       <tbody v-if="blocks.length">
         <tr v-for="block in blocks" :key="block.hash">
           <td data-title="Height:">
-            <span class="monospace">{{ block.height }}</span>
+            <router-link :to="{name: 'Block', params: {height: block.height}}">
+              <span class="monospace">{{ block.height }}</span>
+            </router-link>
           </td>
           <td class="" data-title="Hash:">
-            <router-link :to="{name: 'Block', params: {hash: block.hash}}">
               <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 32) }}</span>
               <span class="monospace md:hidden">{{ block.hash.substr(0, 28) }}</span>
-            </router-link>
           </td>
           <td data-title="Mined:">
             <span class="monospace md:font-sans md:text-gray-400">
@@ -49,28 +49,12 @@ export default {
   data: function () {
     return {}
   },
-  mounted() {
-    // this.loading = true
-    // this.fetchBlocks()
-    // this.pollData()
-  },
   watch: {
     $route (to, from) {
-      // clearInterval(this.polling)
-      // this.polling = null
+
     }
   },
   methods: {
-    // async fetchBlocks() {
-    //   const { blocks } = await fetchBlocks({ options: { limit: 5 } })
-    //   this.blocks = blocks
-    //   this.loading = false
-    // },
-    // pollData() {
-    //   this.polling = setInterval(() => {
-    //     this.fetchBlocks()
-    //   }, 10000)
-    // },
     timeSince(ts) {
       return moment(ts).fromNow()
     }

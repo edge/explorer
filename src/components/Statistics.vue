@@ -4,11 +4,11 @@
     <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2">
       <div class="stat">
         <span class="stat__label">Blocks</span>
-        <span class="stat__value">{{blockMetadata && blockMetadata.totalCount}}</span>
+        <span class="stat__value">{{blockMetadata && Number(blockMetadata.totalCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Transactions</span>
-        <span class="stat__value">{{transactionMetadata && transactionMetadata.totalCount}}</span>
+        <span class="stat__value">{{transactionMetadata && Number(transactionMetadata.totalCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Blocks <span class="text-gray-400">last 24 hrs</span></span>

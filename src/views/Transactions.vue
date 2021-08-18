@@ -9,6 +9,11 @@
         <TransactionOverview :transaction="transaction" />
         <TransactionSummary :transaction="transaction" />
       </div>
+
+      <div v-if="rawData" class="mb-25">
+        <RawData :rawData="rawData" />
+      </div>
+
       <TransactionsTable :transactions="transactions" v-if="!transaction"/>
       <Pagination v-if="!transaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
     </div>
@@ -19,6 +24,7 @@
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination";
+import RawData from "@/components/RawData"
 import TransactionOverview from "@/components/TransactionOverview"
 import TransactionSummary from "@/components/TransactionSummary"
 import TransactionsTable from "@/components/TransactionsTable"
@@ -37,6 +43,7 @@ export default {
       metadata: {},
       page: 1,
       polling: null,
+      rawData: null,
       transaction: null,
       transactions: []
     }
@@ -45,6 +52,7 @@ export default {
     Header,
     HeroPanel,
     Pagination,
+    RawData,
     TransactionOverview,
     TransactionSummary,
     TransactionsTable
@@ -65,8 +73,9 @@ export default {
       this.page = parseInt(this.$route.params.page || 1)
 
       if (this.hash) {
-        const { transactions } = await fetchTransactions({ hash: this.hash })
+        const { raw, transactions } = await fetchTransactions({ hash: this.hash })
         this.transaction = transactions[0]
+        this.rawData = { ...raw }
       } else {
         this.fetchTransactions({ page: this.page })
       }

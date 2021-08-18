@@ -4,7 +4,9 @@
       <thead class="sticky top-0 hidden lg:table-header-group">
         <tr>
           <th width="15%">Height</th>
-          <th width="52%">Hash</th>
+          <th width="30%">Hash</th>
+          <th>Transactions</th>
+          <th>Total XE</th>
           <th>Mined</th>
         </tr>
       </thead>
@@ -22,8 +24,13 @@
               <span class="monospace">{{block.height}}</span>
             </router-link>
           </td>
-          <td data-title="Hash:">
-            <span class="truncate monospace">{{ block.hash.substr(0, 32) }}</span>
+          <td data-title="Hash:"><span class="truncate monospace">{{ block.hash.substr(0, 32) }}&#8230;</span>
+          </td>
+          <td data-title="Transactions:">
+            {{ block.transactions.length }}
+          </td>
+          <td data-title="XE:">
+            {{ block.total }}
           </td>
           <td data-title="Mined:">
             <span class="md:text-gray-400 monospace md:font-sans">
@@ -38,7 +45,6 @@
 
 <script>
 import moment from 'moment'
-// import { fetchBlocks } from '../utils/api'
 
 export default {
   name: 'BlocksTable',
@@ -50,22 +56,7 @@ export default {
       polling: null
     }
   },
-  mounted() {
-    // this.loading = true
-    // this.fetchBlocks()
-    // this.pollData()
-  },
   methods: {
-    // async fetchBlocks() {
-    //   const { blocks } = await fetchBlocks({})
-    //   this.blocks = blocks
-    //   this.loading = false
-    // },
-    // pollData() {
-    //   this.polling = setInterval(() => {
-    //     this.fetchBlocks()
-    //   }, 10000)
-    // },
     timeSince(ts) {
       return moment(ts).fromNow()
     }
@@ -91,7 +82,7 @@ th:last-child {
 }
 
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-10 break-all max-w-full pb-4;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
 }
 
 td::before {
@@ -125,7 +116,7 @@ td a {
   }
 
   th {
-    @apply pt-13 pb-13 pr-30 pb-13;
+    @apply pt-13 pb-13 pr-30;
   }
 
   th:first-child {

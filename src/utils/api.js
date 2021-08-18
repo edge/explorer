@@ -21,25 +21,16 @@ const fetchBlocks = async ({ height, options = {} }) => {
   if (height) {
     return fetchData(url)
       .then(block => {
-        const transactions = []
-        const blockTransactionData = {
-          ...block.data.transactions
-        }
+        block.transactions = pluckBlockTransactions(block)
 
-        Object.keys(blockTransactionData).forEach(address => {
-          const addressData = blockTransactionData[address]
+        // Add total XE.
+        block.total = block.transactions.reduce((accumulator, currentItem) => {
+          accumulator += Number(currentItem.amount)
+          return accumulator
+        }, 0)
 
-          Object.keys(addressData).forEach(tx => {
-            transactions.push(addressData[tx])
-          })
-        })
-
-        block.transactions = transactions.sort((a, b) => {
-          if (a.timestamp === b.timestamp) return 0
-          return a.timestamp < b.timestamp ? -1 : 1
-        })
-
-        block.transactions = formatTransactions(null, block.transactions)
+        // Add average XE.
+        block.average = block.transactions.length ? block.total / block.transactions.length : 0
 
         return {
           blocks: [block],
@@ -51,6 +42,20 @@ const fetchBlocks = async ({ height, options = {} }) => {
   return fetchData(url)
     .then(response => {
       const { results, metadata } = response
+
+      results.forEach(block => {
+        block.transactions = pluckBlockTransactions(block)
+
+        // Add total XE.
+        block.total = block.transactions.reduce((accumulator, currentItem) => {
+          accumulator += Number(currentItem.amount)
+          return accumulator
+        }, 0)
+
+        // Add average XE.
+        block.average = block.transactions.length ? block.total / block.transactions.length : 0
+      })
+
       return {
         blocks: results,
         metadata
@@ -214,6 +219,28 @@ const getNonce = async address => {
   }
 
   return nonce
+}
+
+const pluckBlockTransactions = block => {
+  const transactions = []
+  const blockTransactionData = {
+    ...block.data.transactions
+  }
+
+  Object.keys(blockTransactionData).forEach(address => {
+    const addressData = blockTransactionData[address]
+
+    Object.keys(addressData).forEach(tx => {
+      transactions.push(addressData[tx])
+    })
+  })
+
+  block.transactions = transactions.sort((a, b) => {
+    if (a.timestamp === b.timestamp) return 0
+    return a.timestamp < b.timestamp ? -1 : 1
+  })
+
+  return formatTransactions(null, block.transactions)
 }
 
 const search = input => {

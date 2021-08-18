@@ -12,7 +12,7 @@
         <span class="not-link" v-else><ChevronLeftIcon/></span>
       </li>
       <li class="pagination__item">
-        <span v-if="totalPages">Page {{currentPage}} of {{totalPages}}</span>
+        <span v-if="totalPages">Page {{Number(currentPage).toLocaleString()}} of {{Number(totalPages).toLocaleString()}}</span>
         <span v-else>&nbsp;</span>
       </li>
       <li class="pagination__item">

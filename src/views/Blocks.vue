@@ -98,13 +98,6 @@ export default {
     processBlock() {
       this.rawData = { ...this.block }
       this.transactions = this.block.transactions
-
-      this.block.total = this.transactions.reduce((accumulator, currentItem) => {
-        accumulator += Number(currentItem.amount)
-        return accumulator
-      }, 0)
-      
-      this.block.average = this.transactions.length ? this.block.total/this.transactions.length : 0
     }
   }
 }

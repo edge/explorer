@@ -3,10 +3,10 @@
     <table>
       <thead class="sticky top-0 z-10 hidden lg:table-header-group">
       <tr>
+        <th width="12%">Tx Hash</th>
         <th width="14%">Date</th>
         <th width="16%">From</th>
         <th width="16%"><span class="pl-10">To</span></th>
-        <th width="9%">Tx Hash</th>
         <th width="18%">Memo</th>
         <th width="10%">Status</th>
         <th width="16%">Amount</th>

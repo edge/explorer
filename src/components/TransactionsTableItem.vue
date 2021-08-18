@@ -1,23 +1,23 @@
 <template>
+  <td data-title="Tx Hash:" :title="item.hash">
+    <router-link :to="{name: 'Transaction', params: {hash: item.hash}}">
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.hash, 8) }}&#8230;</span>
+      <span class="monospace md:hidden">{{ sliceString(item.hash, 26) }}&#8230;</span>
+    </router-link>
+  </td>
   <td data-title="Date:">
     <span class="monospace md:font-sans">
       {{ item.date }}
     </span>
   </td>
   <td data-title="From:">
-    <span class="hidden monospace md:block">{{ sliceString(item.sender, 20) }}</span>
-    <span class="monospace md:hidden">{{ sliceString(item.sender, 26) }}</span>
+    <span class="hidden monospace md:block">{{ sliceString(item.sender, 20) }}&#8230;</span>
+    <span class="monospace md:hidden">{{ sliceString(item.sender, 26) }}&#8230;</span>
   </td>
   <td data-title="To:" class="relative">
     <span class="arrow-icon"><ArrowRightIcon /></span>
-    <span class="hidden lg:pl-10 monospace md:block">{{ sliceString(item.recipient, 19) }}</span>
-    <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
-  </td>
-  <td data-title="Tx Hash:" :title="item.hash">
-    <router-link :to="{name: 'Transaction', params: {hash: item.hash}}">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.hash, 8) }}</span>
-      <span class="monospace md:hidden">{{ sliceString(item.hash, 26) }}</span>
-    </router-link>
+    <span class="hidden lg:pl-10 monospace md:block">{{ sliceString(item.recipient, 20) }}&#8230;</span>
+    <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}&#8230;</span>
   </td>
   <td data-title="Memo:" :class="item.description === 'None' ? 'text-gray-400' : ''">
     <span class="monospace md:font-sans">{{ item.description }}</span>
@@ -46,7 +46,7 @@ export default {
       }
     },
     sliceString(string, symbols) {
-      return string.length > symbols ? string.slice(0, symbols) + '...' : string;
+      return string.length > symbols ? string.slice(0, symbols) : string;
     },
     formatAmount(amount) {
       return formatXe(amount, true)

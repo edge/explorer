@@ -5,9 +5,9 @@
     <table class="w-full">
       <thead class="hidden lg:table-header-group">
         <tr>
-          <th width="25%">Hash</th>
-          <th width="15%">From</th>
-          <th width="15%"><span class="pl-5">To</span></th>
+          <th width="20%">Hash</th>
+          <th width="25%">From</th>
+          <th width="25%"><span class="pl-5">To</span></th>
           <th class="right">Amount</th>
         </tr>
       </thead>
@@ -22,19 +22,19 @@
         <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
             <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
-              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 10) }}</span>
-              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 20) }}</span>
+              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 8) }}&#8230;</span>
+              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 20) }}&#8230;</span>
             </router-link>
           </td>
           <td data-title="From:">
             <span class="truncate monospace">
-              {{ sliceString(transaction.sender, 10) }}
+              {{ sliceString(transaction.sender, 18) }}&#8230;
             </span>
           </td>
           <td data-title="To:" class="relative">
             <span class="arrow-icon"><ArrowRightIcon /></span>
             <span class="truncate lg:pl-5 monospace">
-              {{ sliceString(transaction.recipient, 10) }}
+              {{ sliceString(transaction.recipient, 20) }}&#8230;
             </span>
           </td>
           <td class="lg:text-right" data-title="Amount:">

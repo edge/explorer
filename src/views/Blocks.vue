@@ -64,7 +64,7 @@ export default {
       metadata: {},
       page: 1,
       polling: null,
-      rawData: {},
+      rawData: null,
       transactions: null
     }
   },

@@ -13,7 +13,7 @@
         </span>
       </div>
       <div v-if="rawDataVisible" class="mt-20">
-        {{ rawData }}
+        <pre class="text-sm">{{ JSON.stringify(rawData, null, 2) }}</pre>
       </div>
     </div>
   </div>

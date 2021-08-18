@@ -35,7 +35,7 @@ export default {
 
 <style scoped>
   .main-nav__link {
-    @apply text-gray block p-12 transition bg-black-100 bg-opacity-60 hover:text-white;
+    @apply text-gray block px-12 py-20 my-px transition bg-black-100 bg-opacity-60 hover:text-white;
   }
 
   .main-nav__link.router-link-active {
@@ -56,7 +56,7 @@ export default {
       @apply flex flex-wrap -my-20 md:pl-32;
     }
     .main-nav__link {
-      @apply py-20 px-24;
+      @apply py-20 px-24 my-0;
     }
   }
   @screen lg {

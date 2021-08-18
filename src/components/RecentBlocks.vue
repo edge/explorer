@@ -6,7 +6,9 @@
       <thead class="hidden lg:table-header-group">
         <tr>
           <th width="15%">Height</th>
-          <th width="52%">Hash</th>
+          <th width="25%">Hash</th>
+          <th width="20%">Transactions</th>
+          <th width="20%">XE</th>
           <th>Mined</th>
         </tr>
       </thead>
@@ -25,8 +27,14 @@
             </router-link>
           </td>
           <td class="" data-title="Hash:">
-              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 32) }}</span>
-              <span class="monospace md:hidden">{{ block.hash.substr(0, 28) }}</span>
+              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 16) }}&#8230;</span>
+              <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}&#8230;</span>
+          </td>
+          <td data-title="Transactions:">
+            {{ block.transactions.length }}
+          </td>
+          <td data-title="XE:">
+            {{ block.total }}
           </td>
           <td data-title="Mined:">
             <span class="monospace md:font-sans md:text-gray-400">
@@ -84,7 +92,7 @@ tr {
 }
 
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-10 break-all max-w-full pb-4;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
 }
 
 td::before {
@@ -118,7 +126,7 @@ td a {
   }
 
   th {
-    @apply pt-13 pb-13 pr-30 pb-13;
+    @apply pt-13 pb-13 pr-30;
   }
 
   th:first-child {

@@ -31,7 +31,7 @@ import { fetchBlocks, fetchTransactions } from '../utils/api'
 export default {
   name: 'Summary',
   title() {
-    return 'XE Explorer » Summary'
+    return 'XE Explorer » Overview'
   },
   data: function () {
     return {

@@ -20,7 +20,7 @@
     <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}&#8230;</span>
   </td>
   <td data-title="Memo:" :class="item.description === 'None' ? 'text-gray-400' : ''">
-    <span class="monospace md:font-sans">{{ item.description }}</span>
+    <span class="monospace md:font-sans">{{ sliceString(item.description, 26) }}&#8230;</span>
   </td>
   <td data-title="Status:">
     <span v-if="item.confirmations >= 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-green"><CheckCircleIcon /></span>

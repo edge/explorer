@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { ClockIcon } from "@heroicons/vue/outline"
+import moment from 'moment'
 
 export default {
   name: 'BlocksTable',

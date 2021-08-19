@@ -27,7 +27,7 @@
     </button>
     <div
       class="absolute left-0 text-sm2 text-red"
-      :class="size==='large' ? '-bottom-24' : '-top-24'"
+      :class="size==='large' ? '-bottom-20 md:-bottom-24' : '-bottom-20 md:-top-24'"
       v-if="showFeedback"
     >
       {{ searchFeedback }}

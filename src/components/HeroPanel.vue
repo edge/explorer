@@ -23,9 +23,34 @@ import Search from '@/components/Search'
 
 export default {
   name: "HeroPanel",
-  props: ['title', 'hash', 'height'],
+  props: ['title', 'blockId', 'hash'],
+  data: function () {
+    return {
+      hash: null,
+      height: null
+    }
+  },
   components: {
     Search
+  },
+  mounted() {
+    this.determineBlockIdentifier()
+  },
+  methods: {
+    determineBlockIdentifier() {
+      const blockHeightRegex = /^[0-9]+$/
+      const txHashRegex = /[0-9a-f]{64}/
+      
+      if (this.blockId) {
+        if (txHashRegex.test(this.blockId)) {
+          this.hash = this.blockId
+        }
+
+        if (blockHeightRegex.test(this.blockId)) {
+          this.height = this.blockId
+        }
+      }
+    }
   }
 }
 </script>

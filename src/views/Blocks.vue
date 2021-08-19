@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full">
     <Header />
-    <HeroPanel v-if="block" :title="'Block'" :height="height" />
+    <HeroPanel v-if="block" :title="'Block'" :blockId="blockId" />
     <HeroPanel v-else :title="'Blocks'" />
 
     <div class="flex-1 bg-gray-200 py-35">

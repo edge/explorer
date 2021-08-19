@@ -2,7 +2,7 @@
   <div class="flex flex-col h-full">
     <h3>Block Summary</h3>
     <div class="relative max-h-full tile md:pr-50">
-      This block was mined on <span>{{new Date(block.timestamp).toLocaleString().split(',')[0]}}</span> at <span>{{new Date(block.timestamp).toLocaleString().split(',')[1]}}</span>. A total of <span>{{ formatAmount(block.total) }} XE</span> were sent in the block with the average transaction being <span>{{ block.average }} XE</span>.
+      This block was mined on <span>{{new Date(block.timestamp).toLocaleString().split(',')[0]}}</span> at <span>{{new Date(block.timestamp).toLocaleString().split(',')[1]}}</span>. A total of <span>{{ formatAmount(block.total) }} XE</span> were sent in the block with an average transaction amount of <span>{{ block.average }} XE</span>.
     </div>
   </div>
 </template>

@@ -1,3 +1,4 @@
+const qs = require('querystring')
 const {
   xeStringFromMicroXe
 } = require('@edge/wallet-utils')
@@ -14,11 +15,13 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
     options.limit = 25
   }
 
-  const url = blockId
-    ? `${INDEX_API_URL}/block/${blockId}`
-    : `${INDEX_API_URL}/blocks?page=${options.page}&limit=${options.limit}`
+  // Standard URL for blocks query.
+  let url = `${INDEX_API_URL}/blocks?${qs.encode(options)}`
 
   if (blockId) {
+    // Single block query.
+    url = `${INDEX_API_URL}/block/${blockId}`
+
     return fetchData(url)
       .then(results => {
         if (results.results && Array.isArray(results.results) && !results.results[0]) {
@@ -110,10 +113,6 @@ const fetchPendingTransactions = (address, options = {}) => {
   return fetchData(url)
 }
 
-const fetchRates = async () => {
-  return fetchData(`${INDEX_API_URL}/rates`)
-}
-
 const fetchTransactions = async ({ address, hash, options = {} }) => {
   if (typeof address !== 'string') {
     address = ''
@@ -127,14 +126,17 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
     options.limit = 25
   }
 
+  // Standard URL for pending transactions query.
   const pendingTxUrl = `${BLOCKCHAIN_API_URL}/transactions/pending/${address}`
-  const txUrl = hash
-    ? `${INDEX_API_URL}/transaction/${hash}`
-    : `${INDEX_API_URL}/transactions/${address}?page=${options.page}&limit=${options.limit}`
-
+  
+  // Standard URL for transactions query.
+  let txUrl = `${INDEX_API_URL}/transactions/${address}?${qs.encode(options)}`
+  
   let txResults = []
 
   if (hash) {
+    txUrl = `${INDEX_API_URL}/transaction/${hash}`
+
     return fetchData(txUrl)
       .then(results => {
         if (results.results && Array.isArray(results.results) && !results.results[0]) {
@@ -172,6 +174,22 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
     .then(response => {
       // Pending transactions need to be reversed to show them in the correct order.
       response = response.reverse()
+
+      response = [{
+            amount: xeStringFromMicroXe(23456),
+            block: 9099,
+            date: new Date(new Date().getTime()).toLocaleString(), // '16/04/2021 13:06',
+            data: {
+              memo: 'None'
+            },
+            hash: 'tx.hash',
+            recipient: 'tx.recipient',
+            sender: 'tx.sender',
+            timestamp: new Date().getTime(),
+            confirmations: 8,
+            pending: true
+          }]
+
       txResults = txResults.concat(formatTransactions(address, response, true))
 
       // Fetch confirmed transactions.
@@ -186,10 +204,6 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
           }
         })
     })
-}
-
-const fetchWallet = address => {
-  return fetchData(`${BLOCKCHAIN_API_URL}/wallet/${address}`)
 }
 
 const formatTransactions = (address, data, pending) => {
@@ -209,25 +223,6 @@ const formatTransactions = (address, data, pending) => {
       pending
     }
   })
-}
-
-const getNonce = async address => {
-  const wallet = await fetchWallet(address)
-  let nonce = wallet.nonce
-
-  // Update nonce with pending transactions.
-  let pendingTx = await fetchPendingTransactions(address)
-
-  if (pendingTx.length) {
-    pendingTx = pendingTx.sort((a, b) => {
-      if (a.nonce === b.nonce) return 0
-      return a.nonce > b.nonce ? -1 : 1
-    })
-
-    nonce = pendingTx[0].nonce + 1
-  }
-
-  return nonce
 }
 
 const pluckBlockTransactions = block => {
@@ -274,11 +269,7 @@ const sendTransaction = tx => {
 export {
   fetchBlocks,
   fetchPendingTransactions,
-  fetchRates,
   fetchTransactions,
-  fetchWallet,
   formatTransactions,
-  getNonce,
-  search,
-  sendTransaction
+  search
 }

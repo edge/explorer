@@ -18,14 +18,12 @@
 
 <script>
 import Header from "@/components/Header"
-import AccountPanel from "@/components/AccountPanel"
 import NewsPromo from "@/components/NewsPromo"
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
 import SummaryHero from "@/components/SummaryHero"
 
-import { getWalletAddress } from '../utils/wallet'
 import { fetchBlocks, fetchTransactions } from '../utils/api'
 
 export default {
@@ -44,7 +42,6 @@ export default {
     }
   },
   components: {
-    AccountPanel,
     Header,
     NewsPromo,
     RecentBlocks,
@@ -65,27 +62,39 @@ export default {
     }
   },
   methods: {
-    async loadWallet() {
-      const walletAddress = await getWalletAddress()
-
-      if (!walletAddress) {
-        window.location = '/'
-        return
-      }
-
-      this.wallet = await this.fetchWallet(walletAddress)
-    },
     async fetchBlocks() {
+      // Query for all blocks
       const { blocks, metadata } = await fetchBlocks({ options: { limit: 5 } })
       this.blockMetadata = metadata
       this.blocks = blocks
+      
+      // Query for all blocks in last 24 hours
+      const { metadata: recentBlocksMetadata } = await fetchBlocks({
+        options: {
+          limit: 0,
+          since: new Date().getTime()-(86400000)
+        }
+      })
+      
+      this.blockMetadata.recentBlocksCount = recentBlocksMetadata.totalCount
+      
       this.loading = false
     },
     async fetchTransactions() {
       const { transactions, metadata } = await fetchTransactions({ options: { limit: 5 } })
       this.transactionMetadata = metadata
-      this.transactions = transactions
+      this.transactions = transactions.filter(tx => !tx.pending)
       this.loading = false
+
+      // Query for all txs in last 24 hours
+      const { metadata: recentTransactionsMetadata } = await fetchTransactions({
+        options: {
+          limit: 0,
+          since: new Date().getTime()-(86400000)
+        }
+      })
+      
+      this.transactionMetadata.recentTransactionssCount = recentTransactionsMetadata.totalCount      
     },
     pollData() {
       this.polling = setInterval(() => {

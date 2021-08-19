@@ -73,7 +73,6 @@ export default {
     TransactionsTable
   },
   mounted() {
-    // this.loadWallet()
     this.fetchData()
     this.pollData()
   },

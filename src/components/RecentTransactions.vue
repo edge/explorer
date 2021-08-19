@@ -50,7 +50,6 @@
 
 <script>
 import moment from 'moment'
-import { fetchTransactions } from '../utils/api'
 import { ArrowRightIcon } from "@heroicons/vue/outline"
 
 export default {
@@ -60,27 +59,12 @@ export default {
     return {}
   },
   mounted() {
-    // this.loading = true
-    // this.fetchTransactions()
-    // this.pollData()
   },
   watch: {
     $route (to, from) {
-      // clearInterval(this.polling)
-      // this.polling = null
     }
   },
   methods: {
-    // async fetchTransactions() {
-    //   const { transactions } = await fetchTransactions({ options: { limit: 5 } })
-    //   this.transactions = transactions
-    //   this.loading = false
-    // },
-    // pollData() {
-    //   this.polling = setInterval(() => {
-    //     this.fetchTransactions()
-    //   }, 10000)
-    // },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string
     },

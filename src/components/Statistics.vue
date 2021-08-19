@@ -12,19 +12,19 @@
       </div>
       <div class="stat">
         <span class="stat__label">Blocks <span class="text-gray-400">last 24 hrs</span></span>
-        <span class="stat__value">62,029</span>
+        <span class="stat__value">{{blockMetadata && Number(blockMetadata.recentBlocksCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Transactions <span class="text-gray-400">last 24 hrs</span></span>
-        <span class="stat__value">24</span>
+        <span class="stat__value">{{transactionMetadata && Number(transactionMetadata.recentTransactionssCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Block Time <span class="text-gray-400">avg</span></span>
-        <span class="stat__value">62s</span>
+        <span class="stat__value">{{calculateBlockTime(blockMetadata)}}s</span>
       </div>
       <div class="stat">
         <span class="stat__label">Blocks / Hour <span class="text-gray-400">avg</span></span>
-        <span class="stat__value">58</span>
+        <span class="stat__value">{{calculateBlocksPerHour(blockMetadata)}}</span>
       </div>
     </div>
   </div>
@@ -34,7 +34,23 @@
 
 export default {
   name: 'Statistics',
-  props: ['blockMetadata', 'transactionMetadata']
+  props: ['blockMetadata', 'transactionMetadata'],
+  methods: {
+    calculateBlocksPerHour(blockMetadata) {
+      if (!blockMetadata || !blockMetadata.recentBlocksCount) {
+        return ''
+      }
+      
+      return Number(blockMetadata.recentBlocksCount / 24).toFixed(2)
+    },
+    calculateBlockTime(blockMetadata) {
+      if (!blockMetadata || !blockMetadata.recentBlocksCount) {
+        return ''
+      }
+      
+      return Number((1440 / blockMetadata.recentBlocksCount) * 60).toFixed(0)
+    }
+  }
 }
 </script>
 

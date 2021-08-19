@@ -12,7 +12,7 @@
           {{ rawDataVisible ? '-' : '+' }}
         </span>
       </div>
-      <div v-if="rawDataVisible" class="mt-20">
+      <div v-if="rawDataVisible" class="w-full pt-20 mt-20 border-t border-gray-200">
         <pre class="text-sm md:text-xs">{{ JSON.stringify(rawData, null, 2) }}</pre>
       </div>
     </div>

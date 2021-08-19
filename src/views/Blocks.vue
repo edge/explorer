@@ -97,8 +97,12 @@ export default {
         this.loading = true
         const { blocks } = await fetchBlocks({ height: this.height })
         this.block = blocks[0]
+        
+        if (this.block) {
+          this.processBlock()
+        }
+        
         this.loading = false
-        this.processBlock()
       } else {
         this.fetchBlocks({ page: this.page })
         // this.pollData()

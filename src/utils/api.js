@@ -20,7 +20,16 @@ const fetchBlocks = async ({ height, options = {} }) => {
 
   if (height) {
     return fetchData(url)
-      .then(block => {
+      .then(results => {
+        if (results.results && Array.isArray(results.results) && !results.results[0]) {
+          return {
+            blocks: [],
+            metdata: {}
+          }
+        }
+
+        const block = { ...results }
+
         block.transactions = pluckBlockTransactions(block)
 
         // Add total XE.

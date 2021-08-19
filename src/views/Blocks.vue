@@ -1,24 +1,38 @@
 <template>
-  <Header />
-  <HeroPanel v-if="block" :title="'Block'" :height="height" />
-  <HeroPanel v-else :title="'Blocks'" />
+  <div class="flex flex-col h-full">
+    <Header />
+    <HeroPanel v-if="block" :title="'Block'" :height="height" />
+    <HeroPanel v-else :title="'Blocks'" />
 
-  <div class="bg-gray-200 py-35">
-    <div class="container">
-      <div v-if="block" class="row mb-25">
-        <BlockOverview :block="block" :rawData="rawData" />
-        <BlockSummary :block="block" />
+    <div class="flex-1 bg-gray-200 py-35">
+      <div v-if="block || blocks.length" class="container">
+        <div v-if="block" class="row mb-25">
+          <BlockOverview :block="block" :rawData="rawData" />
+          <BlockSummary :block="block" />
+        </div>
+
+        <div v-if="rawData" class="mb-25">
+          <RawData :rawData="rawData" />
+        </div>
+
+        <h3 v-if="block">Block Transactions</h3>
+        <BlocksTable v-if="blocks.length" :blocks="blocks" />
+        <Pagination v-if="!block" baseRoute="Blocks" :currentPage="page" :totalPages="metadata.totalCount ? Math.ceil(metadata.totalCount/metadata.limit) : 0" />
+
+        <TransactionsTable :transactions="transactions" v-if="transactions"/>
       </div>
-
-      <div v-if="rawData" class="mb-25">
-        <RawData :rawData="rawData" />
+      <div v-else class="container h-full">
+        <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
+          <h3 class='text-xl font-bold monospace'> ¯\_(ツ)_/¯</h3>
+          <p class="mb-0 text-center monospace">
+            Unfortunately this block doesn't exist. <br />
+            Try searching again, or <router-link to="/" class="underline hover:text-green">visit the homepage</router-link> to find your feet.
+          </p>
+          <router-link to="/">
+            <a class="mt-20 button button--solid">Go to homepage</a>
+          </router-link>
+        </div>
       </div>
-
-      <h3 v-if="block">Block Transactions</h3>
-      <BlocksTable v-if="blocks.length" :blocks="blocks" />
-      <Pagination v-if="!block" baseRoute="Blocks" :currentPage="page" :totalPages="metadata.totalCount ? Math.ceil(metadata.totalCount/metadata.limit) : 0" />
-
-      <TransactionsTable :transactions="transactions" v-if="transactions"/>
     </div>
   </div>
 </template>
@@ -83,8 +97,8 @@ export default {
         this.loading = true
         const { blocks } = await fetchBlocks({ height: this.height })
         this.block = blocks[0]
-        this.processBlock()
         this.loading = false
+        this.processBlock()
       } else {
         this.fetchBlocks({ page: this.page })
         // this.pollData()

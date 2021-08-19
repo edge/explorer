@@ -1,21 +1,36 @@
 <template>
-  <Header />
-  <HeroPanel v-if="hash" :title="'Transaction'" :hash="hash" />
-  <HeroPanel v-else :title="'Transactions'" />
+  <div class="flex flex-col h-full">
+    <Header />
+    <HeroPanel v-if="hash" :title="'Transaction'" :hash="hash" />
+    <HeroPanel v-else :title="'Transactions'" />
 
-  <div class="bg-gray-200 py-35">
-    <div class="container">
-      <div v-if="transaction" class="row mb-25">
-        <TransactionOverview :transaction="transaction" />
-        <TransactionSummary :transaction="transaction" />
+    <div class="flex-1 bg-gray-200 py-35">
+      <div v-if="transaction || transactions.length" class="container">
+        <div v-if="transaction" class="row mb-25">
+          <TransactionOverview :transaction="transaction" />
+          <TransactionSummary :transaction="transaction" />
+        </div>
+
+        <div v-if="rawData" class="mb-25">
+          <RawData :rawData="rawData" />
+        </div>
+
+        <TransactionsTable :transactions="transactions" v-if="!transaction"/>
+        <Pagination v-if="!transaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
       </div>
 
-      <div v-if="rawData" class="mb-25">
-        <RawData :rawData="rawData" />
+      <div v-else class="container h-full">
+        <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
+          <h3 class='text-xl font-bold monospace'> ¯\_(ツ)_/¯</h3>
+          <p class="mb-0 text-center monospace">
+            Unfortunately this transaction doesn't exist. <br />
+            Try searching again, or <router-link to="/" class="underline hover:text-green">visit the homepage</router-link> to find your feet.
+          </p>
+          <router-link to="/">
+            <a class="mt-20 button button--solid">Go to homepage</a>
+          </router-link>
+        </div>
       </div>
-
-      <TransactionsTable :transactions="transactions" v-if="!transaction"/>
-      <Pagination v-if="!transaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
     </div>
   </div>
 </template>

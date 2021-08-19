@@ -32,7 +32,7 @@ export default {
 
 <style scoped>
 .hero-panel {
-  @apply bg-black-100 pb-24 md:pb-20 h-150 md:h-128;
+  @apply bg-black-100 pb-24 md:pb-20 h-150 md:h-128 flex-shrink-0;
 }
 .hero-panel__title {
   @apply text-white text-2xl font-normal leading-none mb-0;

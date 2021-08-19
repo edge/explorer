@@ -19,12 +19,12 @@
         <span class="stat__value">24</span>
       </div>
       <div class="stat">
-        <span class="stat__label">Wallets</span>
-        <span class="stat__value">238</span>
+        <span class="stat__label">Block Time <span class="text-gray-400">avg</span></span>
+        <span class="stat__value">62s</span>
       </div>
       <div class="stat">
-        <span class="stat__label">Circulating supply</span>
-        <span class="stat__value">7,241,239 <span class="text-lg">XE</span></span>
+        <span class="stat__label">Blocks / Hour <span class="text-gray-400">avg</span></span>
+        <span class="stat__value">58</span>
       </div>
     </div>
   </div>

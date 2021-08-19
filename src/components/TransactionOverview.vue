@@ -4,12 +4,12 @@
 
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
-        <div class="transactionRow__label">Block</div>
-        <div class="transactionRow__value">
-          <router-link :to="{name: 'Block', params: {height: transaction.block.height}}">
-            {{transaction.block.height}}
-          </router-link>
-        </div>
+        <div class="transactionRow__label">Hash</div>
+        <div class="transactionRow__value">{{ transaction.hash }}</div>
+      </div>
+      <div class="transactionRow">
+        <div class="transactionRow__label">Completed</div>
+        <div class="transactionRow__value">{{new Date(transaction.timestamp).toLocaleString()}}</div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">From</div>
@@ -20,20 +20,50 @@
         <div class="transactionRow__value">{{transaction.recipient}}</div>
       </div>
       <div class="transactionRow">
-        <div class="transactionRow__label">Completed</div>
-        <div class="transactionRow__value">{{new Date(transaction.timestamp).toLocaleString()}}</div>
+        <div class="transactionRow__label">Amount</div>
+        <div class="transactionRow__value">{{ formatAmount(transaction.amount) }} XE</div>
+      </div>
+      <div class="transactionRow">
+        <div class="transactionRow__label">Memo</div>
+        <div class="transactionRow__value">{{transaction.description}}</div>
+      </div>
+      <div class="transactionRow">
+        <div class="transactionRow__label">Block</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Block', params: {height: transaction.block.height}}">
+            {{transaction.block.height}}
+          </router-link>
+        </div>
+      </div>
+      <div class="transactionRow">
+        <div class="transactionRow__label">Block Hash</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Block', params: {height: transaction.block.hash}}">
+            {{transaction.block.hash}}
+          </router-link>
+        </div>
+      </div>
+      <div class="transactionRow">
+        <div class="transactionRow__label">Confirmations</div>
+        <div class="transactionRow__value">{{ transaction }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+const { formatXe } = require('@edge/wallet-utils')
 
 export default {
   name: "TransactionOverview",
   props: {
     transaction: {
       type: Object
+    }
+  },
+  methods: {
+    formatAmount(amount) {
+      return formatXe(amount, true)
     }
   }
 }

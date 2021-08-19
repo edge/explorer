@@ -68,7 +68,7 @@ export default {
       block: null,
       blocks: [],
       error: '',
-      height: null,
+      blockId: null,
       loading: false,
       metadata: {},
       page: 1,
@@ -90,12 +90,12 @@ export default {
       this.loading = false
     },
     async fetchData() {
-      this.height = this.$route.params.height
+      this.blockId = this.$route.params.blockId
       this.page = parseInt(this.$route.params.page || 1)
       
-      if (this.height) {
+      if (this.blockId) {
         this.loading = true
-        const { blocks } = await fetchBlocks({ height: this.height })
+        const { blocks } = await fetchBlocks({ blockId: this.blockId })
         this.block = blocks[0]
         
         if (this.block) {

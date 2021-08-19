@@ -30,7 +30,7 @@
       <div class="transactionRow">
         <div class="transactionRow__label">Block</div>
         <div class="transactionRow__value">
-          <router-link :to="{name: 'Block', params: {height: transaction.block.height}}">
+          <router-link :to="{name: 'Block', params: {blockId: transaction.block.height}}">
             {{transaction.block.height}}
           </router-link>
         </div>
@@ -38,7 +38,7 @@
       <div class="transactionRow">
         <div class="transactionRow__label">Block Hash</div>
         <div class="transactionRow__value">
-          <router-link :to="{name: 'Block', params: {height: transaction.block.hash}}">
+          <router-link :to="{name: 'Block', params: {blockId: transaction.block.hash}}">
             {{transaction.block.hash}}
           </router-link>
         </div>

@@ -5,7 +5,7 @@ const {
 const BLOCKCHAIN_API_URL = process.env.VUE_APP_BLOCKCHAIN_API_URL
 const INDEX_API_URL = process.env.VUE_APP_INDEX_API_URL
 
-const fetchBlocks = async ({ height, options = {} }) => {
+const fetchBlocks = async ({ blockId, options = {} }) => {
   if (!options.page) {
     options.page = 1
   }
@@ -14,11 +14,11 @@ const fetchBlocks = async ({ height, options = {} }) => {
     options.limit = 25
   }
 
-  const url = height
-    ? `${INDEX_API_URL}/block/${height}`
+  const url = blockId
+    ? `${INDEX_API_URL}/block/${blockId}`
     : `${INDEX_API_URL}/blocks?page=${options.page}&limit=${options.limit}`
 
-  if (height) {
+  if (blockId) {
     return fetchData(url)
       .then(results => {
         if (results.results && Array.isArray(results.results) && !results.results[0]) {

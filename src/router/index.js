@@ -23,7 +23,7 @@ const routes = [
     component: Overview
   },
   {
-    path: '/block/:height',
+    path: '/block/:blockId',
     name: 'Block',
     component: Blocks
   },

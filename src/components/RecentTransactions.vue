@@ -22,19 +22,19 @@
         <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
             <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
-              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 8) }}&#8230;</span>
-              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 20) }}&#8230;</span>
+              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 8) }}</span>
+              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 20) }}</span>
             </router-link>
           </td>
           <td data-title="From:">
             <span class="truncate monospace" :title="transaction.sender">
-              {{ sliceString(transaction.sender, 18) }}&#8230;
+              {{ sliceString(transaction.sender, 18) }}
             </span>
           </td>
           <td data-title="To:" class="relative">
             <span class="arrow-icon"><ArrowRightIcon /></span>
             <span class="truncate lg:pl-5 monospace" :title="transaction.recipient">
-              {{ sliceString(transaction.recipient, 20) }}&#8230;
+              {{ sliceString(transaction.recipient, 20) }}
             </span>
           </td>
           <td class="lg:text-right" data-title="Amount:">
@@ -82,7 +82,7 @@ export default {
     //   }, 10000)
     // },
     sliceString(string, symbols) {
-      return string.length > symbols ? string.slice(0, symbols) : string
+      return string.length > symbols ? `${string.slice(0, symbols)}…` : string
     },
     timeSince(ts) {
       return moment(ts).fromNow()
@@ -115,7 +115,7 @@ th:last-child {
 }
 
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-10 break-all max-w-full pb-4;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
 }
 
 td::before {

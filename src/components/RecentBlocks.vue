@@ -27,8 +27,8 @@
             </router-link>
           </td>
           <td class="" data-title="Hash:">
-              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 16) }}&#8230;</span>
-              <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}&#8230;</span>
+              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 16) }}…</span>
+              <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}…</span>
           </td>
           <td data-title="Transactions:">
             {{ block.transactions.length }}

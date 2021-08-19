@@ -14,6 +14,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Blocks from '@/views/Blocks'
 import Transactions from '@/views/Transactions'
 import Overview from '@/views/Overview'
+import NotFound from '@/views/404'
 
 const routes = [
   {
@@ -40,7 +41,8 @@ const routes = [
     path: '/transactions/:page(\\d+)?',
     name: 'Transactions',
     component: Transactions
-  }
+  },
+  { path: '/404', component: NotFound }
 ]
 
 const router = createRouter({

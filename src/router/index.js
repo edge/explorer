@@ -42,7 +42,7 @@ const routes = [
     name: 'Transactions',
     component: Transactions
   },
-  { path: '/404', component: NotFound }
+  { path: '/:catchAll(.*)', component: NotFound }
 ]
 
 const router = createRouter({

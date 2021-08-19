@@ -19,7 +19,7 @@
     <span class="hidden lg:pl-10 monospace md:block">{{ sliceString(item.recipient, 20) }}&#8230;</span>
     <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}&#8230;</span>
   </td>
-  <td data-title="Memo:" :class="item.description === 'None' ? 'text-gray-400' : ''">
+  <td :title="item.description" data-title="Memo:" :class="item.description === 'None' ? 'text-gray-400' : ''">
     <span class="monospace md:font-sans">{{ sliceString(item.description, 26) }}&#8230;</span>
   </td>
   <td data-title="Status:">

@@ -247,19 +247,25 @@ const pluckBlockTransactions = block => {
   return formatTransactions(null, block.transactions)
 }
 
-const search = input => {
+const search = async input => {
   const blockHeightRegex = /^[0-9]+$/
-  const txHashRegex = /[0-9a-f]{64}/
+  const hashRegex = /[0-9a-f]{64}/
 
-  if (txHashRegex.test(input)) {
-    return fetchTransactions({ hash: input })
+  if (hashRegex.test(input)) {
+    // The hash format is the same for blocks and transactions, 
+    // so we need to query both for the input.
+    const { blocks } = await fetchBlocks({ blockId: input })
+    const { transactions } = await fetchTransactions({ hash: input })
+
+    return Promise.resolve({
+      blocks: blocks.length ? blocks : null,
+      transactions: transactions.length ? transactions : null
+    })
+  } else if (blockHeightRegex.test(input)) {
+    return fetchBlocks({ blockId: input })
+  } else {
+    return Promise.resolve({})
   }
-
-  if (blockHeightRegex.test(input)) {
-    return fetchBlocks({ hash: input })
-  }
-
-  return Promise.resolve({})
 }
 
 const sendTransaction = tx => {

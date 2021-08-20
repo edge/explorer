@@ -3,9 +3,9 @@
     <div class="container flex flex-col justify-end h-full md:justify-between md:flex-row md:items-end">
       <div class="flex flex-col">
         <h1 class="hero-panel__title">{{ title }}</h1>
-        <div class="max-w-md mt-5 font-mono text-white truncate md:mt-10 lg:max-w-lg" :class="hash ? '' : 'hidden'">
+        <div class="max-w-md mt-5 font-mono text-white truncate md:mt-10 lg:max-w-lg" :class="hash || thisHash ? '' : 'hidden'">
           <span class="text-green">Hash: </span>
-          {{ hash }}
+          {{ hash || thisHash }}
         </div>
         <div class="max-w-md mt-5 font-mono text-white truncate md:mt-10 lg:max-w-lg" :class="height ? '' : 'hidden'">
           <span class="text-green">Height: </span>
@@ -26,7 +26,7 @@ export default {
   props: ['title', 'blockId', 'hash'],
   data: function () {
     return {
-      hash: null,
+      thisHash: null,
       height: null
     }
   },
@@ -43,7 +43,7 @@ export default {
       
       if (this.blockId) {
         if (txHashRegex.test(this.blockId)) {
-          this.hash = this.blockId
+          this.thisHash = this.blockId
         }
 
         if (blockHeightRegex.test(this.blockId)) {

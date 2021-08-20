@@ -64,7 +64,7 @@ export default {
       this.isSearching = true
       
       const result = await search(this.searchInput)
-      
+     
       this.isSearching = true
 
       const { blocks, transactions } = result

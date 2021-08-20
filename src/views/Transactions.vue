@@ -88,7 +88,12 @@ export default {
         const { raw, transactions } = await fetchTransactions({ hash: this.hash })
 
         this.transaction = transactions[0]
-        this.rawData = { ...raw }
+        
+        if (raw) {
+          this.rawData = { ...raw }
+        }
+
+        this.loading = false
       } else {
         this.fetchTransactions({ page: this.page })
       }

@@ -23,7 +23,7 @@
     <span class="monospace md:font-sans">{{ sliceString(item.description, 26) }}</span>
   </td>
   <td data-title="Status:">
-    <span v-if="item.confirmations >= 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-green">
+    <span v-if="!item.pending && (item.confirmations >= 10 || !item.confirmations)" class="mr-1 -mt-2 icon icon--confirmed icon-green">
       <CheckCircleIcon />
     </span>
     <span v-if="item.confirmations < 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-grey">

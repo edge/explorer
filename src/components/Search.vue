@@ -76,7 +76,7 @@ export default {
       } else {
         // No result.
         setTimeout(() => {
-          this.searchFeedback = "Come on man, that's not a valid Tx or Block ID."
+          this.searchFeedback = "Come on dude, that's not a valid Tx or Block ID."
           this.showFeedback = true
           this.isSearching = false
         }, 1000)

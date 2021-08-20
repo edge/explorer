@@ -12,7 +12,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
   }
 
   if (!options.limit) {
-    options.limit = 25
+    options.limit = 20
   }
 
   // Standard URL for blocks query.
@@ -123,7 +123,7 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
   }
 
   if (!options.limit) {
-    options.limit = 25
+    options.limit = 20
   }
 
   // Standard URL for pending transactions query.

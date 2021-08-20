@@ -45,7 +45,7 @@
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Confirmations</div>
-        <div class="transactionRow__value">{{ transaction }}</div>
+        <div class="transactionRow__value">{{ transaction.confirmations }}</div>
       </div>
     </div>
   </div>

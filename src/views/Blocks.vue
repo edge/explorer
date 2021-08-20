@@ -48,9 +48,9 @@ import TransactionsTable from "@/components/TransactionsTable"
 import { fetchBlocks } from '../utils/api'
 
 export default {
-  name: 'Overview',
+  name: 'Blocks',
   title() {
-    return 'XE Explorer » Blocks'
+    return this.block ? `XE Explorer » Block ${this.block.height}` : 'XE Explorer » Blocks'
   },
   components: {
     BlocksTable,
@@ -104,7 +104,6 @@ export default {
         this.loading = false
       } else {
         this.fetchBlocks({ page: this.page })
-        // this.pollData()
       }
     },
     pollData() {

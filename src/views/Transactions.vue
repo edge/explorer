@@ -18,7 +18,6 @@
         <TransactionsTable :transactions="transactions" v-if="!transaction"/>
         <Pagination v-if="!transaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
       </div>
-
       <div v-else class="container h-full">
         <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
           <h1 class="m-0 mt-20 text-2xl font-bold">This transaction doesn't exist</h1>
@@ -93,8 +92,6 @@ export default {
       } else {
         this.fetchTransactions({ page: this.page })
       }
-      
-      this.loading = false
     },
     async fetchTransactions(options) {
       const { transactions, metadata } = await fetchTransactions({ options })

@@ -6,8 +6,8 @@
       <thead class="hidden lg:table-header-group">
         <tr>
           <th width="15%">Height</th>
-          <th width="25%">Hash</th>
-          <th width="20%">Transactions</th>
+          <th width="20%">Hash</th>
+          <th width="15%">Transactions</th>
           <th width="20%">XE</th>
           <th>Mined</th>
         </tr>
@@ -27,7 +27,7 @@
             </router-link>
           </td>
           <td class="" data-title="Hash:">
-              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 16) }}…</span>
+              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 8) }}…</span>
               <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}…</span>
           </td>
           <td data-title="Transactions:">
@@ -36,8 +36,9 @@
           <td data-title="XE:">
             {{ block.total }}
           </td>
-          <td data-title="Mined:">
-            <span class="monospace md:font-sans md:text-gray-400">
+          <td class="truncate" data-title="Mined:">
+            <span class="mr-1 lg:-mt-2 icon"><ClockIcon /></span>
+            <span class="truncate monospace md:font-sans md:text-gray-400">
               {{ timeSince(block.timestamp) }}
             </span>
           </td>
@@ -48,6 +49,7 @@
 </template>
 
 <script>
+import { ClockIcon } from "@heroicons/vue/outline"
 import moment from 'moment'
 import { fetchBlocks } from '../utils/api'
 
@@ -66,6 +68,9 @@ export default {
     timeSince(ts) {
       return moment(ts).fromNow()
     }
+  },
+  components: {
+    ClockIcon
   }
 }
 </script>
@@ -110,6 +115,10 @@ td:last-child {
 
 td a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+td .icon {
+  @apply w-13 lg:w-15 inline-block align-middle text-gray-600 lg:text-gray-400;
 }
 
 @screen lg {

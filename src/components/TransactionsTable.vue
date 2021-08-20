@@ -7,9 +7,9 @@
         <th width="14%">Date</th>
         <th width="16%">From</th>
         <th width="16%"><span class="pl-10">To</span></th>
-        <th width="18%">Memo</th>
+        <th width="16%">Memo</th>
         <th width="12%">Status</th>
-        <th width="16%">Amount</th>
+        <th width="18%">Amount</th>
       </tr>
       </thead>
       <tbody v-if="transactions.length">

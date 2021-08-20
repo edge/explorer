@@ -29,7 +29,7 @@
     <span v-if="item.confirmations < 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-grey">
       <ClockIcon />
     </span>
-    <span class="monospace md:font-sans">{{ formatStatus(item) }}</span>
+    <span class="monospace md:font-sans" :class="item.confirmations < 10 || !item.confirmations ? 'text-gray-400' : ''">{{ formatStatus(item) }}</span>
   </td>
   <td data-title="Amount:">
     <span class="monospace lg:font-sans">{{ formatAmount(item.amount) }} XE</span>

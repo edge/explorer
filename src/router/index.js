@@ -11,38 +11,38 @@
 //   Technologies Ltd.   \______/
 
 import { createRouter, createWebHistory } from 'vue-router'
-import Index from '../views/Index.vue'
+import Blocks from '@/views/Blocks'
 import Transactions from '@/views/Transactions'
 import Overview from '@/views/Overview'
-
-// {
-//   path: '/governance',
-//   name: 'Governance',
-//   component: () => {}
-// },
-//
-// {
-//   path: '/staking',
-//   name: 'Staking',
-//   component: () => {}
-// },
+import NotFound from '@/views/404'
 
 const routes = [
   {
     path: '/',
-    name: 'Index',
-    component: Index
-  },
-  {
-    path: '/overview',
     name: 'Overview',
     component: Overview
   },
   {
-    path: '/transactions',
+    path: '/block/:blockId',
+    name: 'Block',
+    component: Blocks
+  },
+  {
+    path: '/blocks/:page(\\d+)?',
+    name: 'Blocks',
+    component: Blocks
+  },
+  {
+    path: '/transaction/:hash',
+    name: 'Transaction',
+    component: Transactions
+  },
+  {
+    path: '/transactions/:page(\\d+)?',
     name: 'Transactions',
     component: Transactions
-  }
+  },
+  { path: '/:catchAll(.*)', component: NotFound }
 ]
 
 const router = createRouter({

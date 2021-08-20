@@ -1,7 +1,7 @@
 <template>
-  <strong class="logo block w-52 md:w-38 flex-shrink-0">
-    <router-link to="/overview">
-      <img src="/assets/logo.svg" alt="XE Wallet">
+  <strong class="flex-shrink-0 block logo w-52 md:w-38">
+    <router-link to="/">
+      <img src="/assets/logo.svg" alt="XE">
     </router-link>
   </strong>
 </template>

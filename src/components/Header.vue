@@ -1,9 +1,9 @@
 <template>
-    <header class="header relative z-10 py-16 md:pb-15" :class="{'menu-open':showNav}">
+    <header class="relative z-10 py-16 header md:pb-15" :class="{'menu-open':showNav}">
       <div class="container flex items-center justify-between">
         <Logo/>
-        <BurgerButton  @click="showNav = !showNav"/>
-        <div class="mobile-drop absolute top-full left-0 right-0 md:static flex flex-col md:flex-row bg-black pt-12 md:px-15 pb-24 md:p-0">
+        <BurgerButton @click="showNav = !showNav; bodyScrollLock()"/>
+        <div id="menu" class="absolute left-0 right-0 flex flex-col flex-1 pt-12 pb-24 bg-black mobile-drop top-full md:static md:flex-row md:px-15 md:p-0">
           <Menu :mainNav="mainNav"/>
           <HeaderTools/>
         </div>
@@ -24,27 +24,35 @@
         showNav: false,
         mainNav: [
           {
-            link: "/overview",
+            link: "/",
             text: "Overview"
+          },
+          {
+            link: "/blocks",
+            text: "Blocks"
           },
           {
             link: "/transactions",
             text: "Transactions"
           },
           {
-            link: "/staking",
-            text: "Staking",
+            link: "/stakes",
+            text: "Stakes",
             disabled: true
-          },
-          {
-            link: "/governance",
-            text: "Governance",
-            disabled: true
-          },
-        ],
+          }
+        ]
       }
     },
     methods: {
+      bodyScrollLock () {
+        const targetElement = document.querySelector('#menu')
+        
+        if (this.showNav) {
+          bodyScrollLock.disableBodyScroll(targetElement)
+        } else {
+          bodyScrollLock.enableBodyScroll(targetElement)
+        }
+      }
     },
     components: {
       Logo,

@@ -3,7 +3,7 @@ const { rem, media } = require('../utils')
 
 const baseTypography = {
   text: {
-    xs: rem(10),
+    xs: rem(11),
     sm: rem(12),
     'sm2': rem(13),
     base: rem(14),
@@ -96,7 +96,8 @@ const brandTypography = ({ theme }) => ({
     },
     '.link-underline': {
       color: 'currentColor',
-      textDecoration: 'underline',
+      borderBottom: '1px solid currentColor',
+      paddingBottom: '0px',
       '&:hover': {
         textDecoration: 'none'
       }

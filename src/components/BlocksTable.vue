@@ -1,44 +1,40 @@
 <template>
   <div class="w-full mb-25">
-    <h3>Recent Blocks</h3>
-
     <table class="w-full">
-      <thead class="hidden lg:table-header-group">
+      <thead class="sticky top-0 hidden lg:table-header-group">
         <tr>
           <th width="15%">Height</th>
-          <th width="20%">Hash</th>
-          <th width="15%">Transactions</th>
-          <th width="20%">Total XE</th>
+          <th width="30%">Hash</th>
+          <th>Transactions</th>
+          <th>Total XE</th>
           <th>Mined</th>
         </tr>
       </thead>
-      <tbody v-if="loading">
+      <!-- <tbody v-if="loading">
         <tr>
-          <td colspan="5" class="w-full text-center bg-white py-35">
+          <td colspan="3" class="w-full text-center bg-white py-35">
             Loading latest blocks...
           </td>
         </tr>
-      </tbody>
+      </tbody> -->
       <tbody v-if="blocks.length">
-        <tr v-for="block in blocks" :key="block.hash">
+        <tr v-for="block in blocks" :key="block.height">
           <td data-title="Height:">
             <router-link :to="{name: 'Block', params: {blockId: block.height}}">
-              <span class="monospace">{{ block.height }}</span>
+              <span class="monospace">{{block.height}}</span>
             </router-link>
           </td>
-          <td class="" data-title="Hash:">
-              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 8) }}…</span>
-              <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}…</span>
+          <td data-title="Hash:"><span class="truncate monospace">{{ block.hash.substr(0, 32) }}…</span>
           </td>
           <td data-title="Transactions:">
             {{ block.transactions.length }}
           </td>
-          <td data-title="Total XE:">
+          <td data-title="XE:">
             {{ formatAmount(block.total) }}
           </td>
-          <td class="truncate" data-title="Mined:">
+          <td data-title="Mined:">
             <span class="mr-1 lg:-mt-2 icon"><ClockIcon /></span>
-            <span class="truncate monospace md:font-sans md:text-gray-400">
+            <span class="md:text-gray-400 monospace md:font-sans">
               {{ timeSince(block.timestamp) }}
             </span>
           </td>
@@ -54,14 +50,13 @@ import moment from 'moment'
 const { formatXe } = require('@edge/wallet-utils')
 
 export default {
-  name: 'RecentBlocks',
-  props: ['blocks', 'loading'],
+  name: 'BlocksTable',
+  components: {},
+  props: ['blocks'],
   data: function () {
-    return {}
-  },
-  watch: {
-    $route (to, from) {
-
+    return {
+      loading: false,
+      polling: null
     }
   },
   methods: {
@@ -93,10 +88,6 @@ th {
 
 th:last-child {
   @apply rounded-r-4;
-}
-
-tr {
-  @apply overflow-hidden;
 }
 
 td {

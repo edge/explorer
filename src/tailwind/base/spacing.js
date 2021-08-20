@@ -1,6 +1,7 @@
 const { rem } = require('../utils')
 
 const spacing = {
+  0: rem(0),
   2: rem(2),
   3: rem(3),
   4: rem(4),
@@ -39,6 +40,7 @@ const spacing = {
   96: rem(96),
   123: rem(123),
   128: rem(128),
+  150: rem(150),
   180: rem(180),
   192: rem(192),
   256: rem(256),

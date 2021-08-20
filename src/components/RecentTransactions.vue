@@ -1,45 +1,45 @@
 <template>
   <div class="w-full mb-25">
-    <h3>Recent Blocks</h3>
+    <h3>Recent Transactions</h3>
 
     <table class="w-full">
       <thead class="hidden lg:table-header-group">
         <tr>
-          <th width="15%">Height</th>
           <th width="20%">Hash</th>
-          <th width="15%">Transactions</th>
-          <th width="20%">Total XE</th>
-          <th>Mined</th>
+          <th width="25%">From</th>
+          <th width="25%"><span class="pl-5">To</span></th>
+          <th class="right">Amount</th>
         </tr>
       </thead>
       <tbody v-if="loading">
         <tr>
-          <td colspan="5" class="w-full text-center bg-white py-35">
-            Loading latest blocks...
+          <td colspan="4" class="w-full text-center bg-white py-35">
+            Loading latest transactions...
           </td>
         </tr>
       </tbody>
-      <tbody v-if="blocks.length">
-        <tr v-for="block in blocks" :key="block.hash">
-          <td data-title="Height:">
-            <router-link :to="{name: 'Block', params: {blockId: block.height}}">
-              <span class="monospace">{{ block.height }}</span>
+      <tbody v-if="transactions.length">
+        <tr v-for="transaction in transactions" :key="transaction.hash">
+          <td data-title="Hash:">
+            <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
+              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 8) }}</span>
+              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 20) }}</span>
             </router-link>
           </td>
-          <td class="" data-title="Hash:">
-              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 8) }}…</span>
-              <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}…</span>
+          <td data-title="From:">
+            <span class="truncate monospace" :title="transaction.sender">
+              {{ sliceString(transaction.sender, 18) }}
+            </span>
           </td>
-          <td data-title="Transactions:">
-            {{ block.transactions.length }}
+          <td data-title="To:" class="relative">
+            <span class="arrow-icon"><ArrowRightIcon /></span>
+            <span class="truncate lg:pl-5 monospace" :title="transaction.recipient">
+              {{ sliceString(transaction.recipient, 20) }}
+            </span>
           </td>
-          <td data-title="Total XE:">
-            {{ formatAmount(block.total) }}
-          </td>
-          <td class="truncate" data-title="Mined:">
-            <span class="mr-1 lg:-mt-2 icon"><ClockIcon /></span>
-            <span class="truncate monospace md:font-sans md:text-gray-400">
-              {{ timeSince(block.timestamp) }}
+          <td class="lg:text-right" data-title="Amount:">
+            <span class="monospace lg:font-sans">
+              {{ transaction.amount }} XE
             </span>
           </td>
         </tr>
@@ -49,31 +49,31 @@
 </template>
 
 <script>
-import { ClockIcon } from "@heroicons/vue/outline"
 import moment from 'moment'
-const { formatXe } = require('@edge/wallet-utils')
+import { ArrowRightIcon } from "@heroicons/vue/outline"
 
 export default {
-  name: 'RecentBlocks',
-  props: ['blocks', 'loading'],
+  name: 'RecentTransactions',
+  props: ['loading', 'transactions'],
   data: function () {
     return {}
   },
+  mounted() {
+  },
   watch: {
     $route (to, from) {
-
     }
   },
   methods: {
-    formatAmount(amount) {
-      return formatXe(amount, true)
+    sliceString(string, symbols) {
+      return string.length > symbols ? `${string.slice(0, symbols)}…` : string
     },
     timeSince(ts) {
       return moment(ts).fromNow()
     }
   },
   components: {
-    ClockIcon
+    ArrowRightIcon
   }
 }
 </script>
@@ -86,6 +86,9 @@ table, tbody, tr {
 th {
   @apply font-normal text-sm2 text-left text-black bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
 }
+th.right {
+  @apply text-right;
+}
 
 /* th:first-child {
   @apply pt-8;
@@ -93,10 +96,6 @@ th {
 
 th:last-child {
   @apply rounded-r-4;
-}
-
-tr {
-  @apply overflow-hidden;
 }
 
 td {
@@ -120,8 +119,8 @@ td a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
-td .icon {
-  @apply w-13 lg:w-15 inline-block align-middle text-gray-600 lg:text-gray-400;
+td .arrow-icon {
+  @apply absolute hidden pt-1 lg:block w-12 h-12 -left-4 text-green;
 }
 
 @screen lg {
@@ -138,7 +137,7 @@ td .icon {
   }
 
   th {
-    @apply pt-13 pb-13 pr-30;
+    @apply pt-13 pb-13 pr-30 pb-13;
   }
 
   th:first-child {

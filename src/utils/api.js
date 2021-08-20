@@ -175,21 +175,6 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
       // Pending transactions need to be reversed to show them in the correct order.
       response = response.reverse()
 
-      response = [{
-            amount: xeStringFromMicroXe(23456),
-            block: 9099,
-            date: new Date(new Date().getTime()).toLocaleString(), // '16/04/2021 13:06',
-            data: {
-              memo: 'None'
-            },
-            hash: 'tx.hash',
-            recipient: 'tx.recipient',
-            sender: 'tx.sender',
-            timestamp: new Date().getTime(),
-            confirmations: 8,
-            pending: true
-          }]
-
       txResults = txResults.concat(formatTransactions(address, response, true))
 
       // Fetch confirmed transactions.

@@ -26,7 +26,7 @@
     <span v-if="item.confirmations >= 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-green">
       <CheckCircleIcon />
     </span>
-    <span v-if="item.confirmations < 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed ">
+    <span v-if="item.confirmations < 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-grey">
       <ClockIcon />
     </span>
     <span class="monospace md:font-sans">{{ formatStatus(item) }}</span>
@@ -99,6 +99,10 @@ td .icon--confirmed {
 
 td .icon-green {
   @apply text-green;
+}
+
+td .icon-grey {
+  @apply text-gray-400;
 }
 
 td .icon-red {

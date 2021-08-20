@@ -8,7 +8,7 @@
           <th width="15%">Height</th>
           <th width="20%">Hash</th>
           <th width="15%">Transactions</th>
-          <th width="20%">XE</th>
+          <th width="20%">Total XE</th>
           <th>Mined</th>
         </tr>
       </thead>

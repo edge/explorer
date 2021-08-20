@@ -253,10 +253,6 @@ const search = async input => {
   }
 }
 
-const sendTransaction = tx => {
-  return fetchData(`${BLOCKCHAIN_API_URL}/transaction`, { method: 'post' }, tx)
-}
-
 export {
   fetchBlocks,
   fetchPendingTransactions,

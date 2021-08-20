@@ -23,18 +23,22 @@
     <span class="monospace md:font-sans">{{ sliceString(item.description, 26) }}</span>
   </td>
   <td data-title="Status:">
-    <span v-if="item.confirmations >= 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-green"><CheckCircleIcon /></span>
+    <span v-if="item.confirmations >= 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-green">
+      <CheckCircleIcon />
+    </span>
+    <span v-if="item.confirmations < 10 || !item.confirmations" class="mr-1 -mt-2 icon">
+      <ClockIcon />
+    </span>
     <span class="monospace md:font-sans">{{ formatStatus(item) }}</span>
   </td>
   <td data-title="Amount:">
-    <span v-if="item.type.toLowerCase() === 'sent'">-</span>
     <span class="monospace lg:font-sans">{{ formatAmount(item.amount) }} XE</span>
   </td>
 </template>
 
 <script>
 const { formatXe } = require('@edge/wallet-utils')
-import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon } from "@heroicons/vue/outline"
+import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from "@heroicons/vue/outline"
 
 export default {
   name: "TransactionsTableItem",
@@ -62,7 +66,8 @@ export default {
     ArrowDownIcon,
     ArrowRightIcon,
     ArrowUpIcon,
-    CheckCircleIcon
+    CheckCircleIcon,
+    ClockIcon
   }
 }
 </script>

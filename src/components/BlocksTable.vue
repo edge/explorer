@@ -30,7 +30,7 @@
             {{ block.transactions.length }}
           </td>
           <td data-title="XE:">
-            {{ block.total }}
+            {{ formatAmount(block.total) }}
           </td>
           <td data-title="Mined:">
             <span class="mr-1 lg:-mt-2 icon"><ClockIcon /></span>
@@ -47,6 +47,7 @@
 <script>
 import { ClockIcon } from "@heroicons/vue/outline"
 import moment from 'moment'
+const { formatXe } = require('@edge/wallet-utils')
 
 export default {
   name: 'BlocksTable',
@@ -59,6 +60,9 @@ export default {
     }
   },
   methods: {
+    formatAmount(amount) {
+      return formatXe(amount, true)
+    },
     timeSince(ts) {
       return moment(ts).fromNow()
     }

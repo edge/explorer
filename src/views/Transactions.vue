@@ -42,7 +42,7 @@ import TransactionOverview from "@/components/TransactionOverview"
 import TransactionSummary from "@/components/TransactionSummary"
 import TransactionsTable from "@/components/TransactionsTable"
 
-import { fetchTransactions, fetchWallet } from '../utils/api'
+import { fetchTransactions } from '../utils/api'
 
 export default {
   name: 'Transactions',

@@ -12,11 +12,11 @@
       </div>
       <div class="stat">
         <span class="stat__label">Blocks <span class="text-gray-400">last 24 hrs</span></span>
-        <span class="stat__value">{{blockMetadata && Number(blockMetadata.recentBlocksCount).toLocaleString()}}</span>
+        <span class="stat__value">{{blockMetadata && blockMetadata.recentBlocksCount && Number(blockMetadata.recentBlocksCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Transactions <span class="text-gray-400">last 24 hrs</span></span>
-        <span class="stat__value">{{transactionMetadata && Number(transactionMetadata.recentTransactionssCount).toLocaleString()}}</span>
+        <span class="stat__value">{{transactionMetadata && transactionMetadata.recentTransactionsCount && Number(transactionMetadata.recentTransactionsCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Block Time <span class="text-gray-400">avg</span></span>
@@ -38,14 +38,14 @@ export default {
   methods: {
     calculateBlocksPerHour(blockMetadata) {
       if (!blockMetadata || !blockMetadata.recentBlocksCount) {
-        return ''
+        return 0
       }
       
       return Number(blockMetadata.recentBlocksCount / 24).toFixed(2)
     },
     calculateBlockTime(blockMetadata) {
       if (!blockMetadata || !blockMetadata.recentBlocksCount) {
-        return ''
+        return 0
       }
       
       return Number((1440 / blockMetadata.recentBlocksCount) * 60).toFixed(0)

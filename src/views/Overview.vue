@@ -94,7 +94,7 @@ export default {
         }
       })
       
-      this.transactionMetadata.recentTransactionssCount = recentTransactionsMetadata.totalCount      
+      this.transactionMetadata.recentTransactionsCount = recentTransactionsMetadata.totalCount      
     },
     pollData() {
       this.polling = setInterval(() => {

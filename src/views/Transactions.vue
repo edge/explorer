@@ -88,11 +88,14 @@ export default {
 
       if (this.hash) {
         const { raw, transactions } = await fetchTransactions({ hash: this.hash })
+
         this.transaction = transactions[0]
         this.rawData = { ...raw }
       } else {
         this.fetchTransactions({ page: this.page })
       }
+      
+      this.loading = false
     },
     async fetchTransactions(options) {
       const { transactions, metadata } = await fetchTransactions({ options })
@@ -103,7 +106,7 @@ export default {
     },
     pollData() {
       this.polling = this.hash && setInterval(() => {
-        // this.fetchTransactions()
+        this.fetchData()
       }, 10000)
     }
   },

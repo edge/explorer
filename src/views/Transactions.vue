@@ -21,13 +21,12 @@
 
       <div v-else class="container h-full">
         <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
-          <h3 class='text-xl font-bold monospace'> ¯\_(ツ)_/¯</h3>
-          <p class="mb-0 text-center monospace">
-            Unfortunately this transaction doesn't exist. <br />
-            Try searching again, or <router-link to="/" class="underline hover:text-green">visit the homepage</router-link> to find your feet.
+          <h1 class="m-0 mt-20 text-2xl font-bold">This transaction doesn't exist</h1>
+          <p class="mt-5 mb-0 text-center monospace">
+            Try searching for a different transaction, or <router-link to="/transactions" class="underline hover:text-green">view all transactions</router-link>.
           </p>
-          <router-link to="/">
-            <a class="mt-20 button button--solid">Go to homepage</a>
+          <router-link to="/transactions">
+            <a class="mt-20 button button--solid">View all transactions</a>
           </router-link>
         </div>
       </div>

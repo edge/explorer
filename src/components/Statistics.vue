@@ -12,7 +12,7 @@
       </div>
       <div class="stat">
         <span class="stat__label">Blocks <span class="text-gray-400">last 24 hrs</span></span>
-        <span class="stat__value">{{blockMetadata && blockMetadata.recentBlocksCount && Number(blockMetadata.recentBlocksCount).toLocaleString()}}</span>
+        <span class="stat__value">{{blockMetadata && blockMetadata.recentBlocksCount && Number(blockMetadata.recentBlocksCount).toLocaleString()}}&nbsp;</span>
       </div>
       <div class="stat">
         <span class="stat__label">Transactions <span class="text-gray-400">last 24 hrs</span></span>

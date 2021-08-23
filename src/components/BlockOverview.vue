@@ -4,7 +4,11 @@
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
         <div class="transactionRow__label">Height</div>
-        <div class="transactionRow__value">{{ block.height }}</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Block', params: {blockId: block.height}}">
+            {{ block.height }}
+          </router-link>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Timestamp</div>
@@ -12,11 +16,19 @@
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Block Hash</div>
-        <div class="transactionRow__value">{{ block.hash }}</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
+            {{ block.hash }}
+          </router-link>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Parent Hash</div>
-        <div class="transactionRow__value">{{ block.parent }}</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Block', params: {blockId: block.parent}}">
+            {{ block.parent }}
+          </router-link>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Data Hash</div>

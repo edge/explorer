@@ -38,6 +38,7 @@ export default {
       transactionMetadata: null,
       transactions: [],
       loading: false,
+      pollInterval: 10000,
       polling: null
     }
   },
@@ -56,18 +57,16 @@ export default {
     this.pollData()
   },
   watch: {
-    $route (to, from) {
+    $route(to, from) {
       clearInterval(this.polling)
       this.polling = null
     }
   },
   methods: {
     async fetchBlocks() {
-      // Query for all blocks
-      const { blocks, metadata } = await fetchBlocks({ options: { limit: 5 } })
-      this.blockMetadata = metadata
-      this.blocks = blocks
-      
+      const recentBlocks = await fetchBlocks({ options: { limit: 5 } })
+      const blockMetadata = recentBlocks.metadata
+
       // Query for all blocks in last 24 hours
       const { metadata: recentBlocksMetadata } = await fetchBlocks({
         options: {
@@ -75,16 +74,15 @@ export default {
           since: new Date().getTime()-(86400000)
         }
       })
-      
-      this.blockMetadata.recentBlocksCount = recentBlocksMetadata.totalCount
-      
+
+      blockMetadata.recentBlocksCount = recentBlocksMetadata.totalCount
+      this.blockMetadata = blockMetadata
+      this.blocks = recentBlocks.blocks
       this.loading = false
     },
     async fetchTransactions() {
-      const { transactions, metadata } = await fetchTransactions({ options: { limit: 5 } })
-      this.transactionMetadata = metadata
-      this.transactions = transactions.filter(tx => !tx.pending)
-      this.loading = false
+      const recentTransactions = await fetchTransactions({ options: { limit: 5 } })
+      const transactionMetadata = recentTransactions.metadata
 
       // Query for all txs in last 24 hours
       const { metadata: recentTransactionsMetadata } = await fetchTransactions({
@@ -93,14 +91,17 @@ export default {
           since: new Date().getTime()-(86400000)
         }
       })
-      
-      this.transactionMetadata.recentTransactionsCount = recentTransactionsMetadata.totalCount      
+
+      transactionMetadata.recentTransactionsCount = recentTransactionsMetadata.totalCount
+      this.transactionMetadata = transactionMetadata
+      this.transactions = recentTransactions.transactions.filter(tx => !tx.pending)
+      this.loading = false
     },
     pollData() {
       this.polling = setInterval(() => {
         this.fetchBlocks()
         this.fetchTransactions()
-      }, 10000)
+      }, this.pollInterval)
     }
   }
 }

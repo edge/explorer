@@ -25,7 +25,11 @@
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Memo</div>
-        <div class="transactionRow__value">{{transaction.description}}</div>
+        <div class="transactionRow__value">
+          <span :class="{'text-gray-400': transaction.description=='None'}">
+            {{transaction.description}}
+          </span>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Block</div>

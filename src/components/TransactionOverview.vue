@@ -75,12 +75,16 @@ export default {
 
 <style scoped>
   .transactionRow {
-    @apply px-12 md:px-24 py-12 text-sm text-gray-300 bg-white rounded w-full grid grid-cols-12 items-center;
+    @apply px-12 md:px-24 py-12 text-sm bg-white rounded w-full grid grid-cols-12 items-center;
   }
   .transactionRow__label {
     @apply col-span-4 md:col-span-3;
   }
   .transactionRow__value {
-    @apply font-mono col-span-8 md:col-span-9 text-black truncate;
+    @apply font-mono col-span-8 text-gray-300 md:col-span-9 truncate;
+  }
+
+  .transactionRow__value a {
+    @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
   }
 </style>

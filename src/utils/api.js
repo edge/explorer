@@ -198,7 +198,7 @@ const formatTransactions = (address, data, pending) => {
       address: tx.sender === address ? tx.recipient : tx.sender,
       amount: xeStringFromMicroXe(tx.amount),
       date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
-      description: tx.data.memo || 'None',
+      memo: tx.data.memo || 'None',
       hash: tx.hash,
       recipient: tx.recipient,
       sender: tx.sender,

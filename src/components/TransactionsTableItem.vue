@@ -32,7 +32,7 @@
     <span class="monospace md:font-sans" :class="item.confirmations < 10 || !item.confirmations ? 'text-gray-400' : ''">{{ formatStatus(item) }}</span>
   </td>
   <td data-title="Amount:">
-    <span class="monospace lg:font-sans">{{ formatAmount(item.amount) }} XE</span>
+    <span class="monospace lg:font-sans">{{ formatAmount(item.amount) }}</span>
   </td>
 </template>
 

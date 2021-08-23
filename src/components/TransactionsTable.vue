@@ -9,7 +9,7 @@
         <th width="16%"><span class="pl-10">To</span></th>
         <th width="16%">Memo</th>
         <th width="12%">Status</th>
-        <th width="18%">Amount</th>
+        <th width="18%">Amount XE</th>
       </tr>
       </thead>
       <tbody v-if="transactions.length">

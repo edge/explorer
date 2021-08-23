@@ -83,8 +83,13 @@ export default {
   },
   mounted() {
     this.fetchData()
+    this.pollData()
   },
   methods: {
+    beforeDestroy() {
+      // Stops the data polling.
+      clearInterval(this.polling)
+    },
     async fetchBlocks(options) {
       this.loading = true
       
@@ -112,7 +117,7 @@ export default {
       }
     },
     pollData() {
-      this.polling = this.block && setInterval(() => {
+      this.polling = setInterval(() => {
         this.fetchBlocks()
       }, 10000)
     },
@@ -122,6 +127,12 @@ export default {
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
+    }
+  },
+  watch:{
+    $route (to, from) {
+      // When the route changes, stops polling for new data.
+      this.beforeDestroy()
     }
   }
 }

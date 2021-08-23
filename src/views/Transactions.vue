@@ -81,6 +81,7 @@ export default {
   },
   methods: {
     beforeDestroy() {
+      // Stops the data polling.
       clearInterval(this.polling)
     },
     async fetchData() {
@@ -111,7 +112,7 @@ export default {
       this.loading = false
     },
     pollData() {
-      this.polling = this.hash && setInterval(() => {
+      this.polling = setInterval(() => {
         this.fetchData()
       }, 10000)
     },
@@ -120,8 +121,11 @@ export default {
     }
   },
   watch: {
-    // call again the method if the route changes
-    '$route': 'fetchData'
+    $route (to, from) {
+      // When the route changes, stops polling for new data.
+      this.beforeDestroy()
+      this.fetchData()
+    }
   }
 }
 </script>

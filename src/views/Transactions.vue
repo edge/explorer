@@ -47,6 +47,11 @@ import { fetchTransactions } from '../utils/api'
 export default {
   name: 'Transactions',
   title() {
+    if (window.location.href.indexOf('/transaction/') > 0) {
+      const parts = window.location.href.split('/')
+      return 'XE Explorer » Transaction ' + this.sliceString(parts[parts.length - 1], 7)
+    }
+
     return 'XE Explorer » Transactions'
   },
   data: function () {
@@ -109,6 +114,9 @@ export default {
       this.polling = this.hash && setInterval(() => {
         this.fetchData()
       }, 10000)
+    },
+    sliceString(string, symbols) {
+      return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     }
   },
   watch: {

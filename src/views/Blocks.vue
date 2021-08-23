@@ -50,7 +50,12 @@ import { fetchBlocks } from '../utils/api'
 export default {
   name: 'Blocks',
   title() {
-    return this.block ? `XE Explorer » Block ${this.block.height}` : 'XE Explorer » Blocks'
+    if (window.location.href.indexOf('/block/') > 0) {
+      const parts = window.location.href.split('/')
+      return 'XE Explorer » Block ' + this.sliceString(parts[parts.length - 1], 7)
+    }
+
+    return 'XE Explorer » Blocks'
   },
   components: {
     BlocksTable,
@@ -114,6 +119,9 @@ export default {
     processBlock() {
       this.rawData = { ...this.block }
       this.transactions = this.block.transactions
+    },
+    sliceString(string, symbols) {
+      return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     }
   }
 }

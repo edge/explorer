@@ -8,7 +8,7 @@
           <th width="20%">Hash</th>
           <th width="25%">From</th>
           <th width="25%"><span class="pl-5">To</span></th>
-          <th class="right">Amount</th>
+          <th class="right">Amount XE</th>
         </tr>
       </thead>
       <tbody v-if="loading">
@@ -37,9 +37,9 @@
               {{ sliceString(transaction.recipient, 20) }}
             </span>
           </td>
-          <td class="lg:text-right" data-title="Amount:">
+          <td class="lg:text-right" data-title="Amount XE:">
             <span class="monospace lg:font-sans">
-              {{ transaction.amount }} XE
+              {{ formatAmount(transaction.amount) }}
             </span>
           </td>
         </tr>
@@ -51,6 +51,7 @@
 <script>
 import moment from 'moment'
 import { ArrowRightIcon } from "@heroicons/vue/outline"
+const { formatXe } = require('@edge/wallet-utils')
 
 export default {
   name: 'RecentTransactions',
@@ -65,6 +66,9 @@ export default {
     }
   },
   methods: {
+    formatAmount(amount) {
+      return formatXe(amount, true)
+    },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string
     },

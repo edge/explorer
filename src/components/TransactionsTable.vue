@@ -48,7 +48,7 @@ table, tbody, tr {
 }
 
 th {
-  @apply font-normal text-sm2 text-left text-black bg-gray-100 border-b-2 border-gray-200;
+  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
 }
 
 th:last-child {

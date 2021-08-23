@@ -3,16 +3,16 @@
     <h3>Block Overview</h3>
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
+        <div class="transactionRow__label">Timestamp</div>
+        <div class="transactionRow__value">{{new Date(block.timestamp).toLocaleString()}}</div>
+      </div>
+      <div class="transactionRow">
         <div class="transactionRow__label">Height</div>
         <div class="transactionRow__value">
           <router-link :to="{name: 'Block', params: {blockId: block.height}}">
             {{ block.height }}
           </router-link>
         </div>
-      </div>
-      <div class="transactionRow">
-        <div class="transactionRow__label">Timestamp</div>
-        <div class="transactionRow__value">{{new Date(block.timestamp).toLocaleString()}}</div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Block Hash</div>

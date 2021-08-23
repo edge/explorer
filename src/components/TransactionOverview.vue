@@ -4,12 +4,24 @@
 
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
-        <div class="transactionRow__label">Hash</div>
-        <div class="transactionRow__value">{{ transaction.hash }}</div>
+        <div class="transactionRow__label">Timestamp</div>
+        <div class="transactionRow__value">{{new Date(transaction.timestamp).toLocaleString()}}</div>
       </div>
       <div class="transactionRow">
-        <div class="transactionRow__label">Completed</div>
-        <div class="transactionRow__value">{{new Date(transaction.timestamp).toLocaleString()}}</div>
+        <div class="transactionRow__label">Block</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Block', params: {blockId: transaction.block.height}}">
+            {{transaction.block.height}}
+          </router-link>
+        </div>
+      </div>
+      <div class="transactionRow">
+        <div class="transactionRow__label">Tx Hash</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Transaction', params: {transactionId: transaction.hash}}">
+            {{transaction.hash}}
+          </router-link>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">From</div>
@@ -25,24 +37,21 @@
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Memo</div>
-        <div class="transactionRow__value">{{transaction.description}}</div>
-      </div>
-      <div class="transactionRow">
-        <div class="transactionRow__label">Block</div>
         <div class="transactionRow__value">
-          <router-link :to="{name: 'Block', params: {blockId: transaction.block.height}}">
-            {{transaction.block.height}}
-          </router-link>
+          <span :class="{'text-gray-400': transaction.memo=='None'}">
+            {{transaction.memo}}
+          </span>
         </div>
       </div>
-      <div class="transactionRow">
+
+      <!-- <div class="transactionRow">
         <div class="transactionRow__label">Block Hash</div>
         <div class="transactionRow__value">
           <router-link :to="{name: 'Block', params: {blockId: transaction.block.hash}}">
             {{transaction.block.hash}}
           </router-link>
         </div>
-      </div>
+      </div> -->
       <div class="transactionRow">
         <div class="transactionRow__label">Confirmations</div>
         <div class="transactionRow__value">{{ transaction.confirmations }}</div>
@@ -71,12 +80,16 @@ export default {
 
 <style scoped>
   .transactionRow {
-    @apply px-12 md:px-24 py-12 text-sm text-gray-300 bg-white rounded w-full grid grid-cols-12 items-center;
+    @apply px-12 md:px-24 py-12 text-sm bg-white rounded w-full grid grid-cols-12 items-center;
   }
   .transactionRow__label {
     @apply col-span-4 md:col-span-3;
   }
   .transactionRow__value {
-    @apply font-mono col-span-8 md:col-span-9 text-black truncate;
+    @apply font-mono col-span-8 text-gray-300 md:col-span-9 truncate;
+  }
+
+  .transactionRow__value a {
+    @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
   }
 </style>

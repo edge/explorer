@@ -27,8 +27,10 @@
             </router-link>
           </td>
           <td class="" data-title="Hash:">
+            <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
               <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 8) }}…</span>
               <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}…</span>
+            </router-link>
           </td>
           <td data-title="Transactions:">
             {{ block.transactions.length }}
@@ -56,14 +58,6 @@ const { formatXe } = require('@edge/wallet-utils')
 export default {
   name: 'RecentBlocks',
   props: ['blocks', 'loading'],
-  data: function () {
-    return {}
-  },
-  watch: {
-    $route (to, from) {
-
-    }
-  },
   methods: {
     formatAmount(amount) {
       return formatXe(amount, true)
@@ -84,7 +78,7 @@ table, tbody, tr {
 }
 
 th {
-  @apply font-normal text-sm2 text-left text-black bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
+  @apply font-normal text-sm2 text-left bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
 }
 
 /* th:first-child {

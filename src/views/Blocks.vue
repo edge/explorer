@@ -76,6 +76,7 @@ export default {
       loading: false,
       metadata: {},
       page: 1,
+      pollInterval: 10000,
       polling: null,
       rawData: null,
       transactions: null
@@ -92,7 +93,7 @@ export default {
     },
     async fetchBlocks(options) {
       this.loading = true
-      
+
       const { blocks, metadata } = await fetchBlocks({ options })
       this.blocks = blocks
       this.metadata = metadata
@@ -101,29 +102,41 @@ export default {
     async fetchData() {
       this.blockId = this.$route.params.blockId
       this.page = parseInt(this.$route.params.page || 1)
-      
+
       if (this.blockId) {
         this.loading = true
         const { blocks } = await fetchBlocks({ blockId: this.blockId })
         this.block = blocks[0]
-        
+
+        if (this.block.transactions && Object.keys(this.block.transactions).length) {
+          const latestBlocks = await fetchBlocks({ options: { limit: 1 } })
+          if (latestBlocks && latestBlocks.blocks && latestBlocks.blocks[0]) {
+            this.latestBlockHeight = latestBlocks.blocks[0].height
+          }
+        }
+
         if (this.block) {
           this.processBlock()
         }
-        
+
         this.loading = false
       } else {
         this.fetchBlocks({ page: this.page })
       }
     },
     pollData() {
-      this.polling = setInterval(() => {
-        this.fetchBlocks()
-      }, 10000)
+      if (!this.blockId) {
+        this.polling = setInterval(() => {
+          this.fetchBlocks()
+        }, this.pollInterval)
+      }
     },
     processBlock() {
       this.rawData = { ...this.block }
       this.transactions = this.block.transactions
+      this.transactions.forEach(tx => {
+        if (!tx.confirmations) tx.confirmations = this.latestBlockHeight - this.block.height + 1
+      })
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;

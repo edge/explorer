@@ -43,6 +43,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
 
         // Add average XE.
         block.average = block.transactions.length ? block.total / block.transactions.length : 0
+        block.average = block.average.toFixed(6)
 
         return {
           blocks: [block],
@@ -128,10 +129,10 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
 
   // Standard URL for pending transactions query.
   const pendingTxUrl = `${BLOCKCHAIN_API_URL}/transactions/pending/${address}`
-  
+
   // Standard URL for transactions query.
   let txUrl = `${INDEX_API_URL}/transactions/${address}?${qs.encode(options)}`
-  
+
   let txResults = []
 
   if (hash) {
@@ -156,7 +157,7 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
             amount: xeStringFromMicroXe(tx.amount),
             block: tx.block,
             date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
-            description: tx.data.memo || 'None',
+            memo: tx.data.memo || 'None',
             hash: tx.hash,
             recipient: tx.recipient,
             sender: tx.sender,
@@ -237,7 +238,7 @@ const search = async input => {
   const hashRegex = /[0-9a-f]{64}/
 
   if (hashRegex.test(input)) {
-    // The hash format is the same for blocks and transactions, 
+    // The hash format is the same for blocks and transactions,
     // so we need to query both for the input.
     const { blocks } = await fetchBlocks({ blockId: input })
     const { transactions } = await fetchTransactions({ hash: input })

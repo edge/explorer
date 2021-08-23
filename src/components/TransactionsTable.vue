@@ -9,7 +9,7 @@
         <th width="16%"><span class="pl-10">To</span></th>
         <th width="16%">Memo</th>
         <th width="12%">Status</th>
-        <th width="18%">Amount</th>
+        <th width="18%">Amount XE</th>
       </tr>
       </thead>
       <tbody v-if="transactions.length">
@@ -48,7 +48,7 @@ table, tbody, tr {
 }
 
 th {
-  @apply font-normal text-sm2 text-left text-black bg-gray-100 border-b-2 border-gray-200;
+  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
 }
 
 th:last-child {

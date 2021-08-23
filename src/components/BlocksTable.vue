@@ -3,8 +3,10 @@
     <table class="w-full">
       <thead class="sticky top-0 hidden lg:table-header-group">
         <tr>
-          <th width="15%">Height</th>
-          <th width="30%">Hash</th>
+          <th>Height</th>
+          <th>Block Hash</th>
+          <th>Data Hash</th>
+          <th>Ledger Hash</th>
           <th>Transactions</th>
           <th>Total XE</th>
           <th>Mined</th>
@@ -24,7 +26,16 @@
               <span class="monospace">{{block.height}}</span>
             </router-link>
           </td>
-          <td data-title="Hash:"><span class="truncate monospace">{{ block.hash.substr(0, 32) }}…</span>
+          <td data-title="Block Hash:">
+            <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
+              <span class="truncate monospace">{{ block.hash.substr(0, 32) }}…</span>
+            </router-link>
+          </td>
+          <td data-title="Data Hash:">
+            <span class="truncate monospace">{{ block.dataHash.substr(0, 16) }}…</span>
+          </td>
+          <td data-title="Ledger Hash:">
+            <span class="truncate monospace">{{ block.ledgerHash.substr(0, 16) }}…</span>
           </td>
           <td data-title="Transactions:">
             {{ block.transactions.length }}
@@ -79,7 +90,7 @@ table, tbody, tr {
 }
 
 th {
-  @apply font-normal text-sm2 text-left text-black bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
+  @apply font-normal text-sm2 text-left bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
 }
 
 /* th:first-child {

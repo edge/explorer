@@ -4,12 +4,24 @@
 
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
-        <div class="transactionRow__label">Hash</div>
-        <div class="transactionRow__value">{{ transaction.hash }}</div>
+        <div class="transactionRow__label">Timestamp</div>
+        <div class="transactionRow__value">{{new Date(transaction.timestamp).toLocaleString()}}</div>
       </div>
       <div class="transactionRow">
-        <div class="transactionRow__label">Completed</div>
-        <div class="transactionRow__value">{{new Date(transaction.timestamp).toLocaleString()}}</div>
+        <div class="transactionRow__label">Block</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Block', params: {blockId: transaction.block.height}}">
+            {{transaction.block.height}}
+          </router-link>
+        </div>
+      </div>
+      <div class="transactionRow">
+        <div class="transactionRow__label">Tx Hash</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Transaction', params: {transactionId: transaction.hash}}">
+            {{transaction.hash}}
+          </router-link>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">From</div>
@@ -31,22 +43,15 @@
           </span>
         </div>
       </div>
-      <div class="transactionRow">
-        <div class="transactionRow__label">Block</div>
-        <div class="transactionRow__value">
-          <router-link :to="{name: 'Block', params: {blockId: transaction.block.height}}">
-            {{transaction.block.height}}
-          </router-link>
-        </div>
-      </div>
-      <div class="transactionRow">
+
+      <!-- <div class="transactionRow">
         <div class="transactionRow__label">Block Hash</div>
         <div class="transactionRow__value">
           <router-link :to="{name: 'Block', params: {blockId: transaction.block.hash}}">
             {{transaction.block.hash}}
           </router-link>
         </div>
-      </div>
+      </div> -->
       <div class="transactionRow">
         <div class="transactionRow__label">Confirmations</div>
         <div class="transactionRow__value">{{ transaction.confirmations }}</div>

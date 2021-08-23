@@ -39,7 +39,7 @@ export default {
     @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
   }
   .tile span.emphasis {
-    @apply text-black font-medium font-mono;
+    @apply text-gray-900 font-medium font-mono;
   }
   button {
     @apply leading-none text-sm2 border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;

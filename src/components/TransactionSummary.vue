@@ -38,6 +38,6 @@ export default {
     @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded md:pr-50;
   }
   .tile span.emphasis {
-    @apply text-black font-medium font-mono;
+    @apply text-gray-900 font-medium font-mono;
   }
 </style>

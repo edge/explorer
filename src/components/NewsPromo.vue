@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-full h-full">
-    <h3>XE Distribution now open</h3>
+    <h3>XE Distribution is closing soon</h3>
     <div class="border border-black rounded-t">
       <img src="/assets/e-xe-promo.png">
     </div>

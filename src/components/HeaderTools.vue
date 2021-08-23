@@ -22,7 +22,7 @@
 
 <style scoped>
   .header-tools {
-    @apply mt-auto md:px-15 flex-shrink-0;
+    @apply mt-auto px-15 flex-shrink-0;
   }
 
   .header-tools__link {

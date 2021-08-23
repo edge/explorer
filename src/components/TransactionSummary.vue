@@ -3,18 +3,24 @@
     <h3>Transaction Summary</h3>
     <div class="tile">
       This transaction was mined on <span>{{new Date(transaction.timestamp).toLocaleString().split(',')[0]}}</span> at <span>{{new Date(transaction.timestamp).toLocaleString().split(',')[1]}}</span>.
-      A total of <span>{{transaction.amount}} XE</span> were sent.
+      A total of <span>{{formatAmount(transaction.amount)}} XE</span> were sent.
     </div>
   </div>
 </template>
 
 <script>
+const { formatXe } = require('@edge/wallet-utils')
 
 export default {
   name: "TransactionSummary",
   props: {
     transaction: {
       type: Object
+    }
+  },
+  methods: {
+    formatAmount(amount) {
+      return formatXe(amount, true)
     }
   }
 }

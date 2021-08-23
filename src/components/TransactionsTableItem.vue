@@ -23,11 +23,11 @@
     <span class="monospace md:font-sans">{{ sliceString(item.description, 26) }}</span>
   </td>
   <td data-title="Status:">
-    <span v-if="!item.pending && (item.confirmations >= 10 || !item.confirmations)" class="mr-1 -mt-2 icon icon--confirmed icon-green">
-      <CheckCircleIcon />
-    </span>
-    <span v-if="item.confirmations < 10 || !item.confirmations" class="mr-1 -mt-2 icon icon--confirmed icon-grey">
+    <span v-if="!isConfirmed(item)" class="mr-1 -mt-2 icon icon--confirmed icon-grey">
       <ClockIcon />
+    </span>
+    <span v-if="isConfirmed(item)" class="mr-1 -mt-2 icon icon--confirmed icon-green">
+      <CheckCircleIcon />
     </span>
     <span class="monospace md:font-sans" :class="item.confirmations < 10 || !item.confirmations ? 'text-gray-400' : ''">{{ formatStatus(item) }}</span>
   </td>
@@ -60,6 +60,12 @@ export default {
       if (item.confirmations === 1) return `${item.confirmations} confirmation`
       if (item.confirmations < 10) return `${item.confirmations} confirmations`
       return `Confirmed`
+    },
+    isConfirmed(item) {
+      if (item.pending) return false
+      if (item.confirmations === 1) return false
+      if (item.confirmations < 10) return false
+      return true
     }
   },
   components: {

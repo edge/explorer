@@ -47,6 +47,11 @@ import { fetchTransactions } from '../utils/api'
 export default {
   name: 'Transactions',
   title() {
+    if (window.location.href.indexOf('/transaction/') > 0) {
+      const parts = window.location.href.split('/')
+      return 'XE Explorer » Transaction ' + this.sliceString(parts[parts.length - 1], 7)
+    }
+
     return 'XE Explorer » Transactions'
   },
   data: function () {
@@ -76,6 +81,7 @@ export default {
   },
   methods: {
     beforeDestroy() {
+      // Stops the data polling.
       clearInterval(this.polling)
     },
     async fetchData() {
@@ -106,14 +112,20 @@ export default {
       this.loading = false
     },
     pollData() {
-      this.polling = this.hash && setInterval(() => {
+      this.polling = setInterval(() => {
         this.fetchData()
       }, 10000)
+    },
+    sliceString(string, symbols) {
+      return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     }
   },
   watch: {
-    // call again the method if the route changes
-    '$route': 'fetchData'
+    $route (to, from) {
+      // When the route changes, stops polling for new data.
+      this.beforeDestroy()
+      this.fetchData()
+    }
   }
 }
 </script>

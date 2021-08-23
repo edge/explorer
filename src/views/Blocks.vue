@@ -50,7 +50,12 @@ import { fetchBlocks } from '../utils/api'
 export default {
   name: 'Blocks',
   title() {
-    return this.block ? `XE Explorer » Block ${this.block.height}` : 'XE Explorer » Blocks'
+    if (window.location.href.indexOf('/block/') > 0) {
+      const parts = window.location.href.split('/')
+      return 'XE Explorer » Block ' + this.sliceString(parts[parts.length - 1], 7)
+    }
+
+    return 'XE Explorer » Blocks'
   },
   components: {
     BlocksTable,
@@ -78,8 +83,13 @@ export default {
   },
   mounted() {
     this.fetchData()
+    this.pollData()
   },
   methods: {
+    beforeDestroy() {
+      // Stops the data polling.
+      clearInterval(this.polling)
+    },
     async fetchBlocks(options) {
       this.loading = true
       
@@ -107,13 +117,22 @@ export default {
       }
     },
     pollData() {
-      this.polling = this.block && setInterval(() => {
+      this.polling = setInterval(() => {
         this.fetchBlocks()
       }, 10000)
     },
     processBlock() {
       this.rawData = { ...this.block }
       this.transactions = this.block.transactions
+    },
+    sliceString(string, symbols) {
+      return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
+    }
+  },
+  watch:{
+    $route (to, from) {
+      // When the route changes, stops polling for new data.
+      this.beforeDestroy()
     }
   }
 }

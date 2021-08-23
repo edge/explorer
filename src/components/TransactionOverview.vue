@@ -38,8 +38,8 @@
       <div class="transactionRow">
         <div class="transactionRow__label">Memo</div>
         <div class="transactionRow__value">
-          <span :class="{'text-gray-400': transaction.description=='None'}">
-            {{transaction.description}}
+          <span :class="{'text-gray-400': transaction.memo=='None'}">
+            {{transaction.memo}}
           </span>
         </div>
       </div>

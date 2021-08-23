@@ -157,7 +157,7 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
             amount: xeStringFromMicroXe(tx.amount),
             block: tx.block,
             date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
-            description: tx.data.memo || 'None',
+            memo: tx.data.memo || 'None',
             hash: tx.hash,
             recipient: tx.recipient,
             sender: tx.sender,

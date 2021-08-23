@@ -19,8 +19,8 @@
     <span class="hidden lg:pl-10 monospace md:block">{{ sliceString(item.recipient, 20) }}</span>
     <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
   </td>
-  <td :title="item.description" data-title="Memo:" :class="item.description === 'None' ? 'text-gray-400' : ''">
-    <span class="monospace md:font-sans">{{ sliceString(item.description, 26) }}</span>
+  <td :title="item.memo" data-title="Memo:" :class="item.memo === 'None' ? 'text-gray-400' : ''">
+    <span class="monospace md:font-sans">{{ sliceString(item.memo, 26) }}</span>
   </td>
   <td data-title="Status:">
     <span v-if="!isConfirmed(item)" class="mr-1 -mt-2 icon icon--confirmed icon-grey">

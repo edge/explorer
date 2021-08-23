@@ -1,9 +1,13 @@
 <template>
   <td data-title="Tx Hash:" :title="item.hash">
-    <router-link :to="{name: 'Transaction', params: {hash: item.hash}}">
+    <router-link v-if="!item.pending" :to="{name: 'Transaction', params: {hash: item.hash}}">
       <span class="hidden monospace md:inline-block">{{ sliceString(item.hash, 8) }}</span>
       <span class="monospace md:hidden">{{ sliceString(item.hash, 26) }}</span>
     </router-link>
+    <div v-else>
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.hash, 8) }}</span>
+      <span class="monospace md:hidden">{{ sliceString(item.hash, 26) }}</span>
+    </div>
   </td>
   <td data-title="Date:">
     <span class="monospace md:font-sans">
@@ -50,7 +54,7 @@ export default {
       }
     },
     sliceString(string, symbols) {
-      return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
+      return string && string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     },
     formatAmount(amount) {
       return formatXe(amount, true)

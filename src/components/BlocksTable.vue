@@ -24,7 +24,10 @@
               <span class="monospace">{{block.height}}</span>
             </router-link>
           </td>
-          <td data-title="Hash:"><span class="truncate monospace">{{ block.hash.substr(0, 32) }}…</span>
+          <td data-title="Hash:">
+            <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
+              <span class="truncate monospace">{{ block.hash.substr(0, 32) }}…</span>
+            </router-link>
           </td>
           <td data-title="Transactions:">
             {{ block.transactions.length }}

@@ -59,11 +59,6 @@ export default {
   data: function () {
     return {}
   },
-  watch: {
-    $route (to, from) {
-
-    }
-  },
   methods: {
     formatAmount(amount) {
       return formatXe(amount, true)

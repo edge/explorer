@@ -56,15 +56,6 @@ const { formatXe } = require('@edge/wallet-utils')
 export default {
   name: 'RecentTransactions',
   props: ['loading', 'transactions'],
-  data: function () {
-    return {}
-  },
-  mounted() {
-  },
-  watch: {
-    $route (to, from) {
-    }
-  },
   methods: {
     formatAmount(amount) {
       return formatXe(amount, true)

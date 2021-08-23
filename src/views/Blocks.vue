@@ -135,7 +135,7 @@ export default {
       this.rawData = { ...this.block }
       this.transactions = this.block.transactions
       this.transactions.forEach(tx => {
-        if (!tx.confirmations) tx.confirmations = this.latestBlockHeight - this.block.height
+        if (!tx.confirmations) tx.confirmations = this.latestBlockHeight - this.block.height + 1
       })
     },
     sliceString(string, symbols) {

@@ -76,6 +76,7 @@ export default {
       loading: false,
       metadata: {},
       page: 1,
+      pollInterval: 10000,
       polling: null,
       rawData: null,
       transactions: null
@@ -124,9 +125,11 @@ export default {
       }
     },
     pollData() {
-      this.polling = setInterval(() => {
-        this.fetchBlocks()
-      }, 10000)
+      if (!this.blockId) {
+        this.polling = setInterval(() => {
+          this.fetchBlocks()
+        }, this.pollInterval)
+      }
     },
     processBlock() {
       this.rawData = { ...this.block }

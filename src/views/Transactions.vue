@@ -60,6 +60,7 @@ export default {
       loading: false,
       metadata: {},
       page: 1,
+      pollInterval: 10000,
       polling: null,
       rawData: null,
       transaction: null,
@@ -86,7 +87,7 @@ export default {
     },
     async fetchData() {
       this.loading = true
-      
+
       this.hash = this.$route.params.hash
       this.page = parseInt(this.$route.params.page || 1)
 
@@ -94,7 +95,7 @@ export default {
         const { raw, transactions } = await fetchTransactions({ hash: this.hash })
 
         this.transaction = transactions[0]
-        
+
         if (raw) {
           this.rawData = { ...raw }
         }
@@ -112,9 +113,11 @@ export default {
       this.loading = false
     },
     pollData() {
-      this.polling = setInterval(() => {
-        this.fetchData()
-      }, 10000)
+      if (!this.hash) {
+        this.polling = setInterval(() => {
+          this.fetchData()
+        }, this.pollInterval)
+      }
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;

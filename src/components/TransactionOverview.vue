@@ -8,7 +8,12 @@
         <div class="transactionRow__value">{{new Date(transaction.timestamp).toLocaleString()}}</div>
       </div>
       <div class="transactionRow">
-        <div class="transactionRow__label">Block</div>
+        <div class="transactionRow__label flex items-center space-x-3">
+          Block
+          <Tooltip :text="`The block this transaction was included in.`">
+            <InformationCircleIcon class="hidden md:block button__icon w-16" />
+          </Tooltip>
+        </div>
         <div class="transactionRow__value">
           <router-link :to="{name: 'Block', params: {blockId: transaction.block.height}}">
             {{transaction.block.height}}
@@ -61,10 +66,18 @@
 </template>
 
 <script>
+import {
+  InformationCircleIcon
+} from '@heroicons/vue/solid'
+import Tooltip from '@/components/Tooltip'
 const { formatXe } = require('@edge/wallet-utils')
 
 export default {
   name: "TransactionOverview",
+  components: {
+    InformationCircleIcon,
+    Tooltip
+  },
   props: {
     transaction: {
       type: Object

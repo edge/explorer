@@ -42,7 +42,7 @@ import TransactionOverview from "@/components/TransactionOverview"
 import TransactionSummary from "@/components/TransactionSummary"
 import TransactionsTable from "@/components/TransactionsTable"
 
-import { fetchTransactions } from '../utils/api'
+import { fetchTransactions, fetchExchangeTransaction } from '../utils/api'
 
 export default {
   name: 'Transactions',
@@ -93,12 +93,11 @@ export default {
 
       if (this.hash) {
         const { raw, transactions } = await fetchTransactions({ hash: this.hash })
+        const exchangeResult = await fetchExchangeTransaction(this.hash)
 
         this.transaction = transactions[0]
-
-        if (raw) {
-          this.rawData = { ...raw }
-        }
+        if (raw) this.rawData = { ...raw }
+        if (exchangeResult && !exchangeResult.metadata) this.transaction.exchangeResult = exchangeResult
 
         this.loading = false
       } else {

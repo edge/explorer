@@ -6,9 +6,9 @@
       <thead class="hidden lg:table-header-group">
         <tr>
           <th width="15%">Height</th>
-          <th width="20%">Hash</th>
-          <th width="15%">Transactions</th>
-          <th width="20%">Total XE</th>
+          <th width="25%">Hash</th>
+          <th width="5%">Txs</th>
+          <th width="25%">Total XE</th>
           <th>Mined</th>
         </tr>
       </thead>
@@ -28,11 +28,11 @@
           </td>
           <td class="" data-title="Hash:">
             <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
-              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 8) }}…</span>
+              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 16) }}…</span>
               <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}…</span>
             </router-link>
           </td>
-          <td data-title="Transactions:">
+          <td data-title="Txs:">
             {{ block.transactions.length }}
           </td>
           <td data-title="Total XE:">

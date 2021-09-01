@@ -27,7 +27,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
         if (results.results && Array.isArray(results.results) && !results.results[0]) {
           return {
             blocks: [],
-            metdata: {}
+            metadata: {}
           }
         }
 
@@ -103,14 +103,19 @@ const fetchData = (url, options = {}, payload) => {
     .catch(() => {
       return {
         results: [],
-        metdata: {}
+        metadata: {}
       }
     })
 }
 
 const fetchPendingTransactions = (address, options = {}) => {
   const url = `${BLOCKCHAIN_API_URL}/transactions/pending/${address}`
+  return fetchData(url)
+}
 
+const fetchExchangeTransaction = (hash) => {
+  const url = `${INDEX_API_URL}/exchange/${hash}`
+  const results = fetchData(url)
   return fetchData(url)
 }
 
@@ -143,7 +148,7 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
         if (results.results && Array.isArray(results.results) && !results.results[0]) {
           return {
             transactions: [],
-            metdata: {}
+            metadata: {}
           }
         }
 
@@ -257,6 +262,7 @@ const search = async input => {
 export {
   fetchBlocks,
   fetchPendingTransactions,
+  fetchExchangeTransaction,
   fetchTransactions,
   formatTransactions,
   search

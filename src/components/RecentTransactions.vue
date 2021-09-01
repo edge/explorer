@@ -5,9 +5,9 @@
     <table class="w-full">
       <thead class="hidden lg:table-header-group">
         <tr>
-          <th width="20%">Hash</th>
-          <th width="20%">From</th>
-          <th width="20%"><span class="pl-5">To</span></th>
+          <th>Hash</th>
+          <th>From</th>
+          <th><span class="pl-5">To</span></th>
           <th class="right">Amount XE</th>
         </tr>
       </thead>

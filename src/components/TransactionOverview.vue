@@ -62,7 +62,7 @@
             <CheckCircleIcon class="mr-4 w-16 icon-green" />
             Completed
           </span>
-          <span v-else>
+          <span v-else class="flex items-center space-x-3">
             <ClockIcon class="mr-4 w-16 icon-grey" />
             Pending
           </span>

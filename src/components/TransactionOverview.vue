@@ -10,7 +10,7 @@
       <div class="transactionRow">
         <div class="transactionRow__label flex items-center space-x-3">
           Block
-          <Tooltip theme="light" :text="`The block this transaction was included in.`">
+          <Tooltip position="right" theme="light" :text="`The block this transaction was included in.`">
             <InformationCircleIcon class="hidden md:block button__icon w-16" />
           </Tooltip>
         </div>

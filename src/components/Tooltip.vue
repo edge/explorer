@@ -1,7 +1,7 @@
 <template>
   <div class="tooltip-box">
     <slot />
-    <div class="tooltip" :class="theme === 'dark' ? 'dark' : 'light', position || 'top'">
+    <div class="tooltip" :class="theme === 'dark' ? 'dark' : 'light', position || 'top', wide ? 'wide' : ''">
       <span class="text">{{ text }}</span>
     </div>
   </div>
@@ -23,43 +23,55 @@ export default {
     position: {
       type: String,
       required: false
+    },
+    wide: {
+      type: Boolean,
+      required: false
     }
   }
 }
 </script>
 
 <style scoped>
-  .tooltip-box { 
-    @apply relative inline-block;
+  .tooltip-box {
+    @apply relative inline-block cursor-pointer;
   }
 
   /* visible states */
+  .tooltip-box:hover .tooltip {
+    @apply opacity-100 visible;
+  }
   .tooltip-box:hover .tooltip.top {
-    @apply opacity-100 -translate-y-8;
+    @apply -translate-y-8;
   }
 
   .tooltip-box:hover .tooltip.bottom {
-    @apply opacity-100 translate-y-8;
+    @apply translate-y-8;
   }
 
   .tooltip-box:hover .tooltip.right {
-    @apply opacity-100 translate-x-5;
+    @apply translate-x-5;
   }
 
   .tooltip-box:hover .tooltip.left {
-    @apply opacity-100 -translate-x-5;
+    @apply -translate-x-5;
   }
 
   /* tooltip position */
   .tooltip {
-    @apply p-10 text-xs absolute transform w-180 transition duration-200 text-white text-center shadow rounded opacity-0 z-10 bg-green;
+    width: 200px;
+    @apply invisible p-10 text-xs absolute transform transition duration-200 text-white text-center shadow rounded opacity-0 z-10 bg-green;
   }
 
-  .tooltip.top { 
+  .tooltip.wide {
+    width: 300px;
+  }
+
+  .tooltip.top {
     @apply bottom-full left-1/2 -translate-x-1/2;
   }
 
-  .tooltip.bottom { 
+  .tooltip.bottom {
     @apply top-full left-1/2 -translate-x-1/2;
   }
 

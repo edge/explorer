@@ -55,9 +55,6 @@
 
         <div class="transactionRow__value">{{ transaction.confirmations }}</div>
       </div>
-
-      {{ transaction.exchangeResult }}
-
       <div v-if="transaction.exchangeResult" class="transactionRow">
         <div class="transactionRow__label">Exchange Status</div>
         <div class="transactionRow__value flex items-center space-x-3">

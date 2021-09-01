@@ -63,7 +63,7 @@
             Completed
           </span>
           <span v-else>
-            <InformationCircleIcon class="mr-4 w-16 icon-grey" />
+            <ClockIcon class="mr-4 w-16 icon-grey" />
             Pending
           </span>
         </div>

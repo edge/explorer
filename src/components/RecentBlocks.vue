@@ -7,7 +7,7 @@
         <tr>
           <th width="15%">Height</th>
           <th width="20%">Hash</th>
-          <th width="15%">Transactions</th>
+          <th width="15%">Txs</th>
           <th width="20%">Total XE</th>
           <th>Mined</th>
         </tr>
@@ -28,11 +28,11 @@
           </td>
           <td class="" data-title="Hash:">
             <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
-              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 8) }}…</span>
+              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 12) }}…</span>
               <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}…</span>
             </router-link>
           </td>
-          <td data-title="Transactions:">
+          <td data-title="Txs:">
             {{ block.transactions.length }}
           </td>
           <td data-title="Total XE:">

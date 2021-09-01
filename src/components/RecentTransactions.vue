@@ -6,8 +6,8 @@
       <thead class="hidden lg:table-header-group">
         <tr>
           <th width="20%">Hash</th>
-          <th width="25%">From</th>
-          <th width="25%"><span class="pl-5">To</span></th>
+          <th width="20%">From</th>
+          <th width="20%"><span class="pl-5">To</span></th>
           <th class="right">Amount XE</th>
         </tr>
       </thead>
@@ -28,13 +28,13 @@
           </td>
           <td data-title="From:">
             <span class="truncate monospace" :title="transaction.sender">
-              {{ sliceString(transaction.sender, 18) }}
+              {{ sliceString(transaction.sender, 16) }}
             </span>
           </td>
           <td data-title="To:" class="relative">
             <span class="arrow-icon"><ArrowRightIcon /></span>
             <span class="truncate lg:pl-5 monospace" :title="transaction.recipient">
-              {{ sliceString(transaction.recipient, 20) }}
+              {{ sliceString(transaction.recipient, 16) }}
             </span>
           </td>
           <td class="lg:text-right" data-title="Amount XE:">

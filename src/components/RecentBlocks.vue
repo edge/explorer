@@ -6,9 +6,9 @@
       <thead class="hidden lg:table-header-group">
         <tr>
           <th width="15%">Height</th>
-          <th width="25%">Hash</th>
-          <th width="5%">Txs</th>
-          <th width="25%">Total XE</th>
+          <th>Hash</th>
+          <th>Txs</th>
+          <th>Total XE</th>
           <th>Mined</th>
         </tr>
       </thead>

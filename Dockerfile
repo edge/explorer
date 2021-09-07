@@ -1,6 +1,6 @@
 # Copyright (C) 2021 Edge Network Technologies Ltd
-# Use of this source code is governed by an MIT-style license that can be
-# found in the LICENSE file or at https://opensource.org/licenses/MIT.
+# Use of this source code is governed by a GNU GPL-style license
+# that can be found in the LICENSE.md file. All rights reserved.
 
 #
 # 1. Build the Vue app

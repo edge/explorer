@@ -1,9 +1,9 @@
 {
-  "name": "xe-explorer",
-  "version": "1.2.1",
-  "description": "XE Blockchain Explorer",
+  "name": "explorer",
+  "version": "1.2.4",
+  "description": "Blockchain & network explorer",
   "private": true,
-  "license": "unlicensed",
+  "license": "GPL",
   "author": "Edge Network <core@edge.network>",
   "contributors": [
     "Adam K Dean <adam@edge.network>",

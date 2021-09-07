@@ -1,4 +1,4 @@
-### License
+### LICENSE
 
 Edge is the infrastructure of Web3. A peer-to-peer network and blockchain providing high performance decentralised web services, powered by the spare capacity all around us.
 

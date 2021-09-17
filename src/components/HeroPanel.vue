@@ -3,13 +3,19 @@
     <div class="container flex flex-col justify-end h-full md:justify-between md:flex-row md:items-end">
       <div class="flex flex-col">
         <h1 class="hero-panel__title">{{ title }}</h1>
-        <div class="max-w-md mt-5 font-mono text-white truncate md:mt-10 lg:max-w-lg" :class="hash || thisHash ? '' : 'hidden'">
-          <span class="text-green">Hash: </span>
-          {{ hash || thisHash }}
-        </div>
-        <div class="max-w-md mt-5 font-mono text-white truncate md:mt-10 lg:max-w-lg" :class="height ? '' : 'hidden'">
-          <span class="text-green">Height: </span>
-          {{ height }}
+        <div class="max-w-md mt-5 font-mono text-white truncate md:mt-10 lg:max-w-lg" >
+          <div v-if="hash || thisHash">
+            <span class="text-green">Hash: </span>
+            {{ hash || thisHash }}
+          </div>
+          <div v-else-if="height">
+            <span class="text-green">Height: </span>
+            {{ height }}
+          </div>
+          <div v-else-if="address">
+            <span class="text-green">Address: </span>
+           {{ address }} 
+          </div>
         </div>
       </div>
       <Search />
@@ -23,7 +29,7 @@ import Search from '@/components/Search'
 
 export default {
   name: "HeroPanel",
-  props: ['title', 'blockId', 'hash'],
+  props: ['title', 'blockId', 'hash', 'address'],
   data: function () {
     return {
       thisHash: null,

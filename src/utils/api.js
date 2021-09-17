@@ -126,8 +126,6 @@ const fetchWallet = async (address) => {
   const url = `${BLOCKCHAIN_API_URL}/wallet/${address}`
   const results = await fetchData(url)
 
-  console.log('fetchwallet', results)
-
   // If fetchData returns an empty response, we
   // return an empty wallet. TODO: tidy up fetchData.
   return results && results.metadata

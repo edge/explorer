@@ -15,6 +15,17 @@
         <Pagination v-if="transactions" baseRoute="Wallet" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
       </div>
     </div>
+    <div v-else class="container h-full">
+      <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
+        <h1 class="m-0 mt-20 text-2xl font-bold">This wallet doesn't exist</h1>
+        <p class="mt-5 mb-0 text-center monospace">
+          Try searching for a different wallet, or <router-link to="/" class="underline hover:text-green">return to overview</router-link>.
+        </p>
+        <router-link to="/">
+          <a class="mt-20 button button--solid">Return to overview</a>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 

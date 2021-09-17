@@ -22,20 +22,23 @@
         <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
             <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
-              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 8) }}</span>
+              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 12) }}</span>
               <span class="monospace md:hidden">{{ sliceString(transaction.hash, 20) }}</span>
             </router-link>
           </td>
           <td data-title="From:">
-            <span class="truncate monospace" :title="transaction.sender">
-              {{ sliceString(transaction.sender, 16) }}
-            </span>
+            <router-link :to="{name: 'Wallet', params: {address: transaction.sender}}">
+              <span class="truncate monospace" :title="transaction.sender">
+                {{ sliceString(transaction.sender, 18) }}
+              </span>
+            </router-link>
           </td>
           <td data-title="To:" class="relative">
-            <span class="arrow-icon"><ArrowRightIcon /></span>
-            <span class="truncate lg:pl-5 monospace" :title="transaction.recipient">
-              {{ sliceString(transaction.recipient, 16) }}
-            </span>
+            <router-link :to="{name: 'Wallet', params: {address: transaction.recipient}}">
+              <span class="truncate lg:pl-5 monospace" :title="transaction.recipient">
+                {{ sliceString(transaction.recipient, 18) }}
+              </span>
+            </router-link>
           </td>
           <td class="lg:text-right" data-title="Amount XE:">
             <span class="monospace lg:font-sans">

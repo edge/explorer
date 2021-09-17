@@ -119,8 +119,20 @@ const fetchPendingTransactions = (address, options = {}) => {
 
 const fetchExchangeTransaction = (hash) => {
   const url = `${INDEX_API_URL}/exchange/${hash}`
-  const results = fetchData(url)
   return fetchData(url)
+}
+
+const fetchWallet = async (address) => {
+  const url = `${BLOCKCHAIN_API_URL}/wallet/${address}`
+  const results = await fetchData(url)
+
+  console.log('fetchwallet', results)
+
+  // If fetchData returns an empty response, we
+  // return an empty wallet. TODO: tidy up fetchData.
+  return results && results.metadata
+    ? { address, balance: 0, nonce: 0 }
+    : results
 }
 
 const fetchTransactions = async ({ address, hash, options = {} }) => {
@@ -268,6 +280,7 @@ export {
   fetchPendingTransactions,
   fetchExchangeTransaction,
   fetchTransactions,
+  fetchWallet,
   formatTransactions,
   search
 }

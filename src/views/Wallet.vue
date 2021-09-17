@@ -31,8 +31,7 @@ import { fetchTransactions, fetchWallet } from '../utils/api'
 export default {
   name: 'Wallet',
   title() {
-    const parts = window.location.href.split('/')
-    return 'XE Explorer » Wallet ' + this.sliceString(parts[parts.length - 1], 7)
+    return 'XE Explorer » Wallet ' + this.address
   },
   components: {
     WalletOverview,

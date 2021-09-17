@@ -25,11 +25,19 @@
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">From</div>
-        <div class="transactionRow__value">{{ transaction.sender }}</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Wallet', params: {address: transaction.sender}}">
+            {{ transaction.sender }}
+          </router-link>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">To</div>
-        <div class="transactionRow__value">{{ transaction.recipient }}</div>
+        <div class="transactionRow__value">
+          <router-link :to="{name: 'Wallet', params: {address: transaction.recipient}}">
+            {{ transaction.recipient }}
+          </router-link>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Amount</div>
@@ -47,7 +55,7 @@
         <div class="transactionRow__label flex items-center space-x-3">
           Confirmations
           <Tooltip
-            class="ml-3 icon-grey" position="right" wide="true"
+            class="ml-3 icon-grey" position="right" :wide="true"
             text="The number of blocks since this transaction was included in the blockchain">
             <InformationCircleIcon class="hidden md:block button__icon w-16" />
           </Tooltip>

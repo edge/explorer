@@ -15,13 +15,19 @@
     </span>
   </td>
   <td data-title="From:">
-    <span class="hidden monospace md:block">{{ sliceString(item.sender, 20) }}</span>
-    <span class="monospace md:hidden">{{ sliceString(item.sender, 26) }}</span>
+    <router-link :to="{name: 'Wallet', params: {address: item.sender}}">
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.sender, 22) }}</span>
+      <span class="monospace md:hidden">{{ sliceString(item.sender, 26) }}</span>
+    </router-link>
+  </td>
+  <td class="arrow-icon">
+    <ArrowRightIcon />
   </td>
   <td data-title="To:" class="relative">
-    <span class="arrow-icon"><ArrowRightIcon /></span>
-    <span class="hidden lg:pl-10 monospace md:block">{{ sliceString(item.recipient, 20) }}</span>
-    <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
+    <router-link :to="{name: 'Wallet', params: {address: item.recipient}}">
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.recipient, 22) }}</span>
+      <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
+    </router-link>
   </td>
   <td :title="item.memo" data-title="Memo:" :class="!item.memo ? 'text-gray-400' : ''">
     <span class="monospace md:font-sans">{{ item.memo ? sliceString(item.memo, 26) : 'None' }}</span>
@@ -84,7 +90,7 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 truncate;
 }
 
 td::before {
@@ -119,8 +125,12 @@ td .icon-red {
   @apply text-red;
 }
 
-td .arrow-icon {
-  @apply absolute hidden pt-px lg:block w-14 h-14 -left-14 text-green;
+td.arrow-icon {
+  @apply hidden lg:table-cell;
+}
+
+td.arrow-icon svg {
+  @apply pt-px w-14 h-14 text-green;
 }
 
 td a {

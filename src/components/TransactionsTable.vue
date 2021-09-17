@@ -3,23 +3,24 @@
     <table>
       <thead class="sticky top-0 z-10 hidden lg:table-header-group">
       <tr>
-        <th width="12%">Tx Hash</th>
-        <th width="14%">Date</th>
+        <th width="10%">Tx Hash</th>
+        <th width="12%">Date</th>
         <th width="16%">From</th>
-        <th width="16%"><span class="pl-10">To</span></th>
+        <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
+        <th width="16%">To</th>
         <th width="16%">Memo</th>
-        <th width="12%">Status</th>
+        <th width="10%">Status</th>
         <th width="18%">Amount XE</th>
       </tr>
       </thead>
-      <tbody v-if="transactions.length">
+      <tbody v-if="transactions && transactions.length">
         <tr v-for="item in transactions" :key="item.id" :class="item.pending ? 'italic text-gray-400' : ''">
           <TransactionsTableItem :item="item"/>
         </tr>
       </tbody>
-      <tbody v-if="!transactions.length">
+      <tbody v-else>
         <tr>
-          <td colspan="7" class="block w-full text-center bg-white lg:table-cell py-35">
+          <td colspan="8" class="block w-full text-center bg-white lg:table-cell py-35">
             No transactions.
           </td>
         </tr>

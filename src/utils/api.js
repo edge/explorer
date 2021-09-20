@@ -253,10 +253,13 @@ const pluckBlockTransactions = block => {
 }
 
 const search = async input => {
+  const addressRegex = /^xe_[0-9a-fA-F]{40}$/
   const blockHeightRegex = /^[0-9]+$/
   const hashRegex = /[0-9a-f]{64}/
 
-  if (hashRegex.test(input)) {
+  if (addressRegex.test(input)) {
+    return fetchWallet(input)
+  } else if (hashRegex.test(input)) {
     // The hash format is the same for blocks and transactions,
     // so we need to query both for the input.
     const { blocks } = await fetchBlocks({ blockId: input })

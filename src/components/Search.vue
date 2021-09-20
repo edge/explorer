@@ -1,6 +1,6 @@
 <template>
   <div class="search" :class="size==='large' ? 'search--lge' : ''">
-    <input @keyup.enter="search" class="search__input" v-model="searchInput" type="text" placeholder="Search Tx or Block ID" />
+    <input @keyup.enter="search" class="search__input" v-model="searchInput" type="text" placeholder="Search Address, Tx or Block ID" />
     <button
       class="search__submit"
       @click="search"
@@ -62,21 +62,31 @@ export default {
   methods: {
     async search () {
       this.isSearching = true
-      
-      const result = await search(this.searchInput)
-     
-      this.isSearching = true
+    
+      const result = await search(this.searchInput)  
 
-      const { blocks, transactions } = result
+      const { address, blocks, transactions } = result
       
-      if (blocks && blocks[0]) {
+      // Edge case - resets searching flag in case the search was
+      // performed from the same page.
+      if (
+        address
+        || (blocks && blocks[0])
+        || (transactions && transactions[0])
+      ) {
+        this.isSearching = false
+      }
+      
+      if (address) {
+        this.$router.push(`/wallet/${address}`)
+      } else if (blocks && blocks[0]) {
         this.$router.push(`/block/${blocks[0].height}`)
       } else if (transactions && transactions[0]) {
         this.$router.push(`/transaction/${transactions[0].hash}`)
       } else {
         // No result.
         setTimeout(() => {
-          this.searchFeedback = "Come on dude, that's not a valid Tx or Block ID."
+          this.searchFeedback = "That doesn't appear to be a valid Address, Tx or Block ID."
           this.showFeedback = true
           this.isSearching = false
         }, 1000)

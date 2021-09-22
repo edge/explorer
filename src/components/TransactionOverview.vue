@@ -18,7 +18,7 @@
       <div class="transactionRow">
         <div class="transactionRow__label">Tx Hash</div>
         <div class="transactionRow__value">
-          <router-link :to="{ name: 'Transaction', params: { transactionId: transaction.hash } }">
+          <router-link :to="{ name: 'Transaction', params: { hash: transaction.hash } }">
             {{ transaction.hash }}
           </router-link>
         </div>
@@ -81,7 +81,7 @@
         <div class="transactionRow__value">
           <router-link
             v-if="transaction.exchangeResult.destToken === 'XE'"
-            :to="{ name: 'Transaction', params: { transactionId: transaction.exchangeResult.completedTransactionHash } }">
+            :to="{ name: 'Transaction', params: { hash: transaction.exchangeResult.completedTransactionHash } }">
             {{ transaction.exchangeResult.completedTransactionHash }}
           </router-link>
           <a target="_about" class=""
@@ -89,6 +89,15 @@
             :href="`https://etherscan.io/tx/${transaction.exchangeResult.completedTransactionHash}`">
             {{ transaction.exchangeResult.completedTransactionHash }}
           </a>
+        </div>
+      </div>
+      <div class="transactionRow" v-if="transaction.exchangeResult && transaction.exchangeResult.feeTransactionHash">
+        <div class="transactionRow__label">Fee Tx</div>
+        <div class="transactionRow__value">
+          <router-link
+            :to="{ name: 'Transaction', params: { hash: transaction.exchangeResult.feeTransactionHash } }">
+            {{ transaction.exchangeResult.feeTransactionHash }}
+          </router-link>
         </div>
       </div>
     </div>

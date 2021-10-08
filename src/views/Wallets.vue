@@ -23,7 +23,7 @@
       </div>
       <div v-else class="container h-full">
         <div v-if="loading" class="flex flex-col items-center justify-center h-full">
-          <h1 class="m-0 mt-20 text-2xl font-bold">Loading</h1>
+          <h1 class="m-0 mt-0 text-2xl font-bold">Loading</h1>
           <p class="mt-5 mb-0 text-center monospace">
             This should only take a moment.
           </p>

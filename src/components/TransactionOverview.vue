@@ -77,7 +77,13 @@
         </div>
       </div>
       <div class="transactionRow" v-if="transaction.exchangeResult && transaction.exchangeResult.completedTransactionHash">
-        <div class="transactionRow__label">{{ transaction.exchangeResult.destToken === 'XE' ? 'Deposit Tx' : 'Withdrawal Tx' }}</div>
+        <div class="transactionRow__label">{{
+          transaction.exchangeResult.destToken === 'XE'
+            ? 'Deposit Tx'
+            : transaction.exchangeResult.destToken === 'EDGE'
+              ? 'Withdrawal Tx'
+              : 'Sale Tx'
+          }}</div>
         <div class="transactionRow__value">
           <router-link
             v-if="transaction.exchangeResult.destToken === 'XE'"
@@ -86,6 +92,11 @@
           </router-link>
           <a target="_about" class=""
             v-if="transaction.exchangeResult.destToken === 'EDGE'"
+            :href="`https://etherscan.io/tx/${transaction.exchangeResult.completedTransactionHash}`">
+            {{ transaction.exchangeResult.completedTransactionHash }}
+          </a>
+          <a target="_about" class=""
+            v-if="transaction.exchangeResult.destToken === 'USDC'"
             :href="`https://etherscan.io/tx/${transaction.exchangeResult.completedTransactionHash}`">
             {{ transaction.exchangeResult.completedTransactionHash }}
           </a>

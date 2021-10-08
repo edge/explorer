@@ -36,6 +36,10 @@
             text: "Transactions"
           },
           {
+            link: "/wallets",
+            text: "Wallets"
+          },
+          {
             link: "/stakes",
             text: "Stakes",
             disabled: true
@@ -46,7 +50,7 @@
     methods: {
       bodyScrollLock () {
         const targetElement = document.querySelector('#menu')
-        
+
         if (this.showNav) {
           bodyScrollLock.disableBodyScroll(targetElement)
         } else {

@@ -123,7 +123,7 @@ const fetchExchangeTransaction = (hash) => {
 }
 
 const fetchWallet = async (address) => {
-  const url = `${BLOCKCHAIN_API_URL}/wallet/${address}`
+  const url = `${INDEX_API_URL}/wallet/${address}`
   const results = await fetchData(url)
 
   // If fetchData returns an empty response, we
@@ -133,25 +133,23 @@ const fetchWallet = async (address) => {
     : results
 }
 
+const fetchWallets = async (options = {}) => {
+  if (!options.page) options.page = 1
+  if (!options.limit) options.limit = 20
+
+  const url = `${INDEX_API_URL}/wallets?page=${options.page}&limit=${options.limit}`
+  const results = await fetchData(url)
+
+  return results
+}
+
 const fetchTransactions = async ({ address, hash, options = {} }) => {
-  if (typeof address !== 'string') {
-    address = ''
-  }
+  if (typeof address !== 'string') address = ''
+  if (!options.page) options.page = 1
+  if (!options.limit) options.limit = 20
 
-  if (!options.page) {
-    options.page = 1
-  }
-
-  if (!options.limit) {
-    options.limit = 20
-  }
-
-  // Standard URL for pending transactions query.
   const pendingTxUrl = `${BLOCKCHAIN_API_URL}/transactions/pending/${address}`
-
-  // Standard URL for transactions query.
   let txUrl = `${INDEX_API_URL}/transactions/${address}?${qs.encode(options)}`
-
   let txResults = []
 
   if (hash) {
@@ -282,6 +280,7 @@ export {
   fetchExchangeTransaction,
   fetchTransactions,
   fetchWallet,
+  fetchWallets,
   formatTransactions,
   search
 }

@@ -110,7 +110,7 @@ export default {
       }
     },
     async fetchWallets(options) {
-      const { results, metadata } = await fetchWallets({ options })
+      const { results, metadata } = await fetchWallets(options)
 
       this.wallets = results
       this.metadata = metadata

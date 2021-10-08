@@ -22,14 +22,11 @@
         </div>
       </div>
       <div v-else class="container h-full">
-        <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
-          <h1 class="m-0 mt-20 text-2xl font-bold">This wallet doesn't exist</h1>
+        <div v-if="loading" class="flex flex-col items-center justify-center h-full">
+          <h1 class="m-0 mt-20 text-2xl font-bold">Loading</h1>
           <p class="mt-5 mb-0 text-center monospace">
-            Try searching for a different wallet, or <router-link to="/" class="underline hover:text-green">return to overview</router-link>.
+            This should only take a moment.
           </p>
-          <router-link to="/">
-            <a class="mt-20 button button--solid">Return to overview</a>
-          </router-link>
         </div>
       </div>
     </div>
@@ -65,11 +62,9 @@ export default {
   data: function () {
     return {
       hash: null,
-      loading: false,
+      loading: true,
       metadata: {},
       page: 1,
-      pollInterval: 10000,
-      polling: null,
       rawData: null,
       wallet: null,
       wallets: []
@@ -87,13 +82,8 @@ export default {
   },
   mounted() {
     this.fetchData()
-    this.pollData()
   },
   methods: {
-    beforeDestroy() {
-      // Stops the data polling.
-      clearInterval(this.polling)
-    },
     async fetchData() {
       this.address = this.$route.params.address
       this.page = parseInt(this.$route.params.page || 1)
@@ -133,21 +123,12 @@ export default {
       this.metadata = metadata
       this.loading = false
     },
-    pollData() {
-      if (!this.hash) {
-        this.polling = setInterval(() => {
-          this.fetchData()
-        }, this.pollInterval)
-      }
-    },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     }
   },
   watch: {
-    $route (to, from) {
-      // When the route changes, stops polling for new data.
-      this.beforeDestroy()
+    $route(to, from) {
       this.fetchData()
     }
   }

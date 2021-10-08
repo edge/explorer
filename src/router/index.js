@@ -7,7 +7,7 @@ import Blocks from '@/views/Blocks'
 import Overview from '@/views/Overview'
 import NotFound from '@/views/404'
 import Transactions from '@/views/Transactions'
-import Wallet from '@/views/Wallet'
+import Wallets from '@/views/Wallets'
 
 const routes = [
   {
@@ -36,9 +36,14 @@ const routes = [
     component: Transactions
   },
   {
-    path: '/wallet/:address/:page(\\d+)?',
+    path: '/wallet/:address',
     name: 'Wallet',
-    component: Wallet
+    component: Wallets
+  },
+  {
+    path: '/wallets/:page(\\d+)?',
+    name: 'Wallets',
+    component: Wallets
   },
   { path: '/:catchAll(.*)', component: NotFound }
 ]

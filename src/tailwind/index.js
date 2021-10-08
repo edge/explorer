@@ -12,6 +12,7 @@ const {
   buttons,
   container,
   transactionTable,
+  walletTable,
   forms
 } = require('./components')
 
@@ -45,6 +46,7 @@ module.exports = plugin.withOptions(
           { source: container({theme})},
           { source: buttons({ theme }) },
           { source: transactionTable({ theme }) },
+          { source: walletTable({ theme }) },
           { source: forms({ theme }) }
         ],
         brandOverrides,

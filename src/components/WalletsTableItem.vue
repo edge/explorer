@@ -28,8 +28,7 @@
 </template>
 
 <script>
-const { formatXe } = require('@edge/wallet-utils')
-import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from "@heroicons/vue/outline"
+const { xeStringFromMicroXe } = require('@edge/wallet-utils')
 
 export default {
   name: "WalletsTableItem",
@@ -39,18 +38,11 @@ export default {
       return string && string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     },
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return xeStringFromMicroXe(amount, true)
     },
     formatNumber(number) {
       return number.toLocaleString('en-US')
     }
-  },
-  components: {
-    ArrowDownIcon,
-    ArrowRightIcon,
-    ArrowUpIcon,
-    CheckCircleIcon,
-    ClockIcon
   }
 }
 </script>

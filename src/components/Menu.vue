@@ -10,7 +10,7 @@
       <router-link
         :to="item.link"
         class="main-nav__link"
-        :class="location && (item.text === 'Blocks' && location.startsWith('/block') || item.text === 'Transactions' && location.startsWith('/transaction') ) ? 'router-link-active' : ''"
+        :class="location && (item.text === 'Blocks' && location.startsWith('/block') || item.text === 'Transactions' && location.startsWith('/transaction') || item.text === 'Wallets' && location.startsWith('/wallet') ) ? 'router-link-active' : ''"
       >
         {{ item.text }}
       </router-link>
@@ -41,7 +41,7 @@ export default {
   .main-nav__link.router-link-active {
     @apply bg-black-100 text-green;
   }
-  
+
   .main-nav__link.router-link-exact-active {
     @apply bg-black-100 text-green;
   }

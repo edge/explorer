@@ -2,7 +2,7 @@
   <td data-title="Address:" :title="item.address">
     <router-link :to="{name: 'Wallet', params: {address: item.address}}">
       <span class="hidden monospace md:inline-block">{{ item.address }}</span>
-    </router-link>
+    </router-link><BadgeCheckIcon v-if="item.trusted" class="trusted" />
   </td>
   <td data-title="First Tx Date:">
     {{ new Date(item.firstTransaction.timestamp).toLocaleString() }}
@@ -29,10 +29,14 @@
 
 <script>
 const { xeStringFromMicroXe } = require('@edge/wallet-utils')
+import { BadgeCheckIcon } from '@heroicons/vue/solid'
 
 export default {
   name: "WalletsTableItem",
   props: ['item'],
+  components: {
+    BadgeCheckIcon
+  },
   methods: {
     sliceString(string, symbols) {
       return string && string.length > symbols ? `${string.slice(0, symbols)}…` : string;
@@ -94,6 +98,10 @@ td.arrow-icon svg {
 
 td a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+.trusted {
+  @apply w-18 h-18 inline-block ml-2 text-green;
 }
 
 @screen lg {

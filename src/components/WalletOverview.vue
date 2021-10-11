@@ -4,7 +4,7 @@
     <div class="flex flex-col flex-1 space-y-2">
       <div class="overviewRow">
         <div class="overviewRow__label">Address</div>
-        <div class="overviewRow__value">{{ wallet && wallet.address }}</div>
+        <div class="overviewRow__value">{{ wallet && wallet.address }}<BadgeCheckIcon v-if="wallet.trusted" class="trusted" /></div>
       </div>
       <div class="overviewRow">
         <div class="overviewRow__label">Balance</div>
@@ -14,19 +14,27 @@
         <div class="overviewRow__label">Nonce</div>
         <div class="overviewRow__value">{{ wallet ? wallet.nonce : 0 }}</div>
       </div>
+      <div class="overviewRow" v-if="wallet.name">
+        <div class="overviewRow__label">Name</div>
+        <div class="overviewRow__value">{{ wallet.name }}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 const { xeStringFromMicroXe } = require('@edge/wallet-utils')
+import { BadgeCheckIcon } from '@heroicons/vue/solid'
 
 export default {
-  name: "WalletOverview",
+  name: 'WalletOverview',
   props: {
     wallet: {
       type: Object
     }
+  },
+  components: {
+    BadgeCheckIcon
   },
   methods: {
     formatAmount(amount) {
@@ -37,6 +45,9 @@ export default {
 </script>
 
 <style scoped>
+  .trusted {
+    @apply w-18 h-18 inline-block ml-2 -mt-2 text-green;
+  }
   .overviewRow {
     @apply px-12 md:px-24 py-12 text-sm bg-white rounded w-full grid grid-cols-12 items-center;
   }

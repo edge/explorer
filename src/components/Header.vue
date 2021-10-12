@@ -1,8 +1,8 @@
 <template>
     <header class="relative z-10 py-16 header md:pb-15" :class="{'menu-open':showNav}">
       <div class="container flex items-center justify-between">
-        <Logo/>
-        <BurgerButton @click="showNav = !showNav; bodyScrollLock()"/>
+        <Logo />
+        <BurgerButton @click="showNav = !showNav"/>
         <div id="menu" class="absolute left-0 right-0 flex flex-col flex-1 pt-12 pb-24 bg-black mobile-drop top-full md:static md:flex-row md:px-15 md:p-0">
           <Menu :mainNav="mainNav"/>
           <HeaderTools/>
@@ -46,6 +46,12 @@
           }
         ]
       }
+    },
+    watch: {
+      $route () {
+        this.showNav = false
+      },
+      showNav: 'bodyScrollLock',
     },
     methods: {
       bodyScrollLock () {

@@ -1,8 +1,7 @@
 <template>
   <div class="flex flex-col h-full">
     <h3>Wallet Summary</h3>
-    <div class="relative max-h-full tile md:pr-50">
-      The wallet with address <span class="emphasis">{{ wallet && wallet.address }}</span> has a balance of <span class="emphasis">{{ formatAmount(wallet ? wallet.balance : 0) }}</span> XE. It has <span class="emphasis">{{ wallet ? wallet.transactions : 0  }}</span> {{ wallet && wallet.transactions === 1 ? 'transaction' : 'transactions' }} associated with it. The nonce is <span class="emphasis">{{ wallet ? wallet.nonce : 0  }}</span>.
+    <div class="relative max-h-full tile md:pr-50" v-html="generateWalletSummary()">
     </div>
   </div>
 </template>
@@ -20,16 +19,33 @@ export default {
   methods: {
     formatAmount(amount) {
       return xeStringFromMicroXe(amount, true)
+    },
+    generateWalletSummary() {
+      if (this.wallet) {
+        let summary = `The wallet with address <span class="emphasis">${this.wallet.address}</span> has a balance of <span class="emphasis">${this.formatAmount(this.wallet.balance)}</span> XE. `
+        summary += `It has <span class="emphasis">${this.wallet.transactions}</span> ${this.wallet.transactions === 1 ? 'transaction' : 'transactions'} associated with it. `
+        summary += `The nonce is <span class="emphasis">${this.wallet.nonce}</span>. `
+
+        let enhancedSummary = ''
+        if (this.wallet.trusted && this.wallet.name) enhancedSummary += `It is a <span class="emphasis">named</span> and <span class="emphasis">trusted</span> wallet. `
+        else if (this.wallet.trusted) enhancedSummary += `It is a <span class="emphasis">trusted</span> wallet. `
+        else if (this.wallet.name) enhancedSummary += `It is a <span class="emphasis">named</span> wallet. `
+
+        if (this.wallet.description) enhancedSummary += `${this.wallet.description}`
+
+        return enhancedSummary.length ? `${summary}<br><br>${enhancedSummary}` : summary
+      }
     }
   }
 }
 </script>
 
+<!-- See https://medium.com/@brockreece/scoped-styles-with-v-html-c0f6d2dc5d8e for >>> syntax -->
 <style scoped>
   .tile {
     @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
   }
-  .tile span.emphasis {
+  .tile >>> span.emphasis {
     @apply text-gray-900 font-medium font-mono;
   }
   button {

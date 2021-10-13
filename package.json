@@ -3,7 +3,7 @@
   "version": "1.7.1",
   "description": "Blockchain & network explorer",
   "private": true,
-  "license": "GPL",
+  "license": "SEE LICENSE IN LICENSE.md",
   "author": "Edge Network <core@edge.network>",
   "contributors": [
     "Adam K Dean <adam@edge.network>",

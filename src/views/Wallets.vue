@@ -14,7 +14,7 @@
 
           <h3>Wallet Transactions</h3>
           <TransactionsTable :transactions="transactions" />
-          <Pagination v-if="transactions" baseRoute="Wallets" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+          <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
         </div>
         <div v-else>
           <WalletsTable :wallets="wallets" />

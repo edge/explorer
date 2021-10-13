@@ -36,7 +36,7 @@ const routes = [
     component: Transactions
   },
   {
-    path: '/wallet/:address',
+    path: '/wallet/:address/:page(\\d+)?',
     name: 'Wallet',
     component: Wallets
   },

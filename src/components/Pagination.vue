@@ -2,11 +2,11 @@
   <nav class="pagination">
     <ol class="pagination__list">
       <li class="pagination__item">
-        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { page: 1 }}">First</router-link>
+        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { page: 1, address }}">First</router-link>
         <span class="not-link" v-else>First</span>
       </li>
       <li class="pagination__item">
-        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { page: currentPage - 1 }}">
+        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { page: currentPage - 1, address }}">
           <ChevronLeftIcon/>
         </router-link>
         <span class="not-link" v-else><ChevronLeftIcon/></span>
@@ -16,13 +16,13 @@
         <span v-else>&nbsp;</span>
       </li>
       <li class="pagination__item">
-        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { page: currentPage + 1 }}">
+        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { page: currentPage + 1, address }}">
           <ChevronRightIcon/>
         </router-link>
         <span class="not-link" v-else><ChevronRightIcon/></span>
       </li>
       <li class="pagination__item">
-        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { page: totalPages }}">
+        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { page: totalPages, address }}">
           Last
         </router-link>
         <span class="not-link" v-else>Last</span>
@@ -32,12 +32,12 @@
 </template>
 
 <script>
-import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/vue/solid";
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/solid';
 
 export default {
-  name: "Pagination",
-  components: {ChevronRightIcon, ChevronLeftIcon},
-  props: ['baseRoute', 'currentPage', 'totalPages']
+  name: 'Pagination',
+  components: { ChevronRightIcon, ChevronLeftIcon },
+  props: ['baseRoute', 'address', 'currentPage', 'totalPages']
 }
 </script>
 

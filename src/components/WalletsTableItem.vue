@@ -1,7 +1,7 @@
 <template>
   <td data-title="Address:" :title="item.address">
     <router-link :to="{name: 'Wallet', params: {address: item.address}}">
-      <span class="hidden monospace md:inline-block">{{ item.address }}</span>
+      <span class="monospace md:inline-block">{{ item.address }}</span>
     </router-link><BadgeCheckIcon v-if="item.trusted" class="trusted" />
   </td>
   <td data-title="First Tx Date:">

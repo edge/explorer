@@ -1,7 +1,7 @@
 <template>
   <div class="hero-panel">
     <div class="container">
-      <h1 class="hero-panel__title">The XE blockchain explorer</h1>
+      <h1 class="hero-panel__title">{{ title }}</h1>
       <!-- <div class="flex w-full mb-0 form-group lg:pr-24 lg:w-1/2">
         <div class="relative flex-1 input-wrap">
           <span class="pointer-events-none icon">
@@ -28,6 +28,11 @@ export default {
   components: {
     Search,
     SearchIcon
+  },
+  data() {
+    return {
+      title: process.env.VUE_APP_IS_TESTNET ? 'Search the Testnet (XE) Blockchain' : 'Search the Edge (XE) Blockchain'
+    }
   }
 }
 </script>

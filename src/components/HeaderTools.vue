@@ -2,7 +2,7 @@
 <template>
   <ul class="header-tools">
     <li class="header-tools__item">
-      <a href="https://wallet.xe.network/" class="header-tools__link" target="_blank" rel="noreferrer">
+      <a :href="walletUrl" class="header-tools__link" target="_blank" rel="noreferrer">
         <span class="header-tools__icon">
           <CreditCardIcon/>
         </span>
@@ -13,10 +13,15 @@
 </template>
 
 <script>
-  import {CreditCardIcon} from "@heroicons/vue/outline";
+  import { CreditCardIcon } from "@heroicons/vue/outline";
   export default {
     name: "HeaderTools",
-    components: {CreditCardIcon}
+    components: { CreditCardIcon },
+    data() {
+      return {
+        walletUrl: process.env.VUE_APP_IS_TESTNET ? 'https://wallet.test.network' : 'https://wallet.xe.network'
+      }
+    }
   }
 </script>
 

@@ -49,10 +49,10 @@ export default {
   title() {
     if (window.location.href.indexOf('/transaction/') > 0) {
       const parts = window.location.href.split('/')
-      return 'XE Explorer » Transaction ' + this.sliceString(parts[parts.length - 1], 7)
+      return 'Transaction ' + this.sliceString(parts[parts.length - 1], 7)
     }
 
-    return 'XE Explorer » Transactions'
+    return 'Transactions'
   },
   data: function () {
     return {

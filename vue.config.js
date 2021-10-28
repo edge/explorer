@@ -8,7 +8,8 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        args[0].title = 'XE Explorer'
+        // This sets the pre-render title (see also src/mixins/titleMixing.js)
+        args[0].title = process.env.VUE_APP_IS_TESTNET ? 'Testnet (XE) Explorer' : 'Edge (XE) Explorer'
         return args
       })
   }

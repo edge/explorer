@@ -6,9 +6,6 @@
 
 <script>
 export default {
-  title() {
-    return 'XE Explorer'
-  },
   methods: {
     setViewHeight: function() {
       let vh = window.innerHeight * 0.01

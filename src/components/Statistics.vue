@@ -37,7 +37,7 @@ export default {
   props: ['blockMetadata', 'transactionMetadata'],
   data() {
     return {
-      title: process.env.VUE_APP_IS_TESTNET === true ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
+      title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
     }
   },
   methods: {

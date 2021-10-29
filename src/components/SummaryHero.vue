@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      title: process.env.VUE_APP_IS_TESTNET === true ? 'Search the Testnet (XE) Blockchain' : 'Search the Edge (XE) Blockchain'
+      title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'Search the Testnet (XE) Blockchain' : 'Search the Edge (XE) Blockchain'
     }
   }
 }

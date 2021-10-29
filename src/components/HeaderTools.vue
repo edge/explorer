@@ -19,7 +19,7 @@
     components: { CreditCardIcon },
     data() {
       return {
-        walletUrl: process.env.VUE_APP_IS_TESTNET === true ? 'https://wallet.test.network' : 'https://wallet.xe.network'
+        walletUrl: process.env.VUE_APP_IS_TESTNET === 'true' ? 'https://wallet.test.network' : 'https://wallet.xe.network'
       }
     }
   }

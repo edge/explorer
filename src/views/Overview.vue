@@ -27,10 +27,8 @@ import SummaryHero from "@/components/SummaryHero"
 import { fetchBlocks, fetchTransactions } from '../utils/api'
 
 export default {
-  name: 'Summary',
-  title() {
-    return 'XE Explorer » Overview'
-  },
+  name: 'Overview',
+  title: 'Overview',
   data: function () {
     return {
       blockMetadata: null,

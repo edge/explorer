@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <h3>STATISTICS</h3>
+    <h3>{{ title }}</h3>
     <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2">
       <div class="stat">
         <span class="stat__label">Blocks</span>
@@ -35,19 +35,24 @@
 export default {
   name: 'Statistics',
   props: ['blockMetadata', 'transactionMetadata'],
+  data() {
+    return {
+      title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
+    }
+  },
   methods: {
     calculateBlocksPerHour(blockMetadata) {
       if (!blockMetadata || !blockMetadata.recentBlocksCount) {
         return 0
       }
-      
+
       return Number(blockMetadata.recentBlocksCount / 24).toFixed(2)
     },
     calculateBlockTime(blockMetadata) {
       if (!blockMetadata || !blockMetadata.recentBlocksCount) {
         return 0
       }
-      
+
       return Number((1440 / blockMetadata.recentBlocksCount) * 60).toFixed(0)
     }
   }

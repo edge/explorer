@@ -5,10 +5,10 @@
 
 def imagesPushed = ''
 
-def buildAndPushImage(registry, tag, blockchainApi, indexApi) {
+def buildAndPushImage(registry, tag, isTestnet, blockchainApi, indexApi) {
   docker.withRegistry("https://$registry", registry) {
     def image = docker.build("$registry/$tag",
-      "--build-arg BLOCKCHAIN_API_URL=$blockchainApi --build-arg INDEX_API_URL=$indexApi .")
+      "--build-arg IS_TESTNET=$isTestnet --build-arg BLOCKCHAIN_API_URL=$blockchainApi --build-arg INDEX_API_URL=$indexApi .")
     image.push()
     return "$registry/$tag"
   }
@@ -38,7 +38,7 @@ pipeline {
           }
           steps {
             script {
-              def tag = buildAndPushImage(REGISTRY, NAME, BLOCKCHAIN_API_URL, INDEX_API_URL)
+              def tag = buildAndPushImage(REGISTRY, NAME, IS_TESTNET, BLOCKCHAIN_API_URL, INDEX_API_URL)
 
               // Update image list for slack reporting.
               if (imagesPushed == '') imagesPushed = "\n$tag"

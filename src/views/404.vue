@@ -13,9 +13,7 @@
 
 <script>
 export default {
-  title() {
-    return 'XE Explorer » 404'
-  }
+  title: 'Not Found'
 }
 </script>
 <style scoped>

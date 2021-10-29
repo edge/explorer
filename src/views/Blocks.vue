@@ -52,10 +52,10 @@ export default {
   title() {
     if (window.location.href.indexOf('/block/') > 0) {
       const parts = window.location.href.split('/')
-      return 'XE Explorer » Block ' + this.sliceString(parts[parts.length - 1], 7)
+      return 'Block ' + this.sliceString(parts[parts.length - 1], 7)
     }
 
-    return 'XE Explorer » Blocks'
+    return 'Blocks'
   },
   components: {
     BlocksTable,

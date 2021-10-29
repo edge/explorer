@@ -55,9 +55,9 @@ export default {
     let walletAddress = ''
     if (checksumAddressIsValid(last)) walletAddress = last
     else if (checksumAddressIsValid(secondToLast)) walletAddress = secondToLast
-    else return 'XE Explorer » Wallets'
+    else return 'Wallets'
 
-    return `XE Explorer » Wallet ${walletAddress}`
+    return `Wallet ${walletAddress}`
   },
   data: function () {
     return {

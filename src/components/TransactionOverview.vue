@@ -92,12 +92,12 @@
           </router-link>
           <a target="_about" class=""
             v-if="transaction.exchangeResult.destToken === 'EDGE'"
-            :href="`https://etherscan.io/tx/${transaction.exchangeResult.completedTransactionHash}`">
+            :href="`${etherscanUrl}/tx/${transaction.exchangeResult.completedTransactionHash}`">
             {{ transaction.exchangeResult.completedTransactionHash }}
           </a>
           <a target="_about" class=""
             v-if="transaction.exchangeResult.destToken === 'USDC'"
-            :href="`https://etherscan.io/tx/${transaction.exchangeResult.completedTransactionHash}`">
+            :href="`${etherscanUrl}/tx/${transaction.exchangeResult.completedTransactionHash}`">
             {{ transaction.exchangeResult.completedTransactionHash }}
           </a>
         </div>
@@ -138,6 +138,11 @@ export default {
   methods: {
     formatAmount(amount) {
       return formatXe(amount, true)
+    }
+  },
+  data: function() {
+    return {
+      etherscanUrl: process.env.VUE_APP_IS_TESTNET === 'true' ? 'https://rinkeby.etherscan.io' : 'https://etherscan.io'
     }
   }
 }

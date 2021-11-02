@@ -10,15 +10,16 @@
         To request funds, please make a <a :href="`${twitterUrl}${twitterMsg}`" target="_about" class="tweet">tweet</a> including your XE wallet address, then paste the URL of the tweet into the text box below.
       </p>
       <p class="flex-1">
-        <input v-model="url" type="text" placeholder="URL of tweet including your XE address..." class="faucet-input">
+        <input :disabled="true" v-model="url" type="text" placeholder="URL of tweet including your XE address..." class="faucet-input">
       </p>
       <div class="w-full text-right">
         <button
           class="request-button py-8 button button--solid"
-          :disabled="!urlIsValid"
+          :disabled="true"
           @click="requestXE">
-          Request XE
+          Coming soon!
         </button>
+        <!-- Request XE / :disabled="!urlIsValid" -->
       </div>
     </div>
   </div>

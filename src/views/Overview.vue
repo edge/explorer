@@ -5,7 +5,8 @@
     <div class="container">
       <div class="row mb-25">
         <Statistics :blockMetadata="blockMetadata" :transactionMetadata="transactionMetadata" />
-        <NewsPromo />
+        <Faucet v-if="isTestnet" />
+        <NewsPromo v-else />
       </div>
 
       <div class="row mt-15">
@@ -18,6 +19,7 @@
 
 <script>
 import Header from "@/components/Header"
+import Faucet from "@/components/Faucet"
 import NewsPromo from "@/components/NewsPromo"
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
@@ -37,11 +39,13 @@ export default {
       transactions: [],
       loading: false,
       pollInterval: 10000,
-      polling: null
+      polling: null,
+      isTestnet: process.env.VUE_APP_IS_TESTNET === 'true'
     }
   },
   components: {
     Header,
+    Faucet,
     NewsPromo,
     RecentBlocks,
     RecentTransactions,

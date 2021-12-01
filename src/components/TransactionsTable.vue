@@ -1,5 +1,5 @@
 <template>
-  <div class="transaction-table">
+  <div>
     <table>
       <thead class="sticky top-0 z-10 hidden lg:table-header-group">
       <tr>
@@ -48,11 +48,20 @@ table, tbody, tr {
   @apply block;
 }
 
-th {
-  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
+table {
+  width: 100%;
 }
-
-th:last-child {
+thead th {
+  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
+  padding: 0.8125rem 0.3125rem !important;
+}
+thead th:first-of-type {
+  padding-left: 1.25rem !important;
+}
+thead th:last-of-type {
+  padding-right: 1.875rem !important;
+}
+thead th:last-child {
   @apply rounded-r-4 text-right;
 }
 

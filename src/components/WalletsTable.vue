@@ -1,14 +1,14 @@
 <template>
-  <div class="wallet-table">
+  <div>
     <table>
       <thead class="sticky top-0 z-10 hidden lg:table-header-group">
       <tr>
-        <th>Address</th>
-        <th>First Tx Date</th>
-        <th>Hash</th>
-        <th>Latest Tx Date</th>
-        <th>Hash</th>
-        <th>Balance XE</th>
+        <th width="33%">Address</th>
+        <th width="12%">First Tx Date</th>
+        <th width="16%">Hash</th>
+        <th width="12%">Latest Tx Date</th>
+        <th width="16%">Hash</th>
+        <th width="10%">Balance XE</th>
       </tr>
       </thead>
       <tbody v-if="wallets && wallets.length">
@@ -45,12 +45,20 @@ export default {
 table, tbody, tr {
   @apply block;
 }
-
-th {
-  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
+table {
+  width: 100%;
 }
-
-th:last-child {
+thead th {
+  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
+  padding: 0.8125rem 0.3125rem !important;
+}
+thead th:first-of-type {
+  padding-left: 1.25rem !important;
+}
+thead th:last-of-type {
+  padding-right: 1.875rem !important;
+}
+thead th:last-child {
   @apply rounded-r-4 text-right;
 }
 

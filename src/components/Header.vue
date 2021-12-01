@@ -41,8 +41,7 @@
           },
           {
             link: "/stakes",
-            text: "Stakes",
-            disabled: true
+            text: "Stakes"
           }
         ]
       }

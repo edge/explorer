@@ -6,6 +6,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Blocks from '@/views/Blocks'
 import Overview from '@/views/Overview'
 import NotFound from '@/views/404'
+import Stakes from '@/views/Stakes'
 import Transactions from '@/views/Transactions'
 import Wallets from '@/views/Wallets'
 
@@ -24,6 +25,16 @@ const routes = [
     path: '/blocks/:page(\\d+)?',
     name: 'Blocks',
     component: Blocks
+  },
+  {
+    path: '/stake/:stakeId',
+    name: 'Stake',
+    component: Stakes
+  },
+  {
+    path: '/stakes/:page(\\d+)?',
+    name: 'Stakes',
+    component: Stakes
   },
   {
     path: '/transaction/:hash',

@@ -15,14 +15,12 @@
   </td>
   <td data-title="Wallet:">
     <router-link :to="{name: 'Wallet', params: {address: item.tx.recipient}}">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.tx.recipient, 22) }}</span>
-      <span class="monospace md:hidden">{{ sliceString(item.tx.recipient, 40) }}</span>
+      <span class="monospace md:inline-block">{{ item.tx.recipient }}</span>
     </router-link>
   </td>
   <td data-title="Device:">
     <span v-if="item.device">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.device, 22) }}</span>
-      <span class="monospace md:hidden">{{ sliceString(item.tx.device, 40) }}</span>
+      <span class="hidden monospace md:inline-block">{{ item.device }}</span>
     </span>
     <span v-else class="text-gray-400">None</span>
   </td>

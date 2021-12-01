@@ -9,7 +9,7 @@
   </td>
   <td data-title="Hash:">
     <router-link :to="{name: 'Transaction', params: {hash: item.firstTransaction.hash}}">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.firstTransaction.hash, 12) }}</span>
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.firstTransaction.hash, 20) }}</span>
       <span class="monospace md:hidden">{{ sliceString(item.firstTransaction.hash, 26) }}</span>
     </router-link>
   </td>
@@ -18,7 +18,7 @@
   </td>
   <td data-title="Hash:">
     <router-link :to="{name: 'Transaction', params: {hash: item.latestTransaction.hash}}">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.latestTransaction.hash, 12) }}</span>
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.latestTransaction.hash, 20) }}</span>
       <span class="monospace md:hidden">{{ sliceString(item.latestTransaction.hash, 26) }}</span>
     </router-link>
   </td>

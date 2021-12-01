@@ -3,25 +3,24 @@
     <table>
       <thead class="sticky top-0 z-10 hidden lg:table-header-group">
       <tr>
-        <th width="10%">Tx Hash</th>
-        <th width="12%">Date</th>
-        <th width="16%">From</th>
-        <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
-        <th width="16%">To</th>
-        <th width="16%">Memo</th>
-        <th width="10%">Status</th>
-        <th width="18%">Amount XE</th>
+        <th width="8%">ID</th>
+        <th width="8%">Hash</th>
+        <th width="30%">Wallet</th>
+        <th width="30%">Device</th>
+        <th width="8%">Type</th>
+        <th width="8%">Status</th>
+        <th width="8%">Amount XE</th>
       </tr>
       </thead>
-      <tbody v-if="transactions && transactions.length">
-        <tr v-for="item in transactions" :key="item.id" :class="item.pending ? 'italic text-gray-400' : ''">
-          <TransactionsTableItem :item="item"/>
+      <tbody v-if="stakes && stakes.length">
+        <tr v-for="item in stakes" :key="item.id" :class="item.pending ? 'italic text-gray-400' : ''">
+          <StakesTableItem :item="item"/>
         </tr>
       </tbody>
       <tbody v-else>
         <tr>
           <td colspan="8" class="block w-full text-center bg-white lg:table-cell py-35">
-            No transactions.
+            No stakes.
           </td>
         </tr>
       </tbody>
@@ -30,14 +29,14 @@
 </template>
 
 <script>
-import TransactionsTableItem from "@/components/TransactionsTableItem";
+import StakesTableItem from "@/components/StakesTableItem";
 
 export default {
-  name: "TransactionsTable",
+  name: "StakesTable",
   components: {
-    TransactionsTableItem
+    StakesTableItem
   },
-  props: ['transactions'],
+  props: ['stakes'],
   methods: {
   }
 }
@@ -47,7 +46,6 @@ export default {
 table, tbody, tr {
   @apply block;
 }
-
 table {
   width: 100%;
 }
@@ -66,6 +64,10 @@ thead th:last-child {
 }
 
 @screen lg {
+  thead th {
+    @apply py-2;
+  }
+
   tbody {
     @apply table-row-group;
   }

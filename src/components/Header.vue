@@ -36,12 +36,12 @@
             text: "Transactions"
           },
           {
-            link: "/wallets",
-            text: "Wallets"
-          },
-          {
             link: "/stakes",
             text: "Stakes"
+          },
+          {
+            link: "/wallets",
+            text: "Wallets"
           }
         ]
       }

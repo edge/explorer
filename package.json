@@ -8,7 +8,8 @@
   "contributors": [
     "Adam K Dean <adam@edge.network>",
     "Jim Lambie <jim@27.works>",
-    "Jay Whitmore <jay@27.works>"
+    "Jay Whitmore <jay@27.works>",
+    "Aneurin Barker Snook <aneurin@edge.network>"
   ],
   "scripts": {
     "build": "vue-cli-service build",

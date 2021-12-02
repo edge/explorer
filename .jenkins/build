@@ -15,7 +15,9 @@ def buildAndPushImage(registry, tag, isTestnet, blockchainApi, indexApi) {
 }
 
 pipeline {
-  agent any
+  agent {
+    label 'local'
+  }
   stages {
     //
     // Notify the team
@@ -30,21 +32,13 @@ pipeline {
     // Build image
     //
     stage('Build') {
-      failFast true
-      parallel {
-        stage('amd64') {
-          agent {
-            label 'arch-amd64'
-          }
-          steps {
-            script {
-              def tag = buildAndPushImage(REGISTRY, NAME, IS_TESTNET, BLOCKCHAIN_API_URL, INDEX_API_URL)
+      steps {
+        script {
+          def tag = buildAndPushImage(REGISTRY, NAME, IS_TESTNET, BLOCKCHAIN_API_URL, INDEX_API_URL)
 
-              // Update image list for slack reporting.
-              if (imagesPushed == '') imagesPushed = "\n$tag"
-              else imagesPushed = "$imagesPushed\n$tag"
-            }
-          }
+          // Update image list for slack reporting.
+          if (imagesPushed == '') imagesPushed = "\n$tag"
+          else imagesPushed = "$imagesPushed\n$tag"
         }
       }
     }

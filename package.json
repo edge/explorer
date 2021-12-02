@@ -1,12 +1,13 @@
 {
   "name": "explorer",
-  "version": "1.8.0",
+  "version": "1.10.0",
   "description": "Blockchain & network explorer",
   "private": true,
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Edge Network <core@edge.network>",
   "contributors": [
     "Adam K Dean <adam@edge.network>",
+    "Aneurin Barker Snook <aneurin@edge.network>",
     "Jim Lambie <jim@27.works>",
     "Jay Whitmore <jay@27.works>"
   ],
@@ -39,6 +40,7 @@
     "path": "^0.12.7",
     "postcss": "^7.0.35",
     "ramda": "^0.27.1",
+    "superagent": "^6.1.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0",
     "vue": "^3.0.11",
     "vue-router": "^4.0.0-0"

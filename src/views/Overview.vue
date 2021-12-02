@@ -4,8 +4,9 @@
   <div class="bg-gray-200 py-35">
     <div class="container">
       <div class="row mb-25">
-        <Statistics :blockMetadata="blockMetadata" :transactionMetadata="transactionMetadata" />
-        <NewsPromo />
+        <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
+        <Faucet v-if="isTestnet" />
+        <NewsPromo v-else />
       </div>
 
       <div class="row mt-15">
@@ -18,13 +19,14 @@
 
 <script>
 import Header from "@/components/Header"
+import Faucet from "@/components/Faucet"
 import NewsPromo from "@/components/NewsPromo"
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
 import SummaryHero from "@/components/SummaryHero"
 
-import { fetchBlocks, fetchTransactions } from '../utils/api'
+import { fetchBlocks, fetchStakeStats, fetchTransactions } from '../utils/api'
 
 export default {
   name: 'Overview',
@@ -37,11 +39,14 @@ export default {
       transactions: [],
       loading: false,
       pollInterval: 10000,
-      polling: null
+      polling: null,
+      stats: {},
+      isTestnet: process.env.VUE_APP_IS_TESTNET === 'true'
     }
   },
   components: {
     Header,
+    Faucet,
     NewsPromo,
     RecentBlocks,
     RecentTransactions,
@@ -52,6 +57,7 @@ export default {
     this.loading = true
     this.fetchBlocks()
     this.fetchTransactions()
+    this.fetchStats()
     this.pollData()
   },
   watch: {
@@ -62,7 +68,7 @@ export default {
   },
   methods: {
     async fetchBlocks() {
-      const recentBlocks = await fetchBlocks({ options: { limit: 5 } })
+      const recentBlocks = await fetchBlocks({ options: { limit: 10 } })
       const blockMetadata = recentBlocks.metadata
 
       // Query for all blocks in last 24 hours
@@ -78,8 +84,14 @@ export default {
       this.blocks = recentBlocks.blocks
       this.loading = false
     },
+    async fetchStats() {
+      const stakeStats = await fetchStakeStats()
+      this.stats = {
+        stakes: stakeStats
+      }
+    },
     async fetchTransactions() {
-      const recentTransactions = await fetchTransactions({ options: { limit: 5 } })
+      const recentTransactions = await fetchTransactions({ options: { limit: 10 } })
       const transactionMetadata = recentTransactions.metadata
 
       // Query for all txs in last 24 hours
@@ -99,6 +111,7 @@ export default {
       this.polling = setInterval(() => {
         this.fetchBlocks()
         this.fetchTransactions()
+        this.fetchStats()
       }, this.pollInterval)
     }
   }

@@ -117,6 +117,17 @@ const fetchPendingTransactions = (address, options = {}) => {
   return fetchData(url)
 }
 
+const fetchStake = (stakeId) => fetchData(`${INDEX_API_URL}/stake/${stakeId}`)
+
+const fetchStakeHistory = (stakeId) => fetchData(`${INDEX_API_URL}/stake/${stakeId}/history?limit=999`)
+
+const fetchStakeStats = () => fetchData(`${INDEX_API_URL}/stats/stakes`)
+
+const fetchStakes = (options) => {
+  const url = `${INDEX_API_URL}/stakes?skip=${options.skip || 0}&limit=${options.limit || 20}`
+  return fetchData(url)
+}
+
 const fetchExchangeTransaction = (hash) => {
   const url = `${INDEX_API_URL}/exchange/${hash}`
   return fetchData(url)
@@ -277,6 +288,10 @@ const search = async input => {
 export {
   fetchBlocks,
   fetchPendingTransactions,
+  fetchStake,
+  fetchStakeHistory,
+  fetchStakeStats,
+  fetchStakes,
   fetchExchangeTransaction,
   fetchTransactions,
   fetchWallet,

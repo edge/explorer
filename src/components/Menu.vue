@@ -10,7 +10,7 @@
       <router-link
         :to="item.link"
         class="main-nav__link"
-        :class="location && (item.text === 'Blocks' && location.startsWith('/block') || item.text === 'Transactions' && location.startsWith('/transaction') || item.text === 'Wallets' && location.startsWith('/wallet') ) ? 'router-link-active' : ''"
+        :class="location && (item.text === 'Blocks' && location.startsWith('/block') || item.text === 'Transactions' && location.startsWith('/transaction') || item.text === 'Stakes' && location.startsWith('/stake') || item.text === 'Wallets' && location.startsWith('/wallet')) ? 'router-link-active' : ''"
       >
         {{ item.text }}
       </router-link>

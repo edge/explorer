@@ -2,7 +2,7 @@
   <div class="faucet flex flex-col w-full h-full">
     <h3>Testnet XE Faucet</h3>
     <div class="flex flex-col flex-1 px-24 py-32 bg-white rounded">
-      <h1 class="facuet-header my-0 pt-0 pb-20">
+      <h1 class="faucet-header my-0 pt-0 pb-20">
         <img src="assets/faucet.svg" class="inline">
         XE Automated Faucet
       </h1>
@@ -31,13 +31,13 @@
 </template>
 
 <style>
-.facuet-header {
+.faucet-header {
   font-size: 1.2rem;
   line-height: 24px;
   text-align: center;
   padding: 1rem 0;
 }
-.facuet-header img {
+.faucet-header img {
   width: 24px;
   height: 24px;
 }

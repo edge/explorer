@@ -2,7 +2,7 @@
   <div class="faucet flex flex-col w-full h-full">
     <h3>Testnet XE Faucet</h3>
     <div class="flex flex-col flex-1 px-24 py-32 bg-white rounded">
-      <h1 class="faucet-header my-0 pt-0 pb-20">
+      <h1 class="faucet-header my-0 pt-50 pb-20">
         <img src="assets/faucet.svg" class="inline">
         XE Automated Faucet
       </h1>
@@ -18,7 +18,7 @@
           <span v-if="error" class="error">Error processing your request: {{ error }}</span>
         </p>
       </div>
-      <div v-else class="w-full text-right">
+      <div v-else class="w-full text-right pb-50">
         <button
           class="request-button py-8 button button--solid"
           :disabled="!urlIsValid || submitting"

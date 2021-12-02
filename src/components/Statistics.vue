@@ -26,15 +26,26 @@
         <span class="stat__label">Blocks / Hour <span class="text-gray-400">avg</span></span>
         <span class="stat__value">{{calculateBlocksPerHour(blockMetadata)}}</span>
       </div>
+      <div class="stat" v-if="stats.stakes">
+        <span class="stat__label">Stakes</span>
+        <span class="stat__value">{{stats.stakes.count}}</span>
+      </div>
+      <div class="stat" v-if="stats.stakes">
+        <span class="stat__label">Staked XE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>
+        <span class="stat__value">{{stakedAmount()}}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { formatXe } from '@edge/wallet-utils'
+
+const totalSupplyMXE = 51000000 * 1e6
 
 export default {
   name: 'Statistics',
-  props: ['blockMetadata', 'transactionMetadata'],
+  props: ['blockMetadata', 'stats', 'transactionMetadata'],
   data() {
     return {
       title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
@@ -54,6 +65,13 @@ export default {
       }
 
       return Number((1440 / blockMetadata.recentBlocksCount) * 60).toFixed(0)
+    },
+    stakedAmount() {
+      return formatXe(this.stats.stakes.stakedAmount / 1e6, true).replace(/\.?0+$/, '')
+    },
+    stakedPercent() {
+      const dec = this.stats.stakes.stakedAmount / totalSupplyMXE
+      return Math.round(dec * 1000) / 10
     }
   }
 }

@@ -4,7 +4,7 @@
   <div class="bg-gray-200 py-35">
     <div class="container">
       <div class="row mb-25">
-        <Statistics :blockMetadata="blockMetadata" :transactionMetadata="transactionMetadata" />
+        <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
         <Faucet v-if="isTestnet" />
         <NewsPromo v-else />
       </div>
@@ -26,7 +26,7 @@ import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
 import SummaryHero from "@/components/SummaryHero"
 
-import { fetchBlocks, fetchTransactions } from '../utils/api'
+import { fetchBlocks, fetchStakeStats, fetchTransactions } from '../utils/api'
 
 export default {
   name: 'Overview',
@@ -40,6 +40,7 @@ export default {
       loading: false,
       pollInterval: 10000,
       polling: null,
+      stats: {},
       isTestnet: process.env.VUE_APP_IS_TESTNET === 'true'
     }
   },
@@ -56,6 +57,7 @@ export default {
     this.loading = true
     this.fetchBlocks()
     this.fetchTransactions()
+    this.fetchStats()
     this.pollData()
   },
   watch: {
@@ -82,6 +84,12 @@ export default {
       this.blocks = recentBlocks.blocks
       this.loading = false
     },
+    async fetchStats() {
+      const stakeStats = await fetchStakeStats()
+      this.stats = {
+        stakes: stakeStats
+      }
+    },
     async fetchTransactions() {
       const recentTransactions = await fetchTransactions({ options: { limit: 5 } })
       const transactionMetadata = recentTransactions.metadata
@@ -103,6 +111,7 @@ export default {
       this.polling = setInterval(() => {
         this.fetchBlocks()
         this.fetchTransactions()
+        this.fetchStats()
       }, this.pollInterval)
     }
   }

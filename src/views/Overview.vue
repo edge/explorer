@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     async fetchBlocks() {
-      const recentBlocks = await fetchBlocks({ options: { limit: 5 } })
+      const recentBlocks = await fetchBlocks({ options: { limit: 10 } })
       const blockMetadata = recentBlocks.metadata
 
       // Query for all blocks in last 24 hours
@@ -91,7 +91,7 @@ export default {
       }
     },
     async fetchTransactions() {
-      const recentTransactions = await fetchTransactions({ options: { limit: 5 } })
+      const recentTransactions = await fetchTransactions({ options: { limit: 10 } })
       const transactionMetadata = recentTransactions.metadata
 
       // Query for all txs in last 24 hours

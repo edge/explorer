@@ -201,8 +201,8 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
       })
   }
 
-  // Fetch pending transactions first.
-  return fetchData(pendingTxUrl)
+  // On the first page only, fetch pending transactions first.
+  if (options.page === 1) return fetchData(pendingTxUrl)
     .then(response => {
       // Pending transactions need to be reversed to show them in the correct order.
       response = response.reverse()
@@ -220,6 +220,16 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
             metadata
           }
         })
+    })
+
+  // Fetch confirmed transactions.
+  return fetchData(txUrl)
+    .then(response => {
+      const { results, metadata } = response
+      return {
+        transactions: formatTransactions(address, results),
+        metadata
+      }
     })
 }
 

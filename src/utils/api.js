@@ -44,7 +44,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
           accumulator += Number(currentItem.amount)
           return accumulator
         }, 0)
-        block.average = block.total.toFixed(6)
+        block.total = block.total.toFixed(6)
 
         // Add average XE.
         block.average = block.transactions.length ? block.total / block.transactions.length : 0
@@ -69,7 +69,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
           accumulator += Number(currentItem.amount)
           return accumulator
         }, 0)
-        block.average = block.total.toFixed(6)
+        block.total = block.total.toFixed(6)
 
         // Add average XE.
         block.average = block.transactions.length ? block.total / block.transactions.length : 0

@@ -71,6 +71,7 @@ export default {
     },
     stakedPercent() {
       const dec = this.stats.stakes.stakedAmount / totalSupplyMXE
+      if (dec < 1) return "< 1"
       return Math.round(dec * 1000) / 10
     }
   }

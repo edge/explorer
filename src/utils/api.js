@@ -170,8 +170,24 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
     txUrl = `${INDEX_API_URL}/transaction/${hash}`
 
     return fetchData(txUrl)
-      .then(results => {
+      .then(async results => {
         if (results.results && Array.isArray(results.results) && !results.results[0]) {
+          const pendingTxs = await fetchData(`${BLOCKCHAIN_API_URL}/transactions/pending`)
+          if (Array.isArray(pendingTxs) && pendingTxs.length > 0) {
+            const pendingTx = pendingTxs.find(tx => tx.hash === hash)
+            if (pendingTx !== undefined) {
+              return {
+                transactions: [{
+                  ...pendingTx,
+                  amount: xeStringFromMicroXe(pendingTx.amount),
+                  date: new Date(pendingTx.timestamp).toLocaleString(),
+                  block: { height: 0, hash: '' },
+                  confirmations: 0
+                }],
+                metadata: {}
+              }
+            }
+          }
           return {
             transactions: [],
             metadata: {}

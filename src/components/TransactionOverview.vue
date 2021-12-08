@@ -7,12 +7,19 @@
         <div class="transactionRow__label">Timestamp</div>
         <div class="transactionRow__value">{{ new Date(transaction.timestamp).toLocaleString() }}</div>
       </div>
-      <div class="transactionRow">
+      <div class="transactionRow" v-if="transaction.block.height > 0">
         <div class="transactionRow__label">Block</div>
         <div class="transactionRow__value">
           <router-link :to="{ name: 'Block', params: { blockId: transaction.block.height } }">
             {{ transaction.block.height }}
           </router-link>
+        </div>
+      </div>
+      <div class="transactionRow" v-else>
+        <div class="transactionRow__label">Status</div>
+        <div class="transactionRow__value pending">
+          <span class="icon icon-grey"><ClockIcon/></span>
+          Pending for {{secondsPending}} seconds
         </div>
       </div>
       <div class="transactionRow">
@@ -51,7 +58,7 @@
           </span>
         </div>
       </div>
-      <div class="transactionRow">
+      <div class="transactionRow" v-if="transaction.confirmations > 0">
         <div class="transactionRow__label flex items-center space-x-3">
           Confirmations
           <Tooltip
@@ -138,11 +145,28 @@ export default {
   methods: {
     formatAmount(amount) {
       return formatXe(amount, true)
+    },
+    updateSecondsPending() {
+      const ms = Date.now() - this.transaction.timestamp
+      this.secondsPending = Math.floor(ms/1000)
     }
   },
   data: function() {
     return {
+      secondsPending: 0,
+      secondsPendingInterval: null,
       etherscanUrl: process.env.VUE_APP_IS_TESTNET === 'true' ? 'https://rinkeby.etherscan.io' : 'https://etherscan.io'
+    }
+  },
+  mounted() {
+    if (this.transaction.block.height === 0) {
+      this.secondsPendingInterval = setInterval(this.updateSecondsPending, 1000)
+      this.refreshTxInterval = setInterval(this.updateTx, 30*1000)
+    }
+  },
+  unmounted() {
+    if (this.secondsPendingInterval !== null) {
+      clearInterval(this.secondsPendingInterval)
     }
   }
 }
@@ -151,6 +175,10 @@ export default {
 <style scoped>
 .transactionRow {
   @apply px-12 md:px-24 py-12 text-sm bg-white rounded w-full grid grid-cols-12 items-center;
+}
+
+.transactionRow .icon {
+  @apply w-15 inline-block align-middle;
 }
 
 .transactionRow .icon-green {
@@ -167,6 +195,10 @@ export default {
 
 .transactionRow__value {
   @apply font-mono col-span-8 text-gray-300 md:col-span-9 truncate;
+}
+
+.transactionRow__value.pending {
+  @apply text-gray-400;
 }
 
 .transactionRow__value a {

@@ -3,10 +3,13 @@
   <SummaryHero />
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div class="row mb-25">
+      <div class="row mb-25" v-if="isTestnet">
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
-        <Faucet v-if="isTestnet" />
-        <NewsPromo v-else />
+        <Faucet />
+      </div>
+      <div class="row mb-25" v-else>
+        <NewsPromo />
+        <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
       </div>
 
       <div class="row mt-15">

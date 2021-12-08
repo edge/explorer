@@ -1,22 +1,22 @@
 <template>
   <div class="w-full">
     <h3>{{ title }}</h3>
-    <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2">
+    <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2" v-if="blockMetadata && stats && transactionMetadata">
       <div class="stat">
         <span class="stat__label">Blocks</span>
-        <span class="stat__value">{{blockMetadata && Number(blockMetadata.totalCount).toLocaleString()}}</span>
+        <span class="stat__value">{{Number(blockMetadata.totalCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Transactions</span>
-        <span class="stat__value">{{transactionMetadata && Number(transactionMetadata.totalCount).toLocaleString()}}</span>
+        <span class="stat__value">{{Number(transactionMetadata.totalCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Blocks <span class="text-gray-400">last 24 hrs</span></span>
-        <span class="stat__value">{{blockMetadata && blockMetadata.recentBlocksCount && Number(blockMetadata.recentBlocksCount).toLocaleString()}}&nbsp;</span>
+        <span class="stat__value">{{blockMetadata.recentBlocksCount && Number(blockMetadata.recentBlocksCount).toLocaleString()}}&nbsp;</span>
       </div>
       <div class="stat">
         <span class="stat__label">Transactions <span class="text-gray-400">last 24 hrs</span></span>
-        <span class="stat__value">{{transactionMetadata && transactionMetadata.recentTransactionsCount && Number(transactionMetadata.recentTransactionsCount).toLocaleString()}}</span>
+        <span class="stat__value">{{transactionMetadata.recentTransactionsCount && Number(transactionMetadata.recentTransactionsCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Block Time <span class="text-gray-400">avg</span></span>
@@ -34,6 +34,9 @@
         <span class="stat__label">Staked XE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>
         <span class="stat__value">{{stakedAmount()}}</span>
       </div>
+    </div>
+    <div class="tile md:pr-50" v-else>
+      Loading statistics...
     </div>
   </div>
 </template>
@@ -71,6 +74,7 @@ export default {
     },
     stakedPercent() {
       const dec = this.stats.stakes.stakedAmount / totalSupplyMXE
+      if (dec < 1) return "< 1"
       return Math.round(dec * 1000) / 10
     }
   }
@@ -78,6 +82,11 @@ export default {
 </script>
 
 <style scoped>
+.tile {
+  @apply flex-1 p-12 md:p-24 text-sm bg-white rounded;
+  text-align: center;
+}
+
 .stat {
   @apply p-12 bg-white rounded flex flex-col;
   @apply md:p-16 lg:p-20;

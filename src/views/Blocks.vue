@@ -16,6 +16,10 @@
         </div>
 
         <h3 v-if="block">Block Transactions</h3>
+        <div class="row" v-if="blocks-length">
+          <input type="checkbox" id="showEmpty" :checked="showEmpty" v-on:change="toggleShowEmpty"/>
+          <label for="showEmpty">Show empty blocks</label>
+        </div>
         <BlocksTable v-if="blocks.length" :blocks="blocks" />
         <Pagination v-if="!block" baseRoute="Blocks" :currentPage="page" :totalPages="metadata.totalCount ? Math.ceil(metadata.totalCount/metadata.limit) : 0" />
 
@@ -79,6 +83,7 @@ export default {
       pollInterval: 10000,
       polling: null,
       rawData: null,
+      showEmpty: false,
       transactions: null
     }
   },
@@ -121,13 +126,13 @@ export default {
 
         this.loading = false
       } else {
-        this.fetchBlocks({ page: this.page })
+        this.fetchBlocks({ page: this.page, noEmpty: this.showEmpty ? 0 : 1 })
       }
     },
     pollData() {
       if (!this.blockId) {
         this.polling = setInterval(() => {
-          this.fetchBlocks()
+          this.fetchBlocks({ noEmpty: this.showEmpty ? 0 : 1 })
         }, this.pollInterval)
       }
     },
@@ -140,6 +145,11 @@ export default {
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
+    },
+    toggleShowEmpty() {
+      this.showEmpty = !this.showEmpty
+      this.page = 1
+      this.fetchBlocks({ noEmpty: this.showEmpty ? 0 : 1 })
     }
   },
   watch:{

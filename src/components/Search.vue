@@ -1,6 +1,6 @@
 <template>
   <div class="search" :class="size==='large' ? 'search--lge' : ''">
-    <input @keyup.enter="search" class="search__input" v-model="searchInput" type="text" placeholder="Search Address, Tx or Block ID" />
+    <input @keyup.enter="search" class="search__input" v-model="searchInput" type="text" placeholder="Search Address, Tx, Stake, or Block ID" />
     <button
       class="search__submit"
       @click="search"
@@ -65,13 +65,14 @@ export default {
     
       const result = await search(this.searchInput)  
 
-      const { address, blocks, transactions } = result
+      const { address, blocks, stake, transactions } = result
       
       // Edge case - resets searching flag in case the search was
       // performed from the same page.
       if (
         address
         || (blocks && blocks[0])
+        || stake
         || (transactions && transactions[0])
       ) {
         this.isSearching = false
@@ -83,6 +84,8 @@ export default {
         this.$router.push(`/block/${blocks[0].height}`)
       } else if (transactions && transactions[0]) {
         this.$router.push(`/transaction/${transactions[0].hash}`)
+      } else if (stake) {
+        this.$router.push(`/stake/${stake.id}`)
       } else {
         // No result.
         setTimeout(() => {

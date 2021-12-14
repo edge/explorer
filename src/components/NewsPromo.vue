@@ -4,7 +4,7 @@
     <div class="border border-black rounded-t">
       <img src="/assets/e-wiki-promo.png">
     </div>
-    <div class="flex flex-col flex-1 px-12 pt-20 pb-12 bg-white rounded-b">
+    <div class="flex flex-col flex-1 px-12 pt-12 pb-12 bg-white rounded-b">
       <p class="flex-1">The Community Wiki is the go to resource for all things Edge. Learn about the tech, find out how to contribute, and get answers to common support questions.</p>
       <div class="w-full text-right">
         <!-- <a href="https://edge.network/news/article/here" target="_about" class="py-8 mr-8 button button--outline">More info</a> -->

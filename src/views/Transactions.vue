@@ -60,6 +60,8 @@ export default {
       loading: false,
       metadata: {},
       page: 1,
+      pendingPolling: null,
+      pendingPollingInterval: 30000,
       pollInterval: 10000,
       polling: null,
       rawData: null,
@@ -77,13 +79,19 @@ export default {
     TransactionsTable
   },
   mounted() {
-    this.fetchData()
-    this.pollData()
+    this.fetchData().then(() => {
+      if (this.transaction && this.transaction.block && this.transaction.block.height === 0) {
+        this.pollPendingTx()
+      } else {
+        this.pollData()
+      }
+    })
   },
   methods: {
     beforeDestroy() {
       // Stops the data polling.
       clearInterval(this.polling)
+      clearInterval(this.pendingPolling)
     },
     async fetchData() {
       this.loading = true
@@ -117,6 +125,11 @@ export default {
           this.fetchData()
         }, this.pollInterval)
       }
+    },
+    pollPendingTx() {
+      this.pendingPolling = setInterval(() => {
+        this.fetchData()
+      }, this.pendingPollingInterval)
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;

@@ -170,8 +170,24 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
     txUrl = `${INDEX_API_URL}/transaction/${hash}`
 
     return fetchData(txUrl)
-      .then(results => {
+      .then(async results => {
         if (results.results && Array.isArray(results.results) && !results.results[0]) {
+          const pendingTxs = await fetchData(`${BLOCKCHAIN_API_URL}/transactions/pending`)
+          if (Array.isArray(pendingTxs) && pendingTxs.length > 0) {
+            const pendingTx = pendingTxs.find(tx => tx.hash === hash)
+            if (pendingTx !== undefined) {
+              return {
+                transactions: [{
+                  ...pendingTx,
+                  amount: xeStringFromMicroXe(pendingTx.amount),
+                  date: new Date(pendingTx.timestamp).toLocaleString(),
+                  block: { height: 0, hash: '' },
+                  confirmations: 0
+                }],
+                metadata: {}
+              }
+            }
+          }
           return {
             transactions: [],
             metadata: {}
@@ -201,8 +217,8 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
       })
   }
 
-  // Fetch pending transactions first.
-  return fetchData(pendingTxUrl)
+  // On the first page only, fetch pending transactions first.
+  if (options.page === 1) return fetchData(pendingTxUrl)
     .then(response => {
       // Pending transactions need to be reversed to show them in the correct order.
       response = response.reverse()
@@ -220,6 +236,16 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
             metadata
           }
         })
+    })
+
+  // Fetch confirmed transactions.
+  return fetchData(txUrl)
+    .then(response => {
+      const { results, metadata } = response
+      return {
+        transactions: formatTransactions(address, results),
+        metadata
+      }
     })
 }
 
@@ -272,13 +298,15 @@ const search = async input => {
   if (addressRegex.test(input)) {
     return fetchWallet(input)
   } else if (hashRegex.test(input)) {
-    // The hash format is the same for blocks and transactions,
-    // so we need to query both for the input.
+    // The hash format is the same for blocks, transactions, and stakes,
+    // so we need to query all of them for the input.
     const { blocks } = await fetchBlocks({ blockId: input })
     const { transactions } = await fetchTransactions({ hash: input })
+    const stake = await fetchStake(input)
 
     return Promise.resolve({
       blocks: blocks.length ? blocks : null,
+      stake: stake || null,
       transactions: transactions.length ? transactions : null
     })
   } else if (blockHeightRegex.test(input)) {

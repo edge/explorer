@@ -18,8 +18,8 @@
       <div class="transactionRow" v-else>
         <div class="transactionRow__label">Status</div>
         <div class="transactionRow__value pending">
-          <span class="icon icon-grey"><ClockIcon/></span>
-          Pending for {{secondsPending}} seconds
+          <span class="icon icon-grey mb-2"><ClockIcon/></span>
+          <span class="ml-5 inline-block">Pending for {{secondsPending}} seconds</span>
         </div>
       </div>
       <div class="transactionRow">
@@ -178,7 +178,7 @@ export default {
 }
 
 .transactionRow .icon {
-  @apply w-15 inline-block align-middle;
+  @apply w-18 inline-block align-middle;
 }
 
 .transactionRow .icon-green {

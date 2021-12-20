@@ -127,7 +127,9 @@ const fetchStakeHistory = (stakeId) => fetchData(`${INDEX_API_URL}/stake/${stake
 const fetchStakeStats = () => fetchData(`${INDEX_API_URL}/stats/stakes`)
 
 const fetchStakes = (options) => {
-  const url = `${INDEX_API_URL}/stakes?skip=${options.skip || 0}&limit=${options.limit || 20}`
+  if (!options.page) options.page = 1
+  if (!options.limit) options.limit = 20
+  const url = `${INDEX_API_URL}/stakes?page=${options.page}&limit=${options.limit}`
   return fetchData(url)
 }
 

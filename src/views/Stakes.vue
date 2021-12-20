@@ -66,14 +66,12 @@ export default {
   },
   data: function () {
     return {
-      limit: 20,
       loading: false,
       metadata: {},
       page: 1,
       pollInterval: 30000,
       polling: null,
       rawData: null,
-      skip: 0,
       stake: null,
       stakeId: null,
       stakes: [],
@@ -106,7 +104,6 @@ export default {
 
       this.stakeId = this.$route.params.stakeId
       this.page = parseInt(this.$route.params.page || 1)
-      this.skip = this.page * this.limit
 
       if (this.stakeId) {
         const stake = await fetchStake(this.stakeId)
@@ -114,7 +111,7 @@ export default {
         await this.fetchStakeTxs(this.stakeId)
         this.loading = false
       } else {
-        this.fetchStakes({ skip: this.skip, limit: this.page })
+        this.fetchStakes({ page: this.page })
       }
     },
     async fetchStakes(options) {

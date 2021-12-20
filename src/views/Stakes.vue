@@ -75,7 +75,6 @@ export default {
       stake: null,
       stakeId: null,
       stakes: [],
-
       lastTx: null,
       txs: []
     }
@@ -115,7 +114,7 @@ export default {
       }
     },
     async fetchStakes(options) {
-      const { results: stakes, metadata } = await fetchStakes({ options })
+      const { results: stakes, metadata } = await fetchStakes(options)
 
       this.stakes = stakes
       this.metadata = metadata

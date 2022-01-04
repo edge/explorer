@@ -21,9 +21,9 @@
       <div v-else class="w-full text-right pb-50">
         <button
           class="request-button py-8 button button--solid"
-          :disabled="true || !urlIsValid || submitting"
+          :disabled="!urlIsValid || submitting"
           @click="requestXE">
-          {{ submitting ? 'Submitting' : 'Faucet Offline' }}
+          {{ submitting ? 'Submitting' : 'Request XE' }}
         </button>
       </div>
     </div>

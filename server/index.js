@@ -24,5 +24,5 @@ app.use((req, res) => {
 
 // Listen on the configured port
 app.listen(config.http.port, () => {
-  console.log(`Edge Wallet listening for requests on ${config.http.port}`)
+  console.log(`Edge Explorer listening for requests on ${config.http.port}`)
 })

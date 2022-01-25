@@ -131,11 +131,9 @@ export default {
       this.loading = false
     },
     pollData() {
-      if (!this.address) {
-        this.polling = setInterval(() => {
-          this.fetchData()
-        }, this.pollInterval)
-      }
+      this.polling = setInterval(() => {
+        this.fetchData()
+      }, this.pollInterval)
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;

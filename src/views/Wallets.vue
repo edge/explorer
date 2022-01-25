@@ -65,6 +65,8 @@ export default {
       loading: true,
       metadata: {},
       page: 1,
+      pollInterval: 10000,
+      polling: null,
       rawData: null,
       wallet: null,
       wallets: []
@@ -82,8 +84,13 @@ export default {
   },
   mounted() {
     this.fetchData()
+    this.pollData()
   },
   methods: {
+    beforeDestroy() {
+      // Stops the data polling.
+      clearInterval(this.polling)
+    },
     async fetchData() {
       this.address = this.$route.params.address
       this.page = parseInt(this.$route.params.page || 1)
@@ -123,12 +130,18 @@ export default {
       this.metadata = metadata
       this.loading = false
     },
+    pollData() {
+      this.polling = setInterval(() => {
+        this.fetchData()
+      }, this.pollInterval)
+    },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     }
   },
   watch: {
     $route(to, from) {
+      this.beforeDestroy()
       this.fetchData()
     }
   }

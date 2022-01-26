@@ -9,17 +9,19 @@
       <div class="transactionRow">
         <div class="transactionRow__label">Height</div>
         <div class="transactionRow__value">
-          <router-link :to="{name: 'Block', params: {blockId: block.height}}">
+          <router-link v-if="$route.params.blockId != block.height" :to="{name: 'Block', params: {blockId: block.height}}">
             {{ block.height }}
           </router-link>
+          <span v-else>{{ block.height }}</span>
         </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Block Hash</div>
         <div class="transactionRow__value">
-          <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
+          <router-link v-if="$route.params.blockId != block.hash" :to="{name: 'Block', params: {blockId: block.hash}}">
             {{ block.hash }}
           </router-link>
+          <span v-else>{{ block.hash }}</span>
         </div>
       </div>
       <div class="transactionRow">

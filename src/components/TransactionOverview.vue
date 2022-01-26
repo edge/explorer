@@ -25,9 +25,7 @@
       <div class="transactionRow">
         <div class="transactionRow__label">Tx Hash</div>
         <div class="transactionRow__value">
-          <router-link :to="{ name: 'Transaction', params: { hash: transaction.hash } }">
             {{ transaction.hash }}
-          </router-link>
         </div>
       </div>
       <div class="transactionRow">

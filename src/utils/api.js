@@ -133,6 +133,13 @@ const fetchStakes = (options) => {
   return fetchData(url)
 }
 
+const fetchStakesByWallet = (address, options) => {
+  if (!options.page) options.page = 1
+  if (!options.limit) options.limit = 10
+  const url = `${INDEX_API_URL}/stakes/${address}?page=${options.page}&limit=${options.limit}`
+  return fetchData(url)
+}
+
 const fetchExchangeTransaction = (hash) => {
   const url = `${INDEX_API_URL}/exchange/${hash}`
   return fetchData(url)

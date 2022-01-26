@@ -18,6 +18,7 @@
           
           <h3>Wallet Stakes</h3>
           <StakesTable :stakes="stakes" />
+          <Pagination v-if="stakes" baseRoute="Wallet" :address="address" :currentPage="page" :totalPages="Math.ceil(stakesMetadata.totalCount/stakesMetadata.limit)" />
 
         </div>
         <div v-else>
@@ -109,7 +110,7 @@ export default {
         }
 
         this.loading = true
-        const { transactions, metadata } = await fetchTransactions({ address: this.address, options: { page: this.txsPage } })
+        const { transactions, metadata } = await fetchTransactions({ address: this.address, options: { page: this.page, limit: 10 } })
         const wallet = await fetchWallet(this.address)
 
         this.transactions = transactions
@@ -121,7 +122,6 @@ export default {
         this.wallet = {
           ...wallet,
           transactions: metadata.totalCount,
-          // stakes: stakesMetadata.totalCount,
         }
 
         this.loading = false

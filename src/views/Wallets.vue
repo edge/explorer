@@ -14,7 +14,11 @@
 
           <h3>Wallet Transactions</h3>
           <TransactionsTable :transactions="transactions" />
-          <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="txsPage" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" query="txsPage" />
+          <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+          
+          <h3>Wallet Stakes</h3>
+          <StakesTable :stakes="stakes" />
+
         </div>
         <div v-else>
           <WalletsTable :wallets="wallets" />
@@ -38,12 +42,13 @@ import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination";
 import RawData from "@/components/RawData"
+import StakesTable from "@/components/StakesTable"
 import TransactionsTable from "@/components/TransactionsTable"
 import WalletOverview from "@/components/WalletOverview"
 import WalletSummary from "@/components/WalletSummary"
 import WalletsTable from "@/components/WalletsTable"
 
-import { fetchTransactions, fetchWallets, fetchWallet } from '../utils/api'
+import { fetchStakesByWallet, fetchTransactions, fetchWallets, fetchWallet } from '../utils/api'
 const { checksumAddressIsValid } = require('@edge/wallet-utils')
 
 export default {
@@ -78,6 +83,7 @@ export default {
     HeroPanel,
     Pagination,
     RawData,
+    StakesTable,
     TransactionsTable,
     WalletOverview,
     WalletSummary,
@@ -108,9 +114,14 @@ export default {
 
         this.transactions = transactions
         this.metadata = metadata
+        
+
+        await this.fetchStakes({page: this.page, limit: 10})
+
         this.wallet = {
           ...wallet,
-          transactions: metadata.totalCount
+          transactions: metadata.totalCount,
+          // stakes: stakesMetadata.totalCount,
         }
 
         this.loading = false
@@ -129,6 +140,13 @@ export default {
 
       this.transactions = transactions
       this.metadata = metadata
+      this.loading = false
+    },
+    async fetchStakes(options) {
+      const { results, metadata } = await fetchStakesByWallet(this.address, options)
+
+      this.stakes = results
+      this.stakesMetadata = metadata
       this.loading = false
     },
     pollData() {

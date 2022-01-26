@@ -332,6 +332,7 @@ export {
   fetchStakeHistory,
   fetchStakeStats,
   fetchStakes,
+  fetchStakesByWallet,
   fetchExchangeTransaction,
   fetchTransactions,
   fetchWallet,

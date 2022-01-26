@@ -92,10 +92,11 @@ export default {
       clearInterval(this.polling)
     },
     async fetchData() {
-      this.address = this.$route.params.address
       this.page = parseInt(this.$route.params.page || 1)
 
       if (this.address && checksumAddressIsValid(this.address)) {
+        this.address = this.$route.params.address
+
         if (!this.wallet) {
           this.wallet = { address: this.address, balance: 0, nonce: 0 }
         }

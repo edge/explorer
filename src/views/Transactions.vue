@@ -97,7 +97,7 @@ export default {
       this.loading = true
 
       this.hash = this.$route.params.hash
-      this.page = parseInt(this.$route.params.page || 1)
+      this.page = parseInt(this.$route.query.page || 1)
 
       if (this.hash) {
         const { raw, transactions } = await fetchTransactions({ hash: this.hash })

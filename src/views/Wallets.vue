@@ -14,16 +14,16 @@
 
           <h3>Wallet Transactions</h3>
           <TransactionsTable :transactions="transactions" />
-          <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+          <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="txsPage" :totalPages="Math.ceil(txsMetadata.totalCount/txsMetadata.limit)" query="txsPage" />
           
           <h3>Wallet Stakes</h3>
           <StakesTable :stakes="stakes" />
-          <Pagination v-if="stakes" baseRoute="Wallet" :address="address" :currentPage="page" :totalPages="Math.ceil(stakesMetadata.totalCount/stakesMetadata.limit)" />
+          <Pagination v-if="stakes" baseRoute="Wallet" :address="address" :currentPage="stakesPage" :totalPages="Math.ceil(stakesMetadata.totalCount/stakesMetadata.limit)" query="stakesPage" />
 
         </div>
         <div v-else>
           <WalletsTable :wallets="wallets" />
-          <Pagination v-if="wallets" baseRoute="Wallets" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" query="page" />
+          <Pagination v-if="wallets" baseRoute="Wallets" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
         </div>
       </div>
       <div v-else class="container h-full">
@@ -71,10 +71,11 @@ export default {
       loading: true,
       metadata: {},
       page: 1,
-      txsPage: 1,
       pollInterval: 10000,
       polling: null,
       rawData: null,
+      stakesPage: 1,
+      txsPage: 1,
       wallet: null,
       wallets: []
     }
@@ -110,43 +111,41 @@ export default {
         }
 
         this.loading = true
-        const { transactions, metadata } = await fetchTransactions({ address: this.address, options: { page: this.page, limit: 10 } })
+        
         const wallet = await fetchWallet(this.address)
 
-        this.transactions = transactions
-        this.metadata = metadata
-        
-
+        await this.fetchTransactions({ address: this.address, options: { page: this.page, limit: 10 } })
         await this.fetchStakes({page: this.page, limit: 10})
 
         this.wallet = {
           ...wallet,
-          transactions: metadata.totalCount,
+          stakes: this.stakesMetadata.totalCount,
+          transactions: this.txsMetadata.totalCount
         }
 
         this.loading = false
       } else {
         this.fetchWallets({ page: this.page })
       }
-    },
-    async fetchWallets(options) {
-      const { results, metadata } = await fetchWallets(options)
-      this.wallets = results
-      this.metadata = metadata
-      this.loading = false
-    },
-    async fetchTransactions(options) {
-      const { transactions, metadata } = await fetchTransactions({ options })
-
-      this.transactions = transactions
-      this.metadata = metadata
-      this.loading = false
-    },
+    },    
     async fetchStakes(options) {
       const { results, metadata } = await fetchStakesByWallet(this.address, options)
 
       this.stakes = results
       this.stakesMetadata = metadata
+      this.loading = false
+    },
+    async fetchTransactions(options) {
+      const { transactions, metadata } = await fetchTransactions(options)
+
+      this.transactions = transactions
+      this.txsMetadata = metadata
+      this.loading = false
+    },
+    async fetchWallets(options) {
+      const { results, metadata } = await fetchWallets(options)
+      this.wallets = results
+      this.metadata = metadata
       this.loading = false
     },
     pollData() {

@@ -101,7 +101,7 @@ export default {
     },
     async fetchData() {
       this.blockId = this.$route.params.blockId
-      this.page = parseInt(this.$route.params.page || 1)
+      this.page = parseInt(this.$route.query.page || 1)
 
       if (this.blockId) {
         this.loading = true

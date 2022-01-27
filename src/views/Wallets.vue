@@ -14,11 +14,11 @@
 
           <h3>Wallet Transactions</h3>
           <TransactionsTable :transactions="transactions" />
-          <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+          <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="txsPage" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" query="txsPage" />
         </div>
         <div v-else>
           <WalletsTable :wallets="wallets" />
-          <Pagination v-if="wallets" baseRoute="Wallets" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+          <Pagination v-if="wallets" baseRoute="Wallets" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" query="page" />
         </div>
       </div>
       <div v-else class="container h-full">
@@ -65,6 +65,7 @@ export default {
       loading: true,
       metadata: {},
       page: 1,
+      txsPage: 1,
       pollInterval: 10000,
       polling: null,
       rawData: null,
@@ -93,7 +94,8 @@ export default {
     },
     async fetchData() {
       this.address = this.$route.params.address
-      this.page = parseInt(this.$route.params.page || 1)
+      this.page = parseInt(this.$route.query.page || 1)
+      this.txsPage = parseInt(this.$route.query.txsPage || 1)
 
       if (this.address && checksumAddressIsValid(this.address)) {
         if (!this.wallet) {
@@ -101,7 +103,7 @@ export default {
         }
 
         this.loading = true
-        const { transactions, metadata } = await fetchTransactions({ address: this.address, options: { page: this.page } })
+        const { transactions, metadata } = await fetchTransactions({ address: this.address, options: { page: this.txsPage } })
         const wallet = await fetchWallet(this.address)
 
         this.transactions = transactions
@@ -118,7 +120,6 @@ export default {
     },
     async fetchWallets(options) {
       const { results, metadata } = await fetchWallets(options)
-
       this.wallets = results
       this.metadata = metadata
       this.loading = false

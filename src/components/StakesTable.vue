@@ -2,7 +2,15 @@
   <div>
     <table>
       <thead class="sticky top-0 z-10 hidden lg:table-header-group">
-      <tr>
+      <tr v-if="hideWallet">
+        <th width="23%">ID</th>
+        <th width="23%">Hash</th>
+        <th width="30%">Device</th>
+        <th width="8%">Type</th>
+        <th width="8%">Status</th>
+        <th width="8%">Amount XE</th>
+      </tr>
+      <tr v-else>
         <th width="8%">ID</th>
         <th width="8%">Hash</th>
         <th width="30%">Wallet</th>
@@ -14,7 +22,7 @@
       </thead>
       <tbody v-if="stakes && stakes.length">
         <tr v-for="item in stakes" :key="item.id" :class="item.pending ? 'italic text-gray-400' : ''">
-          <StakesTableItem :item="item"/>
+          <StakesTableItem :item="item" :hideWallet="hideWallet" />
         </tr>
       </tbody>
       <tbody v-else>
@@ -36,7 +44,7 @@ export default {
   components: {
     StakesTableItem
   },
-  props: ['stakes'],
+  props: ['stakes', 'hideWallet'],
   methods: {
   }
 }

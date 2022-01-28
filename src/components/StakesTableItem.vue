@@ -1,19 +1,19 @@
 <template>
   <td data-title="ID:" :title="item.id">
     <router-link v-if="!item.pending" :to="{name: 'Stake', params: {stakeId: item.id}}">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.id, 8) }}</span>
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.id, getSliceChars(hideWallet)) }}</span>
       <span class="monospace md:hidden">{{ sliceString(item.id, 26) }}</span>
     </router-link>
     <div v-else>
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.id, 8) }}</span>
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.id, getSliceChars(hideWallet)) }}</span>
       <span class="monospace md:hidden">{{ sliceString(item.id, 26) }}</span>
     </div>
   </td>
   <td data-title="Hash:">
-    <span class="hidden monospace md:inline-block">{{ sliceString(item.hash, 8) }}</span>
+    <span class="hidden monospace md:inline-block">{{ sliceString(item.hash, getSliceChars(hideWallet)) }}</span>
     <span class="monospace md:hidden">{{ sliceString(item.hash, 26) }}</span>
   </td>
-  <td data-title="Wallet:">
+  <td v-if="!hideWallet" data-title="Wallet:">
     <router-link :to="{name: 'Wallet', params: {address: item.tx.recipient}}">
       <span class="monospace md:inline-block">{{ item.tx.recipient }}</span>
     </router-link>
@@ -58,12 +58,16 @@ import { ArrowCircleDownIcon, CheckCircleIcon, ClockIcon, DotsCircleHorizontalIc
 
 export default {
   name: "StakesTableItem",
-  props: ['item'],
+  props: ['item', 'hideWallet'],
   methods: {
     async copyToClipboard (input) {
       if (!!navigator.clipboard) {
         await navigator.clipboard.writeText(input)
       }
+    },
+    getSliceChars: (hideWallet) => {
+      if (hideWallet) return 30
+      else return 8
     },
     sliceString(string, symbols) {
       return string && string.length > symbols ? `${string.slice(0, symbols)}…` : string;

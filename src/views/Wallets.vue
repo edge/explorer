@@ -18,7 +18,7 @@
             <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="txsPage" :totalPages="Math.ceil(txsMetadata.totalCount/txsMetadata.limit)" query="txsPage" />
           </div>
           
-          <div v-if="stakes.length">
+          <div v-if="stakes.length" class="mt-20">
             <h3>Wallet Stakes</h3>
             <StakesTable :stakes="stakes" :hideWallet="true" />
             <Pagination v-if="stakes" baseRoute="Wallet" :address="address" :currentPage="stakesPage" :totalPages="Math.ceil(stakesMetadata.totalCount/stakesMetadata.limit)" query="stakesPage" />

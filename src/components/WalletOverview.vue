@@ -10,7 +10,7 @@
         <div class="overviewRow__label flex items-center space-x-3">
           Balance
           <Tooltip
-            class="ml-3 icon-grey" position="right" :wide="true"
+            class="ml-3 icon-grey" position="right"
             text="Available balance excluding stakes">
             <InformationCircleIcon class="hidden md:block button__icon w-16" />
           </Tooltip>
@@ -21,7 +21,7 @@
         <div class="overviewRow__label flex items-center space-x-3">
           Staked
           <Tooltip
-            class="ml-3 icon-grey" position="right" :wide="true"
+            class="ml-3 icon-grey" position="right"
             text="Current amount locked in stakes">
             <InformationCircleIcon class="hidden md:block button__icon w-16" />
           </Tooltip>

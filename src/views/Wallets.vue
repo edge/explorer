@@ -17,7 +17,6 @@
             <TransactionsTable :transactions="transactions" />
             <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="txsPage" :totalPages="Math.ceil(txsMetadata.totalCount/txsMetadata.limit)" query="txsPage" />
           </div>
-          
           <div v-if="stakes.length" class="mt-20">
             <h3>Wallet Stakes</h3>
             <StakesTable :stakes="stakes" :hideWallet="true" />
@@ -108,6 +107,7 @@ export default {
       this.address = this.$route.params.address
       this.page = parseInt(this.$route.query.page || 1)
       this.txsPage = parseInt(this.$route.query.txsPage || 1)
+      this.stakesPage = parseInt(this.$route.query.stakesPage || 1)
 
       if (this.address && checksumAddressIsValid(this.address)) {
         if (!this.wallet) {
@@ -118,8 +118,8 @@ export default {
         
         const wallet = await fetchWallet(this.address)
 
-        await this.fetchTransactions({ address: this.address, options: { page: this.page, limit: 10 } })
-        await this.fetchStakes({page: this.page, limit: 10})
+        await this.fetchTransactions({ address: this.address, options: { page: this.txsPage, limit: 10 } })
+        await this.fetchStakes({page: this.stakesPage, limit: 10})
 
         this.wallet = {
           ...wallet,
@@ -131,17 +131,15 @@ export default {
       } else {
         this.fetchWallets({ page: this.page })
       }
-    },    
+    },
     async fetchStakes(options) {
       const { results, metadata } = await fetchStakesByWallet(this.address, options)
-
       this.stakes = results
       this.stakesMetadata = metadata
       this.loading = false
     },
     async fetchTransactions(options) {
       const { transactions, metadata } = await fetchTransactions(options)
-
       this.transactions = transactions
       this.txsMetadata = metadata
       this.loading = false

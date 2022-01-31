@@ -11,7 +11,11 @@
     </span>
   </td>
   <td data-title="From:">
-    <router-link :to="{name: 'Wallet', params: {address: item.sender}}">
+    <div v-if="isSelfRefLink(item.sender)">
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.sender, 22) }}</span>
+      <span class="monospace md:hidden">{{ sliceString(item.sender, 26) }}</span> 
+    </div>
+    <router-link v-else :to="{name: 'Wallet', params: {address: item.sender}}">
       <span class="hidden monospace md:inline-block">{{ sliceString(item.sender, 22) }}</span>
       <span class="monospace md:hidden">{{ sliceString(item.sender, 26) }}</span>
     </router-link>
@@ -20,7 +24,11 @@
     <ArrowRightIcon />
   </td>
   <td data-title="To:" class="relative">
-    <router-link :to="{name: 'Wallet', params: {address: item.recipient}}">
+    <div v-if="isSelfRefLink(item.recipient)">
+      <span class="hidden monospace md:inline-block">{{ sliceString(item.recipient, 22) }}</span>
+      <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
+    </div>
+    <router-link v-else :to="{name: 'Wallet', params: {address: item.recipient}}">
       <span class="hidden monospace md:inline-block">{{ sliceString(item.recipient, 22) }}</span>
       <span class="monospace md:hidden">{{ sliceString(item.recipient, 26) }}</span>
     </router-link>
@@ -72,6 +80,12 @@ export default {
       if (item.confirmations === 1) return false
       if (item.confirmations < 10) return false
       return true
+    },
+    isSelfRefLink(address) {
+      if (this.$route.name === 'Wallet') {
+        if (this.$route.params.address === address) return true;
+      };
+      return false;
     }
   },
   components: {

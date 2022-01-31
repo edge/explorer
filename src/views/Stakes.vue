@@ -102,7 +102,7 @@ export default {
       this.loading = true
 
       this.stakeId = this.$route.params.stakeId
-      this.page = parseInt(this.$route.params.page || 1)
+      this.page = parseInt(this.$route.query.page || 1)
 
       if (this.stakeId) {
         const stake = await fetchStake(this.stakeId)

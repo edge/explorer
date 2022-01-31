@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full">
     <Header />
-    <HeroPanel v-if="address" :title="'Wallet'" :address="address" />
+    <HeroPanel v-if="wallet" :title="'Wallet'" :address="address" />
     <HeroPanel v-else :title="'Wallets'" />
 
     <div class="flex-1 bg-gray-200 py-35">
@@ -12,9 +12,17 @@
             <WalletSummary :wallet="wallet" />
           </div>
 
-          <h3>Wallet Transactions</h3>
-          <TransactionsTable :transactions="transactions" />
-          <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+          <div>
+            <h3>Wallet Transactions</h3>
+            <TransactionsTable :transactions="transactions" />
+            <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="txsPage" :totalPages="Math.ceil(txsMetadata.totalCount/txsMetadata.limit)" query="txsPage" />
+          </div>
+          <div v-if="stakes.length" class="mt-20">
+            <h3>Wallet Stakes</h3>
+            <StakesTable :stakes="stakes" :hideWallet="true" />
+            <Pagination v-if="stakes" baseRoute="Wallet" :address="address" :currentPage="stakesPage" :totalPages="Math.ceil(stakesMetadata.totalCount/stakesMetadata.limit)" query="stakesPage" />
+          </div>
+
         </div>
         <div v-else>
           <WalletsTable :wallets="wallets" />
@@ -38,12 +46,13 @@ import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination";
 import RawData from "@/components/RawData"
+import StakesTable from "@/components/StakesTable"
 import TransactionsTable from "@/components/TransactionsTable"
 import WalletOverview from "@/components/WalletOverview"
 import WalletSummary from "@/components/WalletSummary"
 import WalletsTable from "@/components/WalletsTable"
 
-import { fetchTransactions, fetchWallets, fetchWallet } from '../utils/api'
+import { fetchStakesByWallet, fetchTransactions, fetchWallets, fetchWallet } from '../utils/api'
 const { checksumAddressIsValid } = require('@edge/wallet-utils')
 
 export default {
@@ -65,7 +74,11 @@ export default {
       loading: true,
       metadata: {},
       page: 1,
+      pollInterval: 10000,
+      polling: null,
       rawData: null,
+      stakesPage: 1,
+      txsPage: 1,
       wallet: null,
       wallets: []
     }
@@ -75,6 +88,7 @@ export default {
     HeroPanel,
     Pagination,
     RawData,
+    StakesTable,
     TransactionsTable,
     WalletOverview,
     WalletSummary,
@@ -82,11 +96,18 @@ export default {
   },
   mounted() {
     this.fetchData()
+    this.pollData()
   },
   methods: {
+    beforeDestroy() {
+      // Stops the data polling.
+      clearInterval(this.polling)
+    },
     async fetchData() {
       this.address = this.$route.params.address
-      this.page = parseInt(this.$route.params.page || 1)
+      this.page = parseInt(this.$route.query.page || 1)
+      this.txsPage = parseInt(this.$route.query.txsPage || 1)
+      this.stakesPage = parseInt(this.$route.query.stakesPage || 1)
 
       if (this.address && checksumAddressIsValid(this.address)) {
         if (!this.wallet) {
@@ -94,14 +115,16 @@ export default {
         }
 
         this.loading = true
-        const { transactions, metadata } = await fetchTransactions({ address: this.address, options: { page: this.page } })
+        
         const wallet = await fetchWallet(this.address)
 
-        this.transactions = transactions
-        this.metadata = metadata
+        await this.fetchTransactions({ address: this.address, options: { page: this.txsPage, limit: 10 } })
+        await this.fetchStakes({page: this.stakesPage, limit: 10})
+
         this.wallet = {
           ...wallet,
-          transactions: metadata.totalCount
+          stakes: this.stakesMetadata.totalCount,
+          transactions: this.txsMetadata.totalCount
         }
 
         this.loading = false
@@ -109,19 +132,28 @@ export default {
         this.fetchWallets({ page: this.page })
       }
     },
+    async fetchStakes(options) {
+      const { results, metadata } = await fetchStakesByWallet(this.address, options)
+      this.stakes = results
+      this.stakesMetadata = metadata
+      this.loading = false
+    },
+    async fetchTransactions(options) {
+      const { transactions, metadata } = await fetchTransactions(options)
+      this.transactions = transactions
+      this.txsMetadata = metadata
+      this.loading = false
+    },
     async fetchWallets(options) {
       const { results, metadata } = await fetchWallets(options)
-
       this.wallets = results
       this.metadata = metadata
       this.loading = false
     },
-    async fetchTransactions(options) {
-      const { transactions, metadata } = await fetchTransactions({ options })
-
-      this.transactions = transactions
-      this.metadata = metadata
-      this.loading = false
+    pollData() {
+      this.polling = setInterval(() => {
+        this.fetchData()
+      }, this.pollInterval)
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
@@ -129,6 +161,7 @@ export default {
   },
   watch: {
     $route(to, from) {
+      this.beforeDestroy()
       this.fetchData()
     }
   }

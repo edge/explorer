@@ -6,9 +6,7 @@
       <div class="stakeRow">
         <div class="stakeRow__label">ID</div>
         <div class="stakeRow__value">
-          <router-link :to="{ name: 'Stake', params: { stakeId: stake.id } }">
-            {{ stake.id }}
-          </router-link>
+          {{ stake.id }}
         </div>
       </div>
       <div class="stakeRow">

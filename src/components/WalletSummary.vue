@@ -22,8 +22,11 @@ export default {
     },
     generateWalletSummary() {
       if (this.wallet) {
-        let summary = `The wallet with address <span class="emphasis">${this.wallet.address}</span> has a balance of <span class="emphasis">${this.formatAmount(this.wallet.balance)}</span> XE. `
+        let summary = `The wallet with address <span class="emphasis word-break">${this.wallet.address}</span> has a balance of <span class="emphasis">${this.formatAmount(this.wallet.balance)}</span> XE. `
         summary += `It has <span class="emphasis">${this.wallet.transactions}</span> ${this.wallet.transactions === 1 ? 'transaction' : 'transactions'} associated with it. `
+        if (this.wallet.stakedAmount) {
+          summary += `It has <span class="emphasis">${this.wallet.stakes}</span> ${this.stakes === 1 ? 'stake' : 'stakes'} with a total value of <span class="emphasis">${this.formatAmount(this.wallet.stakedAmount)}</span> XE. `
+        }
         summary += `The nonce is <span class="emphasis">${this.wallet.nonce}</span>. `
 
         let enhancedSummary = ''
@@ -43,11 +46,12 @@ export default {
 <!-- See https://medium.com/@brockreece/scoped-styles-with-v-html-c0f6d2dc5d8e for >>> syntax -->
 <style scoped>
   .tile {
-    @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
+    @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded break-words;
   }
   .tile >>> span.emphasis {
     @apply text-gray-900 font-medium font-mono;
   }
+  
   button {
     @apply leading-none text-sm2 border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
   }

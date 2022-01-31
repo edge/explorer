@@ -10,6 +10,10 @@
         <div class="overviewRow__label">Balance</div>
         <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.balance : 0) }} XE</div>
       </div>
+      <div v-if="wallet.stakedAmount" class="overviewRow">
+        <div class="overviewRow__label">Staked</div>
+        <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.stakedAmount : 0) }} XE</div>
+      </div>
       <div class="overviewRow">
         <div class="overviewRow__label">Nonce</div>
         <div class="overviewRow__value">{{ wallet ? wallet.nonce : 0 }}</div>

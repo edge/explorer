@@ -7,11 +7,25 @@
         <div class="overviewRow__value">{{ wallet && wallet.address }}<BadgeCheckIcon v-if="wallet.trusted" class="trusted" /></div>
       </div>
       <div class="overviewRow">
-        <div class="overviewRow__label">Balance</div>
+        <div class="overviewRow__label flex items-center space-x-3">
+          Balance
+          <Tooltip
+            class="ml-3 icon-grey" position="right" :wide="true"
+            text="Available balance excluding stakes">
+            <InformationCircleIcon class="hidden md:block button__icon w-16" />
+          </Tooltip>
+        </div>
         <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.balance : 0) }} XE</div>
       </div>
       <div v-if="wallet.stakedAmount" class="overviewRow">
-        <div class="overviewRow__label">Staked</div>
+        <div class="overviewRow__label flex items-center space-x-3">
+          Staked
+          <Tooltip
+            class="ml-3 icon-grey" position="right" :wide="true"
+            text="Current amount locked in stakes">
+            <InformationCircleIcon class="hidden md:block button__icon w-16" />
+          </Tooltip>
+        </div>
         <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.stakedAmount : 0) }} XE</div>
       </div>
       <div class="overviewRow">
@@ -29,6 +43,8 @@
 <script>
 const { xeStringFromMicroXe } = require('@edge/wallet-utils')
 import { BadgeCheckIcon } from '@heroicons/vue/solid'
+import { InformationCircleIcon } from '@heroicons/vue/solid'
+import Tooltip from '@/components/Tooltip'
 
 export default {
   name: 'WalletOverview',
@@ -38,7 +54,9 @@ export default {
     }
   },
   components: {
-    BadgeCheckIcon
+    BadgeCheckIcon,
+    InformationCircleIcon,
+    Tooltip
   },
   methods: {
     formatAmount(amount) {
@@ -63,5 +81,17 @@ export default {
   }
   .overviewRow__value a {
     @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  }
+
+  .overviewRow .icon {
+    @apply w-18 inline-block align-middle;
+  }
+
+  .overviewRow .icon-green {
+    @apply text-green;
+  }
+
+  .overviewRow .icon-grey {
+    @apply text-gray-400;
   }
 </style>

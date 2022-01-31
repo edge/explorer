@@ -2,11 +2,11 @@
   <nav class="pagination">
     <ol class="pagination__list">
       <li class="pagination__item">
-        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { address }, query: { [queryKey]: 1 }}">First</router-link>
+        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { address }, query: { ...$route.query, [queryKey]: 1 }}">First</router-link>
         <span class="not-link" v-else>First</span>
       </li>
       <li class="pagination__item">
-        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { address }, query: { [queryKey]: currentPage - 1 }}">
+        <router-link v-if="currentPage !== 1" :to="{ name: baseRoute, params: { address }, query: { ...$route.query, [queryKey]: currentPage - 1 }}">
           <ChevronLeftIcon/>
         </router-link>
         <span class="not-link" v-else><ChevronLeftIcon/></span>
@@ -16,13 +16,13 @@
         <span v-else>&nbsp;</span>
       </li>
       <li class="pagination__item">
-        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { address }, query: { [queryKey]: currentPage + 1 }}">
+        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { address }, query: { ...$route.query, [queryKey]: currentPage + 1 }}">
           <ChevronRightIcon/>
         </router-link>
         <span class="not-link" v-else><ChevronRightIcon/></span>
       </li>
       <li class="pagination__item">
-        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { address }, query: { [queryKey]: totalPages }}">
+        <router-link v-if="currentPage < totalPages" :to="{ name: baseRoute, params: { address }, query: { ...$route.query, [queryKey]: totalPages }}">
           Last
         </router-link>
         <span class="not-link" v-else>Last</span>

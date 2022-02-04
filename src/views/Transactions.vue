@@ -5,17 +5,21 @@
     <HeroPanel v-else :title="'Transactions'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="transaction || transactions.length" class="container">
+      <div v-if="transaction || isTxWaitingConfirmation || transactions.length" class="container">
         <div v-if="transaction" class="row mb-25">
           <TransactionOverview :transaction="transaction" />
           <TransactionSummary :transaction="transaction" />
+        </div>
+        <div v-else-if="isTxWaitingConfirmation && timeWaitingForConfirmation < 60000" class="row mb-25">
+          <TransactionOverview :transaction="pendingTransaction" />
+          <TransactionSummary :transaction="pendingTransaction" />
         </div>
 
         <div v-if="rawData" class="mb-25">
           <RawData :rawData="rawData" />
         </div>
 
-        <TransactionsTable :transactions="transactions" v-if="!transaction"/>
+        <TransactionsTable :transactions="transactions" v-if="!transaction && !isTxWaitingConfirmation"/>
         <Pagination v-if="!transaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
       </div>
       <div v-else class="container h-full">
@@ -62,11 +66,13 @@ export default {
       page: 1,
       pendingPolling: null,
       pendingPollingInterval: 30000,
+      pendingTransaction: null,
       pollInterval: 10000,
       polling: null,
       rawData: null,
       transaction: null,
-      transactions: []
+      transactions: [],
+      waitingForConfirmationBegan: null,
     }
   },
   components: {
@@ -78,9 +84,24 @@ export default {
     TransactionSummary,
     TransactionsTable
   },
+  computed: {
+    isTransactionPending() {
+      if (this.transaction && this.transaction.block.height === 0 && this.transaction.confirmations === 0) return true
+      else return false
+    },
+    isTxWaitingConfirmation() {
+      if (this.pendingTransaction && !this.transaction) return true
+      else return false
+    },
+    timeWaitingForConfirmation() {
+      if (this.waitingForConfirmationBegan) {
+        return Date.now() - this.waitingForConfirmationBegan
+      }
+    }
+  },
   mounted() {
     this.fetchData().then(() => {
-      if (this.transaction && this.transaction.block && this.transaction.block.height === 0) {
+      if (this.isTransactionPending) {
         this.pollPendingTx()
       } else {
         this.pollData()
@@ -104,6 +125,23 @@ export default {
         const exchangeResult = await fetchExchangeTransaction(this.hash)
 
         this.transaction = transactions[0]
+
+        // if transaction is pending, set a copy of it
+        if (this.isTransactionPending) {
+          this.pendingTransaction = this.transaction
+        }
+
+        // set time when waiting confirmation began (when the tx is no longer on the pending list, but is also not a confirmed transaction yet)
+        if (!this.waitingForConfirmationBegan && this.pendingTransaction && !this.transaction) {
+          console.log('pending tx disappeared - waiting confirmation')
+          this.waitingForConfirmationBegan = Date.now()
+        }
+
+        // clear pending transaction data if waiting for confirmation for longer than 60 seconds
+        if (this.isTxWaitingConfirmation && this.timeWaitingForConfirmation > 60000) {
+          this.clearPendingTransaction()
+        }
+
         if (raw) this.rawData = { ...raw }
         if (exchangeResult && !exchangeResult.metadata) this.transaction.exchangeResult = exchangeResult
 
@@ -119,6 +157,15 @@ export default {
       this.metadata = metadata
       this.loading = false
     },
+
+    clearPendingTransaction() {
+      this.waitingForConfirmationBegan = null
+      this.pendingTransaction = null
+    },
+    isTxPending(tx) {
+      return tx && tx.block.height === 0 && tx.confirmations === 0
+    },
+
     pollData() {
       if (!this.hash) {
         this.polling = setInterval(() => {

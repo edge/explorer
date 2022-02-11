@@ -16,10 +16,10 @@
     <span class="monospace lg:font-sans">{{ item.stakeCount }}</span>
   </td>
   <td data-title="Staked XE:" class="amount-col">
-    <span class="monospace lg:font-sans">{{ formatAmount(item.staked || 0 ) }}</span>
+    <span class="monospace lg:font-sans">{{ stakedFormatted }}</span>
   </td>
   <td data-title="Balance (XE):" class="amount-col">
-    <span class="monospace lg:font-sans">{{ formatAmount(item.balance) }}</span>
+    <span class="monospace lg:font-sans">{{ balanceFormatted }}</span>
   </td>  
 </template>
 
@@ -32,6 +32,14 @@ export default {
   props: ['item'],
   components: {
     BadgeCheckIcon
+  },
+  computed: {
+    balanceFormatted() {
+      return this.formatAmount(this.item.balance)
+    },
+    stakedFormatted() {
+      return this.formatAmount(this.item.staked)
+    }
   },
   methods: {
     sliceString(string, symbols) {

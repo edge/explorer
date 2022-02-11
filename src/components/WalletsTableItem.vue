@@ -42,9 +42,6 @@ export default {
     }
   },
   methods: {
-    sliceString(string, symbols) {
-      return string && string.length > symbols ? `${string.slice(0, symbols)}…` : string;
-    },
     formatAmount(amount) {
       return xeStringFromMicroXe(amount, true)
     },

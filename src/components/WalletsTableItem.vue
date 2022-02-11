@@ -1,30 +1,26 @@
 <template>
-  <td data-title="Address:" :title="item.address">
+  <td data-title="Address:" :title="item.address" class="address">
     <router-link :to="{name: 'Wallet', params: {address: item.address}}">
       <span class="monospace md:inline-block">{{ item.address }}</span>
     </router-link><BadgeCheckIcon v-if="item.trusted" class="trusted" />
   </td>
-  <td data-title="First Tx Date:">
-    {{ new Date(item.firstTransaction.timestamp).toLocaleString() }}
-  </td>
-  <td data-title="Hash:">
-    <router-link :to="{name: 'Transaction', params: {hash: item.firstTransaction.hash}}">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.firstTransaction.hash, 20) }}</span>
-      <span class="monospace md:hidden">{{ sliceString(item.firstTransaction.hash, 26) }}</span>
-    </router-link>
-  </td>
-  <td data-title="Latest Tx Date:">
-    {{ new Date(item.latestTransaction.timestamp).toLocaleString() }}
-  </td>
-  <td data-title="Hash:">
+  <td data-title="Latest Tx:">
     <router-link :to="{name: 'Transaction', params: {hash: item.latestTransaction.hash}}">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.latestTransaction.hash, 20) }}</span>
-      <span class="monospace md:hidden">{{ sliceString(item.latestTransaction.hash, 26) }}</span>
+      <span class="monospace md:inline-block">{{ item.latestTransaction.hash }}</span>
     </router-link>
   </td>
-  <td data-title="Balance (XE):">
-    <span class="monospace lg:font-sans">{{ formatAmount(item.balance) }}</span>
+  <td data-title="Transactions:">
+    <span class="monospace lg:font-sans">{{ item.txCount }}</span>
   </td>
+  <td data-title="Stakes:">
+    <span class="monospace lg:font-sans">{{ item.stakeCount }}</span>
+  </td>
+  <td data-title="Staked XE:" class="amount-col">
+    <span class="monospace lg:font-sans">{{ formatAmount(item.staked || 0 ) }}</span>
+  </td>
+  <td data-title="Balance (XE):" class="amount-col">
+    <span class="monospace lg:font-sans">{{ formatAmount(item.balance) }}</span>
+  </td>  
 </template>
 
 <script>
@@ -53,7 +49,7 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 truncate;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
 }
 
 td::before {
@@ -100,6 +96,14 @@ td a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
+td a {
+  @apply overflow-ellipsis overflow-hidden whitespace-nowrap
+}
+
+td span {
+  @apply max-w-max w-full overflow-ellipsis overflow-hidden whitespace-nowrap
+}
+
 .trusted {
   @apply w-18 h-18 inline-block ml-2 text-green;
 }
@@ -109,12 +113,20 @@ td a {
     @apply border-gray-200 pt-13 pb-15 table-cell border-b-2 align-middle;
   }
 
+  td span {
+    @apply w-11/12
+  }
+
   td:first-child {
     @apply pl-20 pt-13;
   }
 
   td:last-child {
     @apply pr-30 pb-13 text-right border-b-2;
+  }
+
+  td.amount-col {
+    @apply pr-30 text-right
   }
 
   td:before {

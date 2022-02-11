@@ -5,18 +5,18 @@
     <HeroPanel v-else :title="'Transactions'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="transaction || transactions.length" class="container">
-        <div v-if="transaction" class="row mb-25">
-          <TransactionOverview :transaction="transaction" />
-          <TransactionSummary :transaction="transaction" />
+      <div v-if="transaction || pendingTransaction || transactions.length" class="container">
+        <div v-if="transaction || pendingTransaction" class="row mb-25">
+          <TransactionOverview :transaction="transaction || pendingTransaction" />
+          <TransactionSummary :transaction="transaction || pendingTransaction" />
         </div>
 
         <div v-if="rawData" class="mb-25">
           <RawData :rawData="rawData" />
         </div>
 
-        <TransactionsTable :transactions="transactions" v-if="!transaction"/>
-        <Pagination v-if="!transaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+        <TransactionsTable :transactions="transactions" v-if="!transaction && !pendingTransaction"/>
+        <Pagination v-if="!transaction && !pendingTransaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
       </div>
       <div v-else class="container h-full">
         <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
@@ -60,13 +60,12 @@ export default {
       loading: false,
       metadata: {},
       page: 1,
-      pendingPolling: null,
-      pendingPollingInterval: 30000,
+      pendingTransaction: null,
       pollInterval: 10000,
       polling: null,
       rawData: null,
       transaction: null,
-      transactions: []
+      transactions: [],
     }
   },
   components: {
@@ -78,20 +77,20 @@ export default {
     TransactionSummary,
     TransactionsTable
   },
+  computed: {
+    isTransactionPending() {
+      if (this.transaction && this.transaction.block.height === 0 && this.transaction.confirmations === 0) return true
+      else return false
+    }
+  },
   mounted() {
     this.fetchData().then(() => {
-      if (this.transaction && this.transaction.block && this.transaction.block.height === 0) {
-        this.pollPendingTx()
-      } else {
-        this.pollData()
-      }
+      this.pollData()
     })
   },
   methods: {
     beforeDestroy() {
-      // Stops the data polling.
       clearInterval(this.polling)
-      clearInterval(this.pendingPolling)
     },
     async fetchData() {
       this.loading = true
@@ -104,6 +103,24 @@ export default {
         const exchangeResult = await fetchExchangeTransaction(this.hash)
 
         this.transaction = transactions[0]
+
+        // if transaction is pending, set a copy of it
+        if (this.isTransactionPending) {
+          this.pendingTransaction = { ...this.transaction, lastSeen: Date.now() }
+        }
+
+        // if in gap between tx pending and tx appearing on index, clear pendingTransaction after 60 secs
+        if (this.pendingTransaction && !this.transaction) {
+          if (Date.now() - this.pendingTransaction.lastSeen > 60000) {
+            this.pendingTransaction = null
+          }
+        }
+
+        // if transaction no longer pending, clear pendingTransaction
+        if (this.transaction && this.pendingTransaction && !this.isTransactionPending) {
+          this.pendingTransaction = null
+        }
+
         if (raw) this.rawData = { ...raw }
         if (exchangeResult && !exchangeResult.metadata) this.transaction.exchangeResult = exchangeResult
 
@@ -120,16 +137,9 @@ export default {
       this.loading = false
     },
     pollData() {
-      if (!this.hash) {
-        this.polling = setInterval(() => {
-          this.fetchData()
-        }, this.pollInterval)
-      }
-    },
-    pollPendingTx() {
-      this.pendingPolling = setInterval(() => {
+      this.polling = setInterval(() => {
         this.fetchData()
-      }, this.pendingPollingInterval)
+      }, this.pollInterval)
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;

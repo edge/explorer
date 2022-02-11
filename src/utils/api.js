@@ -189,6 +189,7 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
                 transactions: [{
                   ...pendingTx,
                   amount: xeStringFromMicroXe(pendingTx.amount),
+                  memo: pendingTx.data.memo,
                   date: new Date(pendingTx.timestamp).toLocaleString(),
                   block: { height: 0, hash: '' },
                   confirmations: 0

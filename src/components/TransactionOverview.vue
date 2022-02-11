@@ -7,19 +7,19 @@
         <div class="transactionRow__label">Timestamp</div>
         <div class="transactionRow__value">{{ new Date(transaction.timestamp).toLocaleString() }}</div>
       </div>
-      <div class="transactionRow" v-if="transaction.block.height > 0">
+      <div class="transactionRow" v-if="isPending">
+        <div class="transactionRow__label">Status</div>
+        <div class="transactionRow__value pending">
+          <span class="icon icon-grey mb-2"><ClockIcon/></span>
+          <span class="ml-5 inline-block">Pending for {{secondsPending}} seconds</span>
+        </div>
+      </div>
+      <div class="transactionRow" v-else>
         <div class="transactionRow__label">Block</div>
         <div class="transactionRow__value">
           <router-link :to="{ name: 'Block', params: { blockId: transaction.block.height } }">
             {{ transaction.block.height }}
           </router-link>
-        </div>
-      </div>
-      <div class="transactionRow" v-else>
-        <div class="transactionRow__label">Status</div>
-        <div class="transactionRow__value pending">
-          <span class="icon icon-grey mb-2"><ClockIcon/></span>
-          <span class="ml-5 inline-block">Pending for {{secondsPending}} seconds</span>
         </div>
       </div>
       <div class="transactionRow">
@@ -154,6 +154,11 @@ export default {
       secondsPending: 0,
       secondsPendingInterval: null,
       etherscanUrl: process.env.VUE_APP_IS_TESTNET === 'true' ? 'https://rinkeby.etherscan.io' : 'https://etherscan.io'
+    }
+  },
+  computed: {
+    isPending() {
+      return this.transaction.block.height === 0 && this.transaction.confirmations === 0
     }
   },
   mounted() {

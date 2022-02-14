@@ -35,7 +35,7 @@
           <td data-title="Txs:">
             {{ block.transactions.length }}
           </td>
-          <td data-title="Total XE:">
+          <td data-title="Total XE:" class="monospace">
             {{ formatAmount(block.total) }}
           </td>
           <td class="truncate" data-title="Mined:">

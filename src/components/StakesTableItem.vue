@@ -48,7 +48,7 @@
     </span>
   </td>
   <td data-title="Amount:">
-    <span class="monospace lg:font-sans">{{ formatAmount(item.amount / 1e6) }}</span>
+    <span class="monospace">{{ formatAmount(item.amount / 1e6) }}</span>
   </td>
 </template>
 

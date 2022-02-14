@@ -41,7 +41,7 @@
             </router-link>
           </td>
           <td class="lg:text-right" data-title="Amount XE:">
-            <span class="monospace lg:font-sans">
+            <span class="monospace">
               {{ formatAmount(transaction.amount) }}
             </span>
           </td>

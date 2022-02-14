@@ -10,16 +10,16 @@
     </router-link>
   </td>
   <td data-title="Transactions:">
-    <span class="monospace lg:font-sans">{{ item.txCount }}</span>
+    <span class="monospace">{{ item.txCount }}</span>
   </td>
   <td data-title="Stakes:">
-    <span class="monospace lg:font-sans">{{ item.stakeCount }}</span>
+    <span class="monospace">{{ item.stakeCount }}</span>
   </td>
   <td data-title="Staked XE:" class="amount-col">
-    <span class="monospace lg:font-sans">{{ stakedFormatted }}</span>
+    <span class="monospace">{{ stakedFormatted }}</span>
   </td>
   <td data-title="Balance (XE):" class="amount-col">
-    <span class="monospace lg:font-sans">{{ balanceFormatted }}</span>
+    <span class="monospace">{{ balanceFormatted }}</span>
   </td>  
 </template>
 

@@ -37,10 +37,10 @@
           <td data-title="Ledger Hash:">
             <span class="truncate monospace">{{ block.ledgerHash.substr(0, 16) }}…</span>
           </td>
-          <td data-title="Transactions:">
+          <td data-title="Transactions:" class="monospace">
             {{ block.transactions.length }}
           </td>
-          <td data-title="XE:">
+          <td data-title="XE:" class="monospace">
             {{ formatAmount(block.total) }}
           </td>
           <td data-title="Mined:">

@@ -23,7 +23,7 @@ export default {
     generateWalletSummary() {
       if (this.wallet) {
         let summary = `The wallet with address <span class="emphasis word-break">${this.wallet.address}</span> has a balance of <span class="emphasis">${this.formatAmount(this.wallet.balance)}</span> XE. `
-        summary += `It has <span class="emphasis">${this.wallet.transactions}</span> ${this.wallet.transactions === 1 ? 'transaction' : 'transactions'} associated with it. `
+        summary += `It has <span class="emphasis">${this.wallet.transactions.toLocaleString()}</span> ${this.wallet.transactions === 1 ? 'transaction' : 'transactions'} associated with it. `
         if (this.wallet.stakedAmount) {
           summary += `It has <span class="emphasis">${this.wallet.stakes}</span> ${this.stakes === 1 ? 'stake' : 'stakes'} with a total value of <span class="emphasis">${this.formatAmount(this.wallet.stakedAmount)}</span> XE. `
         }

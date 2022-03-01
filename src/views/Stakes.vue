@@ -68,26 +68,15 @@ import { xeStringFromMicroXe } from '@edge/wallet-utils'
 
 export default {
   name: 'Stakes',
-  title() {
-    if (window.location.href.indexOf('/stake/') > 0) {
-      const parts = window.location.href.split('/')
-      return 'Stake ' + this.sliceString(parts[parts.length - 1], 7)
-    }
-
-    return 'Stakes'
-  },
   data: function () {
     return {
+      lastTx: null,
+      limit: 20,
       loading: false,
       metadata: { totalCount: 0 },
-      limit: 20,
       page: 1,
-      pollInterval: 30000,
-      polling: null,
       rawData: null,
       stake: null,
-      stakeId: null,
-      lastTx: null,
       txs: []
     }
   },
@@ -104,9 +93,10 @@ export default {
   mounted() {
     if (this.$route.params.stakeId) { 
       this.fetchData()
+    } else {
+      const p = parseInt(this.$route.query.page) || 0
+      if (p < 1) this.$router.push({ name: this.baseRoute, query: { page: 1 } })
     }
-    const p = parseInt(this.$route.query.page) || 0
-    if (p < 1) this.$router.push({ name: this.baseRoute, query: { page: 1 } })
   },
   computed: {
     baseRoute() {
@@ -117,15 +107,14 @@ export default {
     },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+    stakeId() {
+      return this.$route.params.stakeId || null
     }
   },
   methods: {
     async fetchData() {
       this.loading = true
-
-      this.stakeId = this.$route.params.stakeId
-      this.page = parseInt(this.$route.query.page || 1)
-
       const stake = await fetchStake(this.stakeId)
       this.stake = stake
       await this.fetchStakeTxs(this.stakeId)

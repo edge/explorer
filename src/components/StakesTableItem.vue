@@ -1,107 +1,122 @@
 <template>
-  <td data-title="ID:" :title="item.id">
-    <router-link v-if="!item.pending" :to="{name: 'Stake', params: {stakeId: item.id}}">
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.id, getSliceChars(hideWallet)) }}</span>
-      <span class="monospace md:hidden">{{ sliceString(item.id, 26) }}</span>
-    </router-link>
-    <div v-else>
-      <span class="hidden monospace md:inline-block">{{ sliceString(item.id, getSliceChars(hideWallet)) }}</span>
-      <span class="monospace md:hidden">{{ sliceString(item.id, 26) }}</span>
-    </div>
-  </td>
-  <td data-title="Hash:">
-    <span class="hidden monospace md:inline-block">{{ sliceString(item.hash, getSliceChars(hideWallet)) }}</span>
-    <span class="monospace md:hidden">{{ sliceString(item.hash, 26) }}</span>
-  </td>
-  <td v-if="!hideWallet" data-title="Wallet:">
-    <router-link :to="{name: 'Wallet', params: {address: item.tx.recipient}}">
-      <span class="monospace md:inline-block">{{ item.tx.recipient }}</span>
-    </router-link>
-  </td>
-  <td data-title="Device:">
-    <span v-if="item.device">
-      <span class="hidden monospace md:inline-block">{{ item.device }}</span>
-    </span>
-    <span v-else class="text-gray-400">None</span>
-  </td>
-  <td :title="item.tx.memo" data-title="Type:">
-    <span class="monospace md:font-sans">{{ formatType(item.type) }}</span>
-  </td>
-  <td data-title="Status:">
-    <span v-if="item.released">
-      <span class="mr-1 -mt-2 icon icon-grey"><ArrowCircleDownIcon/></span>
-      <span>Released</span>
-    </span>
-    <span v-else-if="item.unlockRequested">
-      <span v-if="item.unlockRequested + item.unlockPeriod > Date.now()">
-        <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
-        <span>Unlocking</span>
+  <tr>
+    <td data-title="ID:" :title="item.id">
+      <router-link :to="stakeUrl">
+        <span class="monospace md:inline-block">
+          {{ item.id }}
+        </span>
+      </router-link>
+    </td>
+
+    <td data-title="Hash:" :title="item.hash">
+      <span class="monospace md:inline-block">
+        {{ item.hash }}
+      </span>
+    </td>
+
+    <td data-title="Wallet:" :title="item.tx.sender">
+      <router-link :to="walletUrl">
+        <span class="monospace md:inline-block">
+          {{ item.tx.sender }}
+        </span>
+      </router-link>
+    </td>
+
+    <td data-title="Device:" :title="item.device">
+      <span v-if="item.device">
+        <span class="monospace md:inline-block">
+          {{ item.device }}
+        </span>
+      </span>
+      <span v-else class="text-gray-400">None</span>
+    </td>
+
+    <td data-title="Type:">
+      <span class="monospace md:font-sans">{{ formattedType }}</span>
+    </td>
+
+    <td data-title="Status:">
+      <span v-if="item.released">
+        <span class="mr-1 -mt-2 icon icon-grey"><ArrowCircleDownIcon/></span>
+        <span class="monospace md:font-sans">Released</span>
+      </span>
+      <span v-else-if="item.unlockRequested">
+        <span v-if="isUnlocking">
+          <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
+          <span class="monospace md:font-sans">Unlocking</span>
+        </span>
+        <span v-else>
+          <span class="mr-1 -mt-2 icon icon-grey"><DotsCircleHorizontalIcon/></span>
+          <span class="monospace md:font-sans">Unlocked</span>
+        </span>
       </span>
       <span v-else>
-        <span class="mr-1 -mt-2 icon icon-grey"><DotsCircleHorizontalIcon/></span>
-        <span>Unlocked</span>
+        <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon/></span>
+        <span class="monospace md:font-sans">Active</span>
       </span>
-    </span>
-    <span v-else>
-      <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon/></span>
-      <span>Active</span>
-    </span>
-  </td>
-  <td data-title="Amount:">
-    <span class="monospace">{{ formatAmount(item.amount / 1e6) }}</span>
-  </td>
+    </td>
+
+    <td data-title="Amount (XE):" class="amount-col">
+      <span class="monospace">{{ formattedAmount }}</span>
+    </td>
+  </tr>
 </template>
 
 <script>
-const { formatXe } = require('@edge/wallet-utils')
-import { ArrowCircleDownIcon, CheckCircleIcon, ClockIcon, DotsCircleHorizontalIcon } from "@heroicons/vue/outline"
+/*global process*/
+import { formatXe } from '@edge/wallet-utils'
+import { ArrowCircleDownIcon, CheckCircleIcon, ClockIcon, DotsCircleHorizontalIcon } from '@heroicons/vue/outline'
 
 export default {
-  name: "StakesTableItem",
-  props: ['item', 'hideWallet'],
-  methods: {
-    async copyToClipboard (input) {
-      if (!!navigator.clipboard) {
-        await navigator.clipboard.writeText(input)
-      }
-    },
-    getSliceChars: (hideWallet) => {
-      if (hideWallet) return 30
-      else return 8
-    },
-    sliceString(string, symbols) {
-      return string && string.length > symbols ? `${string.slice(0, symbols)}…` : string;
-    },
-    formatAmount(amount) {
-      return formatXe(amount, true)
-    },
-    formatType(typ) {
-      return typ.charAt(0).toUpperCase() + typ.slice(1)
-    },
-    isConfirmed(item) {
-      if (item.pending) return false
-      if (item.confirmations === 1) return false
-      if (item.confirmations < 10) return false
-      return true
-    }
-  },
+  name: 'StakesTableItem',
+  props: ['item'],
   components: {
     ArrowCircleDownIcon,
     CheckCircleIcon,
     ClockIcon,
     DotsCircleHorizontalIcon
+  },
+  computed: {
+    action() {
+      if (this.item.released) return null
+      else if (this.item.unlockRequested) return 'Release'
+      else return 'Unlock'
+    },
+    stakeUrl() {
+      return {name: 'Stake', params: {stakeId: this.item.id}}
+    },
+    walletUrl() {
+      return {name: 'Wallet', params: {address: this.item.tx.sender}}
+    },
+    formattedAmount() {
+      return formatXe(this.item.amount / 1e6, true)
+    },
+    formattedType() {
+      return this.item.type.charAt(0).toUpperCase() + this.item.type.slice(1)
+    },
+    isUnlocking() {
+      return this.item.unlockRequested + this.item.unlockPeriod > Date.now()
+    }
   }
 }
 </script>
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 truncate;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
+}
+
+td span {
+  @apply w-full overflow-ellipsis overflow-hidden whitespace-nowrap
+}
+
+td a {
+  @apply overflow-ellipsis overflow-hidden whitespace-nowrap
 }
 
 td::before {
   content: attr(data-title);
-  @apply font-normal mr-8 min-w-75 text-xs text-gray-600 pt-2;
+  @apply font-normal mr-8 min-w-100 text-xs text-gray-600 pt-2;
 }
 
 td:first-child {
@@ -123,13 +138,6 @@ td .icon-green {
 td .icon-grey {
   @apply text-gray-400;
 }
-td.arrow-icon {
-  @apply hidden lg:table-cell;
-}
-
-td.arrow-icon svg {
-  @apply pt-px w-14 h-14 text-green;
-}
 
 td a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
@@ -144,8 +152,12 @@ td a {
     @apply pl-20 pt-13;
   }
 
+  td.amount-col {
+    @apply text-right
+  }
+
   td:last-child {
-    @apply pr-30 pb-13 text-right border-b-2;
+    @apply pb-13 border-b-2;
   }
 
   td:before {
@@ -153,3 +165,4 @@ td a {
   }
 }
 </style>
+

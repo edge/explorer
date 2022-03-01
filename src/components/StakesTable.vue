@@ -1,87 +1,167 @@
 <template>
-  <div>
-    <table>
-      <thead class="sticky top-0 z-10 hidden lg:table-header-group">
-      <tr v-if="hideWallet">
-        <th width="23%">ID</th>
-        <th width="23%">Hash</th>
-        <th width="30%">Device</th>
-        <th width="8%">Type</th>
-        <th width="8%">Status</th>
-        <th width="8%">Amount XE</th>
+  <table>
+    <thead class="hidden lg:table-header-group">
+      <tr v-if="sortable">
+        <TableHeader width="15%" header="ID" :sortQuery="sortQuery"
+          sortParam="id" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader width="15%" header="Hash" :sortQuery="sortQuery"
+          sortParam="hash" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader width="24%" header="Wallet" :sortQuery="sortQuery"
+          sortParam="sortWallet" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader width="20%" header="Device" :sortQuery="sortQuery"
+          sortParam="device" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader width="8%" header="Type" :sortQuery="sortQuery"
+          sortParam="type" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader width="8%" header="Status" :sortQuery="sortQuery"
+          sortParam="released,unlockRequested" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader class="amount-col" width="10%" header="Amount XE" :sortQuery="sortQuery"
+          sortParam="amount" :onSortingUpdate="updateSorting"
+        />
       </tr>
       <tr v-else>
-        <th width="8%">ID</th>
-        <th width="8%">Hash</th>
-        <th width="30%">Wallet</th>
-        <th width="30%">Device</th>
+        <th width="15%">ID</th>
+        <th width="15%">Hash</th>
+        <th width="24%">Wallet</th>
+        <th width="20%">Device</th>
         <th width="8%">Type</th>
         <th width="8%">Status</th>
-        <th width="8%">Amount XE</th>
+        <th class="amount-col" width="10%">Amount XE</th>
       </tr>
-      </thead>
-      <tbody v-if="stakes && stakes.length">
-        <tr v-for="item in stakes" :key="item.id" :class="item.pending ? 'italic text-gray-400' : ''">
-          <StakesTableItem :item="item" :hideWallet="hideWallet" />
-        </tr>
-      </tbody>
-      <tbody v-else>
-        <tr>
-          <td colspan="8" class="block w-full text-center bg-white lg:table-cell py-35">
-            No stakes.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    </thead>
+    <tbody v-if="stakes.length">
+      <StakesTableItem
+        v-for="item in stakes"
+        :key="item.id"
+        :item="item"
+      />
+    </tbody>
+    <tbody v-else>
+      <tr>
+        <td colspan="7" class="block w-full text-center bg-white lg:table-cell py-35">
+          No stakes.
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
-import StakesTableItem from "@/components/StakesTableItem";
+/*global process*/
+
+import * as index from '@edge/index-utils'
+import StakesTableItem from '@/components/StakesTableItem'
+import TableHeader from '@/components/TableHeader'
+
+const stakesRefreshInterval = 5 * 1000
 
 export default {
-  name: "StakesTable",
-  components: {
-    StakesTableItem
+  name: 'StakesTable',
+  data: function () {
+    return {
+      loading: false,
+      metadata: null,
+      stakes: [],
+      iStakes: null
+    }
   },
-  props: ['stakes', 'hideWallet'],
+  components: {
+    StakesTableItem,
+    TableHeader
+  },
+  props: [
+    'limit',
+    'page',
+    'receiveMetadata',
+    'sortable'
+  ],
+  computed: {
+    sortQuery() {
+      return this.$route.query.sort
+    }
+  },
+  mounted() {
+    this.updateStakes()
+    // initiate polling
+    this.iStakes = setInterval(() => {
+      this.updateStakes()
+    }, stakesRefreshInterval)
+  },
+  unmounted() {
+    clearInterval(this.iStakes)
+  },
   methods: {
+    async updateStakes() {
+      this.loading = true
+      // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-created` : '-created'
+      const stakes = await index.stake.stakes(
+        process.env.VUE_APP_INDEX_API_URL,
+        undefined,
+        {
+          limit: this.limit,
+          page: this.page,
+          sort: sortQuery
+        }
+      )
+      this.stakes = stakes.results
+      this.receiveMetadata(stakes.metadata)
+      this.loading = false
+    },
+    updateSorting(newSortQuery) {
+      const query = { ...this.$route.query, sort: newSortQuery }
+      if (!newSortQuery) delete query.sort
+      this.$router.replace({ query })
+    }
+  },
+  watch: {
+    page() {
+      this.updateStakes()
+    },
+    sortQuery() {
+      this.updateStakes()
+    }
   }
 }
 </script>
 
 <style scoped>
+table {
+  @apply w-full table-fixed
+}
+
 table, tbody, tr {
   @apply block;
 }
-table {
-  width: 100%;
+
+th {
+  @apply font-normal text-sm2 text-left text-black bg-gray-100 border-b-2 border-gray-200 py-13 px-5;
 }
-thead th {
-  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
-  padding: 0.8125rem 0.3125rem !important;
+
+th:first-of-type {
+  @apply pl-20;
 }
-thead th:first-of-type {
-  padding-left: 1.25rem !important;
+
+th.amount-col {
+  @apply text-right
 }
-thead th:last-of-type {
-  padding-right: 1.875rem !important;
-}
-thead th:last-child {
-  @apply rounded-r-4 text-right;
+
+th .icon {
+  @apply w-15 inline-block align-middle text-gray-400;
 }
 
 @screen lg {
-  thead th {
-    @apply py-2;
+  table {
+    @apply table;
   }
 
   tbody {
     @apply table-row-group;
-  }
-
-  table {
-    @apply table;
   }
 
   tr {

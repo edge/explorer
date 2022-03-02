@@ -20,7 +20,11 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
   }
 
   // Standard URL for blocks query.
-  let url = `${INDEX_API_URL}/blocks?${qs.encode(options)}`
+  let query = '?'
+  for (const key in options) {
+    query += `${key}=${options[key]}&`
+  }
+  let url = `${INDEX_API_URL}/blocks${query.substring(0, query.length - 1)}`
 
   if (blockId) {
     // Single block query.
@@ -37,18 +41,8 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
 
         const block = { ...results }
 
+      // remove below when index updated
         block.transactions = pluckBlockTransactions(block)
-
-        // Add total XE.
-        block.total = block.transactions.reduce((accumulator, currentItem) => {
-          accumulator += Number(currentItem.amount)
-          return accumulator
-        }, 0)
-        block.total = block.total.toFixed(6)
-
-        // Add average XE.
-        block.average = block.transactions.length ? block.total / block.transactions.length : 0
-        block.average = block.average.toFixed(6)
 
         return {
           blocks: [block],
@@ -61,19 +55,9 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
     .then(response => {
       const { results, metadata } = response
 
+      // remove below forEach when index updated
       results.forEach(block => {
         block.transactions = pluckBlockTransactions(block)
-
-        // Add total XE.
-        block.total = block.transactions.reduce((accumulator, currentItem) => {
-          accumulator += Number(currentItem.amount)
-          return accumulator
-        }, 0)
-        block.total = block.total.toFixed(6)
-
-        // Add average XE.
-        block.average = block.transactions.length ? block.total / block.transactions.length : 0
-        block.average = block.average.toFixed(6)
       })
 
       return {

@@ -3,164 +3,143 @@
     <table class="w-full">
       <thead class="sticky top-0 hidden lg:table-header-group">
         <tr>
-          <th>Height</th>
-          <th>Block Hash</th>
-          <th>Data Hash</th>
-          <th>Ledger Hash</th>
-          <th>Transactions</th>
-          <th>Total XE</th>
-          <th>Mined</th>
+          <TableHeader width="9%" header="Height" :sortQuery="sortQuery"
+            sortParam="height" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="18%" header="Block Hash" :sortQuery="sortQuery"
+            sortParam="hash" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="18%" header="Data Hash" :sortQuery="sortQuery"
+            sortParam="dataHash" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="18%" header="Ledger Hash" :sortQuery="sortQuery"
+            sortParam="ledgerHash" :onSortingUpdate="updateSorting"
+          />
+          <th width="5%">Txs</th>
+          <th class="amount-col" width="16%">Total XE</th>
+          <TableHeader width="16%" header="Mined" :sortQuery="sortQuery"
+            sortParam="timestamp" :onSortingUpdate="updateSorting"
+          />
         </tr>
       </thead>
-      <!-- <tbody v-if="loading">
-        <tr>
-          <td colspan="3" class="w-full text-center bg-white py-35">
-            Loading latest blocks...
-          </td>
-        </tr>
-      </tbody> -->
-      <tbody v-if="blocks.length">
-        <tr v-for="block in blocks" :key="block.height">
-          <td data-title="Height:">
-            <router-link :to="{name: 'Block', params: {blockId: block.height}}">
-              <span class="monospace">{{block.height}}</span>
-            </router-link>
-          </td>
-          <td data-title="Block Hash:">
-            <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
-              <span class="truncate monospace">{{ block.hash.substr(0, 32) }}…</span>
-            </router-link>
-          </td>
-          <td data-title="Data Hash:">
-            <span class="truncate monospace">{{ block.dataHash.substr(0, 16) }}…</span>
-          </td>
-          <td data-title="Ledger Hash:">
-            <span class="truncate monospace">{{ block.ledgerHash.substr(0, 16) }}…</span>
-          </td>
-          <td data-title="Transactions:" class="monospace">
-            {{ block.transactions.length }}
-          </td>
-          <td data-title="XE:" class="monospace">
-            {{ formatAmount(block.total) }}
-          </td>
-          <td data-title="Mined:">
-            <span class="mr-1 lg:-mt-2 icon"><ClockIcon /></span>
-            <span class="md:text-gray-400 monospace md:font-sans">
-              {{ timeSince(block.timestamp) }}
-            </span>
-          </td>
-        </tr>
+      <tbody>
+        <BlocksTableItem 
+          v-for="item in blocks"
+          :key="item.hash"
+          :item="item"
+        />
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
-import { ClockIcon } from "@heroicons/vue/outline"
-import moment from 'moment'
-const { formatXe } = require('@edge/wallet-utils')
+import BlocksTableItem from '@/components/BlocksTableItem'
+import TableHeader from '@/components/TableHeader'
+import { fetchBlocks } from '@/utils/api.js'
+
+const blocksRefreshInterval = 5 * 1000
 
 export default {
   name: 'BlocksTable',
-  components: {},
-  props: ['blocks'],
   data: function () {
     return {
       loading: false,
-      polling: null
-    }
-  },
-  methods: {
-    formatAmount(amount) {
-      return formatXe(amount, true)
-    },
-    timeSince(ts) {
-      return moment(ts).fromNow()
+      metadata: null,
+      blocks: [],
+      iBlocks: []
     }
   },
   components: {
-    ClockIcon
+    BlocksTableItem,
+    TableHeader
+  },
+  props: [
+    'limit',
+    'page',
+    'receiveMetadata',
+    'sortable'
+  ],
+  computed: {
+    sortQuery() {
+      return this.$route.query.sort
+    }
+  },
+  mounted() {
+    this.updateBlocks()
+    // initiate polling
+    this.iBlocks = setInterval(() => {
+      this.updateBlocks()
+    }, blocksRefreshInterval)
+  },
+  unmounted() {
+    clearInterval(this.iBlocks)
+  },
+  methods: {
+    async updateBlocks() {
+      this.loading = true
+      // the sort query sent to index needs to include "-height", but this is hidden from user in browser url
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-height` : '-height'
+
+      const options = {
+        limit: this.limit,
+        page: this.page,
+        sort: sortQuery
+      }
+      const blocks = await fetchBlocks({options})
+      this.blocks = blocks.blocks
+      this.receiveMetadata(blocks.metadata)
+      this.loading = false
+    },
+    updateSorting(newSortQuery) {
+      const query = { ...this.$route.query, sort: newSortQuery }
+      if (!newSortQuery) delete query.sort
+      this.$router.replace({ query })
+    }
   }
 }
 </script>
 
 <style scoped>
+table {
+  @apply w-full table-fixed
+}
+
 table, tbody, tr {
   @apply block;
 }
 
 th {
-  @apply font-normal text-sm2 text-left bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
+  @apply font-normal text-sm2 text-left text-black bg-gray-100 border-b-2 border-gray-200 py-13 px-5;
 }
 
-/* th:first-child {
-  @apply pt-8;
-} */
-
-th:last-child {
-  @apply rounded-r-4;
+th:first-of-type {
+  @apply pl-20;
 }
 
-td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
+th:last-of-type {
+  @apply pr-20;
 }
 
-td::before {
-  content: attr(data-title);
-  @apply font-normal mr-8 min-w-75 text-xs text-gray-600 pt-2;
+th.amount-col {
+  @apply text-right pr-20
 }
 
-td:first-child {
-  @apply rounded-l-4 pt-8;
-}
-
-td:last-child {
-  @apply rounded-r-4 pb-8 border-b-4 border-gray-200;
-}
-
-td a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
-}
-
-td .icon {
-  @apply w-13 lg:w-15 inline-block align-middle text-gray-600 lg:text-gray-400;
+th .icon {
+  @apply w-15 inline-block align-middle text-gray-400;
 }
 
 @screen lg {
-  tbody {
-    @apply table-row-group;
-  }
-
   table {
     @apply table;
   }
 
+  tbody {
+    @apply table-row-group;
+  }
+
   tr {
     @apply table-row;
-  }
-
-  th {
-    @apply pt-13 pb-13 pr-30;
-  }
-
-  th:first-child {
-    @apply pl-20 pt-13;
-  }
-
-  td {
-    @apply border-gray-200 pt-13 pb-14 table-cell border-b-2 align-middle;
-  }
-
-  td:first-child {
-    @apply pl-20 pt-13;
-  }
-
-  td:last-child {
-    @apply pr-30 pb-13 border-b-2;
-  }
-
-  td:before {
-    @apply hidden;
   }
 }
 </style>

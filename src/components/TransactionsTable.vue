@@ -1,26 +1,82 @@
 <template>
-  <div>
+  <div class="transaction-table">
     <table>
-      <thead class="sticky top-0 z-10 hidden lg:table-header-group">
-      <tr>
-        <th width="10%">Tx Hash</th>
-        <th width="12%">Date</th>
-        <th width="16%">From</th>
-        <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
-        <th width="16%">To</th>
-        <th width="16%">Memo</th>
-        <th width="10%">Status</th>
-        <th width="18%">Amount XE</th>
-      </tr>
-      </thead>
-      <tbody v-if="transactions && transactions.length">
-        <tr v-for="item in transactions" :key="item.id" :class="item.pending ? 'italic text-gray-400' : ''">
-          <TransactionsTableItem :item="item"/>
+      <thead v-if="!wallet" class="hidden lg:table-header-group">
+        <tr v-if="sortable">
+          <TableHeader width="10%" header="Tx Hash" :sortQuery="sortQuery"
+            sortParam="hash" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="16%" header="From" :sortQuery="sortQuery"
+            sortParam="sender" :onSortingUpdate="updateSorting"
+          />
+          <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
+          <TableHeader width="16%" header="To" :sortQuery="sortQuery"
+            sortParam="recipient" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="17%" header="Memo" :sortQuery="sortQuery"
+            sortParam="data.memo" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="12%" header="Date" :sortQuery="sortQuery"
+            sortParam="timestamp" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="10%" header="Status" :sortQuery="sortQuery"
+            sortParam="block.height" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader class="amount-col" width="17%" header="Amount XE" :sortQuery="sortQuery"
+            sortParam="amount" :onSortingUpdate="updateSorting"
+          />
         </tr>
+        <tr v-else>
+          <th width="10%">Tx Hash</th>
+          <th width="16%">From</th>
+          <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
+          <th width="16%">To</th>
+          <th width="17%">Memo</th>
+          <th width="12%">Date</th>
+          <th width="10%">Status</th>
+          <th class="amount-col" width="17%">Amount XE</th>
+        </tr>
+      </thead>
+      <thead v-else class="hidden lg:table-header-group">
+        <tr v-if="sortable">
+          <TableHeader width="10%" header="Tx Hash" :sortQuery="sortQuery"
+            sortParam="hash" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="30%" header="From/To" :sortQuery="sortQuery"
+            sortParam="sortAddress" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="20%" header="Memo" :sortQuery="sortQuery"
+            sortParam="data.memo" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="15%" header="Date" :sortQuery="sortQuery"
+            sortParam="timestamp" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader width="10%" header="Status" :sortQuery="sortQuery"
+            sortParam="block.height" :onSortingUpdate="updateSorting"
+          />
+          <TableHeader class="amount-col" width="15%" header="Amount XE" :sortQuery="sortQuery"
+            sortParam="amount" :onSortingUpdate="updateSorting"
+          />
+        </tr>
+        <tr v-else>
+          <th width="10%">Tx Hash</th>
+          <th width="30%">From/To</th>
+          <th width="20%">Memo</th>
+          <th width="15%">Date</th>
+          <th width="10%">Status</th>
+          <th class="amount-col" width="15%">Amount XE</th>
+        </tr>
+      </thead>
+      <tbody v-if="transactions.length">
+        <TransactionsTableItem
+          v-for="item in transactions"
+          :key="item.hash"
+          :item="item"
+        />
       </tbody>
       <tbody v-else>
         <tr>
-          <td colspan="8" class="block w-full text-center bg-white lg:table-cell py-35">
+          <td :colspan="!wallet ? 8 : 6" class="block w-full text-center bg-white lg:table-cell py-35">
             No transactions.
           </td>
         </tr>
@@ -30,48 +86,124 @@
 </template>
 
 <script>
-import TransactionsTableItem from "@/components/TransactionsTableItem";
+/*global process*/
+import * as index from '@edge/index-utils'
+import TableHeader from '@/components/TableHeader'
+import TransactionsTableItem from '@/components/TransactionsTableItem'
+
+const txsRefreshInterval = 5 * 1000
 
 export default {
-  name: "TransactionsTable",
+  name: 'TransactionsTable',
+  data: function () {
+    return {
+      loading: false,
+      metadata: null,
+      transactions: [],
+      iTransactions: null
+    }
+  },
   components: {
+    TableHeader,
     TransactionsTableItem
   },
-  props: ['transactions'],
+  props: [
+    'limit',
+    'page',
+    'receiveMetadata',
+    'sortable'
+  ],
+  computed: {
+    block() {
+      return this.$route.params.blockId
+    },
+    stake() {
+      return this.$route.params.stakeId
+    },
+    wallet() {
+      return this.$route.params.address
+    },
+    sortQuery() {
+      return this.$route.query.sort
+    }
+  },
+  mounted() {
+    this.updateTransactions()
+    // initiate polling
+    this.iStakes = setInterval(() => {
+      this.updateTransactions()
+    }, txsRefreshInterval)
+  },
+  unmounted() {
+    clearInterval(this.iStakes)
+  },
   methods: {
+    async updateTransactions() {
+      this.loading = true
+      // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-timestamp` : '-timestamp'
+      const transactions = await index.tx.transactions(
+        process.env.VUE_APP_INDEX_API_URL,
+        this.wallet,
+        {
+          limit: this.limit,
+          page: this.page,
+          sort: sortQuery
+        }
+      )
+      this.transactions = transactions.results
+      if (this.receiveMetadata) this.receiveMetadata(transactions.metadata)
+      this.loading = false
+    },
+    updateSorting(newSortQuery) {
+      const query = { ...this.$route.query, sort: newSortQuery }
+      if (!newSortQuery) delete query.sort
+      this.$router.replace({ query })
+    }
+  },
+  watch: {
+    page() {
+      this.updateTransactions()
+    },
+    sortQuery() {
+      this.updateTransactions()
+    }
   }
 }
 </script>
 
 <style scoped>
+table {
+  @apply w-full table-fixed
+}
+
 table, tbody, tr {
   @apply block;
 }
 
-table {
-  width: 100%;
+th {
+  @apply font-normal text-sm2 text-left text-black bg-gray-100 border-b-2 border-gray-200 py-13 px-5;
 }
-thead th {
-  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
-  padding: 0.8125rem 0.3125rem !important;
+
+th:first-of-type {
+  @apply pl-20;
 }
-thead th:first-of-type {
-  padding-left: 1.25rem !important;
+
+th.amount-col {
+  @apply text-right
 }
-thead th:last-of-type {
-  padding-right: 1.875rem !important;
-}
-thead th:last-child {
-  @apply rounded-r-4 text-right;
+
+th .icon {
+  @apply w-15 inline-block align-middle text-gray-400;
 }
 
 @screen lg {
-  tbody {
-    @apply table-row-group;
-  }
-
   table {
     @apply table;
+  }
+
+  tbody {
+    @apply table-row-group;
   }
 
   tr {

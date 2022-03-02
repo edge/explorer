@@ -5,7 +5,7 @@
     <HeroPanel v-else :title="'Transactions'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="transaction || pendingTransaction || transactions.length" class="container">
+      <div v-if="transaction || pendingTransaction" class="container">
         <div v-if="transaction || pendingTransaction" class="row mb-25">
           <TransactionOverview :transaction="transaction || pendingTransaction" />
           <TransactionSummary :transaction="transaction || pendingTransaction" />
@@ -15,8 +15,23 @@
           <RawData :rawData="rawData" />
         </div>
 
-        <TransactionsTable :transactions="transactions" v-if="!transaction && !pendingTransaction"/>
-        <Pagination v-if="!transaction && !pendingTransaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+        <!-- <TransactionsTable :transactions="transactions" v-if="!transaction && !pendingTransaction"/>
+        <Pagination v-if="!transaction && !pendingTransaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" /> -->
+      </div>
+      <div v-else-if="!hash" class="container">
+        <TransactionsTable
+          :limit="limit"
+          :receiveMetadata="onTransactionsUpdate"
+          :page="currentPage"
+          :sortable="true"
+        />
+        <Pagination
+          v-if="metadata.totalCount > limit"
+          baseRoute="Transactions"
+          :currentPage="currentPage"
+          :limit="limit"
+          :totalCount="metadata.totalCount"
+        />
       </div>
       <div v-else class="container h-full">
         <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
@@ -36,7 +51,7 @@
 <script>
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/PaginationNew";
 import RawData from "@/components/RawData"
 import TransactionOverview from "@/components/TransactionOverview"
 import TransactionSummary from "@/components/TransactionSummary"
@@ -56,16 +71,14 @@ export default {
   },
   data: function () {
     return {
-      hash: null,
+      limit: 20,
       loading: false,
-      metadata: {},
-      page: 1,
+      metadata: { totalCount: 0 },
       pendingTransaction: null,
       pollInterval: 10000,
       polling: null,
       rawData: null,
       transaction: null,
-      transactions: [],
     }
   },
   components: {
@@ -78,15 +91,29 @@ export default {
     TransactionsTable
   },
   computed: {
+    currentPage() {
+      return Math.max(1, parseInt(this.$route.query.page) || 1)
+    },
+    lastPage() {
+      return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+    hash() {
+      return this.$route.params.hash
+    },
     isTransactionPending() {
       if (this.transaction && this.transaction.block.height === 0 && this.transaction.confirmations === 0) return true
       else return false
     }
   },
   mounted() {
-    this.fetchData().then(() => {
-      this.pollData()
-    })
+    if (this.hash) { 
+      this.fetchData().then(() => {
+        this.pollData()
+      })
+    } else {
+      const p = parseInt(this.$route.query.page) || 0
+      if (p < 1) this.$router.push({ name: this.baseRoute, query: { page: 1 } })
+    }
   },
   methods: {
     beforeDestroy() {
@@ -94,9 +121,6 @@ export default {
     },
     async fetchData() {
       this.loading = true
-
-      this.hash = this.$route.params.hash
-      this.page = parseInt(this.$route.query.page || 1)
 
       if (this.hash) {
         const { raw, transactions } = await fetchTransactions({ hash: this.hash })
@@ -125,16 +149,10 @@ export default {
         if (exchangeResult && !exchangeResult.metadata) this.transaction.exchangeResult = exchangeResult
 
         this.loading = false
-      } else {
-        this.fetchTransactions({ page: this.page })
       }
     },
-    async fetchTransactions(options) {
-      const { transactions, metadata } = await fetchTransactions({ options })
-
-      this.transactions = transactions
+    onTransactionsUpdate(metadata) {
       this.metadata = metadata
-      this.loading = false
     },
     pollData() {
       this.polling = setInterval(() => {
@@ -150,6 +168,10 @@ export default {
       // When the route changes, stops polling for new data.
       this.beforeDestroy()
       this.fetchData()
+    },
+    metadata() {
+      // clamp pagination to available page numbers with automatic redirection
+      if (this.currentPage > this.lastPage) this.$router.push({ name: 'Transactions', query: { page: this.lastPage } })
     }
   }
 }

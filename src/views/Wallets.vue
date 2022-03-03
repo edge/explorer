@@ -121,10 +121,10 @@ export default {
       return this.$route.params.address
     },
     currentPage() {
-      return Math.max(1, parseInt(this.$route.query.txsPage) || 1)
+      return Math.max(1, parseInt(this.$route.query.page) || 1)
     },
     lastPage() {
-      return Math.max(1, Math.ceil(this.txsMetadata.totalCount / this.txLimit))
+      return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
     },
     txsCurrentPage() {
       return Math.max(1, parseInt(this.$route.query.txsPage) || 1)
@@ -134,8 +134,13 @@ export default {
     },
   },
   mounted() {
-    this.fetchData()
-    this.pollData()
+    if (this.address) {
+      this.fetchData()
+      this.pollData()
+    } else {
+      const p = parseInt(this.$route.query.page) || 0
+      if (p < 1) this.$router.push({ name: 'Wallets', query: { page: 1 } })
+    }
   },
   methods: {
     beforeDestroy() {

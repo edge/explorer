@@ -130,12 +130,7 @@ const fetchExchangeTransaction = (hash) => {
 const fetchWallet = async (address) => {
   const url = `${INDEX_API_URL}/wallet/${address}`
   const results = await fetchData(url)
-
-  // If fetchData returns an empty response, we
-  // return an empty wallet. TODO: tidy up fetchData.
-  return results && results.metadata
-    ? { address, balance: 0, nonce: 0 }
-    : results
+  return results
 }
 
 const fetchWallets = async (options = {}) => {

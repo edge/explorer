@@ -5,22 +5,21 @@
     <HeroPanel v-else :title="'Stakes'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="stake" class="container">
+      <div v-if="stake && stakeId" class="container">
         <div v-if="stake && lastTx">
           <div class="row mb-25">
             <StakeOverview :stake="stake" :tx="lastTx" />
             <StakeSummary :stake="stake" :tx="lastTx" />
           </div>
+          <div v-if="rawData" class="mb-25">
+          <RawData :rawData="rawData" />
+        </div>
           <div class="txs-row mb-25">
             <div>
               <h3>Transactions</h3>
               <TransactionsTable />
             </div>
           </div>
-        </div>
-
-        <div v-if="rawData" class="mb-25">
-          <RawData :rawData="rawData" />
         </div>
       </div>
       <div v-else-if="!$route.params.stakeId" class="container">
@@ -124,8 +123,10 @@ export default {
     async fetchData() {
       this.loading = true
       const stake = await fetchStake(this.stakeId)
+      console.log(stake)
       this.stake = stake
       await this.fetchStakeTxs(this.stakeId)
+      this.rawData = stake
       this.loading = false
     },
     sliceString(string, symbols) {

@@ -128,12 +128,11 @@ export default {
   },
   methods: {
     async fetchBlocks(options) {
-      this.loading = true
-
       const { blocks, metadata } = await fetchBlocks({ options })
-      this.blocks = blocks
-      this.metadata = metadata
-      this.loading = false
+      if (blocks[0].height) {
+        this.blocks = blocks
+        this.metadata = metadata
+      }
     },
     async fetchData() {
       if (this.blockId) {
@@ -141,17 +140,18 @@ export default {
         const { blocks } = await fetchBlocks({ blockId: this.blockId })
         this.block = blocks[0]
 
-        if (this.block.transactions && Object.keys(this.block.transactions).length) {
-          const latestBlocks = await fetchBlocks({ options: { limit: 1 } })
-          if (latestBlocks && latestBlocks.blocks && latestBlocks.blocks[0]) {
-            this.latestBlockHeight = latestBlocks.blocks[0].height
+        if (blocks[0]) {
+          if (this.block.transactions && Object.keys(this.block.transactions).length) {
+            const latestBlocks = await fetchBlocks({ options: { limit: 1 } })
+            if (latestBlocks && latestBlocks.blocks && latestBlocks.blocks[0]) {
+              this.latestBlockHeight = latestBlocks.blocks[0].height
+            }
+          }
+
+          if (this.block) {
+            this.processBlock()
           }
         }
-
-        if (this.block) {
-          this.processBlock()
-        }
-
         this.loading = false
       }
     },

@@ -43,7 +43,6 @@
               query="stakesPage"
             />
           </div>
-
         </div>
       </div>
       <div v-else-if="!address" class="container">
@@ -61,11 +60,14 @@
         />
       </div>
       <div v-else class="container h-full">
-        <div v-if="loading" class="flex flex-col items-center justify-center h-full">
-          <h1 class="m-0 mt-0 text-2xl font-bold">Loading</h1>
+        <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
+          <h1 class="m-0 mt-20 text-2xl font-bold">This wallet doesn't exist</h1>
           <p class="mt-5 mb-0 text-center monospace">
-            This should only take a moment.
+            Try searching for a different wallet, or <router-link to="/wallets" class="underline hover:text-green">view all wallets</router-link>.
           </p>
+          <router-link to="/wallets">
+            <a class="mt-20 button button--solid">View all wallets</a>
+          </router-link>
         </div>
       </div>
     </div>
@@ -162,10 +164,10 @@ export default {
       clearInterval(this.polling)
     },
     async fetchData() {
-      if (this.address && checksumAddressIsValid(this.address)) {
+      if (this.address) {
         this.loading = true
         const wallet = await fetchWallet(this.address)
-        this.wallet = wallet
+        if (wallet.address) this.wallet = wallet
         this.loading = false
       }
     },
@@ -193,15 +195,15 @@ export default {
       this.fetchData()
     },
     metadata() {
-      // clamp pagination to available page numbers with automatic redirection
+      // clamp wallets pagination to available page numbers with automatic redirection
       if (this.currentPage > this.lastPage) this.$router.push({ name: 'Wallets', query: { page: this.lastPage } })
     },
     stakesMetadata() {
-      // clamp pagination to available page numbers with automatic redirection
+      // clamp stakes pagination to available page numbers with automatic redirection
       if (this.stakesCurrentPage > this.stakesLastPage) this.$router.push({ name: 'Wallet', query: { stakesPage: this.stakesLastPage } })
     },
     txsMetadata() {
-      // clamp pagination to available page numbers with automatic redirection
+      // clamp tx pagination to available page numbers with automatic redirection
       if (this.txsCurrentPage > this.txsLastPage) this.$router.push({ name: 'Wallet', query: { txsPage: this.txsLastPage } })
     }
   }

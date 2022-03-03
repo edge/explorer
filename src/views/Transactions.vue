@@ -53,7 +53,6 @@ import RawData from "@/components/RawData"
 import TransactionOverview from "@/components/TransactionOverview"
 import TransactionSummary from "@/components/TransactionSummary"
 import TransactionsTable from "@/components/TransactionsTable"
-
 import { fetchTransactions, fetchExchangeTransaction } from '../utils/api'
 
 export default {

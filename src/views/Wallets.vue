@@ -77,7 +77,7 @@
 <script>
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/PaginationNew";
+import Pagination from "@/components/Pagination";
 import RawData from "@/components/RawData"
 import StakesTable from "@/components/StakesTable"
 import TransactionsTable from "@/components/TransactionsTable"

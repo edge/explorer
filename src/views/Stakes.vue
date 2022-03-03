@@ -55,7 +55,7 @@
 <script>
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/PaginationNew";
+import Pagination from "@/components/Pagination";
 import RawData from "@/components/RawData"
 import StakeOverview from "@/components/StakeOverview"
 import StakeSummary from "@/components/StakeSummary"

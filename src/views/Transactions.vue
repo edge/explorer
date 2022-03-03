@@ -48,7 +48,7 @@
 <script>
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/PaginationNew";
+import Pagination from "@/components/Pagination";
 import RawData from "@/components/RawData"
 import TransactionOverview from "@/components/TransactionOverview"
 import TransactionSummary from "@/components/TransactionSummary"

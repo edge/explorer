@@ -60,12 +60,12 @@
 </template>
 
 <script>
-import Header from "@/components/Header"
 import BlocksTable from "@/components/BlocksTable"
 import BlockOverview from "@/components/BlockOverview"
 import BlockSummary from "@/components/BlockSummary"
+import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/PaginationNew"
+import Pagination from "@/components/Pagination"
 import RawData from "@/components/RawData"
 import TransactionsTable from "@/components/TransactionsTable"
 import { fetchBlocks } from '../utils/api'

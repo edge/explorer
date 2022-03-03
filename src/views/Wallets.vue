@@ -173,6 +173,14 @@ export default {
         this.loading = true
         const wallet = await fetchWallet(this.address)
         if (wallet.address) this.wallet = wallet
+        else if (checksumAddressIsValid(this.address)) {
+          this.wallet = {
+            address: this.address,
+            balance: 0,
+            nonce: 0,
+            txCount: 0
+          }
+        }
         this.loading = false
       }
     },

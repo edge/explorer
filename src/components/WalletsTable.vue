@@ -28,10 +28,10 @@
           :item="item"
         />
       </tbody>
-      <tbody v-else-if="loading">
+      <tbody v-else-if="!loaded & loading">
         <td colspan="6" class="block w-full text-center bg-white lg:table-cell py-35">
-            Loading...
-          </td>
+          Loading...
+        </td>
       </tbody>
       <tbody v-else>
         <tr>
@@ -55,6 +55,7 @@ export default {
   name: "WalletsTable",
   data: function () {
     return {
+      loaded: false,
       loading: false,
       wallets: [],
       iWallets: null
@@ -100,6 +101,7 @@ export default {
       const wallets = await fetchWallets(options)
       this.wallets = wallets.results
       if (this.receiveMetadata) this.receiveMetadata(wallets.metadata)
+      this.loaded = true
       this.loading = false
     },
     updateSorting(newSortQuery) {

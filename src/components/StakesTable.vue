@@ -40,7 +40,7 @@
         :item="item"
       />
     </tbody>
-    <tbody v-else-if="loading">
+    <tbody v-else-if="!loaded & loading">
       <td colspan="7" class="block w-full text-center bg-white lg:table-cell py-35">
         Loading...
       </td>
@@ -67,6 +67,7 @@ export default {
   name: 'StakesTable',
   data: function () {
     return {
+      loaded: false,
       loading: false,
       stakes: [],
       iStakes: null
@@ -116,6 +117,7 @@ export default {
       )
       this.stakes = stakes.results
       this.receiveMetadata(stakes.metadata)
+      this.loaded = true
       this.loading = false
     },
     updateSorting(newSortQuery) {

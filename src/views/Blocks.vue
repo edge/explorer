@@ -121,10 +121,9 @@ export default {
   mounted() {
     if (this.blockId) {
       this.fetchData()
-    } else {
-      const p = parseInt(this.$route.query.page) || 0
-      if (p < 1) this.$router.push({ name: this.baseRoute, query: { page: 1 } })
     }
+    const p = parseInt(this.$route.query.page) || 0
+    if (p < 1) this.$router.push({ name: this.baseRoute, query: { page: 1 } })
   },
   methods: {
     async fetchBlocks(options) {

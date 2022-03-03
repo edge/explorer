@@ -153,6 +153,11 @@ export default {
     if (this.address) {
       this.fetchData()
       this.pollData()
+      // clamp tx and stakes tables to page 1
+      const txP = parseInt(this.$route.query.txsPage) || 0
+      const stakesP = parseInt(this.$route.query.stakesPage) || 0
+      if (txP < 1) this.$router.push({ name: 'Wallet', query: { ...this.$route.query, txsPage: 1 } })
+      if (stakesP < 1) this.$router.push({ name: 'Wallet', query: { ...this.$route.query, stakesPage: 1 } })
     } else {
       const p = parseInt(this.$route.query.page) || 0
       if (p < 1) this.$router.push({ name: 'Wallets', query: { page: 1 } })

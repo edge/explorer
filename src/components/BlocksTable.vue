@@ -22,12 +22,17 @@
           />
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="blocks && blocks.length">
         <BlocksTableItem
           v-for="item in blocks"
           :key="item.hash"
           :item="item"
         />
+      </tbody>
+      <tbody v-else-if="loading">
+        <td colspan="7" class="block w-full text-center bg-white lg:table-cell py-35">
+          Loading...
+        </td>
       </tbody>
     </table>
   </div>

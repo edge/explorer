@@ -38,12 +38,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
             metadata: {}
           }
         }
-
         const block = { ...results }
-
-      // remove below when index updated
-        block.transactions = pluckBlockTransactions(block)
-
         return {
           blocks: [block],
           metadata: {}
@@ -54,12 +49,6 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
   return fetchData(url)
     .then(response => {
       const { results, metadata } = response
-
-      // remove below forEach when index updated
-      results.forEach(block => {
-        block.transactions = pluckBlockTransactions(block)
-      })
-
       return {
         blocks: results,
         metadata

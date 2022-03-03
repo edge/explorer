@@ -45,7 +45,6 @@ export default {
   data: function () {
     return {
       loading: false,
-      metadata: null,
       blocks: [],
       iBlocks: []
     }
@@ -95,6 +94,14 @@ export default {
       const query = { ...this.$route.query, sort: newSortQuery }
       if (!newSortQuery) delete query.sort
       this.$router.replace({ query })
+    }
+  },
+  watch: {
+    page() {
+      this.updateBlocks()
+    },
+    sortQuery() {
+      this.updateBlocks()
     }
   }
 }

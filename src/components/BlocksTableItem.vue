@@ -29,9 +29,9 @@
     </td>
 
     <td data-title="Transactions:" class="monospace">
-      {{ item.transactions.length }}
+      <!-- {{ item.transactions.length }} -->
       <!-- delete above and uncomment below when index updated -->
-      <!-- {{ item.txCount }} -->
+      {{ item.txCount }}
     </td>
 
     <td data-title="XE:" class="monospace amount-col">
@@ -72,10 +72,7 @@ export default {
       return {name: 'Block', params: {blockId: this.item.hash}}
     },
     formattedTotal() {
-      let total = this.item.transactions.reduce((accum, tx) => accum + parseInt(tx.amount), 0)
-      return formatXe(total, true)
-      // delete above and replace with below when index updated
-      // return formatXe(this.item.total / 1e6, true)
+      return formatXe(this.item.total / 1e6, true)
     },
     timeSince() {
       return moment(this.item.timestamp).fromNow()

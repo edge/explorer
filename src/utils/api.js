@@ -144,7 +144,12 @@ const fetchWallets = async (options = {}) => {
   if (!options.page) options.page = 1
   if (!options.limit) options.limit = 20
 
-  const url = `${INDEX_API_URL}/wallets?page=${options.page}&limit=${options.limit}`
+  let query = '?'
+  for (const key in options) {
+    query += `${key}=${options[key]}&`
+  }
+  const url = `${INDEX_API_URL}/wallets${query.substring(0, query.length - 1)}`
+
   const results = await fetchData(url)
 
   return results

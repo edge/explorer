@@ -3,22 +3,34 @@
     <table>
       <thead class="sticky top-0 z-10 hidden lg:table-header-group">
       <tr>
-        <th width="30%">Address</th>
-        <th width="20%">Latest Tx</th>
-        <th width="10%">Transactions</th>
-        <th width="5%">Stakes</th>
-        <th width="15%" class="amount-col">Staked XE</th>
-        <th width="15%" class="amount-col">Balance XE</th> 
+        <TableHeader width="30%" header="Address" :sortQuery="sortQuery"
+          sortParam="address" :onSortingUpdate="updateSorting"
+        />
+        <th width="16%">Latest Tx</th>
+        <TableHeader width="8%" header="Txs" :sortQuery="sortQuery"
+          sortParam="sortTxCount" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader width="8%" header="Stakes" :sortQuery="sortQuery"
+          sortParam="sortStakeCount" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader class="amount-col" width="17%" header="Staked XE" :sortQuery="sortQuery"
+          sortParam="sortStakedTotal" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader class="amount-col" width="17%" header="Balance XE" :sortQuery="sortQuery"
+          sortParam="balance" :onSortingUpdate="updateSorting"
+        />
       </tr>
       </thead>
       <tbody v-if="wallets && wallets.length">
-        <tr v-for="item in wallets" :key="item.id" :class="item.pending ? 'italic text-gray-400' : ''">
-          <WalletsTableItem :item="item"/>
-        </tr>
+        <WalletsTableItem
+          v-for="item in wallets"
+          :key="item.id"
+          :item="item"
+        />
       </tbody>
       <tbody v-else>
         <tr>
-          <td colspan="5" class="block w-full text-center bg-white lg:table-cell py-35">
+          <td colspan="6" class="block w-full text-center bg-white lg:table-cell py-35">
             No wallets.
           </td>
         </tr>
@@ -28,15 +40,76 @@
 </template>
 
 <script>
+import TableHeader from '@/components/TableHeader'
 import WalletsTableItem from "@/components/WalletsTableItem";
+import { fetchWallets } from '@/utils/api.js'
+
+const walletsRefreshInterval = 5 * 1000
 
 export default {
   name: "WalletsTable",
+  data: function () {
+    return {
+      loading: false,
+      wallets: [],
+      iWallets: null
+    }
+  },
   components: {
+    TableHeader,
     WalletsTableItem
   },
-  props: ['wallets'],
+  props: [
+    'limit',
+    'page',
+    'receiveMetadata',
+    'sortable'
+  ],
+  computed: {
+    sortQuery() {
+      return this.$route.query.sort
+    }
+  },
+  mounted() {
+    this.updateWallets()
+    // initiate polling
+    this.iWallets = setInterval(() => {
+      this.updateWallets()
+    }, walletsRefreshInterval)
+  },
+  unmounted() {
+    clearInterval(this.iWallets)
+  },
   methods: {
+    async updateWallets() {
+      this.loading = true
+      // the sort query sent to index needs to include "-balance", but this is hidden from user in browser url
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-balance` : '-balance'
+
+      const options = {
+        limit: this.limit,
+        page: this.page,
+        sort: sortQuery
+      }
+
+      const wallets = await fetchWallets(options)
+      this.wallets = wallets.results
+      if (this.receiveMetadata) this.receiveMetadata(wallets.metadata)
+      this.loading = false
+    },
+    updateSorting(newSortQuery) {
+      const query = { ...this.$route.query, sort: newSortQuery }
+      if (!newSortQuery) delete query.sort
+      this.$router.replace({ query })
+    }
+  },
+  watch: {
+    page() {
+      this.updateWallets()
+    },
+    sortQuery() {
+      this.updateWallets()
+    }
   }
 }
 </script>
@@ -49,38 +122,30 @@ table {
 table, tbody, tr {
   @apply block;
 }
-table {
-  width: 100%;
+
+th {
+  @apply font-normal text-sm2 text-left text-black bg-gray-100 border-b-2 border-gray-200 py-13 pl-5;
 }
-thead th {
-  @apply font-normal text-sm2 text-left bg-gray-100 border-b-2 border-gray-200;
-  padding: 0.8125rem 0.3125rem;
+
+th:first-of-type {
+  @apply pl-20;
 }
-thead th:first-of-type {
-  padding-left: 1.25rem !important;
-}
-thead th:last-of-type {
-  padding-right: 1.875rem !important;
-}
-thead th:last-child {
-  @apply rounded-r-4 text-right;
+
+th.amount-col {
+  @apply text-right
 }
 
 @screen lg {
-  tbody {
-    @apply table-row-group;
-  }
-
   table {
     @apply table;
   }
 
-  tr {
-    @apply table-row;
+  tbody {
+    @apply table-row-group;
   }
 
-  th.amount-col {
-    @apply text-right pr-30
+  tr {
+    @apply table-row;
   }
 }
 </style>

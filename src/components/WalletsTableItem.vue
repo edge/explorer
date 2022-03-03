@@ -1,26 +1,33 @@
 <template>
-  <td data-title="Address:" :title="item.address" class="address">
-    <router-link :to="{name: 'Wallet', params: {address: item.address}}">
-      <span class="monospace md:inline-block">{{ item.address }}</span>
-    </router-link><BadgeCheckIcon v-if="item.trusted" class="trusted" />
-  </td>
-  <td data-title="Latest Tx:">
-    <router-link :to="{name: 'Transaction', params: {hash: item.latestTransaction.hash}}">
-      <span class="monospace md:inline-block">{{ item.latestTransaction.hash }}</span>
-    </router-link>
-  </td>
-  <td data-title="Transactions:">
-    <span class="monospace">{{ item.txCount }}</span>
-  </td>
-  <td data-title="Stakes:">
-    <span class="monospace">{{ item.stakeCount }}</span>
-  </td>
-  <td data-title="Staked XE:" class="amount-col">
-    <span class="monospace">{{ stakedFormatted }}</span>
-  </td>
-  <td data-title="Balance (XE):" class="amount-col">
-    <span class="monospace">{{ balanceFormatted }}</span>
-  </td>  
+  <tr>
+    <td data-title="Address:" :title="item.address" class="address">
+      <router-link :to="addressRoute">
+        <span class="monospace md:inline-block">{{ item.address }}</span>
+      </router-link><BadgeCheckIcon v-if="item.trusted" class="trusted" />
+    </td>
+
+    <td data-title="Latest Tx:">
+      <router-link :to="latestTxRoute">
+        <span class="monospace md:inline-block">{{ item.latestTransaction.hash }}</span>
+      </router-link>
+    </td>
+
+    <td data-title="Transactions:">
+      <span class="monospace">{{ txCountFormatted }}</span>
+    </td>
+
+    <td data-title="Stakes:">
+      <span class="monospace">{{ stakeCountFormatted }}</span>
+    </td>
+
+    <td data-title="Staked XE:" class="amount-col">
+      <span class="monospace">{{ stakedFormatted }}</span>
+    </td>
+
+    <td data-title="Balance (XE):" class="amount-col">
+      <span class="monospace">{{ balanceFormatted }}</span>
+    </td>
+  </tr>
 </template>
 
 <script>
@@ -34,11 +41,23 @@ export default {
     BadgeCheckIcon
   },
   computed: {
+    addressRoute() {
+      return {name: 'Wallet', params: {address: this.item.address}}
+    },
+    latestTxRoute() {
+      return {name: 'Transaction', params: {hash: this.item.latestTransaction.hash}}
+    },
     balanceFormatted() {
       return this.formatAmount(this.item.balance)
     },
     stakedFormatted() {
       return this.formatAmount(this.item.staked)
+    },
+    stakeCountFormatted() {
+      return this.formatNumber(this.item.stakeCount)
+    },
+    txCountFormatted() {
+      return this.formatNumber(this.item.txCount)
     }
   },
   methods: {

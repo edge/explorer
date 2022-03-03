@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <BlocksTableItem 
+        <BlocksTableItem
           v-for="item in blocks"
           :key="item.hash"
           :item="item"

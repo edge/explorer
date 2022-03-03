@@ -5,8 +5,8 @@
     <HeroPanel v-else :title="'Wallets'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="wallet || wallets.length" class="container">
-        <div v-if="wallet">
+      <div v-if="address && wallet" class="container">
+        <div>
           <div class="row mb-25">
             <WalletOverview :wallet="wallet" />
             <WalletSummary :wallet="wallet" />
@@ -14,8 +14,19 @@
 
           <div>
             <h3>Wallet Transactions</h3>
-            <TransactionsTable :transactions="transactions" />
-            <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="txsPage" :totalPages="Math.ceil(txsMetadata.totalCount/txsMetadata.limit)" query="txsPage" />
+            <TransactionsTable
+              :limit="txsLimit"
+              :receiveMetadata="onTransactionsUpdate"
+              :page="txCurrentPage"
+              query="txsPage"
+            />
+            <Pagination
+              v-if="metadata.totalCount > txsLimit"
+              baseRoute="Wallet"
+              :currentPage="txCurrentPage"
+              :limit="txsLimit"
+              :totalCount="txMetadata.totalCount"
+            />
           </div>
           <div v-if="stakes.length" class="mt-20">
             <h3>Wallet Stakes</h3>
@@ -24,10 +35,20 @@
           </div>
 
         </div>
-        <div v-else>
-          <WalletsTable :wallets="wallets" />
-          <Pagination v-if="wallets" baseRoute="Wallets" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
-        </div>
+      </div>
+      <div v-else-if="!address" class="container">
+        <WalletsTable
+          :limit="limit"
+          :receiveMetadata="onWalletsUpdate"
+          :page="currentPage"
+        />
+        <Pagination
+          v-if="metadata.totalCount > limit"
+          baseRoute="Wallets"
+          :currentPage="currentPage"
+          :limit="limit"
+          :totalCount="metadata.totalCount"
+        />
       </div>
       <div v-else class="container h-full">
         <div v-if="loading" class="flex flex-col items-center justify-center h-full">
@@ -44,7 +65,7 @@
 <script>
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/PaginationNew";
 import RawData from "@/components/RawData"
 import StakesTable from "@/components/StakesTable"
 import TransactionsTable from "@/components/TransactionsTable"
@@ -71,14 +92,15 @@ export default {
   data: function () {
     return {
       hash: null,
+      limit: 20,
       loading: true,
-      metadata: {},
-      page: 1,
+      metadata: { totalCount: 0 },
       pollInterval: 10000,
       polling: null,
       rawData: null,
       stakesPage: 1,
-      txsPage: 1,
+      txsLimit: 10,
+      txsMetadata: { totalCount: 0 },
       wallet: null,
       wallets: []
     }
@@ -94,6 +116,23 @@ export default {
     WalletSummary,
     WalletsTable
   },
+  computed: {
+    address() {
+      return this.$route.params.address
+    },
+    currentPage() {
+      return Math.max(1, parseInt(this.$route.query.txsPage) || 1)
+    },
+    lastPage() {
+      return Math.max(1, Math.ceil(this.txsMetadata.totalCount / this.txLimit))
+    },
+    txsCurrentPage() {
+      return Math.max(1, parseInt(this.$route.query.txsPage) || 1)
+    },
+    txsLastPage() {
+      return Math.max(1, Math.ceil(this.txsMetadata.totalCount / this.txLimit))
+    },
+  },
   mounted() {
     this.fetchData()
     this.pollData()
@@ -104,9 +143,6 @@ export default {
       clearInterval(this.polling)
     },
     async fetchData() {
-      this.address = this.$route.params.address
-      this.page = parseInt(this.$route.query.page || 1)
-      this.txsPage = parseInt(this.$route.query.txsPage || 1)
       this.stakesPage = parseInt(this.$route.query.stakesPage || 1)
 
       if (this.address && checksumAddressIsValid(this.address)) {
@@ -118,7 +154,7 @@ export default {
         
         const wallet = await fetchWallet(this.address)
 
-        await this.fetchTransactions({ address: this.address, options: { page: this.txsPage, limit: 10 } })
+        // await this.fetchTransactions({ address: this.address, options: { page: this.txsPage, limit: 10 } })
         await this.fetchStakes({page: this.stakesPage, limit: 10})
 
         this.wallet = {
@@ -128,8 +164,6 @@ export default {
         }
 
         this.loading = false
-      } else {
-        this.fetchWallets({ page: this.page })
       }
     },
     async fetchStakes(options) {
@@ -138,17 +172,17 @@ export default {
       this.stakesMetadata = metadata
       this.loading = false
     },
-    async fetchTransactions(options) {
-      const { transactions, metadata } = await fetchTransactions(options)
-      this.transactions = transactions
-      this.txsMetadata = metadata
-      this.loading = false
-    },
     async fetchWallets(options) {
       const { results, metadata } = await fetchWallets(options)
       this.wallets = results
       this.metadata = metadata
       this.loading = false
+    },
+    onTransactionsUpdate(metadata) {
+      this.txsMetadata = metadata
+    },
+    onWalletsUpdate(metadata) {
+      this.metadata = metadata
     },
     pollData() {
       this.polling = setInterval(() => {
@@ -163,6 +197,14 @@ export default {
     $route(to, from) {
       this.beforeDestroy()
       this.fetchData()
+    },
+    metadata() {
+      // clamp pagination to available page numbers with automatic redirection
+      if (this.currentPage > this.lastPage) this.$router.push({ name: 'Wallets', query: { page: this.lastPage } })
+    },
+    txsMetadata() {
+      // clamp pagination to available page numbers with automatic redirection
+      if (this.txsCurrentPage > this.txsLastPage) this.$router.push({ name: 'Transaction', query: { txsPage: this.txsLastPage } })
     }
   }
 }

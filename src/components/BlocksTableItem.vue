@@ -80,7 +80,7 @@ export default {
     timeSince() {
       return moment(this.item.timestamp).fromNow()
     }
-  }, 
+  },
   methods: {
     formatAmount(amount) {
       return formatXe(amount, true)

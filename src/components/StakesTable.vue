@@ -2,13 +2,13 @@
   <table>
     <thead class="hidden lg:table-header-group">
       <tr v-if="sortable">
-        <TableHeader width="15%" header="ID" :sortQuery="sortQuery"
+        <TableHeader width="12%" header="ID" :sortQuery="sortQuery"
           sortParam="id" :onSortingUpdate="updateSorting"
         />
-        <TableHeader width="15%" header="Hash" :sortQuery="sortQuery"
+        <TableHeader width="12%" header="Hash" :sortQuery="sortQuery"
           sortParam="hash" :onSortingUpdate="updateSorting"
         />
-        <TableHeader width="24%" header="Wallet" :sortQuery="sortQuery"
+        <TableHeader width="23%" header="Wallet" :sortQuery="sortQuery"
           sortParam="sortWallet" :onSortingUpdate="updateSorting"
         />
         <TableHeader width="20%" header="Device" :sortQuery="sortQuery"
@@ -20,7 +20,7 @@
         <TableHeader width="8%" header="Status" :sortQuery="sortQuery"
           sortParam="released,unlockRequested" :onSortingUpdate="updateSorting"
         />
-        <TableHeader class="amount-col" width="10%" header="Amount XE" :sortQuery="sortQuery"
+        <TableHeader class="amount-col" width="15%" header="Amount XE" :sortQuery="sortQuery"
           sortParam="amount" :onSortingUpdate="updateSorting"
         />
       </tr>
@@ -53,7 +53,6 @@
 
 <script>
 /*global process*/
-
 import * as index from '@edge/index-utils'
 import StakesTableItem from '@/components/StakesTableItem'
 import TableHeader from '@/components/TableHeader'

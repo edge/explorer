@@ -68,6 +68,14 @@ import { xeStringFromMicroXe } from '@edge/wallet-utils'
 
 export default {
   name: 'Stakes',
+  title() {
+    if (window.location.href.indexOf('/stake/') > 0) {
+      const parts = window.location.href.split('/')
+      return 'Stake ' + this.sliceString(parts[parts.length - 1], 7)
+    }
+
+    return 'Stakes'
+  },
   data: function () {
     return {
       lastTx: null,

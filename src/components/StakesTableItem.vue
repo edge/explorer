@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td data-title="ID:" :title="item.id">
-      <router-link :to="stakeUrl">
+      <router-link :to="stakeRoute">
         <span class="monospace md:inline-block">
           {{ item.id }}
         </span>
@@ -15,7 +15,7 @@
     </td>
 
     <td data-title="Wallet:" :title="item.tx.sender">
-      <router-link :to="walletUrl">
+      <router-link :to="walletRoute">
         <span class="monospace md:inline-block">
           {{ item.tx.sender }}
         </span>
@@ -82,10 +82,10 @@ export default {
       else if (this.item.unlockRequested) return 'Release'
       else return 'Unlock'
     },
-    stakeUrl() {
+    stakeRoute() {
       return {name: 'Stake', params: {stakeId: this.item.id}}
     },
-    walletUrl() {
+    walletRoute() {
       return {name: 'Wallet', params: {address: this.item.tx.sender}}
     },
     formattedAmount() {
@@ -153,7 +153,7 @@ td a {
   }
 
   td.amount-col {
-    @apply text-right
+    @apply text-right pr-30
   }
 
   td:last-child {

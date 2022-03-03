@@ -25,13 +25,13 @@
         />
       </tr>
       <tr v-else>
-        <th width="15%">ID</th>
-        <th width="15%">Hash</th>
-        <th width="24%">Wallet</th>
+        <th width="12%">ID</th>
+        <th width="12%">Hash</th>
+        <th width="23%">Wallet</th>
         <th width="20%">Device</th>
         <th width="8%">Type</th>
         <th width="8%">Status</th>
-        <th class="amount-col" width="10%">Amount XE</th>
+        <th class="amount-col" width="15%">Amount XE</th>
       </tr>
     </thead>
     <tbody v-if="stakes.length">
@@ -155,7 +155,7 @@ th:first-of-type {
 }
 
 th.amount-col {
-  @apply text-right
+  @apply text-right pr-30
 }
 
 th .icon {

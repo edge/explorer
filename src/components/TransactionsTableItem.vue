@@ -1,5 +1,11 @@
 <template>
-  <tr v-if="!wallet" :class="isPending && 'pending'">
+  <tr v-if="!wallet" :class="item.pending && 'pending'">
+    <td data-title="Date:" :title="date">
+      <div class="overflow"><span class="overflow">
+        {{ date }}
+      </span></div>
+    </td>
+
     <td data-title="Tx Hash:" :title="item.hash">
       <router-link :to="txHashRoute">
         <span class="monospace md:inline-block">
@@ -28,15 +34,9 @@
       </router-link>
     </td>
 
-    <td data-title="Memo:" :title="item.data.memo || 'none'">
+    <td data-title="Memo:" :title="item.data.memo || 'None'">
       <div class="overflow"><span class="monospace md:font-sans overflow" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
-      </span></div>
-    </td>
-
-    <td data-title="Date:" :title="date">
-      <div class="overflow"><span class="overflow">
-        {{ date }}
       </span></div>
     </td>
 
@@ -59,7 +59,13 @@
   </tr>
 
   <!--for tx table in wallet, display a single "from/to" column rather than separate from and to columns-->
-  <tr v-else :class="isPending && 'pending'">
+  <tr v-else :class="item.pending && 'pending'">
+    <td data-title="Date:">
+      <span class="md:inline-block">
+        {{ date }}
+      </span>
+    </td>
+
     <td data-title="Tx Hash:" :title="item.hash">
       <router-link :to="txHashRoute">
         <span class="monospace md:inline-block">
@@ -89,14 +95,10 @@
       </span>
     </td>
 
-    <td data-title="Memo:">
-      <span class="monospace md:font-sans">{{ item.data.memo }}</span>
-    </td>
-
-    <td data-title="Date:">
-      <span class="md:inline-block">
-        {{ date }}
-      </span>
+    <td data-title="Memo:" :title="item.data.memo || 'None'">
+      <div class="overflow"><span class="monospace md:font-sans overflow" :class="!item.data.memo && 'text-gray-400'">
+        {{ item.data.memo || 'None'}}
+      </span></div>
     </td>
 
     <td data-title="Status:">
@@ -154,13 +156,10 @@ export default {
       return formatXe(this.item.amount / 1e6, true)
     },
     isConfirmed() {
-      return (!this.isPending || !this.item.confirmations < 10)
-    },
-    isPending() {
-      return !this.item.block
+      return (!this.item.pending || !this.item.confirmations < 10)
     },
     statusFormatted() {
-      if (this.isPending) return 'Pending'
+      if (this.item.pending) return 'Pending'
       if (this.item.confirmations === 1) return `${this.item.confirmations} confirmation`
       if (this.item.confirmations < 10) return `${this.item.confirmations} confirmations`
       return 'Confirmed'

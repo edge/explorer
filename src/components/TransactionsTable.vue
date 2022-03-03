@@ -3,6 +3,9 @@
     <table>
       <thead v-if="!wallet" class="hidden lg:table-header-group">
         <tr v-if="sortable">
+          <TableHeader width="12%" header="Date" :sortQuery="sortQuery"
+            sortParam="timestamp" :onSortingUpdate="updateSorting"
+          />
           <TableHeader width="10%" header="Tx Hash" :sortQuery="sortQuery"
             sortParam="hash" :onSortingUpdate="updateSorting"
           />
@@ -16,9 +19,6 @@
           <TableHeader width="17%" header="Memo" :sortQuery="sortQuery"
             sortParam="data.memo" :onSortingUpdate="updateSorting"
           />
-          <TableHeader width="12%" header="Date" :sortQuery="sortQuery"
-            sortParam="timestamp" :onSortingUpdate="updateSorting"
-          />
           <TableHeader width="10%" header="Status" :sortQuery="sortQuery"
             sortParam="block.height" :onSortingUpdate="updateSorting"
           />
@@ -27,18 +27,21 @@
           />
         </tr>
         <tr v-else>
+          <th width="12%">Date</th>
           <th width="10%">Tx Hash</th>
           <th width="16%">From</th>
           <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
           <th width="16%">To</th>
           <th width="17%">Memo</th>
-          <th width="12%">Date</th>
           <th width="10%">Status</th>
           <th class="amount-col" width="17%">Amount XE</th>
         </tr>
       </thead>
       <thead v-else class="hidden lg:table-header-group">
         <tr v-if="sortable">
+           <TableHeader width="15%" header="Date" :sortQuery="sortQuery"
+            sortParam="timestamp" :onSortingUpdate="updateSorting"
+          />
           <TableHeader width="10%" header="Tx Hash" :sortQuery="sortQuery"
             sortParam="hash" :onSortingUpdate="updateSorting"
           />
@@ -48,9 +51,6 @@
           <TableHeader width="20%" header="Memo" :sortQuery="sortQuery"
             sortParam="data.memo" :onSortingUpdate="updateSorting"
           />
-          <TableHeader width="15%" header="Date" :sortQuery="sortQuery"
-            sortParam="timestamp" :onSortingUpdate="updateSorting"
-          />
           <TableHeader width="10%" header="Status" :sortQuery="sortQuery"
             sortParam="block.height" :onSortingUpdate="updateSorting"
           />
@@ -59,10 +59,10 @@
           />
         </tr>
         <tr v-else>
+          <th width="15%">Date</th>
           <th width="10%">Tx Hash</th>
           <th width="30%">From/To</th>
           <th width="20%">Memo</th>
-          <th width="15%">Date</th>
           <th width="10%">Status</th>
           <th class="amount-col" width="15%">Amount XE</th>
         </tr>
@@ -98,7 +98,6 @@ export default {
   data: function () {
     return {
       loading: false,
-      metadata: null,
       transactions: [],
       iTransactions: null
     }

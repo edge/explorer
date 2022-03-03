@@ -14,9 +14,6 @@
         <div v-if="rawData" class="mb-25">
           <RawData :rawData="rawData" />
         </div>
-
-        <!-- <TransactionsTable :transactions="transactions" v-if="!transaction && !pendingTransaction"/>
-        <Pagination v-if="!transaction && !pendingTransaction" baseRoute="Transactions" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" /> -->
       </div>
       <div v-else-if="!hash" class="container">
         <TransactionsTable

@@ -134,17 +134,13 @@ export default {
   },
   mounted() {
     this.updateTransactions()
-    if (!this.stake) {
-      // initiate polling
-      this.iTransactions = setInterval(() => {
-        this.updateTransactions()
-      }, txsRefreshInterval)
-    }
+    // initiate polling
+    this.iTransactions = setInterval(() => {
+      this.updateTransactions()
+    }, txsRefreshInterval)
   },
   unmounted() {
-    if (!this.stake) {
-      clearInterval(this.iTransactions)
-    }
+    clearInterval(this.iTransactions)
   },
   methods: {
     async updateTransactions() {

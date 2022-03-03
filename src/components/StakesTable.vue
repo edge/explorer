@@ -69,7 +69,6 @@ export default {
   data: function () {
     return {
       loading: false,
-      metadata: null,
       stakes: [],
       iStakes: null
     }

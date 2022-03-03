@@ -81,7 +81,6 @@ export default {
       limit: 20,
       loading: false,
       metadata: { totalCount: 0 },
-      page: 1,
       rawData: null,
       stake: null,
       txs: []

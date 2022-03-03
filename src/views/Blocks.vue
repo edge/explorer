@@ -93,7 +93,6 @@ export default {
   data: function () {
     return {
       block: null,
-      error: '',
       loading: false,
       metadata: { totalCount: 0 },
       rawData: null,

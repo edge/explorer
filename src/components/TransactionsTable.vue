@@ -95,6 +95,7 @@
 import * as index from '@edge/index-utils'
 import TableHeader from '@/components/TableHeader'
 import TransactionsTableItem from '@/components/TransactionsTableItem'
+import { fetchStakeHistory } from '@/utils/api.js'
 
 const txsRefreshInterval = 5 * 1000
 
@@ -133,30 +134,42 @@ export default {
   },
   mounted() {
     this.updateTransactions()
-    // initiate polling
-    this.iStakes = setInterval(() => {
-      this.updateTransactions()
-    }, txsRefreshInterval)
+    if (!this.stake) {
+      // initiate polling
+      this.iTransactions = setInterval(() => {
+        this.updateTransactions()
+      }, txsRefreshInterval)
+    }
   },
   unmounted() {
-    clearInterval(this.iStakes)
+    if (!this.stake) {
+      clearInterval(this.iTransactions)
+    }
   },
   methods: {
     async updateTransactions() {
       this.loading = true
-      // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-timestamp` : '-timestamp'
-      const transactions = await index.tx.transactions(
-        process.env.VUE_APP_INDEX_API_URL,
-        this.wallet,
-        {
-          limit: this.limit,
-          page: this.page,
-          sort: sortQuery
-        }
-      )
-      this.transactions = transactions.results
-      if (this.receiveMetadata) this.receiveMetadata(transactions.metadata)
+      if (this.stake) {
+        console.log('test')
+        const { results } = await fetchStakeHistory(this.stake)
+        console.log(results)
+        this.transactions = results
+      }
+      else {
+        // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
+        const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-timestamp` : '-timestamp'
+        const transactions = await index.tx.transactions(
+          process.env.VUE_APP_INDEX_API_URL,
+          this.wallet,
+          {
+            limit: this.limit,
+            page: this.page,
+            sort: sortQuery
+          }
+        )
+        this.transactions = transactions.results
+        if (this.receiveMetadata) this.receiveMetadata(transactions.metadata)
+      }
       this.loading = false
     },
     updateSorting(newSortQuery) {

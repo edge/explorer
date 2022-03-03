@@ -14,7 +14,7 @@
           <div class="txs-row mb-25">
             <div>
               <h3>Transactions</h3>
-              <TransactionsTable v-if="txs && txs.length" :transactions="txs"/>
+              <TransactionsTable />
             </div>
           </div>
         </div>

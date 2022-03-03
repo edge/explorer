@@ -95,7 +95,7 @@
 import * as index from '@edge/index-utils'
 import TableHeader from '@/components/TableHeader'
 import TransactionsTableItem from '@/components/TransactionsTableItem'
-import { fetchStakeHistory } from '@/utils/api.js'
+import { fetchBlocks, fetchStakeHistory } from '@/utils/api.js'
 
 const txsRefreshInterval = 5 * 1000
 
@@ -129,7 +129,7 @@ export default {
       return this.$route.params.address
     },
     sortQuery() {
-      return this.$route.query.sort
+      return this.$route.query.sort || this.$route.query.txSort
     }
   },
   mounted() {
@@ -150,14 +150,29 @@ export default {
     async updateTransactions() {
       this.loading = true
       if (this.stake) {
-        console.log('test')
         const { results } = await fetchStakeHistory(this.stake)
-        console.log(results)
         this.transactions = results
+      }
+      else if (this.block) {
+        const sortQuery = this.sortQuery ? `${this.sortQuery},-timestamp` : '-timestamp'
+        const options = {
+          limit: this.limit,
+          page: this.page,
+          sort: sortQuery
+        }
+        const { blocks } = await fetchBlocks({ blockId: this.block, options })
+        const block = blocks[0]
+        this.transactions = block.transactions
+        // since there is no tx metadata, get total count from data
+        let totalCount = 0
+        for (const hash in block.data.transactions) {
+          totalCount += Object.keys(block.data.transactions[hash]).length
+        }
+        if (this.receiveMetadata) this.receiveMetadata({ totalCount })
       }
       else {
         // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-        const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-timestamp` : '-timestamp'
+        const sortQuery = this.sortQuery ? `${this.sortQuery},-timestamp` : '-timestamp'
         const transactions = await index.tx.transactions(
           process.env.VUE_APP_INDEX_API_URL,
           this.wallet,

@@ -87,6 +87,9 @@ export default {
   computed: {
     sortQuery() {
       return this.$route.query.sort
+    },
+    wallet() {
+      return this.$route.params.address
     }
   },
   mounted() {
@@ -106,7 +109,7 @@ export default {
       const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-created` : '-created'
       const stakes = await index.stake.stakes(
         process.env.VUE_APP_INDEX_API_URL,
-        undefined,
+        this.wallet,
         {
           limit: this.limit,
           page: this.page,

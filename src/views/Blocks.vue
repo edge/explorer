@@ -15,20 +15,30 @@
           <RawData :rawData="rawData" />
         </div>
 
-        <h3 v-if="transactions.length">Block Transactions</h3>
-
-        <TransactionsTable :transactions="transactions" v-if="transactions"/>
+        <h3 v-if="metadata.totalCount > 0">Block Transactions</h3>
+        <TransactionsTable 
+          :limit="limit"
+          :receiveMetadata="receiveMetaData"
+          :page="currentPage"
+        />
+        <Pagination
+          v-if="metadata.totalCount > limit"
+          :baseRoute="baseRoute"
+          :currentPage="currentPage"
+          :limit="limit"
+          :totalCount="metadata.totalCount"
+        />
       </div>
       <div v-else-if="!blockId" class="container">
         <BlocksTable
           :limit="limit"
-          :receiveMetadata="onBlocksUpdate"
+          :receiveMetadata="receiveMetaData"
           :page="currentPage"
           :sortable="true"
         />
         <Pagination
           v-if="metadata.totalCount > limit"
-          baseRoute="Blocks"
+          :baseRoute="baseRoute"
           :currentPage="currentPage"
           :limit="limit"
           :totalCount="metadata.totalCount"
@@ -84,7 +94,6 @@ export default {
     return {
       block: null,
       error: '',
-      limit: 20,
       loading: false,
       metadata: { totalCount: 0 },
       rawData: null,
@@ -103,6 +112,10 @@ export default {
     },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+    limit() {
+      // 10 txs when viewing a block, or 20 blocks if view block table
+      return this.blockId ? 10 : 20
     }
   },
   mounted() {
@@ -142,7 +155,7 @@ export default {
         this.loading = false
       }
     },
-    onBlocksUpdate(metadata) {
+    receiveMetaData(metadata) {
       this.metadata = metadata
     },
     processBlock() {

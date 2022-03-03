@@ -11,27 +11,37 @@
             <WalletOverview :wallet="wallet" />
             <WalletSummary :wallet="wallet" />
           </div>
-
           <div>
             <h3>Wallet Transactions</h3>
             <TransactionsTable
               :limit="txsLimit"
               :receiveMetadata="onTransactionsUpdate"
-              :page="txCurrentPage"
-              query="txsPage"
+              :page="txsCurrentPage"
             />
             <Pagination
-              v-if="metadata.totalCount > txsLimit"
+              v-if="txsMetadata.totalCount > txsLimit"
               baseRoute="Wallet"
-              :currentPage="txCurrentPage"
+              :currentPage="txsCurrentPage"
               :limit="txsLimit"
-              :totalCount="txMetadata.totalCount"
+              :totalCount="txsMetadata.totalCount"
+              query="txsPage"
             />
           </div>
-          <div v-if="stakes.length" class="mt-20">
+          <div class="mt-20">
             <h3>Wallet Stakes</h3>
-            <StakesTable :stakes="stakes" :hideWallet="true" />
-            <Pagination v-if="stakes" baseRoute="Wallet" :address="address" :currentPage="stakesPage" :totalPages="Math.ceil(stakesMetadata.totalCount/stakesMetadata.limit)" query="stakesPage" />
+            <StakesTable 
+              :limit="stakesLimit"
+              :receiveMetadata="onStakesUpdate"
+              :page="stakesCurrentPage"
+            />
+            <Pagination
+              v-if="stakesMetadata.totalCount > stakesLimit"
+              baseRoute="Wallet"
+              :currentPage="stakesCurrentPage"
+              :limit="stakesLimit"
+              :totalCount="stakesMetadata.totalCount"
+              query="stakesPage"
+            />
           </div>
 
         </div>
@@ -72,9 +82,8 @@ import TransactionsTable from "@/components/TransactionsTable"
 import WalletOverview from "@/components/WalletOverview"
 import WalletSummary from "@/components/WalletSummary"
 import WalletsTable from "@/components/WalletsTable"
-
-import { fetchStakesByWallet, fetchTransactions, fetchWallets, fetchWallet } from '../utils/api'
-const { checksumAddressIsValid } = require('@edge/wallet-utils')
+import { checksumAddressIsValid } from '@edge/wallet-utils'
+import { fetchWallet } from '../utils/api'
 
 export default {
   name: 'Wallets',
@@ -91,18 +100,17 @@ export default {
   },
   data: function () {
     return {
-      hash: null,
-      limit: 20,
       loading: true,
-      metadata: { totalCount: 0 },
       pollInterval: 10000,
       polling: null,
       rawData: null,
-      stakesPage: 1,
+      limit: 20,
+      stakesLimit: 10,
       txsLimit: 10,
+      metadata: { totalCount: 0 },
+      stakesMetadata: { totalCount: 0 },
       txsMetadata: { totalCount: 0 },
       wallet: null,
-      wallets: []
     }
   },
   components: {
@@ -126,11 +134,17 @@ export default {
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
     },
+    stakesCurrentPage() {
+      return Math.max(1, parseInt(this.$route.query.stakesPage) || 1)
+    },
+    stakesLastPage() {
+      return Math.max(1, Math.ceil(this.stakesMetadata.totalCount / this.stakesLimit))
+    },
     txsCurrentPage() {
       return Math.max(1, parseInt(this.$route.query.txsPage) || 1)
     },
     txsLastPage() {
-      return Math.max(1, Math.ceil(this.txsMetadata.totalCount / this.txLimit))
+      return Math.max(1, Math.ceil(this.txsMetadata.totalCount / this.txsLimit))
     },
   },
   mounted() {
@@ -148,40 +162,15 @@ export default {
       clearInterval(this.polling)
     },
     async fetchData() {
-      this.stakesPage = parseInt(this.$route.query.stakesPage || 1)
-
       if (this.address && checksumAddressIsValid(this.address)) {
-        if (!this.wallet) {
-          this.wallet = { address: this.address, balance: 0, nonce: 0 }
-        }
-
         this.loading = true
-        
         const wallet = await fetchWallet(this.address)
-
-        // await this.fetchTransactions({ address: this.address, options: { page: this.txsPage, limit: 10 } })
-        await this.fetchStakes({page: this.stakesPage, limit: 10})
-
-        this.wallet = {
-          ...wallet,
-          stakes: this.stakesMetadata.totalCount,
-          transactions: this.txsMetadata.totalCount
-        }
-
+        this.wallet = wallet
         this.loading = false
       }
     },
-    async fetchStakes(options) {
-      const { results, metadata } = await fetchStakesByWallet(this.address, options)
-      this.stakes = results
+    onStakesUpdate(metadata) {
       this.stakesMetadata = metadata
-      this.loading = false
-    },
-    async fetchWallets(options) {
-      const { results, metadata } = await fetchWallets(options)
-      this.wallets = results
-      this.metadata = metadata
-      this.loading = false
     },
     onTransactionsUpdate(metadata) {
       this.txsMetadata = metadata
@@ -207,9 +196,13 @@ export default {
       // clamp pagination to available page numbers with automatic redirection
       if (this.currentPage > this.lastPage) this.$router.push({ name: 'Wallets', query: { page: this.lastPage } })
     },
+    stakesMetadata() {
+      // clamp pagination to available page numbers with automatic redirection
+      if (this.stakesCurrentPage > this.stakesLastPage) this.$router.push({ name: 'Wallet', query: { stakesPage: this.stakesLastPage } })
+    },
     txsMetadata() {
       // clamp pagination to available page numbers with automatic redirection
-      if (this.txsCurrentPage > this.txsLastPage) this.$router.push({ name: 'Transaction', query: { txsPage: this.txsLastPage } })
+      if (this.txsCurrentPage > this.txsLastPage) this.$router.push({ name: 'Wallet', query: { txsPage: this.txsLastPage } })
     }
   }
 }

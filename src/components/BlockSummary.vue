@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return formatXe(amount / 1e6, true)
     }
   }
 }

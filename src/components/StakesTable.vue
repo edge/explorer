@@ -8,9 +8,8 @@
         <TableHeader width="12%" header="Hash" :sortQuery="sortQuery"
           sortParam="hash" :onSortingUpdate="updateSorting"
         />
-        <TableHeader width="23%" header="Wallet" :sortQuery="sortQuery"
-          sortParam="sortWallet" :onSortingUpdate="updateSorting"
-        />
+        <!-- the wallet isn't part of the stake data, so can't be used to sort -->
+        <th width="23%">Wallet</th>
         <TableHeader width="20%" header="Device" :sortQuery="sortQuery"
           sortParam="device" :onSortingUpdate="updateSorting"
         />

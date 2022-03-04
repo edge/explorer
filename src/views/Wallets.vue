@@ -5,36 +5,69 @@
     <HeroPanel v-else :title="'Wallets'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="wallet || wallets.length" class="container">
-        <div v-if="wallet">
+      <div v-if="address && wallet" class="container">
+        <div>
           <div class="row mb-25">
             <WalletOverview :wallet="wallet" />
             <WalletSummary :wallet="wallet" />
           </div>
-
           <div>
             <h3>Wallet Transactions</h3>
-            <TransactionsTable :transactions="transactions" />
-            <Pagination v-if="transactions" baseRoute="Wallet" :address="address" :currentPage="txsPage" :totalPages="Math.ceil(txsMetadata.totalCount/txsMetadata.limit)" query="txsPage" />
+            <TransactionsTable
+              :limit="txsLimit"
+              :receiveMetadata="onTransactionsUpdate"
+              :page="txsCurrentPage"
+            />
+            <Pagination
+              v-if="txsMetadata.totalCount > txsLimit"
+              baseRoute="Wallet"
+              :currentPage="txsCurrentPage"
+              :limit="txsLimit"
+              :totalCount="txsMetadata.totalCount"
+              query="txsPage"
+            />
           </div>
-          <div v-if="stakes.length" class="mt-20">
+          <div class="mt-20">
             <h3>Wallet Stakes</h3>
-            <StakesTable :stakes="stakes" :hideWallet="true" />
-            <Pagination v-if="stakes" baseRoute="Wallet" :address="address" :currentPage="stakesPage" :totalPages="Math.ceil(stakesMetadata.totalCount/stakesMetadata.limit)" query="stakesPage" />
+            <StakesTable 
+              :limit="stakesLimit"
+              :receiveMetadata="onStakesUpdate"
+              :page="stakesCurrentPage"
+            />
+            <Pagination
+              v-if="stakesMetadata.totalCount > stakesLimit"
+              baseRoute="Wallet"
+              :currentPage="stakesCurrentPage"
+              :limit="stakesLimit"
+              :totalCount="stakesMetadata.totalCount"
+              query="stakesPage"
+            />
           </div>
-
-        </div>
-        <div v-else>
-          <WalletsTable :wallets="wallets" />
-          <Pagination v-if="wallets" baseRoute="Wallets" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
         </div>
       </div>
+      <div v-else-if="!address" class="container">
+        <WalletsTable
+          :limit="limit"
+          :receiveMetadata="onWalletsUpdate"
+          :page="currentPage"
+        />
+        <Pagination
+          v-if="metadata.totalCount > limit"
+          baseRoute="Wallets"
+          :currentPage="currentPage"
+          :limit="limit"
+          :totalCount="metadata.totalCount"
+        />
+      </div>
       <div v-else class="container h-full">
-        <div v-if="loading" class="flex flex-col items-center justify-center h-full">
-          <h1 class="m-0 mt-0 text-2xl font-bold">Loading</h1>
+        <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
+          <h1 class="m-0 mt-20 text-2xl font-bold">This wallet doesn't exist</h1>
           <p class="mt-5 mb-0 text-center monospace">
-            This should only take a moment.
+            Try searching for a different wallet, or <router-link to="/wallets" class="underline hover:text-green">view all wallets</router-link>.
           </p>
+          <router-link to="/wallets">
+            <a class="mt-20 button button--solid">View all wallets</a>
+          </router-link>
         </div>
       </div>
     </div>
@@ -51,9 +84,8 @@ import TransactionsTable from "@/components/TransactionsTable"
 import WalletOverview from "@/components/WalletOverview"
 import WalletSummary from "@/components/WalletSummary"
 import WalletsTable from "@/components/WalletsTable"
-
-import { fetchStakesByWallet, fetchTransactions, fetchWallets, fetchWallet } from '../utils/api'
-const { checksumAddressIsValid } = require('@edge/wallet-utils')
+import { checksumAddressIsValid } from '@edge/wallet-utils'
+import { fetchWallet } from '../utils/api'
 
 export default {
   name: 'Wallets',
@@ -70,17 +102,17 @@ export default {
   },
   data: function () {
     return {
-      hash: null,
       loading: true,
-      metadata: {},
-      page: 1,
       pollInterval: 10000,
       polling: null,
       rawData: null,
-      stakesPage: 1,
-      txsPage: 1,
+      limit: 20,
+      stakesLimit: 10,
+      txsLimit: 10,
+      metadata: { totalCount: 0 },
+      stakesMetadata: { totalCount: 0 },
+      txsMetadata: { totalCount: 0 },
       wallet: null,
-      wallets: []
     }
   },
   components: {
@@ -94,9 +126,42 @@ export default {
     WalletSummary,
     WalletsTable
   },
+  computed: {
+    address() {
+      return this.$route.params.address
+    },
+    currentPage() {
+      return Math.max(1, parseInt(this.$route.query.page) || 1)
+    },
+    lastPage() {
+      return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+    stakesCurrentPage() {
+      return Math.max(1, parseInt(this.$route.query.stakesPage) || 1)
+    },
+    stakesLastPage() {
+      return Math.max(1, Math.ceil(this.stakesMetadata.totalCount / this.stakesLimit))
+    },
+    txsCurrentPage() {
+      return Math.max(1, parseInt(this.$route.query.txsPage) || 1)
+    },
+    txsLastPage() {
+      return Math.max(1, Math.ceil(this.txsMetadata.totalCount / this.txsLimit))
+    },
+  },
   mounted() {
-    this.fetchData()
-    this.pollData()
+    if (this.address) {
+      this.fetchData()
+      this.pollData()
+      // clamp tx and stakes tables to page 1
+      const txP = parseInt(this.$route.query.txsPage) || 0
+      const stakesP = parseInt(this.$route.query.stakesPage) || 0
+      if (txP < 1) this.$router.push({ name: 'Wallet', query: { ...this.$route.query, txsPage: 1 } })
+      if (stakesP < 1) this.$router.push({ name: 'Wallet', query: { ...this.$route.query, stakesPage: 1 } })
+    } else {
+      const p = parseInt(this.$route.query.page) || 0
+      if (p < 1) this.$router.push({ name: 'Wallets', query: { page: 1 } })
+    }
   },
   methods: {
     beforeDestroy() {
@@ -104,51 +169,29 @@ export default {
       clearInterval(this.polling)
     },
     async fetchData() {
-      this.address = this.$route.params.address
-      this.page = parseInt(this.$route.query.page || 1)
-      this.txsPage = parseInt(this.$route.query.txsPage || 1)
-      this.stakesPage = parseInt(this.$route.query.stakesPage || 1)
-
-      if (this.address && checksumAddressIsValid(this.address)) {
-        if (!this.wallet) {
-          this.wallet = { address: this.address, balance: 0, nonce: 0 }
-        }
-
+      if (this.address) {
         this.loading = true
-        
         const wallet = await fetchWallet(this.address)
-
-        await this.fetchTransactions({ address: this.address, options: { page: this.txsPage, limit: 10 } })
-        await this.fetchStakes({page: this.stakesPage, limit: 10})
-
-        this.wallet = {
-          ...wallet,
-          stakes: this.stakesMetadata.totalCount,
-          transactions: this.txsMetadata.totalCount
+        if (wallet.address) this.wallet = wallet
+        else if (checksumAddressIsValid(this.address)) {
+          this.wallet = {
+            address: this.address,
+            balance: 0,
+            nonce: 0,
+            txCount: 0
+          }
         }
-
         this.loading = false
-      } else {
-        this.fetchWallets({ page: this.page })
       }
     },
-    async fetchStakes(options) {
-      const { results, metadata } = await fetchStakesByWallet(this.address, options)
-      this.stakes = results
+    onStakesUpdate(metadata) {
       this.stakesMetadata = metadata
-      this.loading = false
     },
-    async fetchTransactions(options) {
-      const { transactions, metadata } = await fetchTransactions(options)
-      this.transactions = transactions
+    onTransactionsUpdate(metadata) {
       this.txsMetadata = metadata
-      this.loading = false
     },
-    async fetchWallets(options) {
-      const { results, metadata } = await fetchWallets(options)
-      this.wallets = results
+    onWalletsUpdate(metadata) {
       this.metadata = metadata
-      this.loading = false
     },
     pollData() {
       this.polling = setInterval(() => {
@@ -163,6 +206,18 @@ export default {
     $route(to, from) {
       this.beforeDestroy()
       this.fetchData()
+    },
+    metadata() {
+      // clamp wallets pagination to available page numbers with automatic redirection
+      if (this.currentPage > this.lastPage) this.$router.push({ name: 'Wallets', query: { page: this.lastPage } })
+    },
+    stakesMetadata() {
+      // clamp stakes pagination to available page numbers with automatic redirection
+      if (this.stakesCurrentPage > this.stakesLastPage) this.$router.push({ name: 'Wallet', query: { stakesPage: this.stakesLastPage } })
+    },
+    txsMetadata() {
+      // clamp tx pagination to available page numbers with automatic redirection
+      if (this.txsCurrentPage > this.txsLastPage) this.$router.push({ name: 'Wallet', query: { txsPage: this.txsLastPage } })
     }
   }
 }

@@ -8,12 +8,12 @@
         No transactions were sent in this block.
       </span>
       <span v-else>
-        A total of <span class="emphasis">{{ formatAmount(block.total) }} XE</span> was sent in this block over <span class="emphasis">{{ block.transactions.length }}</span> {{ block.transactions.length === 1 ? 'transaction' : 'transactions' }} with an average value of <span class="emphasis">{{ formatAmount(block.average) }} XE</span>.
+        A total of <span class="emphasis">{{ formatAmount(block.total) }} XE</span> was sent in this block over <span class="emphasis">{{ block.transactions.length.toLocaleString() }}</span> {{ block.transactions.length === 1 ? 'transaction' : 'transactions' }} with an average value of <span class="emphasis">{{ formatAmount(block.average) }} XE</span>.
       </span>
 
       The block nonce was <span class="emphasis">{{ block.nonce }}</span>.
     </div>
-  </div>
+  </div>  
 </template>
 
 <script>
@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return formatXe(amount / 1e6, true)
     }
   }
 }

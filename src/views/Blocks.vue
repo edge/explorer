@@ -5,7 +5,7 @@
     <HeroPanel v-else :title="'Blocks'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="block || blocks.length" class="container">
+      <div v-if="block" class="container">
         <div v-if="block" class="row mb-25">
           <BlockOverview :block="block" :rawData="rawData" />
           <BlockSummary :block="block" />
@@ -15,11 +15,34 @@
           <RawData :rawData="rawData" />
         </div>
 
-        <h3 v-if="block">Block Transactions</h3>
-        <BlocksTable v-if="blocks.length" :blocks="blocks" />
-        <Pagination v-if="!block" baseRoute="Blocks" :currentPage="page" :totalPages="metadata.totalCount ? Math.ceil(metadata.totalCount/metadata.limit) : 0" />
-
-        <TransactionsTable :transactions="transactions" v-if="transactions"/>
+        <h3 v-if="metadata.totalCount > 0">Block Transactions</h3>
+        <TransactionsTable 
+          :limit="limit"
+          :receiveMetadata="receiveMetaData"
+          :page="currentPage"
+        />
+        <Pagination
+          v-if="metadata.totalCount > limit"
+          :baseRoute="baseRoute"
+          :currentPage="currentPage"
+          :limit="limit"
+          :totalCount="metadata.totalCount"
+        />
+      </div>
+      <div v-else-if="!blockId" class="container">
+        <BlocksTable
+          :limit="limit"
+          :receiveMetadata="receiveMetaData"
+          :page="currentPage"
+          :sortable="true"
+        />
+        <Pagination
+          v-if="metadata.totalCount > limit"
+          :baseRoute="baseRoute"
+          :currentPage="currentPage"
+          :limit="limit"
+          :totalCount="metadata.totalCount"
+        />
       </div>
       <div v-else class="container h-full">
         <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
@@ -37,10 +60,10 @@
 </template>
 
 <script>
-import Header from "@/components/Header"
 import BlocksTable from "@/components/BlocksTable"
 import BlockOverview from "@/components/BlockOverview"
 import BlockSummary from "@/components/BlockSummary"
+import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination"
 import RawData from "@/components/RawData"
@@ -70,66 +93,68 @@ export default {
   data: function () {
     return {
       block: null,
-      blocks: [],
-      error: '',
-      blockId: null,
       loading: false,
-      metadata: {},
-      page: 1,
-      pollInterval: 10000,
-      polling: null,
+      metadata: { totalCount: 0 },
       rawData: null,
       transactions: null
     }
   },
+  computed: {
+    baseRoute() {
+      return this.blockId ? 'Block' : 'Blocks'
+    },
+    blockId() {
+      return this.$route.params.blockId
+    },
+    currentPage() {
+      return Math.max(1, parseInt(this.$route.query.page) || 1)
+    },
+    lastPage() {
+      return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+    limit() {
+      // 10 txs when viewing a block, or 20 blocks if view block table
+      return this.blockId ? 10 : 20
+    }
+  },
   mounted() {
-    this.fetchData()
-    this.pollData()
+    if (this.blockId) {
+      this.fetchData()
+    }
+    const p = parseInt(this.$route.query.page) || 0
+    if (p < 1) this.$router.push({ name: this.baseRoute, query: { page: 1 } })
   },
   methods: {
-    beforeDestroy() {
-      // Stops the data polling.
-      clearInterval(this.polling)
-    },
     async fetchBlocks(options) {
-      this.loading = true
-
       const { blocks, metadata } = await fetchBlocks({ options })
-      this.blocks = blocks
-      this.metadata = metadata
-      this.loading = false
+      if (blocks[0].height) {
+        this.blocks = blocks
+        this.metadata = metadata
+      }
     },
     async fetchData() {
-      this.blockId = this.$route.params.blockId
-      this.page = parseInt(this.$route.query.page || 1)
-
       if (this.blockId) {
         this.loading = true
         const { blocks } = await fetchBlocks({ blockId: this.blockId })
         this.block = blocks[0]
 
-        if (this.block.transactions && Object.keys(this.block.transactions).length) {
-          const latestBlocks = await fetchBlocks({ options: { limit: 1 } })
-          if (latestBlocks && latestBlocks.blocks && latestBlocks.blocks[0]) {
-            this.latestBlockHeight = latestBlocks.blocks[0].height
+        if (blocks[0]) {
+          if (this.block.transactions && Object.keys(this.block.transactions).length) {
+            const latestBlocks = await fetchBlocks({ options: { limit: 1 } })
+            if (latestBlocks && latestBlocks.blocks && latestBlocks.blocks[0]) {
+              this.latestBlockHeight = latestBlocks.blocks[0].height
+            }
+          }
+
+          if (this.block) {
+            this.processBlock()
           }
         }
-
-        if (this.block) {
-          this.processBlock()
-        }
-
         this.loading = false
-      } else {
-        this.fetchBlocks({ page: this.page })
       }
     },
-    pollData() {
-      if (!this.blockId) {
-        this.polling = setInterval(() => {
-          this.fetchBlocks()
-        }, this.pollInterval)
-      }
+    receiveMetaData(metadata) {
+      this.metadata = metadata
     },
     processBlock() {
       this.rawData = { ...this.block }
@@ -143,9 +168,9 @@ export default {
     }
   },
   watch:{
-    $route (to, from) {
-      // When the route changes, stops polling for new data.
-      this.beforeDestroy()
+    metadata() {
+      // clamp pagination to available page numbers with automatic redirection
+      if (this.currentPage > this.lastPage) this.$router.push({ name: this.baseRoute, query: { page: this.lastPage } })
     }
   }
 }

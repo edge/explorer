@@ -5,26 +5,37 @@
     <HeroPanel v-else :title="'Stakes'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="stake || stakes.length" class="container">
+      <div v-if="stake && stakeId" class="container">
         <div v-if="stake && lastTx">
           <div class="row mb-25">
             <StakeOverview :stake="stake" :tx="lastTx" />
             <StakeSummary :stake="stake" :tx="lastTx" />
           </div>
+          <div v-if="rawData" class="mb-25">
+          <RawData :rawData="rawData" />
+        </div>
           <div class="txs-row mb-25">
             <div>
               <h3>Transactions</h3>
-              <TransactionsTable v-if="txs && txs.length" :transactions="txs"/>
+              <TransactionsTable />
             </div>
           </div>
         </div>
-
-        <div v-if="rawData" class="mb-25">
-          <RawData :rawData="rawData" />
-        </div>
-
-        <StakesTable :stakes="stakes" v-if="!stake"/>
-        <Pagination v-if="!stake" baseRoute="Stakes" :currentPage="page" :totalPages="Math.ceil(metadata.totalCount/metadata.limit)" />
+      </div>
+      <div v-else-if="!$route.params.stakeId" class="container">
+        <StakesTable
+          :limit="limit"
+          :receiveMetadata="onStakesUpdate"
+          :page="currentPage"
+          :sortable="true"
+        />
+        <Pagination
+          v-if="metadata.totalCount > limit"
+          baseRoute="Stakes"
+          :currentPage="currentPage"
+          :limit="limit"
+          :totalCount="metadata.totalCount"
+        />
       </div>
       <div v-else class="container h-full">
         <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
@@ -51,7 +62,7 @@ import StakeSummary from "@/components/StakeSummary"
 import StakesTable from "@/components/StakesTable"
 import TransactionsTable from "@/components/TransactionsTable"
 
-import { fetchStake, fetchStakeHistory, fetchStakes } from '../utils/api'
+import { fetchStake, fetchStakeHistory } from '../utils/api'
 import { xeStringFromMicroXe } from '@edge/wallet-utils'
 
 export default {
@@ -66,16 +77,12 @@ export default {
   },
   data: function () {
     return {
+      lastTx: null,
+      limit: 20,
       loading: false,
-      metadata: {},
-      page: 1,
-      pollInterval: 30000,
-      polling: null,
+      metadata: { totalCount: 0 },
       rawData: null,
       stake: null,
-      stakeId: null,
-      stakes: [],
-      lastTx: null,
       txs: []
     }
   },
@@ -90,42 +97,36 @@ export default {
     TransactionsTable
   },
   mounted() {
-    this.fetchData()
-    this.pollData()
+    if (this.$route.params.stakeId) { 
+      this.fetchData()
+    } else {
+      const p = parseInt(this.$route.query.page) || 0
+      if (p < 1) this.$router.push({ name: this.baseRoute, query: { page: 1 } })
+    }
+  },
+  computed: {
+    baseRoute() {
+      return this.$route.params.stakeId ? 'Stake' : 'Stakes'
+    },
+    currentPage() {
+      return Math.max(1, parseInt(this.$route.query.page) || 1)
+    },
+    lastPage() {
+      return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+    stakeId() {
+      return this.$route.params.stakeId || null
+    }
   },
   methods: {
-    beforeDestroy() {
-      // Stops the data polling.
-      clearInterval(this.polling)
-    },
     async fetchData() {
       this.loading = true
-
-      this.stakeId = this.$route.params.stakeId
-      this.page = parseInt(this.$route.query.page || 1)
-
-      if (this.stakeId) {
-        const stake = await fetchStake(this.stakeId)
-        this.stake = stake
-        await this.fetchStakeTxs(this.stakeId)
-        this.loading = false
-      } else {
-        this.fetchStakes({ page: this.page })
-      }
-    },
-    async fetchStakes(options) {
-      const { results: stakes, metadata } = await fetchStakes(options)
-
-      this.stakes = stakes
-      this.metadata = metadata
+      const stake = await fetchStake(this.stakeId)
+      console.log(stake)
+      this.stake = stake
+      await this.fetchStakeTxs(this.stakeId)
+      this.rawData = stake
       this.loading = false
-    },
-    pollData() {
-      if (!this.stakeId) {
-        this.polling = setInterval(() => {
-          this.fetchData()
-        }, this.pollInterval)
-      }
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
@@ -149,13 +150,18 @@ export default {
         block: tx.block,
         pending: false
       })).sort((a, b) => b.timestamp - a.timestamp)
-    }
+    },
+    onStakesUpdate(metadata) {
+      this.metadata = metadata
+    },
   },
   watch: {
     $route (to, from) {
-      // When the route changes, stops polling for new data.
-      this.beforeDestroy()
       this.fetchData()
+    },
+    metadata() {
+      // clamp pagination to available page numbers with automatic redirection
+      if (this.currentPage > this.lastPage) this.$router.push({ name: this.baseRoute, query: { page: this.lastPage } })
     }
   }
 }

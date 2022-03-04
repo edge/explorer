@@ -20,11 +20,19 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
   }
 
   // Standard URL for blocks query.
-  let url = `${INDEX_API_URL}/blocks?${qs.encode(options)}`
+  let query = '?'
+  for (const key in options) {
+    query += `${key}=${options[key]}&`
+  }
+  let url = `${INDEX_API_URL}/blocks${query.substring(0, query.length - 1)}`
 
   if (blockId) {
     // Single block query.
-    url = `${INDEX_API_URL}/block/${blockId}`
+    let query = '?'
+    for (const key in options) {
+      query += `${key}=${options[key]}&`
+    }
+    let url = `${INDEX_API_URL}/block/${blockId}${query.substring(0, query.length - 1)}`
 
     return fetchData(url)
       .then(results => {
@@ -34,22 +42,12 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
             metadata: {}
           }
         }
-
         const block = { ...results }
-
-        block.transactions = pluckBlockTransactions(block)
-
-        // Add total XE.
-        block.total = block.transactions.reduce((accumulator, currentItem) => {
-          accumulator += Number(currentItem.amount)
-          return accumulator
-        }, 0)
-        block.total = block.total.toFixed(6)
 
         // Add average XE.
         block.average = block.transactions.length ? block.total / block.transactions.length : 0
         block.average = block.average.toFixed(6)
-
+        
         return {
           blocks: [block],
           metadata: {}
@@ -60,22 +58,6 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
   return fetchData(url)
     .then(response => {
       const { results, metadata } = response
-
-      results.forEach(block => {
-        block.transactions = pluckBlockTransactions(block)
-
-        // Add total XE.
-        block.total = block.transactions.reduce((accumulator, currentItem) => {
-          accumulator += Number(currentItem.amount)
-          return accumulator
-        }, 0)
-        block.total = block.total.toFixed(6)
-
-        // Add average XE.
-        block.average = block.transactions.length ? block.total / block.transactions.length : 0
-        block.average = block.average.toFixed(6)
-      })
-
       return {
         blocks: results,
         metadata
@@ -148,19 +130,19 @@ const fetchExchangeTransaction = (hash) => {
 const fetchWallet = async (address) => {
   const url = `${INDEX_API_URL}/wallet/${address}`
   const results = await fetchData(url)
-
-  // If fetchData returns an empty response, we
-  // return an empty wallet. TODO: tidy up fetchData.
-  return results && results.metadata
-    ? { address, balance: 0, nonce: 0 }
-    : results
+  return results
 }
 
 const fetchWallets = async (options = {}) => {
   if (!options.page) options.page = 1
   if (!options.limit) options.limit = 20
 
-  const url = `${INDEX_API_URL}/wallets?page=${options.page}&limit=${options.limit}`
+  let query = '?'
+  for (const key in options) {
+    query += `${key}=${options[key]}&`
+  }
+  const url = `${INDEX_API_URL}/wallets${query.substring(0, query.length - 1)}`
+
   const results = await fetchData(url)
 
   return results
@@ -276,28 +258,6 @@ const formatTransactions = (address, data, pending) => {
       pending
     }
   })
-}
-
-const pluckBlockTransactions = block => {
-  const transactions = []
-  const blockTransactionData = {
-    ...block.data.transactions
-  }
-
-  Object.keys(blockTransactionData).forEach(address => {
-    const addressData = blockTransactionData[address]
-
-    Object.keys(addressData).forEach(tx => {
-      transactions.push(addressData[tx])
-    })
-  })
-
-  block.transactions = transactions.sort((a, b) => {
-    if (a.timestamp === b.timestamp) return 0
-    return a.timestamp < b.timestamp ? -1 : 1
-  })
-
-  return formatTransactions(null, block.transactions)
 }
 
 const search = async input => {

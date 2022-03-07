@@ -88,19 +88,19 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex content-center px-5 break-all max-w-full pb-4;
+  @apply bg-white text-sm2 font-normal flex content-center px-5 break-all max-w-full pb-4 leading-none;
 }
 
 td span {
-  @apply w-full overflow-ellipsis overflow-hidden whitespace-nowrap
+  @apply w-full overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 td a {
-  @apply overflow-ellipsis overflow-hidden whitespace-nowrap
+  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 td .overflow {
-  @apply overflow-ellipsis overflow-hidden whitespace-nowrap
+  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 td::before {
@@ -129,11 +129,11 @@ td a {
 }
 
 tr.pending {
-  @apply italic text-gray-400
+  @apply italic text-gray-400;
 }
 
 tr.pending a {
-  @apply italic text-gray-400
+  @apply italic text-gray-400;
 }
 
 @screen lg {
@@ -146,7 +146,7 @@ tr.pending a {
   }
 
   td.amount-col {
-    @apply text-right pr-20
+    @apply text-right pr-20;
   }
 
   td:last-child {

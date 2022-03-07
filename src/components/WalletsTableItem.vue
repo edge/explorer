@@ -73,7 +73,7 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-none;
 }
 
 td::before {
@@ -121,11 +121,11 @@ td a {
 }
 
 td a {
-  @apply overflow-ellipsis overflow-hidden whitespace-nowrap
+  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 td span {
-  @apply max-w-max w-full overflow-ellipsis overflow-hidden whitespace-nowrap
+  @apply max-w-max w-full overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 .trusted {
@@ -138,7 +138,7 @@ td span {
   }
 
   td span {
-    @apply w-11/12
+    @apply w-11/12;
   }
 
   td:first-child {
@@ -150,7 +150,7 @@ td span {
   }
 
   td.amount-col {
-    @apply pr-30 text-right
+    @apply pr-30 text-right;
   }
 
   td:before {

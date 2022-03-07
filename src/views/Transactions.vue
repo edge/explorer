@@ -108,7 +108,7 @@ export default {
       })
     } else {
       const p = parseInt(this.$route.query.page) || 0
-      if (p < 1) this.$router.push({ name: this.baseRoute, query: { page: 1 } })
+      if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
     }
   },
   methods: {
@@ -167,7 +167,7 @@ export default {
     },
     metadata() {
       // clamp pagination to available page numbers with automatic redirection
-      if (this.currentPage > this.lastPage) this.$router.push({ name: 'Transactions', query: { page: this.lastPage } })
+      if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
     }
   }
 }

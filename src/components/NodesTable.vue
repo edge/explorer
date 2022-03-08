@@ -62,13 +62,89 @@ import TableHeader from '@/components/TableHeader'
 
 const nodesRefreshInterval = 5 * 1000
 
+// Generate mock node data
+const WalletUtils = require('@edge/wallet-utils')
+
+const count = { stargates: 3, gateways: 8, hosts: 250}
+const stargates = []
+const gateways = []
+const hosts = []
+
+function generateRandomLatLong() {
+  const lat = Math.random() * 180 - 90
+  const lng = Math.random() * 360 - 180
+  return { lat, lng, location: 'Example, USA' }
+}
+
+function generateRandomAvailability(min) {
+  const aboveMin = Math.random() * (100 - min)
+  return min + aboveMin
+}
+
+function generateRandomLastSeen(chanceOnline) {
+  const now = Date.now()
+  const ranNum = Math.random() * 100
+  if (ranNum > chanceOnline) {
+    const lastOnline = Math.random() * 5e9
+    return now - 60000 - lastOnline
+  }
+  return now
+}
+
+// Generate Stargates
+for (let i = 0; i < count.stargates; i++) {
+  const stargate = {
+    type: 'stargate',
+    address: WalletUtils.generateWallet().address,
+    geo: generateRandomLatLong(),
+    availability: generateRandomAvailability(98),
+    lastSeen: generateRandomLastSeen(95),
+  }
+
+  stargates.push(stargate)
+}
+
+// Generate Gateways
+for (let i = 0; i < count.gateways; i++) {
+  const gateway = {
+    type: 'gateway',
+    address: WalletUtils.generateWallet().address,
+    geo: generateRandomLatLong(),
+    availability: generateRandomAvailability(95),
+    lastSeen: generateRandomLastSeen(85),
+    stargate: stargates[Math.floor(Math.random() * count.stargates)].address,
+    hosts: []
+  }
+  gateways.push(gateway)
+}
+
+// Generate Hosts
+for (let i = 0; i < count.gateways; i++) {
+  const gateway = gateways[Math.floor(Math.random() * count.gateways)]
+  const host = {
+    type: 'host',
+    address: WalletUtils.generateWallet().address,
+    geo: generateRandomLatLong(),
+    availability: generateRandomAvailability(85),
+    lastSeen: generateRandomLastSeen(50),
+    gateway: gateway.address,
+    stargate: gateway.stargate
+  }
+  hosts.push(host)
+}
+
+const nodes = [].concat(stargates, gateways, hosts)
+console.log(nodes)
+
+
+
 export default {
   name: 'NodesTable',
   data: function () {
     return {
       loaded: false,
       loading: false,
-      nodes: [],
+      nodes: nodes,
       iNodes: null
     }
   },
@@ -90,10 +166,10 @@ export default {
       return this.$route.params.address
     },
     stargateAddress() {
-      return this.$route.params.stargate || 'N/a'
+      return this.$route.params.stargate
     },
     gatewayAddress() {
-      return this.$route.params.gateway || 'N/a'
+      return this.$route.params.gateway
     }
   },
   mounted() {
@@ -121,8 +197,11 @@ export default {
       //   }
       // )
       // this.nodes = nodes.results
-      const nodes = []
-      this.receiveMetadata(nodes.metadata)
+      // const nodes = nodes
+      // this.receiveMetadata(nodes.metadata)
+
+      this.receiveMetadata({totalCount: nodes.length})
+
       this.loaded = true
       this.loading = false
     },

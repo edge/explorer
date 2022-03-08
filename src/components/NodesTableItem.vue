@@ -9,19 +9,25 @@
     </td>
 
     <td data-title="Gateway:" :title="item.gateway">
-      <router-link :to="gatewayRoute">
+      <router-link v-if="item.gateway" :to="gatewayRoute">
         <span class="monospace md:inline-block">
           {{ item.gateway }}
         </span>
       </router-link>
+      <span v-else class="monospace md:inline-block text-gray">
+        N/a
+      </span>
     </td>
 
     <td data-title="Stargate:" :title="item.stargate">
-      <router-link :to="stargateRoute">
+      <router-link v-if="item.stargate" :to="stargateRoute">
         <span class="monospace md:inline-block">
           {{ item.stargate }}
         </span>
       </router-link>
+      <span v-else class="monospace md:inline-block text-gray">
+        N/a
+      </span>
     </td>
 
     <td data-title="Type:">
@@ -29,31 +35,34 @@
     </td>
 
     <td data-title="Location:" :title="item.location">
-      <span class="monospace md:inline-block">
-        {{ item.location }}
+      <span class="monospace md:font-sans">
+        {{ item.geo.location }}
       </span>
     </td>
 
     <td data-title="Availability:" :title="item.availability">
       <span class="monospace md:inline-block">
-        {{ item.availability }}
+        {{ item.availability.toFixed(2) }}%
       </span>
     </td>
 
     <td data-title="Last Seen:">
-      <span class="monospace">{{ lastSeen }}</span>
+      <span v-if="!isOnline" class="mr-1 lg:-mt-2 icon icon-grey"><ClockIcon /></span>
+      <span class="monospace md:font-sans" :class="!isOnline && 'text-gray'">{{ lastSeen }}</span>
     </td>
   </tr>
 </template>
 
 <script>
 /*global process*/
-import {  } from '@heroicons/vue/outline'
+import { ClockIcon } from '@heroicons/vue/outline'
+import moment from 'moment'
 
 export default {
   name: 'NodesTableItem',
   props: ['item'],
   components: {
+    ClockIcon
   },
   computed: {
     action() {
@@ -72,6 +81,13 @@ export default {
     },
     formattedType() {
       return this.item.type.charAt(0).toUpperCase() + this.item.type.slice(1)
+    },
+    isOnline() {
+      return Date.now() - this.item.lastSeen < 60000
+    },
+    lastSeen() {
+      if (this.isOnline) return 'Online'
+      return moment(this.item.lastSeen).fromNow()
     }
   }
 }

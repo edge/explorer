@@ -89,7 +89,7 @@ export default {
       const options = {
         limit: this.limit,
         page: this.page,
-        sort: sortQuery,
+        sort: sortQuery
       }
       if (this.hideEmptyBlocks) options.noEmpty = 1
 

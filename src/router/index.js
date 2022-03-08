@@ -4,8 +4,9 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 import Blocks from '@/views/Blocks'
-import Overview from '@/views/Overview'
+import Nodes from '@/views/Nodes'
 import NotFound from '@/views/404'
+import Overview from '@/views/Overview'
 import Stakes from '@/views/Stakes'
 import Transactions from '@/views/Transactions'
 import Wallets from '@/views/Wallets'
@@ -25,6 +26,16 @@ const routes = [
     path: '/blocks/:page(\\d+)?',
     name: 'Blocks',
     component: Blocks
+  },
+  {
+    path: '/nodes/',
+    name: 'Node',
+    component: Nodes
+  },
+  {
+    path: '/node/:address',
+    name: 'Nodes',
+    component: Nodes
   },
   {
     path: '/stake/:stakeId',

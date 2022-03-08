@@ -42,6 +42,10 @@
           {
             link: "/wallets",
             text: "Wallets"
+          },
+          {
+            link: "/nodes",
+            text: "Nodes"
           }
         ]
       }

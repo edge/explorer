@@ -30,6 +30,10 @@
         />
       </div>
       <div v-else-if="!blockId" class="container">
+        <div class="flex items-center mb-10">
+          <input type="checkbox" class="mr-5" />
+          <label class="mb-0">Hide Empty Blocks</label>
+        </div>
         <BlocksTable
           :limit="limit"
           :receiveMetadata="receiveMetaData"

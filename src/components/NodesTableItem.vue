@@ -15,7 +15,7 @@
         </span>
       </router-link>
       <span v-else class="monospace md:inline-block text-gray">
-        N/a
+        N/A
       </span>
     </td>
 
@@ -26,7 +26,7 @@
         </span>
       </router-link>
       <span v-else class="monospace md:inline-block text-gray">
-        N/a
+        N/A
       </span>
     </td>
 

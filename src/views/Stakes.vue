@@ -122,7 +122,6 @@ export default {
     async fetchData() {
       this.loading = true
       const stake = await fetchStake(this.stakeId)
-      console.log(stake)
       this.stake = stake
       await this.fetchStakeTxs(this.stakeId)
       this.rawData = stake

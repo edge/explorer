@@ -60,6 +60,7 @@ export default {
     TableHeader
   },
   props: [
+    'hideEmptyBlocks',
     'limit',
     'page',
     'receiveMetadata',
@@ -85,12 +86,13 @@ export default {
       this.loading = true
       // the sort query sent to index needs to include "-height", but this is hidden from user in browser url
       const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-height` : '-height'
-
       const options = {
         limit: this.limit,
         page: this.page,
-        sort: sortQuery
+        sort: sortQuery,
       }
+      if (this.hideEmptyBlocks) options.noEmpty = 1
+
       const blocks = await fetchBlocks({options})
       this.blocks = blocks.blocks
       this.receiveMetadata(blocks.metadata)

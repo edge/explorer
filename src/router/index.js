@@ -29,12 +29,12 @@ const routes = [
   },
   {
     path: '/nodes/',
-    name: 'Node',
+    name: 'Nodes',
     component: Nodes
   },
   {
     path: '/node/:address',
-    name: 'Nodes',
+    name: 'Node',
     component: Nodes
   },
   {

@@ -99,7 +99,7 @@ export default {
 }
 
 .nodeRow__value {
-  @apply font-mono col-span-8 text-gray-300 md:col-span-9;
+  @apply font-mono col-span-8 text-gray-300 md:col-span-9 truncate;
 }
 
 .nodeRow__value a {

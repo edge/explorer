@@ -18,7 +18,7 @@
 
       <br><br>
 
-      This node is located in <span class="emphasis">{{ node.geo.location }}</span> at <span class="emphasis">{{ node.geo.lat.toFixed(2) }}&#176;</span> lattitude by <span class="emphasis">{{ node.geo.lat.toFixed(2) }}&#176;</span> longtitude.
+      This node is located in <span class="emphasis">{{ node.geo.location }}</span> at <span class="emphasis">{{ node.geo.lat.toFixed(2) }}&#176;</span> lattitude by <span class="emphasis">{{ node.geo.lng.toFixed(2) }}&#176;</span> longtitude.
     </div>
   </div>
 </template>

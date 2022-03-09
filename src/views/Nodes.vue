@@ -6,13 +6,10 @@
 
     <div class="flex-1 bg-gray-200 py-35">
       <div v-if="node && address" class="container">
-        <div v-if="node && lastTx">
+        <div v-if="node">
           <div class="row mb-25">
-            <!-- <NodeOverview :node="node" /> -->
-            <!-- <NodeSummary :node="node" /> -->
-          </div>
-          <div v-if="rawData" class="mb-25">
-            <RawData :rawData="rawData" />
+            <NodeOverview :node="node" />
+            <NodeSummary :node="node" />
           </div>
         </div>
       </div>
@@ -50,12 +47,45 @@
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination";
-import RawData from "@/components/RawData"
-// import NodeOverview from "@/components/NodeOverview"
-// import NodeSummary from "@/components/NodeSummary"
+import NodeOverview from "@/components/NodeOverview"
+import NodeSummary from "@/components/NodeSummary"
 import NodesTable from "@/components/NodesTable"
 
-import { Node } from '../utils/api'
+// import { Node } from '../utils/api'
+
+// Generate mock node data
+const WalletUtils = require('@edge/wallet-utils')
+
+function generateRandomLatLong() {
+  const lat = Math.random() * 180 - 90
+  const lng = Math.random() * 360 - 180
+  return { lat, lng, location: 'Example, USA' }
+}
+
+function generateRandomAvailability(type) {
+  const min = type === 'stargate' ? 98 : type === 'gateway' ? 95 : 85
+  const aboveMin = Math.random() * (100 - min)
+  return min + aboveMin
+}
+
+function generateRandomLastSeen(type) {
+  const chanceOnline = type === 'stargate' ? 95 : type === 'gateway' ? 85 : 50
+  const now = Date.now()
+  const ranNum = Math.random() * 100
+  if (ranNum > chanceOnline) {
+    const lastOnline = Math.random() * 5e9
+    return now - 60000 - lastOnline
+  }
+  return now
+}
+
+function generateRandomType() {
+  const ranNum = Math.random()
+  if (ranNum > 0.9) return 'stargate'
+  if (ranNum > 0.7) return 'gateway'
+  return 'host'
+}
+
 
 export default {
   name: 'Nodes',
@@ -73,16 +103,14 @@ export default {
       loading: false,
       metadata: { totalCount: 0 },
       node: null,
-      rawData: null,
     }
   },
   components: {
     Header,
     HeroPanel,
     Pagination,
-    RawData,
-    // NodeOverview,
-    // NodeSummary,
+    NodeOverview,
+    NodeSummary,
     NodesTable,
   },
   mounted() {
@@ -110,9 +138,8 @@ export default {
   methods: {
     async fetchData() {
       this.loading = true
-      const node = await Node(this.address)
-      this.node = node
-      this.rawData = node
+      // const node = await Node(this.address)
+      this.node = this.generateRandomNodeTEST(this.address)
       this.loading = false
     },
     sliceString(string, symbols) {
@@ -121,6 +148,24 @@ export default {
     onNodesUpdate(metadata) {
       this.metadata = metadata
     },
+    generateRandomNodeTEST(address) {
+      const type = generateRandomType()
+      const gateway = type === 'host' ? WalletUtils.generateWallet().address : undefined
+      const stargate = type !== 'stargate' ? WalletUtils.generateWallet().address : undefined
+      const gatewaysConnected = Math.ceil(Math.random() * 6) + 1
+      const hostsConnected = Math.ceil(Math.random() * 30 * gatewaysConnected) + 3
+      return {
+        type,
+        address,
+        geo: generateRandomLatLong(),
+        availability: generateRandomAvailability(type),
+        lastSeen: generateRandomLastSeen(type),
+        gateway,
+        stargate,
+        gatewaysConnected,
+        hostsConnected
+      }
+    }
   },
   watch: {
     $route (to, from) {

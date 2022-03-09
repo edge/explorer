@@ -3,7 +3,9 @@
     <h3>Node Summary</h3>
     <div class="relative max-h-full tile md:pr-50">
       <span class="emphasis">{{ formattedType }}</span> node <span class="emphasis">{{ node.address }}</span>
-      <span v-if="isOnline"> is currently online. </span><span v-else> was last seen {{ lastSeen }}. </span>
+      <span v-if="isOnline"> is currently online. </span><span v-else> was last seen {{ lastSeen }}. </span>It has been available for <span class="emphasis">{{ node.availability.toFixed(2) }}%</span> of the last 24 hours.
+
+      <br><br>
 
       <span v-if="node.type === 'stargate'">
         <span class="emphasis"> {{ node.gatewaysConnected }}</span> gateways and <span class="emphasis">{{ node.hosts }}</span> hosts are connected to it.</span>
@@ -13,8 +15,6 @@
       <span v-else>
         Its gateway node is <span class="emphasis">{{ node.gateway }}</span> and its stargate node is <span class="emphasis">{{ node.stargate }}.</span>
       </span>
-
-      It has been available for <span class="emphasis">{{ node.availability.toFixed(2) }}%</span> of the last 24 hours.
 
       <br><br>
 

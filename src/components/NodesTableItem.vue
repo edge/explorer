@@ -47,7 +47,8 @@
     </td>
 
     <td data-title="Last Seen:">
-      <span v-if="!isOnline" class="mr-1 lg:-mt-2 icon icon-grey"><ClockIcon /></span>
+      <span v-if="isOnline" class="mr-1 lg:-mt-2 icon icon-green"><StatusOnlineIcon /></span>
+      <span v-else class="mr-1 lg:-mt-2 icon icon-grey"><ClockIcon /></span>
       <span class="monospace md:font-sans" :class="!isOnline && 'text-gray'">{{ lastSeen }}</span>
     </td>
   </tr>
@@ -55,14 +56,15 @@
 
 <script>
 /*global process*/
-import { ClockIcon } from '@heroicons/vue/outline'
+import { ClockIcon, StatusOnlineIcon } from '@heroicons/vue/outline'
 import moment from 'moment'
 
 export default {
   name: 'NodesTableItem',
   props: ['item'],
   components: {
-    ClockIcon
+    ClockIcon,
+    StatusOnlineIcon
   },
   computed: {
     action() {

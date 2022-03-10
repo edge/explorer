@@ -24,10 +24,10 @@
       </tr>
       <tr v-else>
         <th width="20%">Address</th>
-        <th width="20%">Gateway</th>
-        <th width="20%">Stargate</th>
+        <th width="16%">Gateway</th>
+        <th width="16%">Stargate</th>
         <th width="8%">Type</th>
-        <th width="12%">Location</th>
+        <th width="20%">Location</th>
         <th width="8%">Availability</th>
         <th width="12%">Last Seen</th>
       </tr>
@@ -62,89 +62,13 @@ import TableHeader from '@/components/TableHeader'
 
 const nodesRefreshInterval = 5 * 1000
 
-// Generate mock node data
-const WalletUtils = require('@edge/wallet-utils')
-
-const count = { stargates: 3, gateways: 8, hosts: 250}
-const stargates = []
-const gateways = []
-const hosts = []
-
-function generateRandomLatLong() {
-  const lat = Math.random() * 180 - 90
-  const lng = Math.random() * 360 - 180
-  return { lat, lng, location: 'Example, USA' }
-}
-
-function generateRandomAvailability(min) {
-  const aboveMin = Math.random() * (100 - min)
-  return min + aboveMin
-}
-
-function generateRandomLastSeen(chanceOnline) {
-  const now = Date.now()
-  const ranNum = Math.random() * 100
-  if (ranNum > chanceOnline) {
-    const lastOnline = Math.random() * 5e9
-    return now - 60000 - lastOnline
-  }
-  return now
-}
-
-// Generate Stargates
-for (let i = 0; i < count.stargates; i++) {
-  const stargate = {
-    type: 'stargate',
-    address: WalletUtils.generateWallet().address,
-    geo: generateRandomLatLong(),
-    availability: generateRandomAvailability(98),
-    lastSeen: generateRandomLastSeen(95),
-  }
-
-  stargates.push(stargate)
-}
-
-// Generate Gateways
-for (let i = 0; i < count.gateways; i++) {
-  const gateway = {
-    type: 'gateway',
-    address: WalletUtils.generateWallet().address,
-    geo: generateRandomLatLong(),
-    availability: generateRandomAvailability(95),
-    lastSeen: generateRandomLastSeen(85),
-    stargate: stargates[Math.floor(Math.random() * count.stargates)].address,
-    hosts: []
-  }
-  gateways.push(gateway)
-}
-
-// Generate Hosts
-for (let i = 0; i < count.gateways; i++) {
-  const gateway = gateways[Math.floor(Math.random() * count.gateways)]
-  const host = {
-    type: 'host',
-    address: WalletUtils.generateWallet().address,
-    geo: generateRandomLatLong(),
-    availability: generateRandomAvailability(85),
-    lastSeen: generateRandomLastSeen(50),
-    gateway: gateway.address,
-    stargate: gateway.stargate
-  }
-  hosts.push(host)
-}
-
-const nodes = [].concat(stargates, gateways, hosts)
-console.log(nodes)
-
-
-
 export default {
   name: 'NodesTable',
   data: function () {
     return {
       loaded: false,
       loading: false,
-      nodes: nodes,
+      nodes: [],
       iNodes: null
     }
   },
@@ -186,21 +110,26 @@ export default {
     async updateNodes() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-created` : '-created'
-      // const nodes = await index.node.nodes(
-      //   process.env.VUE_APP_INDEX_API_URL,
-      //   this.wallet,
-      //   {
-      //     limit: this.limit,
-      //     page: this.page,
-      //     sort: sortQuery
-      //   }
-      // )
-      // this.nodes = nodes.results
-      // const nodes = nodes
-      // this.receiveMetadata(nodes.metadata)
-
-      this.receiveMetadata({totalCount: nodes.length})
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-availability` : '-availability'
+      const sessions = await index.session.sessions(
+        process.env.VUE_APP_INDEX_API_URL,
+        {
+          limit: this.limit,
+          page: this.page,
+          sort: sortQuery
+        }
+      )
+      
+      const nodes = await Promise.all(sessions.results.map(async (session) => {
+        if (session.node.type === 'host') {
+          const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
+          session.node.stargate = gateway.node.stargate
+        }
+        return session
+      }))
+      
+      this.nodes = nodes
+      this.receiveMetadata(sessions.metadata)
 
       this.loaded = true
       this.loading = false

@@ -1,17 +1,17 @@
 <template>
   <tr>
-    <td data-title="Address:" :title="item.address">
+    <td data-title="Address:" :title="item.node.address">
       <router-link :to="addressRoute">
         <span class="monospace md:inline-block">
-          {{ item.address }}
+          {{ item.node.address }}
         </span>
       </router-link>
     </td>
 
-    <td data-title="Gateway:" :title="item.gateway">
-      <router-link v-if="item.gateway" :to="gatewayRoute">
+    <td data-title="Gateway:" :title="item.node.gateway">
+      <router-link v-if="item.node.gateway" :to="gatewayRoute">
         <span class="monospace md:inline-block">
-          {{ item.gateway }}
+          {{ item.node.gateway }}
         </span>
       </router-link>
       <span v-else class="monospace md:inline-block text-gray">
@@ -19,10 +19,10 @@
       </span>
     </td>
 
-    <td data-title="Stargate:" :title="item.stargate">
-      <router-link v-if="item.stargate" :to="stargateRoute">
+    <td data-title="Stargate:" :title="item.node.stargate">
+      <router-link v-if="item.node.stargate" :to="stargateRoute">
         <span class="monospace md:inline-block">
-          {{ item.stargate }}
+          {{ item.node.stargate }}
         </span>
       </router-link>
       <span v-else class="monospace md:inline-block text-gray">
@@ -34,15 +34,15 @@
       <span class="monospace md:font-sans">{{ formattedType }}</span>
     </td>
 
-    <td data-title="Location:" :title="item.location">
-      <span class="monospace md:font-sans">
-        {{ item.geo.location }}
-      </span>
+    <td data-title="Location:" :title="item.node.geo.city">
+      <div class="overflow"><span class="monospace md:font-sans">
+        {{ `${item.node.geo.city}, ${item.node.geo.country}` }}
+      </span></div>
     </td>
 
     <td data-title="Availability:" :title="item.availability">
       <span class="monospace md:inline-block">
-        {{ item.availability.toFixed(2) }}%
+        {{ (item.availability * 100).toFixed(2) }}%
       </span>
     </td>
 
@@ -73,16 +73,16 @@ export default {
       else return 'Unlock'
     },
     addressRoute() {
-      return {name: 'Node', params: {address: this.item.address}}
+      return {name: 'Node', params: {address: this.item.node.address}}
     },
     gatewayRoute() {
-      return {name: 'Node', params: {address: this.item.gateway}}
+      return {name: 'Node', params: {address: this.item.node.gateway}}
     },
     stargateRoute() {
-      return {name: 'Node', params: {address: this.item.stargate}}
+      return {name: 'Node', params: {address: this.item.node.stargate}}
     },
     formattedType() {
-      return this.item.type.charAt(0).toUpperCase() + this.item.type.slice(1)
+      return this.item.node.type.charAt(0).toUpperCase() + this.item.node.type.slice(1)
     },
     isOnline() {
       return Date.now() - this.item.lastSeen < 60000
@@ -105,6 +105,10 @@ td span {
 }
 
 td a {
+  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
+}
+
+td .overflow {
   @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 

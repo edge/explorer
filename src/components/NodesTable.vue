@@ -2,24 +2,23 @@
   <table>
     <thead class="hidden lg:table-header-group">
       <tr v-if="sortable">
-        <TableHeader width="12%" header="ID" :sortQuery="sortQuery"
-          sortParam="id" :onSortingUpdate="updateSorting"
+        <TableHeader width="20%" header="Address" :sortQuery="sortQuery"
+          sortParam="node.address" :onSortingUpdate="updateSorting"
         />
-        <TableHeader width="12%" header="Hash" :sortQuery="sortQuery"
-          sortParam="hash" :onSortingUpdate="updateSorting"
-        />
-        <th width="23%">Wallet</th>
-        <TableHeader width="20%" header="Device" :sortQuery="sortQuery"
-          sortParam="device" :onSortingUpdate="updateSorting"
-        />
+        <!-- currently no sorting on gateway and stargate columns as stargate address isn't contained in a host node's data -->
+        <th width="16%">Gateway</th>
+        <th width="16%">Stargate</th>
         <TableHeader width="8%" header="Type" :sortQuery="sortQuery"
-          sortParam="type" :onSortingUpdate="updateSorting"
+          sortParam="node.type" :onSortingUpdate="updateSorting"
         />
-        <TableHeader width="8%" header="Status" :sortQuery="sortQuery"
-          sortParam="released,unlockRequested" :onSortingUpdate="updateSorting"
+        <TableHeader width="20%" header="Location" :sortQuery="sortQuery"
+          sortParam="node.geo.city" :onSortingUpdate="updateSorting"
         />
-        <TableHeader class="amount-col" width="15%" header="Amount XE" :sortQuery="sortQuery"
-          sortParam="amount" :onSortingUpdate="updateSorting"
+        <TableHeader width="8%" header="Availability" :sortQuery="sortQuery"
+          sortParam="sortAvailability" :onSortingUpdate="updateSorting"
+        />
+        <TableHeader width="12%" header="Last Seen" :sortQuery="sortQuery"
+          sortParam="lastSeen" :onSortingUpdate="updateSorting"
         />
       </tr>
       <tr v-else>
@@ -83,17 +82,11 @@ export default {
     'sortable'
   ],
   computed: {
-    sortQuery() {
-      return this.$route.query.sort
-    },
     address() {
       return this.$route.params.address
     },
-    stargateAddress() {
-      return this.$route.params.stargate
-    },
-    gatewayAddress() {
-      return this.$route.params.gateway
+    sortQuery() {
+      return this.$route.query.sort
     }
   },
   mounted() {
@@ -110,7 +103,7 @@ export default {
     async updateNodes() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-availability` : '-availability'
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-lastSeen` : '-lastSeen'
       const sessions = await index.session.sessions(
         process.env.VUE_APP_INDEX_API_URL,
         {
@@ -120,6 +113,7 @@ export default {
         }
       )
       
+      // add stargate address to host sessions
       const nodes = await Promise.all(sessions.results.map(async (session) => {
         if (session.node.type === 'host') {
           const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)

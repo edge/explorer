@@ -4,36 +4,42 @@
 
     <div class="flex flex-col flex-1 space-y-2">
       <div class="nodeRow">
+        <div class="nodeRow__label">Type</div>
+        <div class="nodeRow__value">{{ formattedType }}</div>
+      </div>
+      <div class="nodeRow">
         <div class="nodeRow__label">Address</div>
         <div class="nodeRow__value">
-          <router-link :to="addressRoute">{{ node.address }}</router-link>
+          <router-link :to="addressRoute">{{ node.node.address }}</router-link>
         </div>
       </div>
-      <div class="nodeRow">
+      <div class="nodeRow" v-if="node.gateway">
         <div class="nodeRow__label">Gateway</div>
         <div class="nodeRow__value">
-          <router-link v-if="node.gateway" :to="gatewayRoute">{{ node.gateway }}</router-link>
-          <span v-else>N/A</span>
+          <router-link :to="gatewayRoute">{{ node.gateway.node.address }}</router-link>
         </div>
       </div>
-      <div class="nodeRow">
+      <div class="nodeRow" v-if="node.stargate">
         <div class="nodeRow__label">Stargate</div>
         <div class="nodeRow__value">
-          <router-link v-if="node.stargate" :to="stargateRoute">{{ node.stargate }}</router-link>
-          <span v-else>N/A</span>
+          <router-link  :to="stargateRoute">{{ node.stargate.node.address }}</router-link>
         </div>
       </div>
       <div class="nodeRow">
-        <div class="nodeRow__label">Type</div>
-        <div class="nodeRow__value">{{ node.type.slice(0, 1).toUpperCase() + node.type.slice(1) }}</div>
+        <div class="nodeRow__label">Status</div>
+        <div class="nodeRow__value">{{ status }}</div>
+      </div>
+      <div class="nodeRow" v-if="!isOnline">
+        <div class="nodeRow__label">Last Seen</div>
+        <div class="nodeRow__value">{{ lastSeen }}</div>
       </div>
       <div class="nodeRow">
         <div class="nodeRow__label">Availability</div>
-        <div class="nodeRow__value">{{ node.availability.toFixed(2) }}%</div>
+        <div class="nodeRow__value">{{ (node.availability * 100).toFixed(2) }}%</div>
       </div>
-      <div class="nodeRow" v-if="node.device">
-        <div class="nodeRow__label">Last Seen</div>
-        <div class="nodeRow__value">{{ lastSeen }}</div>
+      <div class="nodeRow">
+        <div class="nodeRow__label">Location</div>
+        <div class="nodeRow__value">{{ location }}</div>
       </div>
     </div>
 
@@ -41,17 +47,10 @@
 </template>
 
 <script>
-import { ClockIcon, StatusOnlineIcon } from '@heroicons/vue/outline'
 import moment from 'moment'
-import Tooltip from '@/components/Tooltip'
 
 export default {
   name: "NodeOverview",
-  components: {
-    ClockIcon,
-    StatusOnlineIcon,
-    Tooltip
-  },
   props: {
     node: {
       type: Object
@@ -59,23 +58,29 @@ export default {
   },
   computed: {
     addressRoute() {
-      return {name: 'Node', params: {address: this.node.address}}
-    },
-    gatewayRoute() {
-      return {name: 'Node', params: {address: this.node.gateway}}
-    },
-    stargateRoute() {
-      return {name: 'Node', params: {address: this.node.stargate}}
+      return {name: 'Node', params: {address: this.node.node.address}}
     },
     formattedType() {
-      return this.node.type.charAt(0).toUpperCase() + this.node.type.slice(1)
+      return this.node.node.type.charAt(0).toUpperCase() + this.node.node.type.slice(1)
+    },
+    gatewayRoute() {
+      if (this.node.gateway) return {name: 'Node', params: {address: this.node.gateway.node.address}}
     },
     isOnline() {
-      return Date.now() - this.node.lastSeen < 60000
+      return Date.now() - this.node.lastActive < 60000
     },
     lastSeen() {
+      return moment(this.node.lastActive).fromNow()
+    },
+    location() {
+      return `${this.node.node.geo.city}, ${this.node.node.geo.country}`
+    },
+    stargateRoute() {
+      if (this.node.stargate) return {name: 'Node', params: {address: this.node.stargate.node.address}}
+    },
+    status() {
       if (this.isOnline) return 'Online'
-      return moment(this.node.lastSeen).fromNow()
+      return 'Offline'
     }
   }
 }

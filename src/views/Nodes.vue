@@ -6,19 +6,17 @@
 
     <div class="flex-1 bg-gray-200 py-35">
       <div v-if="node && address" class="container">
-        <div v-if="node">
           <div class="row mb-25">
             <NodeOverview :node="node" />
             <NodeSummary :node="node" />
           </div>
-        </div>
       </div>
       <div v-else-if="!$route.params.address" class="container">
         <NodesTable
           :limit="limit"
           :receiveMetadata="onNodesUpdate"
           :page="currentPage"
-          :sortable="false"
+          :sortable="true"
         />
         <Pagination
           v-if="metadata.totalCount > limit"
@@ -44,48 +42,15 @@
 </template>
 
 <script>
+import * as index from '@edge/index-utils'
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/Pagination"
 import NodeOverview from "@/components/NodeOverview"
 import NodeSummary from "@/components/NodeSummary"
 import NodesTable from "@/components/NodesTable"
 
-// import { Node } from '../utils/api'
-
-// Generate mock node data
-const WalletUtils = require('@edge/wallet-utils')
-
-function generateRandomLatLong() {
-  const lat = Math.random() * 180 - 90
-  const lng = Math.random() * 360 - 180
-  return { lat, lng, location: 'Example, USA' }
-}
-
-function generateRandomAvailability(type) {
-  const min = type === 'stargate' ? 98 : type === 'gateway' ? 95 : 85
-  const aboveMin = Math.random() * (100 - min)
-  return min + aboveMin
-}
-
-function generateRandomLastSeen(type) {
-  const chanceOnline = type === 'stargate' ? 95 : type === 'gateway' ? 85 : 50
-  const now = Date.now()
-  const ranNum = Math.random() * 100
-  if (ranNum > chanceOnline) {
-    const lastOnline = Math.random() * 5e9
-    return now - 60000 - lastOnline
-  }
-  return now
-}
-
-function generateRandomType() {
-  const ranNum = Math.random()
-  if (ranNum > 0.9) return 'stargate'
-  if (ranNum > 0.7) return 'gateway'
-  return 'host'
-}
-
+const nodeRefreshInterval = 5 * 1000
 
 export default {
   name: 'Nodes',
@@ -94,7 +59,6 @@ export default {
       const parts = window.location.href.split('/')
       return 'Node ' + this.sliceString(parts[parts.length - 1], 7)
     }
-
     return 'Nodes'
   },
   data: function () {
@@ -103,6 +67,7 @@ export default {
       loading: false,
       metadata: { totalCount: 0 },
       node: null,
+      iNode: null
     }
   },
   components: {
@@ -115,13 +80,23 @@ export default {
   },
   mounted() {
     if (this.$route.params.address) { 
-      this.fetchData()
+      this.updateNode()
+      // initiate polling
+      this.iNode = setInterval(() => {
+        this.updateNode()
+      }, nodeRefreshInterval)
     } else {
       const p = parseInt(this.$route.query.page) || 0
       if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
     }
   },
+  umounted() {
+    clearInterval(this.iNode)
+  },
   computed: {
+    address() {
+      return this.$route.params.address || null
+    },
     baseRoute() {
       return this.$route.params.address ? 'Node' : 'Nodes'
     },
@@ -130,46 +105,43 @@ export default {
     },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
-    },
-    address() {
-      return this.$route.params.address || null
     }
   },
   methods: {
-    async fetchData() {
-      this.loading = true
-      // const node = await Node(this.address)
-      this.node = this.generateRandomNodeTEST(this.address)
-      this.loading = false
+    onNodesUpdate(metadata) {
+      this.metadata = metadata
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     },
-    onNodesUpdate(metadata) {
-      this.metadata = metadata
-    },
-    generateRandomNodeTEST(address) {
-      const type = generateRandomType()
-      const gateway = type === 'host' ? WalletUtils.generateWallet().address : undefined
-      const stargate = type !== 'stargate' ? WalletUtils.generateWallet().address : undefined
-      const gatewaysConnected = Math.ceil(Math.random() * 6) + 1
-      const hostsConnected = Math.ceil(Math.random() * 30 * gatewaysConnected) + 3
-      return {
-        type,
-        address,
-        geo: generateRandomLatLong(),
-        availability: generateRandomAvailability(type),
-        lastSeen: generateRandomLastSeen(type),
-        gateway,
-        stargate,
-        gatewaysConnected,
-        hostsConnected
+    async updateNode() {
+      if (!this.address) return
+      this.loading = true
+      const session = await index.session.session(
+        process.env.VUE_APP_INDEX_API_URL,
+        this.address
+      )
+
+      // add gateway (if host) and stargate (if host/gateway) data to the node data
+      if (session.node.type === 'host') {
+        const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
+        session.gateway = gateway
+        const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, gateway.node.stargate)
+        session.stargate = stargate
       }
+      else if (session.node.type === 'gateway') {
+        const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.stargate)
+        session.stargate = stargate
+      }
+      this.node = session
+
+      this.loaded = true
+      this.loading = false
     }
   },
   watch: {
     $route (to, from) {
-      this.fetchData()
+      this.updateNode()
     },
     metadata() {
       // clamp pagination to available page numbers with automatic redirection
@@ -182,5 +154,21 @@ export default {
   .row {
     @apply grid items-start grid-cols-1 gap-24;
     @apply lg:grid-cols-2;
+  }
+
+  .row-full {
+    @apply grid items-start grid-cols-1 gap-24;
+    @apply lg:grid-cols-1;
+  }
+
+  .map-container {
+    display: flex;
+    justify-content: center;
+    background-color: #cd0e27
+  }
+
+  .map {
+    justify-self: center;
+    align-self: center;
   }
 </style>

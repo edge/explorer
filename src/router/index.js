@@ -28,7 +28,7 @@ const routes = [
     component: Blocks
   },
   {
-    path: '/nodes/',
+    path: '/nodes',
     name: 'Nodes',
     component: Nodes
   },

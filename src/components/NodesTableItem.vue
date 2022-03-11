@@ -36,7 +36,7 @@
 
     <td data-title="Location:" :title="item.node.geo.city">
       <div class="overflow"><span class="monospace md:font-sans">
-        {{ `${item.node.geo.city}, ${item.node.geo.country}` }}
+        {{ location }}
       </span></div>
     </td>
 
@@ -83,6 +83,9 @@ export default {
     },
     formattedType() {
       return this.item.node.type.charAt(0).toUpperCase() + this.item.node.type.slice(1)
+    },
+    location() {
+      return `${this.item.node.geo.city}, ${this.item.node.geo.country}`
     },
     isOnline() {
       return Date.now() - this.item.lastSeen < 60000

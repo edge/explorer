@@ -8,7 +8,7 @@
 <script>
 import * as index from '@edge/index-utils'
 
-const mapRefreshInterval = 60 * 1000
+const mapRefreshInterval = 20 * 1000
 
 // FOR TESTING
 function getRandomLatLng(min, max) {
@@ -19,7 +19,8 @@ export default {
   name: "NetworkMap",
   data: function () {
     return {
-      mapInterval: null,
+      map: null,
+      iMap: null,
       nodes: null,
       options: {
         backgroundColor: '#181818',
@@ -29,31 +30,26 @@ export default {
         magnifyingGlass: {enable: true, zoomFactor: 5},
         legend: 'none',
         tooltip: {trigger: 'none',},
-        colorAxis: {colors: ['#555', '#0ecd61']},
+        colorAxis: {colors: ['#555', '#0ecd61'], values: [0, 1]},
+        sizeAxis: {minSize: 5, maxSize: 9}
       }
     }
   },
   props: [
     'node'
   ],
-  computed: {
-    sizeAxis() {
-      if (this.node) return {minSize: 6, maxSize: 8}
-      return {minSize: 5, maxSize: 9}
-    }
-  },
   mounted() {
     this.loadMap()
     if (!this.node) {
       // initiate polling
-      this.mapInterval = setInterval(() => {
+      this.iMap = setInterval(() => {
         this.loadMap()
       }, mapRefreshInterval)
     }
   },
   umounted() {
     if (!this.node) {
-      clearInterval(this.mapInterval)
+      clearInterval(this.iMap)
     }
   },
   methods: {
@@ -87,11 +83,8 @@ export default {
 
           if (process.env.VUE_APP_INDEX_API_URL.includes('test')) {
             // randomly generate world co-ordinates for testnet nodes
-            // TESTING
-            const ranLat = getRandomLatLng(51.5, 58.5)
-            const ranLng = getRandomLatLng(-9.7, 1.7)
-            // const ranLat = getRandomLatLng(90, -90)
-            // const ranLng = getRandomLatLng(180, -180)
+            const ranLat = getRandomLatLng(-50, 83)
+            const ranLng = getRandomLatLng(-180, 180)
             nodeTable.push([ranLat, ranLng, online, type])
           } else {
             nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
@@ -100,13 +93,13 @@ export default {
       }
 
       const data = google.visualization.arrayToDataTable(nodeTable)
-      const map = new google.visualization.GeoChart(document.getElementById('network_map'))
-      const options = this.options
-      options.sizeAxis = this.sizeAxis
+      if (this.map === null) this.map = new google.visualization.GeoChart(document.getElementById('network_map'))
+
+      // focus on country if viewing single node
+      const options = {...this.options}
       if (this.node) options.region = this.node.node.geo.countryCode
-      // TESTING
-      options.region = 'GB'
-      map.draw(data, options)
+
+      this.map.draw(data, options)
     },
     loadMap() {
       google.charts.load('current', {
@@ -121,7 +114,7 @@ export default {
     async updateNodes() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sessions = await index.session.sessions(process.env.VUE_APP_INDEX_API_URL, { limit: 1000 })
+      const sessions = await index.session.sessions(process.env.VUE_APP_INDEX_API_URL, { limit: 100 })
       this.nodes = sessions.results
       this.loaded = true
       this.loading = false

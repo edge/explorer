@@ -2,7 +2,7 @@
   <div class="flex flex-col h-full">
     <h3>Node Summary</h3>
     <div class="relative max-h-full tile md:pr-50">
-      <span class="emphasis">{{ formattedType }}</span> node <span class="emphasis">{{ node.node.address }}</span> <span v-if="isOnline">is currently online</span><span v-else>was last seen {{ lastSeen }}</span>. It has been available for <span class="emphasis">{{ (node.availability * 100).toFixed(2) }}%</span> of the last 24 hours. It is located in <span class="emphasis">{{ location }}</span>.
+      <span class="emphasis">{{ formattedType }}</span> node <span class="emphasis">{{ node.node.address }}</span> <span v-if="isOnline">is currently online</span><span v-else>was last seen {{ lastActive }}</span>. It has been available for <span class="emphasis">{{ (node.availability * 100).toFixed(2) }}%</span> of the last 24 hours. It is located in <span class="emphasis">{{ location }}</span>.
 
       <span v-if="node.node.type === 'gateway'">
         It is currently connected to Stargate <span class="emphasis">{{ node.stargate.node.address }}</span>.
@@ -32,7 +32,7 @@ export default {
     isOnline() {
       return Date.now() - this.node.lastActive < 60000
     },
-    lastSeen() {
+    lastActive() {
       if (this.isOnline) return 'Online'
       return moment(this.node.lastActive).fromNow()
     },

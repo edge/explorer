@@ -103,7 +103,7 @@ export default {
     async updateNodes() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-lastSeen,node.address` : '-lastSeen,node.address'
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-lastActive,node.address` : '-lastActive,node.address'
       const sessions = await index.session.sessions(
         process.env.VUE_APP_INDEX_API_URL,
         {

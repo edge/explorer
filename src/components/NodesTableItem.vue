@@ -49,7 +49,7 @@
     <td data-title="Last Seen:">
       <span v-if="isOnline" class="mr-1 lg:-mt-2 icon icon-green"><StatusOnlineIcon /></span>
       <span v-else class="mr-1 lg:-mt-2 icon icon-grey"><ClockIcon /></span>
-      <span class="monospace md:font-sans" :class="!isOnline && 'text-gray'">{{ lastSeen }}</span>
+      <span class="monospace md:font-sans" :class="!isOnline && 'text-gray'">{{ lastActive }}</span>
     </td>
   </tr>
 </template>
@@ -90,7 +90,7 @@ export default {
     isOnline() {
       return Date.now() - this.item.lastActive < 60000
     },
-    lastSeen() {
+    lastActive() {
       if (this.isOnline) return 'Online'
       return moment(this.item.lastActive).fromNow()
     }

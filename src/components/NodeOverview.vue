@@ -31,7 +31,7 @@
       </div>
       <div class="nodeRow" v-if="!isOnline">
         <div class="nodeRow__label">Last Seen</div>
-        <div class="nodeRow__value">{{ lastSeen }}</div>
+        <div class="nodeRow__value">{{ lastActive }}</div>
       </div>
       <div class="nodeRow">
         <div class="nodeRow__label">Availability</div>
@@ -69,7 +69,7 @@ export default {
     isOnline() {
       return Date.now() - this.node.lastActive < 60000
     },
-    lastSeen() {
+    lastActive() {
       return moment(this.node.lastActive).fromNow()
     },
     location() {

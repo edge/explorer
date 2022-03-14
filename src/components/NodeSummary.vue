@@ -2,13 +2,13 @@
   <div class="flex flex-col h-full">
     <h3>Node Summary</h3>
     <div class="relative max-h-full tile md:pr-50">
-      <span class="emphasis">{{ formattedType }}</span> node <span class="emphasis">{{ node.node.address }}</span> <span v-if="isOnline">is currently online</span><span v-else>was last seen {{ lastActive }}</span>. It has been available for <span class="emphasis">{{ (node.availability * 100).toFixed(2) }}%</span> of the last 24 hours. It is located in <span class="emphasis">{{ location }}</span>.
+      <span class="emphasis">{{ formattedType }}</span> node <span class="emphasis">{{ session.node.address }}</span> is currently <span v-if="isOnline">online</span><span v-else>offline and was last seen {{ lastActive }}</span>. It has been available for <span class="emphasis">{{ (session.availability * 100).toFixed(2) }}%</span> of the last 24 hours. It is located in <span class="emphasis">{{ location }}</span>.
 
-      <span v-if="node.node.type === 'gateway'">
-        It is currently connected to Stargate <span class="emphasis">{{ node.stargate.node.address }}</span>.
+      <span v-if="isOnline && session.node.type === 'gateway'">
+        It is currently connected to Stargate <span class="emphasis">{{ session.stargate.node.address }}</span>.
       </span>
-      <span v-if="node.node.type === 'host'">
-        It is currently connected to Gateway <span class="emphasis">{{ node.gateway.node.address }}</span> and Stargate <span class="emphasis">{{ node.stargate.node.address }}</span>.
+      <span v-if="isOnline && session.node.type === 'host'">
+        It is currently connected to Gateway <span class="emphasis">{{ session.gateway.node.address }}</span> and Stargate <span class="emphasis">{{ session.stargate.node.address }}</span>.
       </span>
 
     </div>
@@ -21,23 +21,22 @@ import moment from 'moment'
 export default {
   name: "NodeSummary",
   props: {
-    node: {
+    session: {
       type: Object
     }
   },
   computed: {
     formattedType() {
-      return this.node.node.type.charAt(0).toUpperCase() + this.node.node.type.slice(1)
+      return this.session.node.type.charAt(0).toUpperCase() + this.session.node.type.slice(1)
     },
     isOnline() {
-      return Date.now() - this.node.lastActive < 60000
+      return Date.now() - this.session.lastActive < 60000
     },
     lastActive() {
-      if (this.isOnline) return 'Online'
-      return moment(this.node.lastActive).fromNow()
+      return moment(this.session.lastActive).fromNow()
     },
     location() {
-      return `${this.node.node.geo.city}, ${this.node.node.geo.country}`
+      return `${this.session.node.geo.city}, ${this.session.node.geo.country}`
     }
   }
 }

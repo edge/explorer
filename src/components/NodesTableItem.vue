@@ -67,11 +67,6 @@ export default {
     StatusOnlineIcon
   },
   computed: {
-    action() {
-      if (this.item.released) return null
-      else if (this.item.unlockRequested) return 'Release'
-      else return 'Unlock'
-    },
     addressRoute() {
       return {name: 'Node', params: {address: this.item.node.address}}
     },

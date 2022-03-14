@@ -5,16 +5,16 @@
     <HeroPanel v-else :title="'Nodes'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="node && address" class="container">
+      <div v-if="session && address" class="container">
           <div class="row mb-25">
-            <NodeOverview :node="node" />
-            <NodeSummary :node="node" />
+            <NodeOverview :session="session" />
+            <NodeSummary :session="session" />
           </div>
       </div>
       <div v-else-if="!$route.params.address" class="container">
         <NodesTable
           :limit="limit"
-          :receiveMetadata="onNodesUpdate"
+          :receiveMetadata="onSessionsUpdate"
           :page="currentPage"
           :sortable="true"
         />
@@ -66,8 +66,8 @@ export default {
       limit: 20,
       loading: false,
       metadata: { totalCount: 0 },
-      node: null,
-      iNode: null
+      session: null,
+      iSession: null
     }
   },
   components: {
@@ -80,10 +80,10 @@ export default {
   },
   mounted() {
     if (this.$route.params.address) { 
-      this.updateNode()
+      this.updateSession()
       // initiate polling
-      this.iNode = setInterval(() => {
-        this.updateNode()
+      this.iSession = setInterval(() => {
+        this.updateSession()
       }, nodeRefreshInterval)
     } else {
       const p = parseInt(this.$route.query.page) || 0
@@ -91,7 +91,7 @@ export default {
     }
   },
   umounted() {
-    clearInterval(this.iNode)
+    clearInterval(this.iSession)
   },
   computed: {
     address() {
@@ -108,32 +108,32 @@ export default {
     }
   },
   methods: {
-    onNodesUpdate(metadata) {
+    onSessionsUpdate(metadata) {
       this.metadata = metadata
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     },
-    async updateNode() {
+    async updateSession() {
       if (!this.address) return
       this.loading = true
       const session = await index.session.session(
         process.env.VUE_APP_INDEX_API_URL,
         this.address
       )
-
       // add gateway (if host) and stargate (if host/gateway) data to the node data
       if (session.node.type === 'host') {
         const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
         session.gateway = gateway
         const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, gateway.node.stargate)
         session.stargate = stargate
+        console.log(session)
       }
       else if (session.node.type === 'gateway') {
         const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.stargate)
         session.stargate = stargate
       }
-      this.node = session
+      this.session = session
 
       this.loaded = true
       this.loading = false
@@ -141,7 +141,7 @@ export default {
   },
   watch: {
     $route (to, from) {
-      this.updateNode()
+      this.updateSession()
     },
     metadata() {
       // clamp pagination to available page numbers with automatic redirection

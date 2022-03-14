@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full">
-    <h3>{{ node ? "Node Location" : "Network Map"}}</h3>
+    <h3>{{ session ? "Node Location" : "Network Map"}}</h3>
     <div id="network_map"></div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
     return {
       map: null,
       iMap: null,
-      nodes: null,
+      sessions: null,
       options: {
         backgroundColor: '#181818',
         datalessRegionColor: '#808080',
@@ -36,19 +36,19 @@ export default {
     }
   },
   props: [
-    'node'
+    'session'
   ],
   mounted() {
     this.loadMap()
-    if (!this.node) {
+    if (!this.session) {
       // initiate polling
       this.iMap = setInterval(() => {
         this.loadMap()
       }, mapRefreshInterval)
     }
   },
-  umounted() {
-    if (!this.node) {
+  unmounted() {
+    if (!this.session) {
       clearInterval(this.iMap)
     }
   },
@@ -58,10 +58,10 @@ export default {
       // colours are set by online: 0 = offline / 1 = online
       // size is set by type: 0 = host / 1 = gateway / 2 = stargate
       const nodeTable = [['lat', 'lng', 'online', 'type']]
-      if (this.node) {
-        const nodes = [this.node]
-        if (this.node.gateway) nodes.push(this.node.gateway)
-        if (this.node.stargate) nodes.push(this.node.stargate)
+      if (this.session) {
+        const nodes = [this.session]
+        if (this.session.gateway) nodes.push(this.session.gateway)
+        if (this.session.stargate) nodes.push(this.session.stargate)
         nodes.forEach(node => {
           const online = this.isOnline(node) ? 1 : 0
           const type = node.node.type === 'host' ? 0 : node.node.type === 'gateway' ? 1 : 2
@@ -77,7 +77,7 @@ export default {
         })
       }
       else {
-        this.nodes.forEach(node => {
+        this.sessions.forEach(node => {
           const online = this.isOnline(node) ? 1 : 0
           const type = node.node.type === 'host' ? 0 : node.node.type === 'gateway' ? 1 : 2
 
@@ -97,7 +97,7 @@ export default {
 
       // focus on country if viewing single node
       const options = {...this.options}
-      if (this.node) options.region = this.node.node.geo.countryCode
+      if (this.session) options.region = this.session.node.geo.countryCode
 
       this.map.draw(data, options)
     },
@@ -108,14 +108,13 @@ export default {
       google.charts.setOnLoadCallback(this.drawMap)
     },
     isOnline(node) {
-      if (this.node) return Date.now() - node.lastActive < 60000
       return Date.now() - node.lastActive < 60000
     },
     async updateNodes() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
       const sessions = await index.session.sessions(process.env.VUE_APP_INDEX_API_URL, { limit: 100 })
-      this.nodes = sessions.results
+      this.sessions = sessions.results
       this.loaded = true
       this.loading = false
     },

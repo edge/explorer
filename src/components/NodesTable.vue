@@ -31,9 +31,9 @@
         <th width="12%">Last Seen</th>
       </tr>
     </thead>
-    <tbody v-if="nodes.length">
+    <tbody v-if="sessions.length">
       <NodesTableItem
-        v-for="item in nodes"
+        v-for="item in sessions"
         :key="item.id"
         :item="item"
       />
@@ -67,8 +67,8 @@ export default {
     return {
       loaded: false,
       loading: false,
-      nodes: [],
-      iNodes: null
+      sessions: [],
+      iSessions: null
     }
   },
   components: {
@@ -90,21 +90,21 @@ export default {
     }
   },
   mounted() {
-    this.updateNodes()
+    this.updateSessions()
     // initiate polling
-    this.iNodes = setInterval(() => {
-      this.updateNodes()
+    this.iSessions = setInterval(() => {
+      this.updateSessions()
     }, nodesRefreshInterval)
   },
   unmounted() {
-    clearInterval(this.iNodes)
+    clearInterval(this.iSessions)
   },
   methods: {
-    async updateNodes() {
+    async updateSessions() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
       const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-lastActive,node.address` : '-lastActive,node.address'
-      const sessions = await index.session.sessions(
+      const sessionsData = await index.session.sessions(
         process.env.VUE_APP_INDEX_API_URL,
         {
           limit: this.limit,
@@ -114,7 +114,7 @@ export default {
       )
       
       // add stargate address to host sessions
-      const nodes = await Promise.all(sessions.results.map(async (session) => {
+      const sessions = await Promise.all(sessionsData.results.map(async (session) => {
         if (session.node.type === 'host') {
           const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
           session.node.stargate = gateway.node.stargate
@@ -122,8 +122,8 @@ export default {
         return session
       }))
       
-      this.nodes = nodes
-      this.receiveMetadata(sessions.metadata)
+      this.sessions = sessions
+      this.receiveMetadata(sessionsData.metadata)
 
       this.loaded = true
       this.loading = false
@@ -136,10 +136,10 @@ export default {
   },
   watch: {
     page() {
-      this.updateNodes()
+      this.updateSessions()
     },
     sortQuery() {
-      this.updateNodes()
+      this.updateSessions()
     }
   }
 }

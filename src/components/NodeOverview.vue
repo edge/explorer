@@ -10,19 +10,19 @@
       <div class="nodeRow">
         <div class="nodeRow__label">Address</div>
         <div class="nodeRow__value">
-          <router-link :to="addressRoute">{{ node.node.address }}</router-link>
+          <router-link :to="addressRoute">{{ session.node.address }}</router-link>
         </div>
       </div>
-      <div class="nodeRow" v-if="node.gateway">
+      <div class="nodeRow" v-if="session.gateway">
         <div class="nodeRow__label">Gateway</div>
         <div class="nodeRow__value">
-          <router-link :to="gatewayRoute">{{ node.gateway.node.address }}</router-link>
+          <router-link :to="gatewayRoute">{{ session.gateway.node.address }}</router-link>
         </div>
       </div>
-      <div class="nodeRow" v-if="node.stargate">
+      <div class="nodeRow" v-if="session.stargate">
         <div class="nodeRow__label">Stargate</div>
         <div class="nodeRow__value">
-          <router-link  :to="stargateRoute">{{ node.stargate.node.address }}</router-link>
+          <router-link  :to="stargateRoute">{{ session.stargate.node.address }}</router-link>
         </div>
       </div>
       <div class="nodeRow">
@@ -35,7 +35,7 @@
       </div>
       <div class="nodeRow">
         <div class="nodeRow__label">Availability</div>
-        <div class="nodeRow__value">{{ (node.availability * 100).toFixed(2) }}%</div>
+        <div class="nodeRow__value">{{ (session.availability * 100).toFixed(2) }}%</div>
       </div>
       <div class="nodeRow">
         <div class="nodeRow__label">Location</div>
@@ -52,31 +52,31 @@ import moment from 'moment'
 export default {
   name: "NodeOverview",
   props: {
-    node: {
+    session: {
       type: Object
     }
   },
   computed: {
     addressRoute() {
-      return {name: 'Node', params: {address: this.node.node.address}}
+      return {name: 'Node', params: {address: this.session.node.address}}
     },
     formattedType() {
-      return this.node.node.type.charAt(0).toUpperCase() + this.node.node.type.slice(1)
+      return this.session.node.type.charAt(0).toUpperCase() + this.session.node.type.slice(1)
     },
     gatewayRoute() {
-      if (this.node.gateway) return {name: 'Node', params: {address: this.node.gateway.node.address}}
+      if (this.session.gateway) return {name: 'Node', params: {address: this.session.gateway.node.address}}
     },
     isOnline() {
-      return Date.now() - this.node.lastActive < 60000
+      return Date.now() - this.session.lastActive < 60000
     },
     lastActive() {
-      return moment(this.node.lastActive).fromNow()
+      return moment(this.session.lastActive).fromNow()
     },
     location() {
-      return `${this.node.node.geo.city}, ${this.node.node.geo.country}`
+      return `${this.session.node.geo.city}, ${this.session.node.geo.country}`
     },
     stargateRoute() {
-      if (this.node.stargate) return {name: 'Node', params: {address: this.node.stargate.node.address}}
+      if (this.session.stargate) return {name: 'Node', params: {address: this.session.stargate.node.address}}
     },
     status() {
       if (this.isOnline) return 'Online'

@@ -109,7 +109,7 @@ export default {
     },
     isOnline(node) {
       if (this.node) return Date.now() - node.lastActive < 60000
-      return Date.now() - node.lastSeen < 60000
+      return Date.now() - node.lastActive < 60000
     },
     async updateNodes() {
       this.loading = true

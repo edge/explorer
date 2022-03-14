@@ -88,11 +88,11 @@ export default {
       return `${this.item.node.geo.city}, ${this.item.node.geo.country}`
     },
     isOnline() {
-      return Date.now() - this.item.lastSeen < 60000
+      return Date.now() - this.item.lastActive < 60000
     },
     lastSeen() {
       if (this.isOnline) return 'Online'
-      return moment(this.item.lastSeen).fromNow()
+      return moment(this.item.lastActive).fromNow()
     }
   }
 }

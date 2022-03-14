@@ -18,7 +18,7 @@
           sortParam="sortAvailability" :onSortingUpdate="updateSorting"
         />
         <TableHeader width="12%" header="Last Seen" :sortQuery="sortQuery"
-          sortParam="lastSeen" :onSortingUpdate="updateSorting"
+          sortParam="lastActive" :onSortingUpdate="updateSorting"
         />
       </tr>
       <tr v-else>

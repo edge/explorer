@@ -59,7 +59,7 @@ import * as index from '@edge/index-utils'
 import NodesTableItem from '@/components/NodesTableItem'
 import TableHeader from '@/components/TableHeader'
 
-const nodesRefreshInterval = 5 * 1000
+const nodesRefreshInterval = 60 * 1000
 
 export default {
   name: 'NodesTable',
@@ -103,7 +103,7 @@ export default {
     async updateNodes() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-lastSeen` : '-lastSeen'
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-lastSeen,node.address` : '-lastSeen,node.address'
       const sessions = await index.session.sessions(
         process.env.VUE_APP_INDEX_API_URL,
         {

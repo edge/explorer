@@ -35,7 +35,7 @@
     </td>
 
     <td data-title="Location:" :title="item.node.geo.city">
-      <div class="overflow"><span class="monospace md:font-sans">
+      <div class="overflow"><span class="monospace md:font-sans" :class="location === 'Unknown' && 'text-gray'">
         {{ location }}
       </span></div>
     </td>
@@ -80,7 +80,9 @@ export default {
       return this.item.node.type.charAt(0).toUpperCase() + this.item.node.type.slice(1)
     },
     location() {
-      return `${this.item.node.geo.city}, ${this.item.node.geo.country}`
+      if (this.item.node.geo.city) return `${this.item.node.geo.city}, ${this.item.node.geo.country}`
+      else if (this.item.node.geo.country) return this.item.node.geo.country
+      else return 'Unknown'
     },
     isOnline() {
       return Date.now() - this.item.lastActive < 60000

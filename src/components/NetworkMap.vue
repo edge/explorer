@@ -67,7 +67,7 @@ export default {
         this.sessions.forEach(node => {
           const online = this.isOnline(node) ? 1 : 0
           const type = node.node.type === 'host' ? 0 : node.node.type === 'gateway' ? 1 : 2
-          nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
+          if (this.isValidGeoData(node)) nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
         })
       }
 
@@ -88,6 +88,13 @@ export default {
     },
     isOnline(node) {
       return Date.now() - node.lastActive < 60000
+    },
+    isValidGeoData(node) {
+      let isValid = true
+      if (node.node.geo.lat > 90 || node.node.geo.lat < -90) isValid = false
+      if (node.node.geo.lng > 180 || node.node.geo.lng < -180) isValid = false
+      return isValid
+
     },
     async updateNodes() {
       this.loading = true

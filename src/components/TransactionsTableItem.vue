@@ -41,7 +41,7 @@
     </td>
 
     <td data-title="Status:">
-      <span v-if="isConfirmed && item.confirmations > 9">
+      <span v-if="isConfirmed">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
         <span class="monospace md:font-sans">{{ statusFormatted }}</span>
       </span>
@@ -102,15 +102,13 @@
     </td>
 
     <td data-title="Status:">
-      <span v-if="isConfirmed && item.confirmations > 10">
+      <span v-if="isConfirmed">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
-        <span
-          class="monospace md:font-sans">{{ statusFormatted }}</span>
+        <span class="monospace md:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else>
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
-        <span
-          class="monospace md:font-sans text-gray-400">{{ statusFormatted }}</span>
+        <span class="monospace md:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
 

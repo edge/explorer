@@ -10,11 +10,6 @@ import * as index from '@edge/index-utils'
 
 const mapRefreshInterval = 20 * 1000
 
-// FOR TESTING
-function getRandomLatLng(min, max) {
-  return Math.random() * (max - min) + min
-}
-
 export default {
   name: "NetworkMap",
   data: function () {
@@ -65,30 +60,14 @@ export default {
         nodes.forEach(node => {
           const online = this.isOnline(node) ? 1 : 0
           const type = node.node.type === 'host' ? 0 : node.node.type === 'gateway' ? 1 : 2
-
-          if (process.env.VUE_APP_INDEX_API_URL.includes('test')) {
-            // randomly generate UK co-ordinates for testnet nodes
-            const ranLat = getRandomLatLng(51.5, 58.5)
-            const ranLng = getRandomLatLng(-9.7, 1.7)
-            nodeTable.push([ranLat, ranLng, online, type])
-          } else {
-            nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
-          }
+          nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
         })
       }
       else {
         this.sessions.forEach(node => {
           const online = this.isOnline(node) ? 1 : 0
           const type = node.node.type === 'host' ? 0 : node.node.type === 'gateway' ? 1 : 2
-
-          if (process.env.VUE_APP_INDEX_API_URL.includes('test')) {
-            // randomly generate world co-ordinates for testnet nodes
-            const ranLat = getRandomLatLng(-50, 83)
-            const ranLng = getRandomLatLng(-180, 180)
-            nodeTable.push([ranLat, ranLng, online, type])
-          } else {
-            nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
-          }
+          nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
         })
       }
 

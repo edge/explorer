@@ -13,18 +13,6 @@
         </span>
       </router-link>
     </td>
-
-    <td data-title="To:" :title="item.recipient">
-      <router-link :to="toAddressRoute">
-        <span class="monospace md:inline-block">
-          {{ item.recipient }}
-        </span>
-      </router-link>
-    </td>
-
-    <td>
-      <span class="mr-1 -mt-2 icon icon-green"><ArrowRightIcon /></span>
-    </td>
     
     <td data-title="From:" :title="item.sender">
       <router-link :to="fromAddressRoute">
@@ -34,14 +22,26 @@
       </router-link>
     </td>
 
+    <td>
+      <span class="mr-1 -mt-2 icon icon-green"><ArrowRightIcon /></span>
+    </td>
+
+    <td data-title="To:" :title="item.recipient">
+      <router-link :to="toAddressRoute">
+        <span class="monospace md:inline-block">
+          {{ item.recipient }}
+        </span>
+      </router-link>
+    </td>
+
     <td data-title="Memo:" :title="item.data.memo || 'None'">
-      <div class="overflow"><span class="monospace md:font-sans overflow" :class="!item.data.memo && 'text-gray-400'">
+      <div class="overflow"><span class="monospace md:font-sans" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
       </span></div>
     </td>
 
     <td data-title="Status:">
-      <span v-if="isConfirmed && item.confirmations > 9">
+      <span v-if="isConfirmed">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
         <span class="monospace md:font-sans">{{ statusFormatted }}</span>
       </span>
@@ -96,21 +96,19 @@
     </td>
 
     <td data-title="Memo:" :title="item.data.memo || 'None'">
-      <div class="overflow"><span class="monospace md:font-sans overflow" :class="!item.data.memo && 'text-gray-400'">
+      <div class="overflow"><span class="monospace md:font-sans" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
       </span></div>
     </td>
 
     <td data-title="Status:">
-      <span v-if="isConfirmed && item.confirmations > 10">
+      <span v-if="isConfirmed">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
-        <span
-          class="monospace md:font-sans">{{ statusFormatted }}</span>
+        <span class="monospace md:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else>
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
-        <span
-          class="monospace md:font-sans text-gray-400">{{ statusFormatted }}</span>
+        <span class="monospace md:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
 
@@ -156,7 +154,7 @@ export default {
       return formatXe(this.item.amount / 1e6, true)
     },
     isConfirmed() {
-      return (!this.item.pending || !this.item.confirmations < 10)
+      return ((this.item.confirmations || 0) >= 10)
     },
     statusFormatted() {
       if (this.item.pending) return 'Pending'
@@ -176,7 +174,7 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-none;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-tight;
 }
 
 td span {

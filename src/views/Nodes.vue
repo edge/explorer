@@ -127,7 +127,6 @@ export default {
         session.gateway = gateway
         const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, gateway.node.stargate)
         session.stargate = stargate
-        console.log(session)
       }
       else if (session.node.type === 'gateway') {
         const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.stargate)

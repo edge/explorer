@@ -73,7 +73,9 @@ export default {
       return moment(this.session.lastActive).fromNow()
     },
     location() {
-      return `${this.session.node.geo.city}, ${this.session.node.geo.country}`
+      if (this.session.node.geo.city) return `${this.session.node.geo.city}, ${this.session.node.geo.country}`
+      else if (this.session.node.geo.country) return this.session.node.geo.country
+      else return 'Unknown'
     },
     stargateRoute() {
       if (this.session.stargate) return {name: 'Node', params: {address: this.session.stargate.node.address}}

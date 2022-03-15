@@ -26,7 +26,7 @@ export default {
         legend: 'none',
         tooltip: {trigger: 'none',},
         colorAxis: {colors: ['#555', '#0ecd61'], values: [0, 1]},
-        sizeAxis: {minSize: 5, maxSize: 9}
+        sizeAxis: {minSize: 5, maxSize: 5}
       }
     }
   },

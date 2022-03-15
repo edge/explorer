@@ -13,11 +13,11 @@
         </span>
       </router-link>
     </td>
-
-    <td data-title="To:" :title="item.recipient">
-      <router-link :to="toAddressRoute">
+    
+    <td data-title="From:" :title="item.sender">
+      <router-link :to="fromAddressRoute">
         <span class="monospace md:inline-block">
-          {{ item.recipient }}
+          {{ item.sender }}
         </span>
       </router-link>
     </td>
@@ -25,11 +25,11 @@
     <td>
       <span class="mr-1 -mt-2 icon icon-green"><ArrowRightIcon /></span>
     </td>
-    
-    <td data-title="From:" :title="item.sender">
-      <router-link :to="fromAddressRoute">
+
+    <td data-title="To:" :title="item.recipient">
+      <router-link :to="toAddressRoute">
         <span class="monospace md:inline-block">
-          {{ item.sender }}
+          {{ item.recipient }}
         </span>
       </router-link>
     </td>

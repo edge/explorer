@@ -46,17 +46,27 @@
       </span>
     </td>
 
+    <td data-title="Status:">
+      <div v-if="isOnline">
+        <span class="mr-1 lg:-mt-2 icon icon-green"><StatusOnlineIcon /></span>
+        <span class="monospace md:font-sans">Online</span>
+      </div>
+      <div v-else>
+        <span class="mr-1 lg:-mt-2 icon icon-grey"><StatusOfflineIcon /></span>
+        <span class="monospace md:font-sans text-gray">Offline</span>
+      </div>
+    </td>
+
     <td data-title="Last Seen:">
-      <span v-if="isOnline" class="mr-1 lg:-mt-2 icon icon-green"><StatusOnlineIcon /></span>
-      <span v-else class="mr-1 lg:-mt-2 icon icon-grey"><ClockIcon /></span>
-      <span class="monospace md:font-sans" :class="!isOnline && 'text-gray'">{{ lastActive }}</span>
+      <span class="mr-1 lg:-mt-2 icon icon-grey"><ClockIcon /></span>
+      <span class="monospace md:font-sans text-gray">{{ lastActive }}</span>
     </td>
   </tr>
 </template>
 
 <script>
 /*global process*/
-import { ClockIcon, StatusOnlineIcon } from '@heroicons/vue/outline'
+import { ClockIcon, StatusOfflineIcon, StatusOnlineIcon } from '@heroicons/vue/outline'
 import moment from 'moment'
 
 export default {
@@ -64,6 +74,7 @@ export default {
   props: ['item'],
   components: {
     ClockIcon,
+    StatusOfflineIcon,
     StatusOnlineIcon
   },
   computed: {
@@ -88,8 +99,9 @@ export default {
       return Date.now() - this.item.lastActive < 60000
     },
     lastActive() {
-      if (this.isOnline) return 'Online'
-      return moment(this.item.lastActive).fromNow()
+      const momentOutput = moment(this.item.lastActive).fromNow()
+      if (this.isOnline && momentOutput == 'a few seconds ago') return 'Just now'
+      else return momentOutput[0].toUpperCase() + momentOutput.slice(1)
     }
   }
 }
@@ -97,7 +109,7 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-none;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-tight;
 }
 
 td span {

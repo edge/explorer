@@ -35,7 +35,7 @@
     </td>
 
     <td data-title="Memo:" :title="item.data.memo || 'None'">
-      <div class="overflow"><span class="monospace md:font-sans overflow" :class="!item.data.memo && 'text-gray-400'">
+      <div class="overflow"><span class="monospace md:font-sans" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
       </span></div>
     </td>
@@ -96,7 +96,7 @@
     </td>
 
     <td data-title="Memo:" :title="item.data.memo || 'None'">
-      <div class="overflow"><span class="monospace md:font-sans overflow" :class="!item.data.memo && 'text-gray-400'">
+      <div class="overflow"><span class="monospace md:font-sans" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
       </span></div>
     </td>
@@ -176,7 +176,7 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-none;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-tight;
 }
 
 td span {

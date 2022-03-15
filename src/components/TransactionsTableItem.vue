@@ -154,7 +154,7 @@ export default {
       return formatXe(this.item.amount / 1e6, true)
     },
     isConfirmed() {
-      return (!this.item.pending || !this.item.confirmations < 10)
+      return ((this.item.confirmations || 0) >= 10)
     },
     statusFormatted() {
       if (this.item.pending) return 'Pending'

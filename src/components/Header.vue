@@ -40,12 +40,12 @@
             text: "Stakes"
           },
           {
-            link: "/wallets",
-            text: "Wallets"
-          },
-          {
             link: "/nodes",
             text: "Nodes"
+          },
+          {
+            link: "/wallets",
+            text: "Wallets"
           }
         ]
       }

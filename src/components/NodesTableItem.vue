@@ -155,7 +155,7 @@ td a {
 
 @screen lg {
   td {
-    @apply border-gray-200 pt-13 pb-15 table-cell border-b-2 align-middle;
+    @apply border-gray-200 py-15 table-cell border-b-2 align-middle;
   }
 
   td:first-child {
@@ -167,7 +167,7 @@ td a {
   }
 
   td:last-child {
-    @apply pb-13 border-b-2;
+    @apply pb-15 border-b-2;
   }
 
   td:before {

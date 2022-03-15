@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import * as index from '@edge/index-utils'
+import superagent from 'superagent'
 
 const mapRefreshInterval = 20 * 1000
 
@@ -16,7 +16,7 @@ export default {
     return {
       map: null,
       iMap: null,
-      sessions: null,
+      points: [],
       options: {
         backgroundColor: '#181818',
         datalessRegionColor: '#808080',
@@ -26,7 +26,7 @@ export default {
         legend: 'none',
         tooltip: {trigger: 'none',},
         colorAxis: {colors: ['#555', '#0ecd61'], values: [0, 1]},
-        sizeAxis: {minSize: 5, maxSize: 9}
+        sizeAxis: {minSize: 5, maxSize: 5}
       }
     }
   },
@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     async drawMap() {
-      await this.updateNodes()
       // colours are set by online: 0 = offline / 1 = online
       // size is set by type: 0 = host / 1 = gateway / 2 = stargate
       const nodeTable = [['lat', 'lng', 'online', 'type']]
@@ -64,10 +63,9 @@ export default {
         })
       }
       else {
-        this.sessions.forEach(node => {
-          const online = this.isOnline(node) ? 1 : 0
-          const type = node.node.type === 'host' ? 0 : node.node.type === 'gateway' ? 1 : 2
-          if (this.isValidGeoData(node)) nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
+        await this.updatePoints()
+        this.points.forEach(p => {
+          nodeTable.push([p.lat, p.lng, 1, 0])
         })
       }
 
@@ -84,7 +82,7 @@ export default {
       google.charts.load('current', {
         'packages':['geochart'],
       })
-      google.charts.setOnLoadCallback(this.drawMap)
+      google.charts.setOnLoadCallback(this.drawMap.bind(this))
     },
     isOnline(node) {
       return Date.now() - node.lastActive < 60000
@@ -94,13 +92,11 @@ export default {
       if (node.node.geo.lat > 90 || node.node.geo.lat < -90) isValid = false
       if (node.node.geo.lng > 180 || node.node.geo.lng < -180) isValid = false
       return isValid
-
     },
-    async updateNodes() {
+    async updatePoints() {
       this.loading = true
-      // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sessions = await index.session.sessions(process.env.VUE_APP_INDEX_API_URL, { limit: 100 })
-      this.sessions = sessions.results
+      const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/sessions/map?limit=500`)
+      this.points = result.body.results
       this.loaded = true
       this.loading = false
     },

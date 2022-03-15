@@ -20,7 +20,7 @@
         />
         <Pagination
           v-if="metadata.totalCount > limit"
-          baseRoute="Network"
+          baseRoute="Nodes"
           :currentPage="currentPage"
           :limit="limit"
           :totalCount="metadata.totalCount"

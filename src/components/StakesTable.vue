@@ -3,10 +3,10 @@
     <thead class="hidden lg:table-header-group">
       <tr v-if="sortable">
         <TableHeader width="12%" header="ID" :sortQuery="sortQuery"
-          sortParam="id" :onSortingUpdate="updateSorting"
+          sortParam="id" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <TableHeader width="12%" header="Hash" :sortQuery="sortQuery"
-          sortParam="hash" :onSortingUpdate="updateSorting"
+          sortParam="hash" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <!-- the wallet isn't part of the stake data, so can't be used to sort -->
         <th width="23%">Wallet</th>
@@ -14,7 +14,7 @@
           sortParam="device" :onSortingUpdate="updateSorting"
         />
         <TableHeader width="8%" header="Type" :sortQuery="sortQuery"
-          sortParam="type" :onSortingUpdate="updateSorting"
+          sortParam="type" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <TableHeader width="8%" header="Status" :sortQuery="sortQuery"
           sortParam="released,unlockRequested" :onSortingUpdate="updateSorting"

@@ -132,6 +132,10 @@ export default {
         const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.stargate)
         session.stargate = stargate
       }
+      // add wallet address to node data
+      const stake = await index.stake.stake(process.env.VUE_APP_INDEX_API_URL, session.node.stake)
+      session.node.wallet = stake.wallet
+
       this.session = session
 
       this.loaded = true

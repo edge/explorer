@@ -8,10 +8,24 @@
         <div class="nodeRow__value">{{ formattedType }}</div>
       </div>
       <div class="nodeRow">
+        <div class="nodeRow__label">Availability</div>
+        <div class="nodeRow__value">{{ (session.availability * 100).toFixed(2) }}%</div>
+      </div>
+      <div class="nodeRow">
+        <div class="nodeRow__label">Status</div>
+        <div class="nodeRow__value">{{ status }}</div>
+      </div>
+      <div class="nodeRow" v-if="!isOnline">
+        <div class="nodeRow__label">Last Seen</div>
+        <div class="nodeRow__value">{{ lastActive }}</div>
+      </div>
+      <div class="nodeRow">
+        <div class="nodeRow__label">Location</div>
+        <div class="nodeRow__value">{{ location }}</div>
+      </div>
+      <div class="nodeRow">
         <div class="nodeRow__label">Address</div>
-        <div class="nodeRow__value">
-          <router-link :to="addressRoute">{{ session.node.address }}</router-link>
-        </div>
+        <div class="nodeRow__value">{{ session.node.address }}</div>
       </div>
       <div class="nodeRow" v-if="session.gateway">
         <div class="nodeRow__label">Gateway</div>
@@ -26,20 +40,10 @@
         </div>
       </div>
       <div class="nodeRow">
-        <div class="nodeRow__label">Status</div>
-        <div class="nodeRow__value">{{ status }}</div>
-      </div>
-      <div class="nodeRow" v-if="!isOnline">
-        <div class="nodeRow__label">Last Seen</div>
-        <div class="nodeRow__value">{{ lastActive }}</div>
-      </div>
-      <div class="nodeRow">
-        <div class="nodeRow__label">Availability</div>
-        <div class="nodeRow__value">{{ (session.availability * 100).toFixed(2) }}%</div>
-      </div>
-      <div class="nodeRow">
-        <div class="nodeRow__label">Location</div>
-        <div class="nodeRow__value">{{ location }}</div>
+        <div class="nodeRow__label">Wallet</div>
+        <div class="nodeRow__value">
+          <router-link  :to="walletRoute">{{ session.node.wallet }}</router-link>
+        </div>
       </div>
     </div>
 
@@ -57,9 +61,6 @@ export default {
     }
   },
   computed: {
-    addressRoute() {
-      return {name: 'Node', params: {address: this.session.node.address}}
-    },
     formattedType() {
       return this.session.node.type.charAt(0).toUpperCase() + this.session.node.type.slice(1)
     },
@@ -83,6 +84,9 @@ export default {
     status() {
       if (this.isOnline) return 'Online'
       return 'Offline'
+    },
+    walletRoute() {
+      return {name: 'Wallet', params: {address: this.session.node.wallet}}
     }
   }
 }

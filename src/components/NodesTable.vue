@@ -12,7 +12,7 @@
           sortParam="node.type" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <TableHeader width="20%" header="Location" :sortQuery="sortQuery"
-          sortParam="node.geo.city" :onSortingUpdate="updateSorting" :sortAscFirst="true"
+          sortParam="node.geo.country,node.geo.city" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <TableHeader width="98" header="Availability" :sortQuery="sortQuery"
           sortParam="sortAvailability" :onSortingUpdate="updateSorting"

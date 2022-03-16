@@ -111,4 +111,8 @@ export default {
 </script>
 
 <style scoped>
+div {
+  border-radius: 5px;
+  overflow: hidden;
+}
 </style>

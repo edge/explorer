@@ -30,9 +30,9 @@
         <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
           <h1 class="m-0 mt-20 text-2xl font-bold">This node doesn't exist</h1>
           <p class="mt-5 mb-0 text-center monospace">
-            Try searching for a different node, or <router-link to="/network" class="underline hover:text-green">view all nodes</router-link>.
+            Try searching for a different node, or <router-link to="/nodes" class="underline hover:text-green">view all nodes</router-link>.
           </p>
-          <router-link to="/network">
+          <router-link to="/nodes">
             <a class="mt-20 button button--solid">View all nodes</a>
           </router-link>
         </div>
@@ -117,10 +117,18 @@ export default {
     async updateSession() {
       if (!this.address) return
       this.loading = true
-      const session = await index.session.session(
-        process.env.VUE_APP_INDEX_API_URL,
-        this.address
-      )
+      try {
+        const session = await index.session.session(
+          process.env.VUE_APP_INDEX_API_URL,
+          this.address
+        )
+      } catch (e) {
+        this.session = null
+        clearInterval(this.iSession)
+        this.loaded = true
+        this.loading = false
+        return
+      }
       // add gateway (if host) and stargate (if host/gateway) data to the node data
       if (session.node.type === 'host') {
         const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)

@@ -33,6 +33,12 @@ export default {
   props: [
     'session'
   ],
+  computed: {
+    height() {
+      const screenWidth = window.screen.width
+      return screenWidth > 1023 ? 382 : undefined
+    }
+  },
   mounted() {
     this.loadMap()
     if (!this.session) {
@@ -73,7 +79,7 @@ export default {
       if (this.map === null) this.map = new google.visualization.GeoChart(document.getElementById('network_map'))
 
       // focus on country if viewing single node
-      const options = {...this.options}
+      const options = {...this.options, height: this.height}
       if (this.session) options.region = this.session.node.geo.countryCode
 
       this.map.draw(data, options)
@@ -105,4 +111,8 @@ export default {
 </script>
 
 <style scoped>
+div {
+  border-radius: 5px;
+  overflow: hidden;
+}
 </style>

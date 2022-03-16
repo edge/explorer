@@ -11,7 +11,7 @@
             <NodeSummary :session="session" />
           </div>
       </div>
-      <div v-else-if="!$route.params.address" class="container">
+      <div v-else-if="!$route.params.nodeAddress" class="container">
         <NodesTable
           :limit="limit"
           :receiveMetadata="onSessionsUpdate"
@@ -30,9 +30,9 @@
         <div v-if="!loading" class="flex flex-col items-center justify-center h-full">
           <h1 class="m-0 mt-20 text-2xl font-bold">This node doesn't exist</h1>
           <p class="mt-5 mb-0 text-center monospace">
-            Try searching for a different node, or <router-link to="/network" class="underline hover:text-green">view all nodes</router-link>.
+            Try searching for a different node, or <router-link to="/nodes" class="underline hover:text-green">view all nodes</router-link>.
           </p>
-          <router-link to="/network">
+          <router-link to="/nodes">
             <a class="mt-20 button button--solid">View all nodes</a>
           </router-link>
         </div>
@@ -79,7 +79,7 @@ export default {
     NodesTable,
   },
   mounted() {
-    if (this.$route.params.address) { 
+    if (this.$route.params.nodeAddress) { 
       this.updateSession()
       // initiate polling
       this.iSession = setInterval(() => {
@@ -95,10 +95,10 @@ export default {
   },
   computed: {
     address() {
-      return this.$route.params.address || null
+      return this.$route.params.nodeAddress || null
     },
     baseRoute() {
-      return this.$route.params.address ? 'Node' : 'Nodes'
+      return this.$route.params.nodeAddress ? 'Node' : 'Nodes'
     },
     currentPage() {
       return Math.max(1, parseInt(this.$route.query.page) || 1)
@@ -117,10 +117,18 @@ export default {
     async updateSession() {
       if (!this.address) return
       this.loading = true
-      const session = await index.session.session(
-        process.env.VUE_APP_INDEX_API_URL,
-        this.address
-      )
+      try {
+        const session = await index.session.session(
+          process.env.VUE_APP_INDEX_API_URL,
+          this.address
+        )
+      } catch (e) {
+        this.session = null
+        clearInterval(this.iSession)
+        this.loaded = true
+        this.loading = false
+        return
+      }
       // add gateway (if host) and stargate (if host/gateway) data to the node data
       if (session.node.type === 'host') {
         const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
@@ -132,6 +140,10 @@ export default {
         const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.stargate)
         session.stargate = stargate
       }
+      // add wallet address to node data
+      const stake = await index.stake.stake(process.env.VUE_APP_INDEX_API_URL, session.node.stake)
+      session.node.wallet = stake.wallet
+
       this.session = session
 
       this.loaded = true

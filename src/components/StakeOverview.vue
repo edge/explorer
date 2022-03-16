@@ -28,8 +28,10 @@
         <div class="stakeRow__value">{{ stake.type.slice(0, 1).toUpperCase() + stake.type.slice(1) }}</div>
       </div>
       <div class="stakeRow" v-if="stake.device">
-        <div class="stakeRow__label">Device</div>
-        <div class="stakeRow__value">{{ stake.device }}</div>
+        <div class="stakeRow__label">Node</div>
+        <div class="stakeRow__value">
+          <router-link :to="{name: 'Node', params: {nodeAddress: stake.device}}">{{ stake.device }}</router-link>
+        </div>
       </div>
       <div class="stakeRow">
         <div class="stakeRow__label">Amount</div>
@@ -44,8 +46,7 @@
 import { CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip'
-import { fetchStakeHistory } from '../utils/api'
-const { formatXe } = require('@edge/wallet-utils')
+import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: "StakeOverview",

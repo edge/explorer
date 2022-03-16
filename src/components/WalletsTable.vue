@@ -4,7 +4,7 @@
       <thead class="sticky top-0 z-10 hidden lg:table-header-group">
       <tr>
         <TableHeader width="30%" header="Address" :sortQuery="sortQuery"
-          sortParam="address" :onSortingUpdate="updateSorting"
+          sortParam="address" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <th width="16%">Latest Tx</th>
         <TableHeader width="8%" header="Txs" :sortQuery="sortQuery"

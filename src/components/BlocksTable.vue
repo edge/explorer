@@ -7,13 +7,13 @@
             sortParam="height" :onSortingUpdate="updateSorting"
           />
           <TableHeader width="18%" header="Block Hash" :sortQuery="sortQuery"
-            sortParam="hash" :onSortingUpdate="updateSorting"
+            sortParam="hash" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <TableHeader width="18%" header="Data Hash" :sortQuery="sortQuery"
-            sortParam="dataHash" :onSortingUpdate="updateSorting"
+            sortParam="dataHash" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <TableHeader width="18%" header="Ledger Hash" :sortQuery="sortQuery"
-            sortParam="ledgerHash" :onSortingUpdate="updateSorting"
+            sortParam="ledgerHash" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <th width="5%">Txs</th>
           <th class="amount-col" width="16%">Total XE</th>

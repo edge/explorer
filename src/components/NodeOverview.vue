@@ -65,7 +65,7 @@ export default {
       return this.session.node.type.charAt(0).toUpperCase() + this.session.node.type.slice(1)
     },
     gatewayRoute() {
-      if (this.session.gateway) return {name: 'Node', params: {address: this.session.gateway.node.address}}
+      if (this.session.gateway) return {name: 'Node', params: {nodeAddress: this.session.gateway.node.address}}
     },
     isOnline() {
       return Date.now() - this.session.lastActive < 60000
@@ -79,7 +79,7 @@ export default {
       else return 'Unknown'
     },
     stargateRoute() {
-      if (this.session.stargate) return {name: 'Node', params: {address: this.session.stargate.node.address}}
+      if (this.session.stargate) return {name: 'Node', params: {nodeAddress: this.session.stargate.node.address}}
     },
     status() {
       if (this.isOnline) return 'Online'

@@ -11,7 +11,7 @@
             <NodeSummary :session="session" />
           </div>
       </div>
-      <div v-else-if="!$route.params.address" class="container">
+      <div v-else-if="!$route.params.nodeAddress" class="container">
         <NodesTable
           :limit="limit"
           :receiveMetadata="onSessionsUpdate"
@@ -79,7 +79,7 @@ export default {
     NodesTable,
   },
   mounted() {
-    if (this.$route.params.address) { 
+    if (this.$route.params.nodeAddress) { 
       this.updateSession()
       // initiate polling
       this.iSession = setInterval(() => {
@@ -95,10 +95,10 @@ export default {
   },
   computed: {
     address() {
-      return this.$route.params.address || null
+      return this.$route.params.nodeAddress || null
     },
     baseRoute() {
-      return this.$route.params.address ? 'Node' : 'Nodes'
+      return this.$route.params.nodeAddress ? 'Node' : 'Nodes'
     },
     currentPage() {
       return Math.max(1, parseInt(this.$route.query.page) || 1)

@@ -83,7 +83,7 @@ export default {
       else return 'Unlock'
     },
     nodeRoute() {
-      return {name: 'Node', params: {address: this.item.device}}
+      return {name: 'Node', params: {nodeAddress: this.item.device}}
     },
     stakeRoute() {
       return {name: 'Stake', params: {stakeId: this.item.id}}

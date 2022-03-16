@@ -81,13 +81,13 @@ export default {
   },
   computed: {
     addressRoute() {
-      return {name: 'Node', params: {address: this.item.node.address}}
+      return {name: 'Node', params: {nodeAddress: this.item.node.address}}
     },
     gatewayRoute() {
-      return {name: 'Node', params: {address: this.item.node.gateway}}
+      return {name: 'Node', params: {nodeAddress: this.item.node.gateway}}
     },
     stargateRoute() {
-      return {name: 'Node', params: {address: this.item.node.stargate}}
+      return {name: 'Node', params: {nodeAddress: this.item.node.stargate}}
     },
     formattedType() {
       return this.item.node.type.charAt(0).toUpperCase() + this.item.node.type.slice(1)

@@ -30,7 +30,7 @@
       <div class="stakeRow" v-if="stake.device">
         <div class="stakeRow__label">Node</div>
         <div class="stakeRow__value">
-          <router-link :to="{name: 'Node', params: {address: stake.device}}">{{ stake.device }}</router-link>
+          <router-link :to="{name: 'Node', params: {nodeAddress: stake.device}}">{{ stake.device }}</router-link>
         </div>
       </div>
       <div class="stakeRow">

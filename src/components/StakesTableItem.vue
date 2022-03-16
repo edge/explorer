@@ -22,12 +22,12 @@
       </router-link>
     </td>
 
-    <td data-title="Device:" :title="item.device">
-      <span v-if="item.device">
+    <td data-title="Node:" :title="item.device">
+      <router-link :to="nodeRoute" v-if="item.device">
         <span class="monospace md:inline-block">
           {{ item.device }}
         </span>
-      </span>
+      </router-link>
       <span v-else class="text-gray-400">None</span>
     </td>
 
@@ -81,6 +81,9 @@ export default {
       if (this.item.released) return null
       else if (this.item.unlockRequested) return 'Release'
       else return 'Unlock'
+    },
+    nodeRoute() {
+      return {name: 'Node', params: {address: this.item.device}}
     },
     stakeRoute() {
       return {name: 'Stake', params: {stakeId: this.item.id}}

@@ -1,9 +1,10 @@
 <template>
   <tr>
-    <td data-title="Address:" :title="item.address" class="address">
+    <td data-title="Address:" :title="item.address">
       <router-link :to="addressRoute">
         <span class="monospace md:inline-block">{{ item.address }}</span>
-      </router-link><BadgeCheckIcon v-if="item.trusted" class="trusted" />
+      </router-link>
+      <span class="icon-wrap"><BadgeCheckIcon v-if="item.trusted" class="trusted" /></span>
     </td>
 
     <td data-title="Latest Tx:">
@@ -13,19 +14,19 @@
     </td>
 
     <td data-title="Transactions:">
-      <span class="monospace">{{ txCountFormatted }}</span>
+      <span class="monospace md:inline-block">{{ txCountFormatted }}</span>
     </td>
 
     <td data-title="Stakes:">
-      <span class="monospace">{{ stakeCountFormatted }}</span>
+      <span class="monospace md:inline-block">{{ stakeCountFormatted }}</span>
     </td>
 
     <td data-title="Staked XE:" class="amount-col">
-      <span class="monospace">{{ stakedFormatted }}</span>
+      <span class="monospace md:inline-block">{{ stakedFormatted }}</span>
     </td>
 
     <td data-title="Balance (XE):" class="amount-col">
-      <span class="monospace">{{ balanceFormatted }}</span>
+      <span class="monospace md:inline-block">{{ balanceFormatted }}</span>
     </td>
   </tr>
 </template>
@@ -73,7 +74,7 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-none;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-tight;
 }
 
 td::before {
@@ -92,9 +93,6 @@ td:last-child {
 td .icon {
   @apply w-15 inline-block align-middle;
 }
-td .icon--confirmed {
-  @apply w-16 md:w-18;
-}
 
 td .icon-green {
   @apply text-green;
@@ -108,33 +106,29 @@ td .icon-red {
   @apply text-red;
 }
 
-td.arrow-icon {
-  @apply hidden lg:table-cell;
-}
-
-td.arrow-icon svg {
-  @apply pt-px w-14 h-14 text-green;
-}
-
 td a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  @apply border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+td span {
+  @apply w-full overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 td a {
   @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
-td span {
-  @apply max-w-max w-full overflow-ellipsis overflow-hidden whitespace-nowrap;
+.trusted {
+  @apply w-18 h-18 inline-block ml-2 text-green mb-2 lg:mb-0;
 }
 
-.trusted {
-  @apply w-18 h-18 inline-block ml-2 text-green;
+.icon-wrap {
+  @apply max-w-max
 }
 
 @screen lg {
   td {
-    @apply border-gray-200 pt-13 pb-15 table-cell border-b-2 align-middle;
+    @apply border-gray-200 pt-13 pb-10 table-cell border-b-2 align-middle;
   }
 
   td span {
@@ -146,7 +140,7 @@ td span {
   }
 
   td:last-child {
-    @apply pr-30 pb-13 text-right border-b-2;
+    @apply pr-30 pb-10 text-right border-b-2;
   }
 
   td.amount-col {

@@ -31,35 +31,37 @@
     </td>
 
     <td data-title="Type:">
-      <span class="monospace md:font-sans">{{ formattedType }}</span>
+      <span class="monospace md:font-sans md:inline-block">{{ formattedType }}</span>
     </td>
 
-    <td data-title="Location:" :title="item.node.geo.city">
-      <div class="overflow"><span class="monospace md:font-sans" :class="location === 'Unknown' && 'text-gray'">
+    <td data-title="Location:" :title="location">
+      <span class="md:inline-block"><span class="monospace md:font-sans" :class="location === 'Unknown' && 'text-gray'">
         {{ location }}
-      </span></div>
+      </span></span>
     </td>
 
-    <td data-title="Availability:" :title="item.availability">
+    <td data-title="Availability:">
       <span class="monospace md:inline-block">
         {{ (item.availability * 100).toFixed(2) }}%
       </span>
     </td>
 
     <td data-title="Status:">
-      <div v-if="isOnline">
-        <span class="mr-1 lg:-mt-2 icon icon-green"><StatusOnlineIcon /></span>
+      <span v-if="isOnline" class="md:inline-block">
+        <span class="mr-1 -mt-2 icon icon-green"><StatusOnlineIcon /></span>
         <span class="monospace md:font-sans">Online</span>
-      </div>
-      <div v-else>
+      </span>
+      <span v-else class="md:inline-block">
         <span class="mr-1 lg:-mt-2 icon icon-grey"><StatusOfflineIcon /></span>
         <span class="monospace md:font-sans text-gray">Offline</span>
-      </div>
+      </span>
     </td>
 
     <td data-title="Last Seen:">
-      <span class="mr-1 lg:-mt-2 icon icon-grey"><ClockIcon /></span>
-      <span class="monospace md:font-sans text-gray">{{ lastActive }}</span>
+      <span class="md:inline-block">
+        <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon /></span>
+        <span class="monospace md:font-sans text-gray">{{ lastActive }}</span>
+      </span>
     </td>
   </tr>
 </template>
@@ -120,10 +122,6 @@ td a {
   @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
-td .overflow {
-  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
-}
-
 td::before {
   content: attr(data-title);
   @apply font-normal mr-8 min-w-100 text-xs text-gray-600 pt-2;
@@ -150,24 +148,20 @@ td .icon-grey {
 }
 
 td a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  @apply border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 @screen lg {
   td {
-    @apply border-gray-200 py-15 table-cell border-b-2 align-middle;
+    @apply border-gray-200 pt-13 pb-10 table-cell border-b-2 align-middle;
   }
 
   td:first-child {
     @apply pl-20 pt-13;
   }
 
-  td.amount-col {
-    @apply text-right pr-30;
-  }
-
   td:last-child {
-    @apply pb-15 border-b-2;
+    @apply pb-10 border-b-2;
   }
 
   td:before {

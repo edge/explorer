@@ -22,12 +22,17 @@ export default {
   },
   props: ['points'],
   computed: {
+    pointRadius() {
+      if (this.mapWidth > 450) return 5
+      if (this.mapWidth > 350) return 4
+      else return 3
+    },
     mapHeight() {
       return this.$refs.mapImage.clientHeight
     },
     mapWidth() {
       return this.$refs.mapImage.clientWidth
-    },
+    }
   },
   methods: {
     convertGeoToXy(lat, lng) {
@@ -54,7 +59,7 @@ export default {
       this.points.forEach(p => {
         let {x, y} = this.convertGeoToXy(p.lat, p.lng)
         ctx.beginPath()
-        ctx.arc(x, y, 5, 0, 2 * Math.PI)
+        ctx.arc(x, y, this.pointRadius, 0, 2 * Math.PI)
         ctx.fill()
         ctx.stroke()
       })

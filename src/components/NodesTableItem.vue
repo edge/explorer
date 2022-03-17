@@ -2,7 +2,7 @@
   <tr>
     <td data-title="Address:" :title="item.node.address">
       <router-link :to="addressRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.node.address }}
         </span>
       </router-link>
@@ -10,57 +10,57 @@
 
     <td data-title="Gateway:" :title="item.node.gateway">
       <router-link v-if="item.node.gateway" :to="gatewayRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.node.gateway }}
         </span>
       </router-link>
-      <span v-else class="monospace md:inline-block text-gray">
+      <span v-else class="monospace lg:inline-block text-gray">
         N/A
       </span>
     </td>
 
     <td data-title="Stargate:" :title="item.node.stargate">
       <router-link v-if="item.node.stargate" :to="stargateRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.node.stargate }}
         </span>
       </router-link>
-      <span v-else class="monospace md:inline-block text-gray">
+      <span v-else class="monospace lg:inline-block text-gray">
         N/A
       </span>
     </td>
 
     <td data-title="Type:">
-      <span class="monospace md:font-sans md:inline-block">{{ formattedType }}</span>
+      <span class="monospace lg:font-sans lg:inline-block">{{ formattedType }}</span>
     </td>
 
     <td data-title="Location:" :title="location">
-      <span class="md:inline-block"><span class="monospace md:font-sans" :class="location === 'Unknown' && 'text-gray'">
+      <span class="lg:inline-block"><span class="monospace lg:font-sans" :class="location === 'Unknown' && 'text-gray'">
         {{ location }}
       </span></span>
     </td>
 
     <td data-title="Availability:">
-      <span class="monospace md:inline-block">
+      <span class="monospace lg:inline-block">
         {{ (item.availability * 100).toFixed(2) }}%
       </span>
     </td>
 
     <td data-title="Status:">
-      <span v-if="isOnline" class="md:inline-block">
+      <span v-if="isOnline" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><StatusOnlineIcon /></span>
-        <span class="monospace md:font-sans">Online</span>
+        <span class="monospace lg:font-sans">Online</span>
       </span>
-      <span v-else class="md:inline-block">
+      <span v-else class="lg:inline-block">
         <span class="mr-1 lg:-mt-2 icon icon-grey"><StatusOfflineIcon /></span>
-        <span class="monospace md:font-sans text-gray">Offline</span>
+        <span class="monospace lg:font-sans text-gray">Offline</span>
       </span>
     </td>
 
     <td data-title="Last Seen:">
-      <span class="md:inline-block">
+      <span class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon /></span>
-        <span class="monospace md:font-sans text-gray">{{ lastActive }}</span>
+        <span class="monospace lg:font-sans text-gray">{{ lastActive }}</span>
       </span>
     </td>
   </tr>

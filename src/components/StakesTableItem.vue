@@ -2,21 +2,21 @@
   <tr>
     <td data-title="ID:" :title="item.id">
       <router-link :to="stakeRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.id }}
         </span>
       </router-link>
     </td>
 
     <td data-title="Hash:" :title="item.hash">
-      <span class="monospace md:inline-block">
+      <span class="monospace lg:inline-block">
         {{ item.hash }}
       </span>
     </td>
 
     <td data-title="Wallet:" :title="item.tx.sender">
       <router-link :to="walletRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.tx.sender }}
         </span>
       </router-link>
@@ -24,7 +24,7 @@
 
     <td data-title="Node:" :title="item.device">
       <router-link :to="nodeRoute" v-if="item.device">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.device }}
         </span>
       </router-link>
@@ -32,32 +32,32 @@
     </td>
 
     <td data-title="Type:">
-      <span class="monospace md:font-sans md:inline-block">{{ formattedType }}</span>
+      <span class="monospace lg:font-sans lg:inline-block">{{ formattedType }}</span>
     </td>
 
     <td data-title="Status:">
-      <span v-if="item.released" class="md:inline-block">
+      <span v-if="item.released" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey"><ArrowCircleDownIcon/></span>
-        <span class="monospace md:font-sans">Released</span>
+        <span class="monospace lg:font-sans">Released</span>
       </span>
-      <span v-else-if="item.unlockRequested" class="md:inline-block">
+      <span v-else-if="item.unlockRequested" class="lg:inline-block">
         <span v-if="isUnlocking">
           <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
-          <span class="monospace md:font-sans">Unlocking</span>
+          <span class="monospace lg:font-sans">Unlocking</span>
         </span>
-        <span v-else class="md:inline-block">
+        <span v-else class="lg:inline-block">
           <span class="mr-1 -mt-2 icon icon-grey"><DotsCircleHorizontalIcon/></span>
-          <span class="monospace md:font-sans">Unlocked</span>
+          <span class="monospace lg:font-sans">Unlocked</span>
         </span>
       </span>
-      <span v-else class="md:inline-block">
+      <span v-else class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon/></span>
-        <span class="monospace md:font-sans">Active</span>
+        <span class="monospace lg:font-sans">Active</span>
       </span>
     </td>
 
     <td data-title="Amount (XE):" class="amount-col" :title="formattedAmount">
-      <span class="monospace md:inline-block">{{ formattedAmount }}</span>
+      <span class="monospace lg:inline-block">{{ formattedAmount }}</span>
     </td>
   </tr>
 </template>

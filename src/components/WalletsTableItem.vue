@@ -2,31 +2,31 @@
   <tr>
     <td data-title="Address:" :title="item.address">
       <router-link :to="addressRoute">
-        <span class="monospace md:inline-block">{{ item.address }}</span>
+        <span class="monospace lg:inline-block">{{ item.address }}</span>
       </router-link>
       <span class="icon-wrap"><BadgeCheckIcon v-if="item.trusted" class="trusted" /></span>
     </td>
 
     <td data-title="Latest Tx:">
       <router-link :to="latestTxRoute">
-        <span class="monospace md:inline-block">{{ item.latestTransaction.hash }}</span>
+        <span class="monospace lg:inline-block">{{ item.latestTransaction.hash }}</span>
       </router-link>
     </td>
 
     <td data-title="Transactions:">
-      <span class="monospace md:inline-block">{{ txCountFormatted }}</span>
+      <span class="monospace lg:inline-block">{{ txCountFormatted }}</span>
     </td>
 
     <td data-title="Stakes:">
-      <span class="monospace md:inline-block">{{ stakeCountFormatted }}</span>
+      <span class="monospace lg:inline-block">{{ stakeCountFormatted }}</span>
     </td>
 
     <td data-title="Staked XE:" class="amount-col">
-      <span class="monospace md:inline-block">{{ stakedFormatted }}</span>
+      <span class="monospace lg:inline-block">{{ stakedFormatted }}</span>
     </td>
 
     <td data-title="Balance (XE):" class="amount-col">
-      <span class="monospace md:inline-block">{{ balanceFormatted }}</span>
+      <span class="monospace lg:inline-block">{{ balanceFormatted }}</span>
     </td>
   </tr>
 </template>

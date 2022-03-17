@@ -2,8 +2,10 @@
   <div class="flex flex-col h-full">
     <h3>{{ session ? "Node Location" : "Network Map"}}</h3>
     <div class="map-container">
-      <img ref="mapImage" src="/assets/mercator-map.png" alt="">
-      <canvas ref="mapCanvas"></canvas>
+      <div class="wrapper">
+        <img ref="mapImage" src="/assets/mercator-map.png" alt="">
+        <canvas ref="mapCanvas"></canvas>
+      </div>
     </div>
   </div>
 </template>
@@ -19,31 +21,21 @@ export default {
     return {
       map: null,
       iMap: null,
-      mapLngLeft: -179,
+      mapLngLeft: -180,
       mapLngRight: 180,
-      mapLatBottom: -54.7,
+      mapLatBottom: -57,
       points: [],
     }
   },
   props: [
-    'session'
+    'sessions'
   ],
   computed: {
-    height() {
-      const screenWidth = window.screen.width
-      return screenWidth > 1023 ? 382 : undefined
-    },
-    mapElement() {
-      return this.$refs.mapImage
-    },
     mapHeight() {
       return this.$refs.mapImage.clientHeight
     },
     mapWidth() {
       return this.$refs.mapImage.clientWidth
-    },
-    canvasElement() {
-      return this.$refs.mapCanvas
     },
   },
   mounted() {
@@ -77,14 +69,15 @@ export default {
     async drawPoints() {
       await this.updatePoints()
 
-      const ctx = this.canvasElement.getContext('2d')
+      const canvas = this.$refs.mapCanvas
+      const ctx = canvas.getContext('2d')
       ctx.canvas.width = this.mapWidth
       ctx.canvas.height = this.mapHeight
-      ctx.fillStyle = 'rgb(0, 165, 0)'
-      ctx.strokeStyle = 'rgb(0, 0, 0)'
+      ctx.fillStyle = 'rgb(14, 204, 95)'
+      ctx.strokeStyle = 'rgb(10, 90, 45)'
 
       this.points.forEach(p => {
-        const {x, y} = this.convertGeoToXy(p.lat, p.lng)
+        let {x, y} = this.convertGeoToXy(p.lat, p.lng)
         ctx.beginPath()
         ctx.arc(x, y, 5, 0, 2 * Math.PI)
         ctx.fill()
@@ -95,6 +88,7 @@ export default {
     async updatePoints() {
       this.loading = true
       const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/sessions/map?limit=500`)
+      console.log(result)
       this.points = result.body.results
       this.loaded = true
       this.loading = false
@@ -106,18 +100,39 @@ export default {
 <style scoped>
 .map-container {
   position: relative;
+  width: 100%;
+  height: auto;
   border-radius: 5px;
-  overflow: hidden;
+  background-color: white;
 }
 
 img {
-  height: 382px;
-  width: auto;
+  width: 100%;
+  height: auto;
 }
 
 canvas {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+@screen lg {
+  .map-container {
+    height: 382px;
+    width: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .wrapper {
+    position: relative;
+    width: max-content;
+    height: max-content;
+  }
+
+  img {
+    object-fit: contain;
+  }
 }
 </style>

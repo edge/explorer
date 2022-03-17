@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full">
-    <h3>{{ session ? "Node Location" : "Network Map"}}</h3>
+    <h3>Network Map</h3>
     <div class="map-container">
       <div class="wrapper">
         <img ref="mapImage" src="/assets/mercator-map.png" alt="">
@@ -11,25 +11,16 @@
 </template>
 
 <script>
-import superagent from 'superagent'
-
-const mapRefreshInterval = 20 * 1000
-
 export default {
   name: "NetworkMap",
   data: function () {
     return {
-      map: null,
-      iMap: null,
       mapLngLeft: -180,
       mapLngRight: 180,
       mapLatBottom: -57,
-      points: [],
     }
   },
-  props: [
-    'sessions'
-  ],
+  props: ['points'],
   computed: {
     mapHeight() {
       return this.$refs.mapImage.clientHeight
@@ -37,20 +28,6 @@ export default {
     mapWidth() {
       return this.$refs.mapImage.clientWidth
     },
-  },
-  mounted() {
-    this.drawPoints()
-    if (!this.session) {
-      // initiate polling
-      this.iMap = setInterval(() => {
-        this.drawPoints()
-      }, mapRefreshInterval)
-    }
-  },
-  unmounted() {
-    if (!this.session) {
-      clearInterval(this.iMap)
-    }
   },
   methods: {
     convertGeoToXy(lat, lng) {
@@ -67,8 +44,6 @@ export default {
       return {x, y}
     },
     async drawPoints() {
-      await this.updatePoints()
-
       const canvas = this.$refs.mapCanvas
       const ctx = canvas.getContext('2d')
       ctx.canvas.width = this.mapWidth
@@ -83,19 +58,11 @@ export default {
         ctx.fill()
         ctx.stroke()
       })
-
-    },
-    async updatePoints() {
-      this.loading = true
-      const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/sessions/map?limit=500`)
-      this.points = result.body.results
-      this.loaded = true
-      this.loading = false
-    },
+    }
   },
   watch: {
-    sessions: {
-
+    points() {
+      this.drawPoints()
     }
   }
 }

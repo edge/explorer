@@ -89,7 +89,7 @@ export default {
 
 .stat {
   @apply p-12 bg-white rounded flex flex-col;
-  @apply md:p-16 lg:p-20;
+  @apply md:p-16 lg:p-24;
 }
 .stat__label {
   @apply truncate;

@@ -64,7 +64,7 @@ export default {
       const x = (lng - this.mapLngLeft) * (this.mapWidth / mapLngDelta)
       const y = this.mapHeight - ((worldMapWidth / 2 * Math.log((1 + Math.sin(latitudeRad)) / (1 - Math.sin(latitudeRad)))) - mapOffsetY)
 
-      return {x, y} // the pixel x,y value of this point on the map image
+      return {x, y}
     },
     async drawPoints() {
       await this.updatePoints()
@@ -73,8 +73,8 @@ export default {
       const ctx = canvas.getContext('2d')
       ctx.canvas.width = this.mapWidth
       ctx.canvas.height = this.mapHeight
-      ctx.fillStyle = 'rgb(14, 204, 95)'
-      ctx.strokeStyle = 'rgb(10, 90, 45)'
+      ctx.fillStyle = '#0ecc5f'
+      ctx.strokeStyle = '#5cbd64'
 
       this.points.forEach(p => {
         let {x, y} = this.convertGeoToXy(p.lat, p.lng)
@@ -88,11 +88,15 @@ export default {
     async updatePoints() {
       this.loading = true
       const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/sessions/map?limit=500`)
-      console.log(result)
       this.points = result.body.results
       this.loaded = true
       this.loading = false
     },
+  },
+  watch: {
+    sessions: {
+
+    }
   }
 }
 </script>
@@ -119,7 +123,7 @@ canvas {
 
 @screen lg {
   .map-container {
-    height: 382px;
+    height: 414px;
     width: auto;
     display: flex;
     align-items: center;
@@ -127,12 +131,12 @@ canvas {
 
   .wrapper {
     position: relative;
-    width: max-content;
-    height: max-content;
+    width: 100%;
   }
 
   img {
     object-fit: contain;
+    max-height: 414px;
   }
 }
 </style>

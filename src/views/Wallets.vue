@@ -153,14 +153,6 @@ export default {
     if (this.address) {
       this.fetchData()
       this.pollData()
-      // clamp tx and stakes tables to page 1
-      const txP = parseInt(this.$route.query.txsPage) || 0
-      const stakesP = parseInt(this.$route.query.stakesPage) || 0
-      if (txP < 1) this.$router.replace({ query: { ...this.$route.query, txsPage: 1 } })
-      if (stakesP < 1) this.$router.replace({ query: { ...this.$route.query, stakesPage: 1 } })
-    } else {
-      const p = parseInt(this.$route.query.page) || 0
-      if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
     }
   },
   methods: {
@@ -208,15 +200,24 @@ export default {
       this.fetchData()
     },
     metadata() {
-      // clamp wallets pagination to available page numbers with automatic redirection
+      if (this.lastPage > 1) {
+        const p = parseInt(this.$route.query.page) || 0
+        if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
+      }
       if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
     },
     stakesMetadata() {
-      // clamp stakes pagination to available page numbers with automatic redirection
+      if (this.stakesLastPage > 1) {
+        const p = parseInt(this.$route.query.stakesPage) || 0
+        if (p < 1) this.$router.replace({ query: { ...this.$route.query, stakesPage: 1 } })
+      }
       if (this.stakesCurrentPage > this.stakesLastPage) this.$router.replace({ query: { ...this.$route.query, stakesPage: this.stakesLastPage } })
     },
     txsMetadata() {
-      // clamp tx pagination to available page numbers with automatic redirection
+      if (this.txsLastPage > 1) {
+        const p = parseInt(this.$route.query.txsPage) || 0
+        if (p < 1) this.$router.replace({ query: { ...this.$route.query, txsPage: 1 } })
+      }
       if (this.txsCurrentPage > this.txsLastPage) this.$router.replace({ query: { ...this.$route.query, txsPage: this.txsLastPage } })
     }
   }

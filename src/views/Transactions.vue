@@ -106,9 +106,6 @@ export default {
       this.fetchData().then(() => {
         this.pollData()
       })
-    } else {
-      const p = parseInt(this.$route.query.page) || 0
-      if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
     }
   },
   methods: {
@@ -166,7 +163,10 @@ export default {
       this.fetchData()
     },
     metadata() {
-      // clamp pagination to available page numbers with automatic redirection
+      if (this.lastPage > 1) {
+        const p = parseInt(this.$route.query.page) || 0
+        if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
+      }
       if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
     }
   }

@@ -60,7 +60,7 @@ export default {
   props: ['blocks', 'loading'],
   methods: {
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return formatXe(amount / 1e6, true)
     },
     timeSince(ts) {
       return moment(ts).fromNow()

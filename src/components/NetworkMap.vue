@@ -46,7 +46,7 @@ export default {
       const x = (lng - this.mapLngLeft) * (this.mapWidth / mapLngDelta)
       const y = this.mapHeight - ((worldMapWidth / 2 * Math.log((1 + Math.sin(latitudeRad)) / (1 - Math.sin(latitudeRad)))) - mapOffsetY)
 
-      return {x, y}
+      return { x, y }
     },
     async drawPoints() {
       const canvas = this.$refs.mapCanvas
@@ -57,7 +57,7 @@ export default {
       ctx.strokeStyle = '#5cbd64'
 
       this.points.forEach(p => {
-        let {x, y} = this.convertGeoToXy(p.lat, p.lng)
+        let { x, y } = this.convertGeoToXy(p.lat, p.lng)
         ctx.beginPath()
         ctx.arc(x, y, this.pointRadius, 0, 2 * Math.PI)
         ctx.fill()

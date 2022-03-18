@@ -33,6 +33,7 @@ import superagent from 'superagent'
 import { fetchBlocks, fetchStakeStats, fetchTransactions } from '../utils/api'
 
 const mapRefreshInterval = 60 * 1000
+const pollInterval = 10 * 1000
 
 export default {
   name: 'Overview',
@@ -46,7 +47,6 @@ export default {
       loading: false,
       mapPoints: [],
       iMapPoints: null,
-      pollInterval: 10000,
       polling: null,
       stats: {},
       isTestnet: process.env.VUE_APP_IS_TESTNET === 'true'
@@ -130,7 +130,7 @@ export default {
         this.fetchBlocks()
         this.fetchTransactions()
         this.fetchStats()
-      }, this.pollInterval)
+      }, pollInterval)
     },
     async updateMapPoints() {
       this.loading = true

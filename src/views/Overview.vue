@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row mb-25" v-if="isTestnet">
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
-        <NetworkMap :points="mapPoints" />
+        <Faucet />
       </div>
       <div class="row mb-25" v-else>
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import Faucet from "@/components/Faucet"
 import Header from "@/components/Header"
 import NetworkMap from "@/components/NetworkMap"
 import RecentBlocks from "@/components/RecentBlocks"
@@ -52,6 +53,7 @@ export default {
     }
   },
   components: {
+    Faucet,
     Header,
     NetworkMap,
     RecentBlocks,

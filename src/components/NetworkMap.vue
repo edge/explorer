@@ -1,108 +1,114 @@
 <template>
   <div class="flex flex-col h-full">
-    <h3>{{ session ? "Node Location" : "Network Map"}}</h3>
-    <div id="network_map"></div>
+    <h3>Network Map</h3>
+    <div class="map-container">
+      <div class="wrapper">
+        <img ref="mapImage" src="/assets/mercator-map.png" alt="">
+        <canvas ref="mapCanvas"></canvas>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import superagent from 'superagent'
-
-const mapRefreshInterval = 20 * 1000
-
 export default {
   name: "NetworkMap",
   data: function () {
     return {
-      map: null,
-      iMap: null,
-      points: [],
-      options: {
-        backgroundColor: '#181818',
-        datalessRegionColor: '#808080',
-        defaultColor: '#0ecd61',
-        displayMode: 'markers',
-        magnifyingGlass: {enable: true, zoomFactor: 5},
-        legend: 'none',
-        tooltip: {trigger: 'none',},
-        colorAxis: {colors: ['#555', '#0ecd61'], values: [0, 1]},
-        sizeAxis: {minSize: 5, maxSize: 5}
-      }
+      mapLngLeft: -180,
+      mapLngRight: 180,
+      mapLatBottom: -57,
     }
   },
-  props: [
-    'session'
-  ],
-  mounted() {
-    this.loadMap()
-    if (!this.session) {
-      // initiate polling
-      this.iMap = setInterval(() => {
-        this.loadMap()
-      }, mapRefreshInterval)
-    }
-  },
-  unmounted() {
-    if (!this.session) {
-      clearInterval(this.iMap)
+  props: ['points'],
+  computed: {
+    pointRadius() {
+      if (this.mapWidth > 450) return 5
+      if (this.mapWidth > 350) return 4
+      else return 3
+    },
+    mapHeight() {
+      return this.$refs.mapImage.clientHeight
+    },
+    mapWidth() {
+      return this.$refs.mapImage.clientWidth
     }
   },
   methods: {
-    async drawMap() {
-      // colours are set by online: 0 = offline / 1 = online
-      // size is set by type: 0 = host / 1 = gateway / 2 = stargate
-      const nodeTable = [['lat', 'lng', 'online', 'type']]
-      if (this.session) {
-        const nodes = [this.session]
-        if (this.session.gateway) nodes.push(this.session.gateway)
-        if (this.session.stargate) nodes.push(this.session.stargate)
-        nodes.forEach(node => {
-          const online = this.isOnline(node) ? 1 : 0
-          const type = node.node.type === 'host' ? 0 : node.node.type === 'gateway' ? 1 : 2
-          nodeTable.push([node.node.geo.lat, node.node.geo.lng, online, type])
-        })
-      }
-      else {
-        await this.updatePoints()
-        this.points.forEach(p => {
-          nodeTable.push([p.lat, p.lng, 1, 0])
-        })
-      }
+    convertGeoToXy(lat, lng) {
+      const mapLatBottomRad = this.mapLatBottom * Math.PI / 180
+      const latitudeRad = lat * Math.PI / 180
+      const mapLngDelta = (this.mapLngRight - this.mapLngLeft)
 
-      const data = google.visualization.arrayToDataTable(nodeTable)
-      if (this.map === null) this.map = new google.visualization.GeoChart(document.getElementById('network_map'))
+      const worldMapWidth = ((this.mapWidth / mapLngDelta) * 360) / (2 * Math.PI)
+      const mapOffsetY = (worldMapWidth / 2 * Math.log((1 + Math.sin(mapLatBottomRad)) / (1 - Math.sin(mapLatBottomRad))))
 
-      // focus on country if viewing single node
-      const options = {...this.options}
-      if (this.session) options.region = this.session.node.geo.countryCode
+      const x = (lng - this.mapLngLeft) * (this.mapWidth / mapLngDelta)
+      const y = this.mapHeight - ((worldMapWidth / 2 * Math.log((1 + Math.sin(latitudeRad)) / (1 - Math.sin(latitudeRad)))) - mapOffsetY)
 
-      this.map.draw(data, options)
+      return { x, y }
     },
-    loadMap() {
-      google.charts.load('current', {
-        'packages':['geochart'],
+    async drawPoints() {
+      const canvas = this.$refs.mapCanvas
+      const ctx = canvas.getContext('2d')
+      ctx.canvas.width = this.mapWidth
+      ctx.canvas.height = this.mapHeight
+      ctx.fillStyle = '#0ecc5f'
+      ctx.strokeStyle = '#5cbd64'
+
+      this.points.forEach(p => {
+        let { x, y } = this.convertGeoToXy(p.lat, p.lng)
+        ctx.beginPath()
+        ctx.arc(x, y, this.pointRadius, 0, 2 * Math.PI)
+        ctx.fill()
+        ctx.stroke()
       })
-      google.charts.setOnLoadCallback(this.drawMap.bind(this))
-    },
-    isOnline(node) {
-      return Date.now() - node.lastActive < 60000
-    },
-    isValidGeoData(node) {
-      let isValid = true
-      if (node.node.geo.lat > 90 || node.node.geo.lat < -90) isValid = false
-      if (node.node.geo.lng > 180 || node.node.geo.lng < -180) isValid = false
-      return isValid
-    },
-    async updatePoints() {
-      this.loading = true
-      const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/sessions/map?limit=500`)
-      this.points = result.body.results
-      this.loaded = true
-      this.loading = false
-    },
+    }
+  },
+  watch: {
+    points() {
+      this.drawPoints()
+    }
   }
 }
 </script>
 
 <style scoped>
+.map-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  background-color: white;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+@screen lg {
+  .map-container {
+    height: 414px;
+    width: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  img {
+    object-fit: contain;
+    max-height: 414px;
+  }
+}
 </style>

@@ -6,10 +6,10 @@
       <thead class="hidden lg:table-header-group">
         <tr>
           <th width="15%">Height</th>
-          <th>Hash</th>
-          <th>Txs</th>
-          <th>Total XE</th>
-          <th>Mined</th>
+          <th width="20%">Hash</th>
+          <th width="10%">Txs</th>
+          <th width="25%" class="amount-col">Total XE</th>
+          <th width="30%">Mined</th>
         </tr>
       </thead>
       <tbody v-if="loading">
@@ -28,20 +28,21 @@
           </td>
           <td class="" data-title="Hash:">
             <router-link :to="{name: 'Block', params: {blockId: block.hash}}">
-              <span class="hidden monospace md:inline-block">{{ block.hash.substr(0, 16) }}…</span>
-              <span class="monospace md:hidden">{{ block.hash.substr(0, 16) }}…</span>
+              <span class="monospace lg:inline-block">{{ block.hash }}…</span>
             </router-link>
           </td>
           <td data-title="Txs:">
-            {{ block.transactions.length }}
+            <span class="monospace lg:inline-block">{{ block.transactions.length }}</span>
           </td>
-          <td data-title="Total XE:" class="monospace">
-            {{ formatAmount(block.total) }}
+          <td data-title="Total XE:" class="amount-col">
+            <span class="monospace lg:inline-block">{{ formatAmount(block.total) }}</span>
           </td>
-          <td class="truncate" data-title="Mined:">
-            <span class="mr-1 lg:-mt-2 icon"><ClockIcon /></span>
-            <span class="truncate monospace md:font-sans md:text-gray-400">
-              {{ timeSince(block.timestamp) }}
+          <td data-title="Mined:">
+            <span class="lg:inline-block">
+              <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon /></span>
+              <span class="monospace lg:font-sans lg:text-gray-400">
+                {{ timeSince(block.timestamp) }}
+              </span>
             </span>
           </td>
         </tr>
@@ -60,7 +61,7 @@ export default {
   props: ['blocks', 'loading'],
   methods: {
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return formatXe(amount / 1e6, true)
     },
     timeSince(ts) {
       return moment(ts).fromNow()
@@ -77,8 +78,16 @@ table, tbody, tr {
   @apply block;
 }
 
+table {
+  @apply w-full table-fixed
+}
+
 th {
   @apply font-normal text-sm2 text-left bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
+}
+
+th.amount-col {
+  @apply text-right pr-30
 }
 
 /* th:first-child {
@@ -94,7 +103,7 @@ tr {
 }
 
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-tight;
 }
 
 td::before {
@@ -111,7 +120,15 @@ td:last-child {
 }
 
 td a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  @apply border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+td span {
+  @apply w-full overflow-ellipsis overflow-hidden whitespace-nowrap;
+}
+
+td a {
+  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 td .icon {
@@ -145,6 +162,10 @@ td .icon {
 
   td:first-child {
     @apply pl-20 pt-13;
+  }
+
+  td.amount-col {
+    @apply text-right pr-30;
   }
 
   td:last-child {

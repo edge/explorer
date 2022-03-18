@@ -3,16 +3,16 @@
     <thead class="hidden lg:table-header-group">
       <tr v-if="sortable">
         <TableHeader width="16%" header="Address" :sortQuery="sortQuery"
-          sortParam="node.address" :onSortingUpdate="updateSorting"
+          sortParam="node.address" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <!-- currently no sorting on gateway and stargate columns as stargate address isn't contained in a host node's data -->
         <th width="15%">Gateway</th>
         <th width="15%">Stargate</th>
         <TableHeader width="8%" header="Type" :sortQuery="sortQuery"
-          sortParam="node.type" :onSortingUpdate="updateSorting"
+          sortParam="node.type" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <TableHeader width="20%" header="Location" :sortQuery="sortQuery"
-          sortParam="node.geo.city" :onSortingUpdate="updateSorting"
+          sortParam="node.geo.country,node.geo.city" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <TableHeader width="98" header="Availability" :sortQuery="sortQuery"
           sortParam="sortAvailability" :onSortingUpdate="updateSorting"

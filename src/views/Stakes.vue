@@ -99,9 +99,6 @@ export default {
   mounted() {
     if (this.$route.params.stakeId) { 
       this.fetchData()
-    } else {
-      const p = parseInt(this.$route.query.page) || 0
-      if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
     }
   },
   computed: {
@@ -159,7 +156,10 @@ export default {
       this.fetchData()
     },
     metadata() {
-      // clamp pagination to available page numbers with automatic redirection
+      const numRegEx = /^[-+]?\d*$/
+      if (this.$route.query.page) {
+        if (this.$route.query.page < 1 || !numRegEx.test(this.$route.query.page)) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
+      }
       if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
     }
   }

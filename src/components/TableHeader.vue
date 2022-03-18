@@ -25,6 +25,7 @@ export default {
     'classes',
     'header',
     'onSortingUpdate',
+    'sortAscFirst',
     'sortQuery',
     'sortParam',
     'width'
@@ -65,19 +66,36 @@ export default {
     updateSorting() {
       // sorting logic is:
       // - if param already at front of list, toggle between descending > ascending > remove > descending
+      // (if sortAscFirst = true, order is ascending > descending > remove > ascending)
       // - if param already in sorting list, bring to front (as descending)
       // - if param not in list, add to front of list (as descending)
-      if (!this.sortQuery) this.onSortingUpdate(this.sortParamDesc)
-      else if (this.startRegex.test(this.sortQuery)) {
-        let replaceString = this.sortParam
-        if (!this.fullRegex.test(this.sortQuery)) replaceString += ','
-        if (this.sortQuery[0] === '-') this.onSortingUpdate(this.sortQuery.replace(this.startRegex, replaceString))
-        else this.onSortingUpdate(this.sortQuery.replace(this.startRegex, ''))
+      if (!this.sortAscFirst) {
+        if (!this.sortQuery) this.onSortingUpdate(this.sortParamDesc)
+          else if (this.startRegex.test(this.sortQuery)) {
+            let replaceString = this.sortParam
+            if (!this.fullRegex.test(this.sortQuery)) replaceString += ','
+            if (this.sortQuery[0] === '-') this.onSortingUpdate(this.sortQuery.replace(this.startRegex, replaceString))
+            else this.onSortingUpdate(this.sortQuery.replace(this.startRegex, ''))
+          }
+          else {
+            let newSortQuery = this.sortParamDesc
+            if (this.sortQuery) newSortQuery += `,${this.sortQuery.replace(this.midRegex, '').replace(/,$/, '')}`
+            this.onSortingUpdate(newSortQuery)
+          }
       }
       else {
-        let newSortQuery = this.sortParamDesc
-        if (this.sortQuery) newSortQuery += `,${this.sortQuery.replace(this.midRegex, '').replace(/,$/, '')}`
-        this.onSortingUpdate(newSortQuery)
+        if (!this.sortQuery) this.onSortingUpdate(this.sortParam)
+        else if (this.startRegex.test(this.sortQuery)) {
+          let replaceString = this.sortParamDesc
+          if (!this.fullRegex.test(this.sortQuery)) replaceString += ','
+          if (this.sortQuery[0] !== '-') this.onSortingUpdate(this.sortQuery.replace(this.startRegex, replaceString))
+          else this.onSortingUpdate(this.sortQuery.replace(this.startRegex, ''))
+        }
+        else {
+          let newSortQuery = this.sortParam
+          if (this.sortQuery) newSortQuery += `,${this.sortQuery.replace(this.midRegex, '').replace(/,$/, '')}`
+          this.onSortingUpdate(newSortQuery)
+        }
       }
     }
   }

@@ -7,17 +7,17 @@
             sortParam="timestamp" :onSortingUpdate="updateSorting"
           />
           <TableHeader width="15%" header="Tx Hash" :sortQuery="sortQuery"
-            sortParam="hash" :onSortingUpdate="updateSorting"
+            sortParam="hash" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <TableHeader width="15%" header="From" :sortQuery="sortQuery"
-            sortParam="sender" :onSortingUpdate="updateSorting"
+            sortParam="sender" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
           <TableHeader width="15%" header="To" :sortQuery="sortQuery"
-            sortParam="recipient" :onSortingUpdate="updateSorting"
+            sortParam="recipient" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <TableHeader width="25%" header="Memo" :sortQuery="sortQuery"
-            sortParam="data.memo" :onSortingUpdate="updateSorting"
+            sortParam="data.memo" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <TableHeader width="10%" header="Status" :sortQuery="sortQuery"
             sortParam="block.height" :onSortingUpdate="updateSorting"
@@ -43,10 +43,10 @@
             sortParam="timestamp" :onSortingUpdate="updateSorting"
           />
           <TableHeader width="10%" header="Tx Hash" :sortQuery="sortQuery"
-            sortParam="hash" :onSortingUpdate="updateSorting"
+            sortParam="hash" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <TableHeader width="30%" header="From/To" :sortQuery="sortQuery"
-            sortParam="sortAddress" :onSortingUpdate="updateSorting"
+            sortParam="sortAddress" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <TableHeader width="25%" header="Memo" :sortQuery="sortQuery"
             sortParam="data.memo" :onSortingUpdate="updateSorting"

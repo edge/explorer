@@ -1,14 +1,14 @@
 <template>
   <tr v-if="!wallet" :class="item.pending && 'pending'">
     <td data-title="Date:" :title="date">
-      <div class="overflow"><span class="overflow">
+      <span class="lg:inline-block">
         {{ date }}
-      </span></div>
+      </span>
     </td>
 
     <td data-title="Tx Hash:" :title="item.hash">
       <router-link :to="txHashRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.hash }}
         </span>
       </router-link>
@@ -16,43 +16,43 @@
     
     <td data-title="From:" :title="item.sender">
       <router-link :to="fromAddressRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.sender }}
         </span>
       </router-link>
     </td>
 
-    <td>
-      <span class="mr-1 -mt-2 icon icon-green"><ArrowRightIcon /></span>
+    <td class="arrow-icon">
+      <span class="mr-1 -mt-2 icon icon-green lg:inline-block"><ArrowRightIcon /></span>
     </td>
 
     <td data-title="To:" :title="item.recipient">
       <router-link :to="toAddressRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.recipient }}
         </span>
       </router-link>
     </td>
 
     <td data-title="Memo:" :title="item.data.memo || 'None'">
-      <div class="overflow"><span class="monospace md:font-sans" :class="!item.data.memo && 'text-gray-400'">
+      <span class="lg:inline-block"><span class="monospace lg:font-sans" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
-      </span></div>
+      </span></span>
     </td>
 
     <td data-title="Status:">
-      <span v-if="isConfirmed">
+      <span v-if="isConfirmed" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
-        <span class="monospace md:font-sans">{{ statusFormatted }}</span>
+        <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
-      <span v-else>
+      <span v-else class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
-        <span class="monospace md:font-sans text-gray-400">{{ statusFormatted }}</span>
+        <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
 
     <td data-title="Amount (XE):" class="amount-col">
-      <span class="monospace">
+      <span class="monospace lg:inline-block">
         {{ formattedAmount }}
       </span>
     </td>
@@ -61,34 +61,34 @@
   <!--for tx table in wallet, display a single "from/to" column rather than separate from and to columns-->
   <tr v-else :class="item.pending && 'pending'">
     <td data-title="Date:">
-      <span class="md:inline-block">
+      <span class="lg:inline-block">
         {{ date }}
       </span>
     </td>
 
     <td data-title="Tx Hash:" :title="item.hash">
       <router-link :to="txHashRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.hash }}
         </span>
       </router-link>
     </td>
 
-    <td v-if="sent" data-title="To:">
-      <span class="icon-wrap">
-        <span class="mr-1 -mt-2 icon icon-red"><ArrowUpIcon /></span>
+    <td v-if="sent" data-title="To:" class="from-to" :title="item.recipient">
+      <span>
+        <span class="icon-wrap"><ArrowUpIcon class="icon inline-icon icon-red"/></span>
         <router-link :to="toAddressRoute">
-          <span class="monospace md:inline-block">
+          <span class="monospace lg:inline-block">
             {{ item.recipient }}
           </span>
         </router-link>
       </span>
     </td>
-    <td v-else data-title="From:">
-      <span class="icon-wrap">
-        <span class="mr-1 -mt-2 icon icon-green"><ArrowDownIcon /></span>
+    <td v-else data-title="From:" class="from-to" :title="item.sender">
+      <span>
+        <span class="icon-wrap"><ArrowDownIcon class="icon inline-icon icon-green"/></span>
         <router-link :to="fromAddressRoute">
-          <span class="monospace md:inline-block">
+          <span class="monospace lg:inline-block">
             {{ item.sender }}
           </span>
         </router-link>
@@ -96,25 +96,25 @@
     </td>
 
     <td data-title="Memo:" :title="item.data.memo || 'None'">
-      <div class="overflow"><span class="monospace md:font-sans" :class="!item.data.memo && 'text-gray-400'">
+      <span class="lg:inline-block"><span class="monospace lg:font-sans" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
-      </span></div>
+      </span></span>
     </td>
 
     <td data-title="Status:">
-      <span v-if="isConfirmed">
+      <span v-if="isConfirmed" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
-        <span class="monospace md:font-sans">{{ statusFormatted }}</span>
+        <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
-      <span v-else>
+      <span v-else class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
-        <span class="monospace md:font-sans text-gray-400">{{ statusFormatted }}</span>
+        <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
 
-    <td data-title="Amount (XE):" class="amount-col">
-      <span class="monospace">
-        {{ `${sent ? '-' : ''}${formattedAmount}` }}
+    <td data-title="Amount (XE):" class="amount-col" :title="`${sent ? '-' : ''}${formattedAmount}`">
+      <span class="monospace lg:inline-block">
+        {{ `${sent && formattedAmount > 0 ? '-' : ''}${formattedAmount}` }}
       </span>
     </td>
   </tr>
@@ -185,10 +185,6 @@ td a {
   @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
-td .overflow {
-  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
-}
-
 td::before {
   content: attr(data-title);
   @apply font-normal mr-8 min-w-100 text-xs text-gray-600 pt-2;
@@ -206,6 +202,10 @@ td .icon {
   @apply w-15 inline-block align-middle;
 }
 
+td .inline-icon {
+  @apply inline-block mb-2 lg:mb-0
+}
+
 td .icon-green {
   @apply text-green;
 }
@@ -218,12 +218,12 @@ td .icon-red {
   @apply text-red;
 }
 
-.icon-wrap {
-  @apply flex overflow-ellipsis overflow-hidden whitespace-nowrap;
+td.arrow-icon {
+  @apply lg:table-cell hidden
 }
 
 td a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  @apply border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 tr.pending {
@@ -234,9 +234,17 @@ tr.pending a {
   @apply italic text-gray-400;
 }
 
+td.from-to span {
+  @apply lg:w-11/12;
+}
+
+.icon-wrap {
+  @apply max-w-max
+}
+
 @screen lg {
   td {
-    @apply border-gray-200 pt-13 pb-15 table-cell border-b-2 align-middle;
+    @apply border-gray-200 pt-13 pb-10 table-cell border-b-2 align-middle;
   }
 
   td:first-child {
@@ -244,11 +252,11 @@ tr.pending a {
   }
 
   td.amount-col {
-    @apply text-right;
+    @apply text-right pr-30;
   }
 
   td:last-child {
-    @apply pr-30 pb-13 text-right border-b-2;
+    @apply pb-10 border-b-2;
   }
 
   td:before {

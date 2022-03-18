@@ -260,13 +260,25 @@ const formatTransactions = (address, data, pending) => {
   })
 }
 
+const fetchSession = async (address) => {
+  const url = `${INDEX_API_URL}/session/${address}`
+  const results = await fetchData(url)
+  return results
+}
+
 const search = async input => {
   const addressRegex = /^xe_[0-9a-fA-F]{40}$/
   const blockHeightRegex = /^[0-9]+$/
   const hashRegex = /[0-9a-f]{64}/
 
   if (addressRegex.test(input)) {
-    return fetchWallet(input)
+    const wallet = await fetchWallet(input)
+    const node = await fetchSession(input)
+
+    return Promise.resolve({
+      node: node.results ? null : node,
+      wallet: wallet.results ? null : wallet,
+    })
   } else if (hashRegex.test(input)) {
     // The hash format is the same for blocks, transactions, and stakes,
     // so we need to query all of them for the input.
@@ -276,7 +288,7 @@ const search = async input => {
 
     return Promise.resolve({
       blocks: blocks.length ? blocks : null,
-      stake: stake || null,
+      stake: stake.results ? null : stake,
       transactions: transactions.length ? transactions : null
     })
   } else if (blockHeightRegex.test(input)) {

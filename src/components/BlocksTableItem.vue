@@ -2,46 +2,46 @@
   <tr>
     <td data-title="Height:">
       <router-link :to="blockHeightRoute">
-        <span class="monospace">
+        <span class="monospace lg:inline-block max-w-max">
           {{ item.height }}
         </span>
       </router-link>
     </td>
 
-    <td data-title="Block Hash:">
+    <td data-title="Block Hash:" :title="item.hash">
       <router-link :to="blockHashRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.hash }}
         </span>
       </router-link>
     </td>
 
-    <td data-title="Data Hash:">
-      <span class="monospace md:inline-block">
+    <td data-title="Data Hash:" :title="item.dataHash">
+      <span class="monospace lg:inline-block">
         {{ item.dataHash }}
       </span>
     </td>
 
-    <td data-title="Ledger Hash:">
-      <span class="monospace md:inline-block">
+    <td data-title="Ledger Hash:" :title="item.ledgerHash">
+      <span class="monospace lg:inline-block">
         {{ item.ledgerHash }}
       </span>
     </td>
 
-    <td data-title="Transactions:" class="monospace">
-      <!-- {{ item.transactions.length }} -->
-      <!-- delete above and uncomment below when index updated -->
-      {{ item.txCount }}
+    <td data-title="Transactions:">
+      <span class="monospace lg:inline-block">{{ item.txCount }}</span>
     </td>
 
-    <td data-title="XE:" class="monospace amount-col">
-      {{ formattedTotal }}
+    <td data-title="XE:" class="amount-col" :title="formattedTotal">
+      <span class="lg:inline-block monospace">{{ formattedTotal }}</span>
     </td>
 
-    <td data-title="Mined:">
-      <span class="mr-1 lg:-mt-2 icon"><ClockIcon /></span>
-      <span class="md:text-gray-400 monospace md:font-sans">
-        {{ timeSince }}
+    <td data-title="Mined:" :title="timeSince">
+      <span class="lg:inline-block">
+        <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon /></span>
+        <span class="lg:text-gray-400 monospace lg:font-sans">
+          {{ timeSince }}
+        </span>
       </span>
     </td>
   </tr>
@@ -88,7 +88,7 @@ export default {
 
 <style scoped>
 td {
-  @apply bg-white text-sm2 font-normal flex content-center px-5 break-all max-w-full pb-4 leading-none;
+  @apply bg-white text-sm2 font-normal flex content-center px-5 break-all max-w-full pb-4 leading-tight;
 }
 
 td span {
@@ -96,10 +96,6 @@ td span {
 }
 
 td a {
-  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
-}
-
-td .overflow {
   @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
@@ -125,20 +121,12 @@ td .icon-grey {
 }
 
 td a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
-}
-
-tr.pending {
-  @apply italic text-gray-400;
-}
-
-tr.pending a {
-  @apply italic text-gray-400;
+  @apply border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 @screen lg {
   td {
-    @apply border-gray-200 pt-13 pb-15 table-cell border-b-2 align-middle;
+    @apply border-gray-200 pt-13 pb-10 table-cell border-b-2 align-middle;
   }
 
   td:first-child {
@@ -150,7 +138,7 @@ tr.pending a {
   }
 
   td:last-child {
-    @apply pb-13 border-b-2;
+    @apply pb-10 border-b-2;
   }
 
   td:before {

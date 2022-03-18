@@ -1,14 +1,14 @@
 <template>
   <tr v-if="!wallet" :class="item.pending && 'pending'">
     <td data-title="Date:" :title="date">
-      <span class="md:inline-block">
+      <span class="lg:inline-block">
         {{ date }}
       </span>
     </td>
 
     <td data-title="Tx Hash:" :title="item.hash">
       <router-link :to="txHashRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.hash }}
         </span>
       </router-link>
@@ -16,43 +16,43 @@
     
     <td data-title="From:" :title="item.sender">
       <router-link :to="fromAddressRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.sender }}
         </span>
       </router-link>
     </td>
 
-    <td>
-      <span class="mr-1 -mt-2 icon icon-green md:inline-block"><ArrowRightIcon /></span>
+    <td class="arrow-icon">
+      <span class="mr-1 -mt-2 icon icon-green lg:inline-block"><ArrowRightIcon /></span>
     </td>
 
     <td data-title="To:" :title="item.recipient">
       <router-link :to="toAddressRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.recipient }}
         </span>
       </router-link>
     </td>
 
     <td data-title="Memo:" :title="item.data.memo || 'None'">
-      <span class="md:inline-block"><span class="monospace md:font-sans" :class="!item.data.memo && 'text-gray-400'">
+      <span class="lg:inline-block"><span class="monospace lg:font-sans" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
       </span></span>
     </td>
 
     <td data-title="Status:">
-      <span v-if="isConfirmed" class="md:inline-block">
+      <span v-if="isConfirmed" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
-        <span class="monospace md:font-sans">{{ statusFormatted }}</span>
+        <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
-      <span v-else class="md:inline-block">
+      <span v-else class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
-        <span class="monospace md:font-sans text-gray-400">{{ statusFormatted }}</span>
+        <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
 
     <td data-title="Amount (XE):" class="amount-col">
-      <span class="monospace md:inline-block">
+      <span class="monospace lg:inline-block">
         {{ formattedAmount }}
       </span>
     </td>
@@ -61,14 +61,14 @@
   <!--for tx table in wallet, display a single "from/to" column rather than separate from and to columns-->
   <tr v-else :class="item.pending && 'pending'">
     <td data-title="Date:">
-      <span class="md:inline-block">
+      <span class="lg:inline-block">
         {{ date }}
       </span>
     </td>
 
     <td data-title="Tx Hash:" :title="item.hash">
       <router-link :to="txHashRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.hash }}
         </span>
       </router-link>
@@ -96,24 +96,24 @@
     </td>
 
     <td data-title="Memo:" :title="item.data.memo || 'None'">
-      <span class="md:inline-block"><span class="monospace md:font-sans" :class="!item.data.memo && 'text-gray-400'">
+      <span class="lg:inline-block"><span class="monospace lg:font-sans" :class="!item.data.memo && 'text-gray-400'">
         {{ item.data.memo || 'None'}}
       </span></span>
     </td>
 
     <td data-title="Status:">
-      <span v-if="isConfirmed" class="md:inline-block">
+      <span v-if="isConfirmed" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
-        <span class="monospace md:font-sans">{{ statusFormatted }}</span>
+        <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
-      <span v-else class="md:inline-block">
+      <span v-else class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
-        <span class="monospace md:font-sans text-gray-400">{{ statusFormatted }}</span>
+        <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
 
     <td data-title="Amount (XE):" class="amount-col" :title="`${sent ? '-' : ''}${formattedAmount}`">
-      <span class="monospace md:inline-block">
+      <span class="monospace lg:inline-block">
         {{ `${sent ? '-' : ''}${formattedAmount}` }}
       </span>
     </td>
@@ -216,6 +216,10 @@ td .icon-grey {
 
 td .icon-red {
   @apply text-red;
+}
+
+td.arrow-icon {
+  @apply lg:inline-block hidden
 }
 
 td a {

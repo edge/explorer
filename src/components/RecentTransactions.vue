@@ -5,10 +5,10 @@
     <table class="w-full">
       <thead class="hidden lg:table-header-group">
         <tr>
-          <th>Hash</th>
-          <th>From</th>
-          <th><span class="pl-5">To</span></th>
-          <th class="right">Amount XE</th>
+          <th width="20%">Hash</th>
+          <th width="25%">From</th>
+          <th width="25%"><span class="pl-5">To</span></th>
+          <th width="30%" class="amount-col">Amount XE</th>
         </tr>
       </thead>
       <tbody v-if="loading">
@@ -22,26 +22,25 @@
         <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
             <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
-              <span class="monospace md:inline-block">{{ sliceString(transaction.hash, 12) }}</span>
-              <span class="monospace md:hidden">{{ sliceString(transaction.hash, 20) }}</span>
+              <span class="monospace lg:inline-block">{{ transaction.hash }}</span>
             </router-link>
           </td>
           <td data-title="From:">
             <router-link :to="{name: 'Wallet', params: {address: transaction.sender}}">
-              <span class="truncate monospace" :title="transaction.sender">
-                {{ sliceString(transaction.sender, 18) }}
+              <span class="monospace lg:inline-block" :title="transaction.sender">
+                {{ transaction.sender }}
               </span>
             </router-link>
           </td>
           <td data-title="To:" class="relative">
             <router-link :to="{name: 'Wallet', params: {address: transaction.recipient}}">
-              <span class="truncate lg:pl-5 monospace" :title="transaction.recipient">
-                {{ sliceString(transaction.recipient, 18) }}
+              <span class="lg:pl-5 lg:inline-block monospace" :title="transaction.recipient">
+                {{ transaction.recipient }}
               </span>
             </router-link>
           </td>
-          <td class="lg:text-right" data-title="Amount XE:">
-            <span class="monospace">
+          <td class="amount-col" data-title="Amount XE:">
+            <span class="monospace lg:inline-block">
               {{ formatAmount(transaction.amount) }}
             </span>
           </td>
@@ -63,9 +62,6 @@ export default {
     formatAmount(amount) {
       return formatXe(amount, true)
     },
-    sliceString(string, symbols) {
-      return string.length > symbols ? `${string.slice(0, symbols)}…` : string
-    },
     timeSince(ts) {
       return moment(ts).fromNow()
     }
@@ -81,11 +77,19 @@ table, tbody, tr {
   @apply block;
 }
 
+table {
+  @apply w-full table-fixed
+}
+
 th {
   @apply font-normal text-sm2 text-left bg-gray-100 px-5 border-b-2 border-gray-200 py-8;
 }
 th.right {
   @apply text-right;
+}
+
+th.amount-col {
+  @apply text-right pr-30
 }
 
 /* th:first-child {
@@ -97,7 +101,7 @@ th:last-child {
 }
 
 td {
-  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4;
+  @apply bg-white text-sm2 font-normal flex items-center px-5 break-all max-w-full pb-4 leading-tight;
 }
 
 td::before {
@@ -114,7 +118,15 @@ td:last-child {
 }
 
 td a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  @apply border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+td span {
+  @apply w-full overflow-ellipsis overflow-hidden whitespace-nowrap;
+}
+
+td a {
+  @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 td .arrow-icon {
@@ -144,6 +156,10 @@ td .arrow-icon {
 
   td {
     @apply border-gray-200 pt-13 pb-14 table-cell border-b-2 align-middle;
+  }
+
+  td.amount-col {
+    @apply text-right pr-30;
   }
 
   td:first-child {

@@ -2,7 +2,7 @@
   <tr>
     <td data-title="Height:">
       <router-link :to="blockHeightRoute">
-        <span class="monospace md:inline-block max-w-max">
+        <span class="monospace lg:inline-block max-w-max">
           {{ item.height }}
         </span>
       </router-link>
@@ -10,34 +10,34 @@
 
     <td data-title="Block Hash:" :title="item.hash">
       <router-link :to="blockHashRoute">
-        <span class="monospace md:inline-block">
+        <span class="monospace lg:inline-block">
           {{ item.hash }}
         </span>
       </router-link>
     </td>
 
     <td data-title="Data Hash:" :title="item.dataHash">
-      <span class="monospace md:inline-block">
+      <span class="monospace lg:inline-block">
         {{ item.dataHash }}
       </span>
     </td>
 
     <td data-title="Ledger Hash:" :title="item.ledgerHash">
-      <span class="monospace md:inline-block">
+      <span class="monospace lg:inline-block">
         {{ item.ledgerHash }}
       </span>
     </td>
 
     <td data-title="Transactions:">
-      <span class="monospace md:inline-block">{{ item.txCount }}</span>
+      <span class="monospace lg:inline-block">{{ item.txCount }}</span>
     </td>
 
-    <td data-title="XE:" class="monospace amount-col" :title="formattedTotal">
-      <span class="md:inline-block">{{ formattedTotal }}</span>
+    <td data-title="XE:" class="amount-col" :title="formattedTotal">
+      <span class="lg:inline-block monospace">{{ formattedTotal }}</span>
     </td>
 
     <td data-title="Mined:" :title="timeSince">
-      <span class="md:inline-block">
+      <span class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon /></span>
         <span class="lg:text-gray-400 monospace lg:font-sans">
           {{ timeSince }}

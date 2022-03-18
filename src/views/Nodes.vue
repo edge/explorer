@@ -85,9 +85,6 @@ export default {
       this.iSession = setInterval(() => {
         this.updateSession()
       }, nodeRefreshInterval)
-    } else {
-      const p = parseInt(this.$route.query.page) || 0
-      if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
     }
   },
   umounted() {
@@ -122,6 +119,25 @@ export default {
           process.env.VUE_APP_INDEX_API_URL,
           this.address
         )
+        // add gateway (if host) and stargate (if host/gateway) data to the node data
+        if (session.node.type === 'host') {
+          const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
+          session.gateway = gateway
+          const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, gateway.node.stargate)
+          session.stargate = stargate
+        }
+        else if (session.node.type === 'gateway') {
+          const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.stargate)
+          session.stargate = stargate
+        }
+        // add wallet address to node data
+        const stake = await index.stake.stake(process.env.VUE_APP_INDEX_API_URL, session.node.stake)
+        session.node.wallet = stake.wallet
+
+        this.session = session
+
+        this.loaded = true
+        this.loading = false
       } catch (e) {
         this.session = null
         clearInterval(this.iSession)
@@ -129,25 +145,6 @@ export default {
         this.loading = false
         return
       }
-      // add gateway (if host) and stargate (if host/gateway) data to the node data
-      if (session.node.type === 'host') {
-        const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
-        session.gateway = gateway
-        const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, gateway.node.stargate)
-        session.stargate = stargate
-      }
-      else if (session.node.type === 'gateway') {
-        const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.stargate)
-        session.stargate = stargate
-      }
-      // add wallet address to node data
-      const stake = await index.stake.stake(process.env.VUE_APP_INDEX_API_URL, session.node.stake)
-      session.node.wallet = stake.wallet
-
-      this.session = session
-
-      this.loaded = true
-      this.loading = false
     }
   },
   watch: {
@@ -155,7 +152,10 @@ export default {
       this.updateSession()
     },
     metadata() {
-      // clamp pagination to available page numbers with automatic redirection
+      if (this.lastPage > 1) {
+        const p = parseInt(this.$route.query.page) || 0
+        if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
+      }
       if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
     }
   }

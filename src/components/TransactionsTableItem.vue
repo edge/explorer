@@ -219,7 +219,7 @@ td .icon-red {
 }
 
 td.arrow-icon {
-  @apply lg:inline-block hidden
+  @apply lg:table-cell hidden
 }
 
 td a {

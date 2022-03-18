@@ -200,23 +200,23 @@ export default {
       this.fetchData()
     },
     metadata() {
-      if (this.$route.query.page < 1) {
-        const p = parseInt(this.$route.query.page) || 0
-        if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
+      const numRegEx = /^[-+]?\d*$/
+      if (this.$route.query.page) {
+        if (this.$route.query.page < 1 || !numRegEx.test(this.$route.query.page)) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
       }
       if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
     },
     stakesMetadata() {
-      if (this.$route.query.stakesPage < 1) {
-        const p = parseInt(this.$route.query.stakesPage) || 0
-        if (p < 1) this.$router.replace({ query: { ...this.$route.query, stakesPage: 1 } })
+      const numRegEx = /^[-+]?\d*$/
+      if (this.$route.query.stakesPage) {
+        if (this.$route.query.stakesPage < 1 || !numRegEx.test(this.$route.query.stakesPage)) this.$router.replace({ query: { ...this.$route.query, stakesPage: 1 } })
       }
       if (this.stakesCurrentPage > this.stakesLastPage) this.$router.replace({ query: { ...this.$route.query, stakesPage: this.stakesLastPage } })
     },
     txsMetadata() {
-      if (this.$route.query.txsPage < 1) {
-        const p = parseInt(this.$route.query.txsPage) || 0
-        if (p < 1) this.$router.replace({ query: { ...this.$route.query, txsPage: 1 } })
+      const numRegEx = /^[-+]?\d*$/
+      if (this.$route.query.txsPage) {
+        if (this.$route.query.txsPage < 1 || !numRegEx.test(this.$route.query.txsPage)) this.$router.replace({ query: { ...this.$route.query, txsPage: 1 } })
       }
       if (this.txsCurrentPage > this.txsLastPage) this.$router.replace({ query: { ...this.$route.query, txsPage: this.txsLastPage } })
     }

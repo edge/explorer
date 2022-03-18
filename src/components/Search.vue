@@ -1,5 +1,5 @@
 <template>
-  <div class="search" :class="size==='large' ? 'search--lge' : ''">
+  <div class="search" :class="size === 'large' ? 'search--lge' : ''">
     <input @keyup.enter="search" class="search__input" v-model="searchInput" type="text" placeholder="Search Address, Tx, Stake, or Block ID" />
     <button
       class="search__submit"
@@ -27,7 +27,7 @@
     </button>
     <div
       class="absolute left-0 text-sm2 text-red"
-      :class="size==='large' ? '-bottom-20 md:-bottom-24' : '-bottom-20 md:-top-24'"
+      :class="size === 'large' ? '-bottom-20 md:-bottom-24' : 'top-40 md:-top-24'"
       v-if="showFeedback"
     >
       {{ searchFeedback }}

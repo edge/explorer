@@ -9,7 +9,7 @@
       </div>
       <div class="row mb-25" v-else>
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
-        <NetworkMap />
+        <NetworkMap :points="mapPoints" />
       </div>
 
       <div class="row mt-15">
@@ -29,7 +29,11 @@ import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
 import SummaryHero from "@/components/SummaryHero"
 
+import superagent from 'superagent'
 import { fetchBlocks, fetchStakeStats, fetchTransactions } from '../utils/api'
+
+const mapRefreshInterval = 60 * 1000
+const pollInterval = 10 * 1000
 
 export default {
   name: 'Overview',
@@ -41,7 +45,8 @@ export default {
       transactionMetadata: null,
       transactions: [],
       loading: false,
-      pollInterval: 10000,
+      mapPoints: [],
+      iMapPoints: null,
       polling: null,
       stats: {},
       isTestnet: process.env.VUE_APP_IS_TESTNET === 'true'
@@ -62,9 +67,19 @@ export default {
     this.fetchTransactions()
     this.fetchStats()
     this.pollData()
+
+    this.updateMapPoints()
+    this.iMapPoints = setInterval(() => {
+      this.updateMapPoints()
+    }, mapRefreshInterval)
+  },
+  unmounted() {
+    clearInterval(this.iMapPoints)
+    clearInterval(this.polling)
   },
   watch: {
     $route(to, from) {
+      clearInterval(this.iMapPoints)
       clearInterval(this.polling)
       this.polling = null
     }
@@ -115,8 +130,15 @@ export default {
         this.fetchBlocks()
         this.fetchTransactions()
         this.fetchStats()
-      }, this.pollInterval)
-    }
+      }, pollInterval)
+    },
+    async updateMapPoints() {
+      this.loading = true
+      const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/sessions/map?limit=500`)
+      this.mapPoints = result.body.results
+      this.loaded = true
+      this.loading = false
+    },
   }
 }
 </script>

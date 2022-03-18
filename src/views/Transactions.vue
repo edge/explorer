@@ -163,7 +163,7 @@ export default {
       this.fetchData()
     },
     metadata() {
-      if (this.lastPage > 1) {
+      if (this.$route.query.page < 1) {
         const p = parseInt(this.$route.query.page) || 0
         if (p < 1) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
       }

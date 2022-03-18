@@ -87,6 +87,8 @@ import WalletsTable from "@/components/WalletsTable"
 import { checksumAddressIsValid } from '@edge/wallet-utils'
 import { fetchWallet } from '../utils/api'
 
+const numRegEx = /^[-+]?\d*$/
+
 export default {
   name: 'Wallets',
   title() {
@@ -200,21 +202,18 @@ export default {
       this.fetchData()
     },
     metadata() {
-      const numRegEx = /^[-+]?\d*$/
       if (this.$route.query.page) {
         if (this.$route.query.page < 1 || !numRegEx.test(this.$route.query.page)) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
       }
       if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
     },
     stakesMetadata() {
-      const numRegEx = /^[-+]?\d*$/
       if (this.$route.query.stakesPage) {
         if (this.$route.query.stakesPage < 1 || !numRegEx.test(this.$route.query.stakesPage)) this.$router.replace({ query: { ...this.$route.query, stakesPage: 1 } })
       }
       if (this.stakesCurrentPage > this.stakesLastPage) this.$router.replace({ query: { ...this.$route.query, stakesPage: this.stakesLastPage } })
     },
     txsMetadata() {
-      const numRegEx = /^[-+]?\d*$/
       if (this.$route.query.txsPage) {
         if (this.$route.query.txsPage < 1 || !numRegEx.test(this.$route.query.txsPage)) this.$router.replace({ query: { ...this.$route.query, txsPage: 1 } })
       }

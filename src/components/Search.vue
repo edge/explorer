@@ -1,5 +1,5 @@
 <template>
-  <div class="search" :class="size==='large' ? 'search--lge' : ''">
+  <div class="search" :class="size === 'large' ? 'search--lge' : ''">
     <input @keyup.enter="search" class="search__input" v-model="searchInput" type="text" placeholder="Search Address, Tx, Stake, or Block ID" />
     <button
       class="search__submit"
@@ -27,7 +27,7 @@
     </button>
     <div
       class="absolute left-0 text-sm2 text-red"
-      :class="size==='large' ? '-bottom-20 md:-bottom-24' : '-bottom-20 md:-top-24'"
+      :class="size === 'large' ? '-bottom-20 md:-bottom-24' : 'top-40 md:-top-24'"
       v-if="showFeedback"
     >
       {{ searchFeedback }}
@@ -65,27 +65,30 @@ export default {
     
       const result = await search(this.searchInput)  
 
-      const { address, blocks, stake, transactions } = result
+      const { blocks, node, stake, transactions, wallet } = result
       
       // Edge case - resets searching flag in case the search was
       // performed from the same page.
       if (
-        address
-        || (blocks && blocks[0])
+        (blocks && blocks[0])
+        || node
         || stake
         || (transactions && transactions[0])
+        || wallet
       ) {
         this.isSearching = false
       }
       
-      if (address) {
-        this.$router.push(`/wallet/${address}`)
-      } else if (blocks && blocks[0]) {
+      if (blocks && blocks[0]) {
         this.$router.push(`/block/${blocks[0].height}`)
+      } else if (node) {
+        this.$router.push(`/node/${node.node.address}`)
       } else if (transactions && transactions[0]) {
         this.$router.push(`/transaction/${transactions[0].hash}`)
       } else if (stake) {
         this.$router.push(`/stake/${stake.id}`)
+      } else if (wallet) {
+        this.$router.push(`/wallet/${wallet.address}`)
       } else {
         // No result.
         setTimeout(() => {

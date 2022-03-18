@@ -65,27 +65,30 @@ export default {
     
       const result = await search(this.searchInput)  
 
-      const { address, blocks, stake, transactions } = result
+      const { blocks, node, stake, transactions, wallet } = result
       
       // Edge case - resets searching flag in case the search was
       // performed from the same page.
       if (
-        address
-        || (blocks && blocks[0])
+        (blocks && blocks[0])
+        || node
         || stake
         || (transactions && transactions[0])
+        || wallet
       ) {
         this.isSearching = false
       }
       
-      if (address) {
-        this.$router.push(`/wallet/${address}`)
-      } else if (blocks && blocks[0]) {
+      if (blocks && blocks[0]) {
         this.$router.push(`/block/${blocks[0].height}`)
+      } else if (node) {
+        this.$router.push(`/node/${node.node.address}`)
       } else if (transactions && transactions[0]) {
         this.$router.push(`/transaction/${transactions[0].hash}`)
       } else if (stake) {
         this.$router.push(`/stake/${stake.id}`)
+      } else if (wallet) {
+        this.$router.push(`/wallet/${wallet.address}`)
       } else {
         // No result.
         setTimeout(() => {

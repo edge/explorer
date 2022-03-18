@@ -42,7 +42,7 @@
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Transactions</div>
-        <div class="transactionRow__value">{{ block.transactions.length }}</div>
+        <div class="transactionRow__value">{{ block.txCount }}</div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Total XE</div>

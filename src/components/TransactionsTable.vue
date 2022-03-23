@@ -16,10 +16,10 @@
           <TableHeader width="15%" header="To" :sortQuery="sortQuery"
             sortParam="recipient" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
-          <TableHeader width="25%" header="Memo" :sortQuery="sortQuery"
+          <TableHeader width="23%" header="Memo" :sortQuery="sortQuery"
             sortParam="data.memo" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
-          <TableHeader width="10%" header="Status" :sortQuery="sortQuery"
+          <TableHeader width="12%" header="Status" :sortQuery="sortQuery"
             sortParam="block.height" :onSortingUpdate="updateSorting"
           />
           <TableHeader class="amount-col" width="17%" header="Amount XE" :sortQuery="sortQuery"

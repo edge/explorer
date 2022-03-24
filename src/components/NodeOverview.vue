@@ -27,13 +27,13 @@
         <div class="nodeRow__label">Address</div>
         <div class="nodeRow__value">{{ session.node.address }}</div>
       </div>
-      <div class="nodeRow" v-if="session.gateway">
+      <div class="nodeRow" v-if="isOnline && session.gateway">
         <div class="nodeRow__label">Gateway</div>
         <div class="nodeRow__value">
           <router-link :to="gatewayRoute">{{ session.gateway.node.address }}</router-link>
         </div>
       </div>
-      <div class="nodeRow" v-if="session.stargate">
+      <div class="nodeRow" v-if="isOnline && session.stargate">
         <div class="nodeRow__label">Stargate</div>
         <div class="nodeRow__value">
           <router-link  :to="stargateRoute">{{ session.stargate.node.address }}</router-link>

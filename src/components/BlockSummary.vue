@@ -4,11 +4,11 @@
     <div class="relative max-h-full tile md:pr-50">
       Block <span class="emphasis">{{ block.height }}</span> was mined on <span class="emphasis">{{new Date(block.timestamp).toLocaleString().split(',')[0]}}</span> at <span class="emphasis">{{new Date(block.timestamp).toLocaleString().split(',')[1]}}</span>.
 
-      <span v-if="block.total == 0">
+      <span v-if="!block.txCount">
         No transactions were sent in this block.
       </span>
       <span v-else>
-        A total of <span class="emphasis">{{ formatAmount(block.total) }} XE</span> was sent in this block over <span class="emphasis">{{ block.txCount.toLocaleString() }}</span> {{ block.txCount === 1 ? 'transaction' : 'transactions' }} with an average value of <span class="emphasis">{{ formatAmount(block.average) }} XE</span>.
+        A total of <span class="emphasis">{{ formatAmount(block.total) }} XE</span> was sent in this block over <span class="emphasis">{{ block.txCount.toLocaleString() }}</span> {{ block.txCount === 1 ? 'transaction' : 'transactions' }}<span v-if="block.txCount > 1"> with an average value of <span class="emphasis">{{ formatAmount(block.average) }} XE</span></span>.
       </span>
 
       The block nonce was <span class="emphasis">{{ block.nonce }}</span>.

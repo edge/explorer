@@ -45,8 +45,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
         const block = { ...results }
 
         // Add average XE.
-        block.average = block.transactions.length ? block.total / block.transactions.length : 0
-        block.average = block.average.toFixed(6)
+        block.average = block.txCount ? parseInt(block.total / block.txCount) : 0
         
         return {
           blocks: [block],

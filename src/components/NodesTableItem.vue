@@ -9,7 +9,7 @@
     </td>
 
     <td data-title="Gateway:" :title="item.node.gateway">
-      <router-link v-if="item.node.gateway" :to="gatewayRoute">
+      <router-link v-if="isOnline && item.node.gateway" :to="gatewayRoute">
         <span class="monospace lg:inline-block">
           {{ item.node.gateway }}
         </span>
@@ -20,7 +20,7 @@
     </td>
 
     <td data-title="Stargate:" :title="item.node.stargate">
-      <router-link v-if="item.node.stargate" :to="stargateRoute">
+      <router-link v-if="isOnline && item.node.stargate" :to="stargateRoute">
         <span class="monospace lg:inline-block">
           {{ item.node.stargate }}
         </span>

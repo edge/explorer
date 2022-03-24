@@ -4,7 +4,7 @@
     <div class="relative max-h-full tile md:pr-50">
       Block <span class="emphasis">{{ block.height }}</span> was mined on <span class="emphasis">{{new Date(block.timestamp).toLocaleString().split(',')[0]}}</span> at <span class="emphasis">{{new Date(block.timestamp).toLocaleString().split(',')[1]}}</span>.
 
-      <span v-if="block.total == 0">
+      <span v-if="!block.txCount">
         No transactions were sent in this block.
       </span>
       <span v-else>

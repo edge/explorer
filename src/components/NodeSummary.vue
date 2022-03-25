@@ -4,7 +4,7 @@
     <div class="relative max-h-full tile md:pr-50">
       <span class="emphasis">{{ formattedType }}</span> node <span class="emphasis">{{ session.node.address }}</span> is currently <span v-if="isOnline">online</span><span v-else>offline and was last seen {{ lastActive }}</span>.
 
-      It has been available for <span class="emphasis">{{ (session.availability * 100).toFixed(2) }}%</span> of the last 24 hours.
+      <!-- It has been available for <span class="emphasis">{{ (session.availability * 100).toFixed(2) }}%</span> of the last 24 hours. -->
 
       <span v-if="location !== 'Unknown'">It is located in <span class="emphasis">{{ location }}</span></span><span v-else>Its location is <span class="emphasis">Unknown</span></span>.
 

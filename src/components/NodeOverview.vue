@@ -7,10 +7,12 @@
         <div class="nodeRow__label">Type</div>
         <div class="nodeRow__value">{{ formattedType }}</div>
       </div>
+      <!--
       <div class="nodeRow">
         <div class="nodeRow__label">Availability</div>
         <div class="nodeRow__value">{{ (session.availability * 100).toFixed(2) }}%</div>
       </div>
+      -->
       <div class="nodeRow">
         <div class="nodeRow__label">Status</div>
         <div class="nodeRow__value">{{ status }}</div>

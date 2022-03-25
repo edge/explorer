@@ -27,12 +27,12 @@
         />
       </tr>
       <tr v-else>
-        <th width="16%">Address</th>
+        <th width="19%">Address</th>
         <th width="15%">Gateway</th>
         <th width="15%">Stargate</th>
         <th width="8%">Type</th>
         <th width="20%">Location</th>
-        <th width="98">Availability</th>
+        <!-- <th width="98">Availability</th> -->
         <th width="8%">Status</th>
         <th width="12%">Last Seen</th>
       </tr>
@@ -45,13 +45,13 @@
       />
     </tbody>
     <tbody v-else-if="!loaded & loading">
-      <td colspan="8" class="block w-full text-center bg-white lg:table-cell py-35">
+      <td colspan="7" class="block w-full text-center bg-white lg:table-cell py-35">
         Loading...
       </td>
     </tbody>
     <tbody v-else>
       <tr>
-        <td colspan="8" class="block w-full text-center bg-white lg:table-cell py-35">
+        <td colspan="7" class="block w-full text-center bg-white lg:table-cell py-35">
           No Nodes.
         </td>
       </tr>

@@ -2,7 +2,7 @@
   <table>
     <thead class="hidden lg:table-header-group">
       <tr v-if="sortable">
-        <TableHeader width="16%" header="Address" :sortQuery="sortQuery"
+        <TableHeader width="19%" header="Address" :sortQuery="sortQuery"
           sortParam="node.address" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <!-- currently no sorting on gateway and stargate columns as stargate address isn't contained in a host node's data -->
@@ -14,9 +14,11 @@
         <TableHeader width="20%" header="Location" :sortQuery="sortQuery"
           sortParam="node.geo.country,node.geo.city" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
+        <!--
         <TableHeader width="98" header="Availability" :sortQuery="sortQuery"
           sortParam="sortAvailability" :onSortingUpdate="updateSorting"
         />
+        -->
         <TableHeader width="8%" header="Status" :sortQuery="sortQuery"
           sortParam="lastActive" :onSortingUpdate="updateSorting"
         />

@@ -8,11 +8,29 @@
         <div class="stakeRow__value">
           {{ stake.id }}
         </div>
+        <div class="stakeRow__clipboard">
+          <button
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
+            
+            @click.prevent="copyToClipboard(stake.id)"
+          >
+            <ClipboardCopyIcon/>
+          </button>
+        </div>
       </div>
       <div class="stakeRow">
         <div class="stakeRow__label">Hash</div>
         <div class="stakeRow__value">
           {{ stake.hash }}
+        </div>
+        <div class="stakeRow__clipboard">
+          <button
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
+            
+            @click.prevent="copyToClipboard(stake.hash)"
+          >
+            <ClipboardCopyIcon/>
+          </button>
         </div>
       </div>
       <div class="stakeRow" v-if="tx">
@@ -43,7 +61,7 @@
 </template>
 
 <script>
-import { CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
+import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip'
 import { formatXe } from '@edge/wallet-utils'
@@ -54,7 +72,13 @@ export default {
     CheckCircleIcon,
     ClockIcon,
     InformationCircleIcon,
-    Tooltip
+    Tooltip,
+    ClipboardCopyIcon
+  },
+  data() {
+    return {
+      canCopy: !!navigator.clipboard
+    }
   },
   props: {
     tx: {
@@ -67,6 +91,10 @@ export default {
   methods: {
     formatAmount(amount) {
       return formatXe(amount, true)
+    },
+    copyToClipboard(input) {
+      if (!this.canCopy) window.alert('Clipboard unavailable. Please copy-paste manually.')
+      return navigator.clipboard.writeText(input)
     }
   }
 }
@@ -90,10 +118,18 @@ export default {
 }
 
 .stakeRow__value {
-  @apply font-mono col-span-8 text-gray-300 md:col-span-9 truncate;
+  /* @apply font-mono col-span-8 text-gray-300 md:col-span-9 truncate; */
+}
+
+.stakeRow__value {
+  @apply font-mono col-span-6 text-gray-300 md:col-span-8 truncate;
 }
 
 .stakeRow__value a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+.stakeRow__clipboard {
+  @apply font-mono col-span-2 text-gray-300 md:col-span-1;
 }
 </style>

@@ -23,6 +23,15 @@
           </router-link>
           <span v-else>{{ block.hash }}</span>
         </div>
+        <div class="transactionRow__clipboard">
+          <button
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
+            
+            @click.prevent="copyToClipboard(block.hash)"
+          >
+            <ClipboardCopyIcon/>
+          </button>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Parent Hash</div>
@@ -31,14 +40,41 @@
             {{ block.parent }}
           </router-link>
         </div>
+        <div class="transactionRow__clipboard">
+          <button
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
+            
+            @click.prevent="copyToClipboard(block.parent)"
+          >
+            <ClipboardCopyIcon/>
+          </button>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Data Hash</div>
         <div class="transactionRow__value">{{ block.dataHash }}</div>
+        <div class="transactionRow__clipboard">
+          <button
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
+            
+            @click.prevent="copyToClipboard(block.dataHash)"
+          >
+            <ClipboardCopyIcon/>
+          </button>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Ledger Hash</div>
         <div class="transactionRow__value">{{ block.ledgerHash }}</div>
+        <div class="transactionRow__clipboard">
+          <button
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
+            
+            @click.prevent="copyToClipboard(block.ledgerHash)"
+          >
+            <ClipboardCopyIcon/>
+          </button>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Transactions</div>
@@ -58,15 +94,28 @@
 
 <script>
 const { formatXe } = require('@edge/wallet-utils')
+import { ClipboardCopyIcon } from '@heroicons/vue/outline'
 
 export default {
   name: "BlockOverview",
+  components: {
+    ClipboardCopyIcon
+  },
   props: {
     block: {
       type: Object
     }
   },
+  data() {
+    return {
+      canCopy: !!navigator.clipboard
+    }
+  },
   methods: {
+    copyToClipboard(input) {
+      if (!this.canCopy) window.alert('Clipboard unavailable. Please copy-paste manually.')
+      return navigator.clipboard.writeText(input)
+    },
     formatAmount(amount) {
       return formatXe(amount / 1e6, true)
     }
@@ -82,9 +131,12 @@ export default {
     @apply col-span-4 md:col-span-3;
   }
   .transactionRow__value {
-    @apply font-mono col-span-8 md:col-span-9 text-gray-300 truncate;
+    @apply font-mono col-span-6 md:col-span-8 text-gray-300 truncate;
   }
   .transactionRow__value a {
     @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  }
+  .transactionRow__clipboard {
+    @apply font-mono col-span-2 text-gray-300 md:col-span-1;
   }
 </style>

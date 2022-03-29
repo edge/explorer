@@ -27,6 +27,15 @@
         <div class="transactionRow__value">
             {{ transaction.hash }}
         </div>
+        <div class="transactionRow__clipboard">
+          <button
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
+            
+            @click.prevent="copyToClipboard(transaction.hash)"
+          >
+            <ClipboardCopyIcon/>
+          </button>
+        </div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">From</div>
@@ -122,7 +131,7 @@
 </template>
 
 <script>
-import { CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
+import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip'
 const { formatXe } = require('@edge/wallet-utils')
@@ -130,6 +139,7 @@ const { formatXe } = require('@edge/wallet-utils')
 export default {
   name: "TransactionOverview",
   components: {
+    ClipboardCopyIcon,
     CheckCircleIcon,
     ClockIcon,
     InformationCircleIcon,
@@ -141,6 +151,10 @@ export default {
     }
   },
   methods: {
+    copyToClipboard(input) {
+      if (!this.canCopy) window.alert('Clipboard unavailable. Please copy-paste manually.')
+      return navigator.clipboard.writeText(input)
+    },
     formatAmount(amount) {
       return formatXe(amount, true)
     },
@@ -151,6 +165,7 @@ export default {
   },
   data: function() {
     return {
+      canCopy: !!navigator.clipboard,
       secondsPending: 0,
       secondsPendingInterval: null,
       etherscanUrl: process.env.VUE_APP_IS_TESTNET === 'true' ? 'https://rinkeby.etherscan.io' : 'https://etherscan.io'
@@ -197,7 +212,7 @@ export default {
 }
 
 .transactionRow__value {
-  @apply font-mono col-span-8 text-gray-300 md:col-span-9 truncate;
+  @apply font-mono col-span-6 text-gray-300 md:col-span-8 truncate;
 }
 
 .transactionRow__value.pending {
@@ -206,5 +221,9 @@ export default {
 
 .transactionRow__value a {
   @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+}
+
+.transactionRow__clipboard {
+  @apply font-mono col-span-2 text-gray-300 md:col-span-1;
 }
 </style>

@@ -3,8 +3,7 @@
     <h3>Network Map</h3>
     <div class="map-container">
       <div class="wrapper">
-        <img ref="mapImage" src="/assets/mercator-map.png" alt="">
-        <canvas ref="mapCanvas"></canvas>
+        <img ref="mapImage" src="/assets/world.svg" alt="">
       </div>
     </div>
   </div>
@@ -35,35 +34,11 @@ export default {
     }
   },
   methods: {
-    convertGeoToXy(lat, lng) {
-      const mapLatBottomRad = this.mapLatBottom * Math.PI / 180
-      const latitudeRad = lat * Math.PI / 180
-      const mapLngDelta = (this.mapLngRight - this.mapLngLeft)
-
-      const worldMapWidth = ((this.mapWidth / mapLngDelta) * 360) / (2 * Math.PI)
-      const mapOffsetY = (worldMapWidth / 2 * Math.log((1 + Math.sin(mapLatBottomRad)) / (1 - Math.sin(mapLatBottomRad))))
-
-      const x = (lng - this.mapLngLeft) * (this.mapWidth / mapLngDelta)
-      const y = this.mapHeight - ((worldMapWidth / 2 * Math.log((1 + Math.sin(latitudeRad)) / (1 - Math.sin(latitudeRad)))) - mapOffsetY)
-
-      return { x, y }
-    },
     async drawPoints() {
-      const canvas = this.$refs.mapCanvas
-      const ctx = canvas.getContext('2d')
-      ctx.canvas.width = this.mapWidth
-      ctx.canvas.height = this.mapHeight
-      ctx.fillStyle = '#0ecc5f'
-      ctx.strokeStyle = '#5cbd64'
-
       this.points.forEach(p => {
-        let { x, y } = this.convertGeoToXy(p.lat, p.lng)
-        ctx.beginPath()
-        ctx.arc(x, y, this.pointRadius, 0, 2 * Math.PI)
-        ctx.fill()
-        ctx.stroke()
+        console.log('drawing point', p.lat, p.lng)
       })
-    }
+    },
   },
   watch: {
     points() {
@@ -85,20 +60,16 @@ export default {
 img {
   width: 100%;
   height: auto;
-}
-
-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
+  border-radius: 5px;
 }
 
 @screen lg {
   .map-container {
-    height: 414px;
+    height: 535px;
     width: auto;
     display: flex;
     align-items: center;
+    padding: 35px;
   }
 
   .wrapper {
@@ -108,7 +79,7 @@ canvas {
 
   img {
     object-fit: contain;
-    max-height: 414px;
+    max-height: 100%;
   }
 }
 </style>

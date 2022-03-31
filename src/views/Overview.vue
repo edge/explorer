@@ -3,16 +3,20 @@
   <SummaryHero />
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div class="row mb-25" v-if="isTestnet">
-        <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
-        <Faucet />
-      </div>
-      <div class="row mb-25" v-else>
-        <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
+      <div class="row mb-25">
         <NetworkMap :points="mapPoints" />
       </div>
 
-      <div class="row mt-15">
+      <div class="row cols my-25" v-if="isTestnet">
+        <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
+        <Faucet />
+      </div>
+      <div class="row cols my-25" v-else>
+        <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
+        <NewsPromo />
+      </div>
+
+      <div class="row cols mt-15">
         <RecentBlocks :loading="loading" :blocks="blocks" />
         <RecentTransactions :loading="loading" :transactions="transactions" />
       </div>
@@ -24,6 +28,7 @@
 import Faucet from "@/components/Faucet"
 import Header from "@/components/Header"
 import NetworkMap from "@/components/NetworkMap"
+import NewsPromo from "@/components/NewsPromo"
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
@@ -56,6 +61,7 @@ export default {
     Faucet,
     Header,
     NetworkMap,
+    NewsPromo,
     RecentBlocks,
     RecentTransactions,
     Statistics,
@@ -143,7 +149,7 @@ export default {
 }
 </script>
 <style scoped>
-  .row {
+  .cols {
     @apply grid items-start grid-cols-1 gap-24;
     @apply lg:grid-cols-2;
   }

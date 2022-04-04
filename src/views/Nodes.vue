@@ -107,7 +107,7 @@ export default {
       return Math.max(1, parseInt(this.$route.query.page) || 1)
     },
     hideOfflineNodes() {
-      return this.$route.query.hideOffline === '1' || false
+      return this.$route.query.hideOffline === '1'
     },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))

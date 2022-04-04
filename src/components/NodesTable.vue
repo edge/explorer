@@ -112,6 +112,7 @@ export default {
       const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-sortAvailability` : '-sortAvailability'
       const sessionsData = await index.session.sessions(
         process.env.VUE_APP_INDEX_API_URL,
+        undefined,
         {
           limit: this.limit,
           page: this.page,

@@ -12,7 +12,13 @@
           </div>
       </div>
       <div v-else-if="!$route.params.nodeAddress" class="container">
+        <div class="checkbox-container" @click="updateHideOfflineNodes" >
+          <label>Hide Offline Nodes</label>
+          <input type="checkbox" :checked="hideOfflineNodes" />
+          <span class="checkmark"></span>
+        </div>
         <NodesTable
+          :hideOfflineNodes="hideOfflineNodes"
           :limit="limit"
           :receiveMetadata="onSessionsUpdate"
           :page="currentPage"
@@ -100,6 +106,9 @@ export default {
     currentPage() {
       return Math.max(1, parseInt(this.$route.query.page) || 1)
     },
+    hideOfflineNodes() {
+      return this.$route.query.hideOffline === '1' || false
+    },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
     }
@@ -110,6 +119,11 @@ export default {
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
+    },
+    updateHideOfflineNodes() {
+      const hideOffline = !this.hideOfflineNodes ? 1 : undefined
+      const query = { ...this.$route.query, hideOffline }
+      this.$router.replace({ query })
     },
     async updateSession() {
       if (!this.address) return
@@ -162,24 +176,73 @@ export default {
 }
 </script>
 <style scoped>
-  .row {
-    @apply grid items-start grid-cols-1 gap-24;
-    @apply lg:grid-cols-2;
-  }
+.row {
+  @apply grid items-start grid-cols-1 gap-24;
+  @apply lg:grid-cols-2;
+}
 
-  .row-full {
-    @apply grid items-start grid-cols-1 gap-24;
-    @apply lg:grid-cols-1;
-  }
+.checkbox-container {
+  @apply flex items-center mb-10 justify-end;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
-  .map-container {
-    display: flex;
-    justify-content: center;
-    background-color: #cd0e27
-  }
+.checkbox-container label {
+  @apply cursor-pointer mr-5 mb-0;
+}
 
-  .map {
-    justify-self: center;
-    align-self: center;
-  }
+.checkbox-container input {
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+/* Create custom checkbox */
+.checkmark {
+  @apply cursor-pointer mr-5 mb-0;
+  position: relative;
+  height: 13px;
+  width: 13px;
+  border: solid 1px #787878;
+  border-radius: 3px;
+}
+
+/* On mouse-over, add grey background color */
+.checkbox-container:hover input ~ .checkmark {
+  border-color: rgb(70, 70, 70);
+}
+
+/* When checkbox is checked, add green background */
+.checkbox-container input:checked ~ .checkmark {
+  background-color: rgb(14,204,95);
+  border: none;
+}
+
+/* Create checkmark (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style for checkmark */
+.checkbox-container .checkmark:after {
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
 </style>

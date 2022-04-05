@@ -40,13 +40,11 @@
       </span></span>
     </td>
 
-    <!--
     <td data-title="Availability:">
       <span class="monospace lg:inline-block">
         {{ (item.availability * 100).toFixed(2) }}%
       </span>
     </td>
-    -->
 
     <td data-title="Status:">
       <span v-if="isOnline" class="lg:inline-block">

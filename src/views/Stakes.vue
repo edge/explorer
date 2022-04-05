@@ -65,6 +65,8 @@ import TransactionsTable from "@/components/TransactionsTable"
 import { fetchStake, fetchStakeHistory } from '../utils/api'
 import { xeStringFromMicroXe } from '@edge/wallet-utils'
 
+const numRegEx = /^[-+]?\d*$/
+
 export default {
   name: 'Stakes',
   title() {
@@ -156,7 +158,6 @@ export default {
       this.fetchData()
     },
     metadata() {
-      const numRegEx = /^[-+]?\d*$/
       if (this.$route.query.page) {
         if (this.$route.query.page < 1 || !numRegEx.test(this.$route.query.page)) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
       }

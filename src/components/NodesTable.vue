@@ -82,6 +82,7 @@ export default {
     TableHeader
   },
   props: [
+    'hideOfflineNodes',
     'limit',
     'page',
     'receiveMetadata',
@@ -110,14 +111,16 @@ export default {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
       const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-sortAvailability` : '-sortAvailability'
+      const options = {
+        limit: this.limit,
+        page: this.page,
+        sort: sortQuery
+      }
+      if (this.hideOfflineNodes) options.hideOffline = 1
       const sessionsData = await index.session.sessions(
         process.env.VUE_APP_INDEX_API_URL,
         undefined,
-        {
-          limit: this.limit,
-          page: this.page,
-          sort: sortQuery
-        }
+        options
       )
       
       // add stargate address to host sessions

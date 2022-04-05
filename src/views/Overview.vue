@@ -134,7 +134,7 @@ export default {
     },
     async updateMapPoints() {
       this.loading = true
-      const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/sessions/map?limit=500`)
+      const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/mapsessions?limit=500`)
       this.mapPoints = result.body.results
       this.loaded = true
       this.loading = false

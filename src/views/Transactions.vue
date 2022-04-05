@@ -55,6 +55,8 @@ import TransactionSummary from "@/components/TransactionSummary"
 import TransactionsTable from "@/components/TransactionsTable"
 import { fetchTransactions, fetchExchangeTransaction } from '../utils/api'
 
+const numRegEx = /^[-+]?\d*$/
+
 export default {
   name: 'Transactions',
   title() {
@@ -163,7 +165,6 @@ export default {
       this.fetchData()
     },
     metadata() {
-      const numRegEx = /^[-+]?\d*$/
       if (this.$route.query.page) {
         if (this.$route.query.page < 1 || !numRegEx.test(this.$route.query.page)) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
       }

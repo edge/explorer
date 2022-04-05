@@ -57,6 +57,7 @@ import NodeSummary from "@/components/NodeSummary"
 import NodesTable from "@/components/NodesTable"
 
 const nodeRefreshInterval = 5 * 1000
+const numRegEx = /^[-+]?\d*$/
 
 export default {
   name: 'Nodes',
@@ -166,7 +167,6 @@ export default {
       this.updateSession()
     },
     metadata() {
-      const numRegEx = /^[-+]?\d*$/
       if (this.$route.query.page) {
         if (this.$route.query.page < 1 || !numRegEx.test(this.$route.query.page)) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
       }

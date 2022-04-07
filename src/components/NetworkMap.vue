@@ -35,7 +35,7 @@ export default {
   },
   props: ['points'],
   methods: {
-    convertLatLngToXy(lat, lng, mapWidth, topOffset) {
+    convertLatLngToXy(lat, lng, mapWidth, topOffset = 0, leftOffset = 0) {
       // h and w are full height and width of the Robinson map without any cropping - the correct ratio is 1.97165551906973
       const w = mapWidth
       const h = w / 1.97165551906973
@@ -50,7 +50,7 @@ export default {
 
       // x and y co-ordinates ((0,0) at the top-left corner / (mapWidth,mapHeight) at bottom right corner)
       // 1.02 multiplier of x value is a "fudge" value as the points don't quite match up
-      const x = (w / 2) + (0.8487 * R * X * lngRad * 1.02)
+      const x = (w / 2) + (0.8487 * R * X * lngRad * 1.02) + leftOffset
       const y = (h / 2) - (1.3523 * R * Y) - topOffset
 
       return { x, y }

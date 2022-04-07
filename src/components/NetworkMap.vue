@@ -76,9 +76,9 @@ export default {
 
       // if x is not multiple of 5, perform linear interpolation between two closest known points
       const lowerLat = Math.floor(absoluteLat / 5) * 5
-      const iLower = latArray.indexOf(lowerLat)
-      const upperLat = Math.ceil(absoluteLat / 5) * 5
-      const iUpper = latArray.indexOf(upperLat)
+      const upperLat = lowerLat + 5
+      const iLower = lowerLat / 5
+      const iUpper = iLower + 1
       const X = this.linearInterpolation(absoluteLat, lowerLat, upperLat, XValues[iLower], XValues[iUpper])
       let Y = this.linearInterpolation(absoluteLat, lowerLat, upperLat, YValues[iLower], YValues[iUpper]) * sign
       return { X, Y }

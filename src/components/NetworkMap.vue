@@ -36,6 +36,9 @@ export default {
   props: ['points'],
   methods: {
     convertLatLngToXy(lat, lng, mapWidth, topOffset = 0, leftOffset = 0) {
+      // disallow invalid latitude or longtitude
+      if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return
+
       // h and w are full height and width of the Robinson map without any cropping - the correct ratio is 1.97165551906973
       const w = mapWidth
       const h = w / 1.97165551906973
@@ -60,6 +63,7 @@ export default {
       // determine if lattitude is positive or negative
       const sign = lat < 0 ? -1 : 1
 
+      // disallow invalid latitude
       if (absoluteLat > 90) return
 
       // if x is multiple of 5, return known X and Y values

@@ -10,6 +10,14 @@
             <NodeOverview :session="session" />
             <NodeSummary :session="session" />
           </div>
+          <div class="row mb-25">
+            <NodeChartAvailability :session="session" />
+            <NodeChartRequests :session="session" />
+          </div>
+          <div class="row mb-25">
+            <NodeChartDataIn :session="session" />
+            <NodeChartDataOut :session="session" />
+          </div>
       </div>
       <div v-else-if="!$route.params.nodeAddress" class="container">
         <div class="checkbox-container" @click="updateHideOfflineNodes" >
@@ -52,6 +60,10 @@ import * as index from '@edge/index-utils'
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination"
+import NodeChartAvailability from "@/components/NodeChartAvailability"
+import NodeChartRequests from "@/components/NodeChartRequests"
+import NodeChartDataIn from "@/components/NodeChartDataIn"
+import NodeChartDataOut from "@/components/NodeChartDataOut"
 import NodeOverview from "@/components/NodeOverview"
 import NodeSummary from "@/components/NodeSummary"
 import NodesTable from "@/components/NodesTable"
@@ -81,12 +93,16 @@ export default {
     Header,
     HeroPanel,
     Pagination,
+    NodeChartAvailability,
+    NodeChartRequests,
+    NodeChartDataIn,
+    NodeChartDataOut,
     NodeOverview,
     NodeSummary,
     NodesTable,
   },
   mounted() {
-    if (this.$route.params.nodeAddress) { 
+    if (this.$route.params.nodeAddress) {
       this.updateSession()
       // initiate polling
       this.iSession = setInterval(() => {

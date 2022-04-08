@@ -101,7 +101,7 @@
       </span></span>
     </td>
 
-    <td data-title="Status:">
+    <td data-title="Status:" :title="statusFormatted">
       <span v-if="isConfirmed" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>

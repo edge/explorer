@@ -21,15 +21,21 @@
 // the formula and coefficients can be found here: https://en.wikipedia.org/wiki/Robinson_projection#Formulation
 
 // known X and Y coefficients for latitudes at 5 degree intervals
-const latArray = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90]
-const XValues = [1, 0.9986, 0.9954, 0.9900, 0.9822, 0.9730, 0.9600, 0.9427, 0.9216, 0.8962, 0.8679, 0.8350, 0.7986, 0.7597, 0.7186, 0.6732, 0.6213, 0.5722, 0.5322]
-const YValues = [0, 0.0620, 0.1240, 0.1860, 0.2480, 0.3100, 0.3720, 0.4340, 0.4958, 0.5571, 0.6176, 0.6769, 0.7346, 0.7903, 0.8435, 0.8936, 0.9394, 0.9761, 1]
+const latArray = [
+  0, 5,      10,     15,     20,     25,     30,     35,     40,     45,     50,     55,     60,     65,     70,     75,     80,     85,     90
+]
+const XValues = [
+  1, 0.9986, 0.9954, 0.9900, 0.9822, 0.9730, 0.9600, 0.9427, 0.9216, 0.8962, 0.8679, 0.8350, 0.7986, 0.7597, 0.7186, 0.6732, 0.6213, 0.5722, 0.5322
+]
+const YValues = [
+  0, 0.0620, 0.1240, 0.1860, 0.2480, 0.3100, 0.3720, 0.4340, 0.4958, 0.5571, 0.6176, 0.6769, 0.7346, 0.7903, 0.8435, 0.8936, 0.9394, 0.9761, 1
+]
 
 export default {
   name: "NetworkMap",
   data: function() {
     return {
-      // known lontitude offset of map in degrees
+      // known longtitude offset of map in degrees
       lngOffset: -3
     }
   },
@@ -52,15 +58,16 @@ export default {
       const lngRad = (lng + this.lngOffset) * Math.PI / 180
 
       // x and y co-ordinates ((0,0) at the top-left corner / (mapWidth,mapHeight) at bottom right corner)
-      // 1.02 multiplier of x value is a "fudge" value as the points don't quite match up
-      const x = (w / 2) + (0.8487 * R * X * lngRad * 1.02) + leftOffset
+      // xFudge" is a "fudge" value worked out by trial and error to get the markers into the correct position
+      const xFudge = 1.02
+      const x = (w / 2) + (0.8487 * R * X * lngRad * xFudge) + leftOffset
       const y = (h / 2) - (1.3523 * R * Y) - topOffset
 
       return { x, y }
     },
     getXYCoefficients(lat) {
       const absoluteLat = Math.abs(lat)
-      // determine if lattitude is positive or negative
+      // determine if latitude is positive or negative
       const sign = lat < 0 ? -1 : 1
 
       // disallow invalid latitude
@@ -152,9 +159,6 @@ img {
   width: 100%;
   height: auto;
   border-radius: 5px;
-  /* box-sizing: border-box;
-  border-bottom: solid 80px red;
-  border-top: solid 10px red; */
 }
 
 #mapMarkers {

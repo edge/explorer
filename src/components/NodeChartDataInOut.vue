@@ -10,7 +10,7 @@
 <script>
 
 export default {
-  name: "NodeChartDataIn",
+  name: "NodeChartDataInOut",
   props: {
     session: {
       type: Object

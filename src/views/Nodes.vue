@@ -15,8 +15,7 @@
             <NodeChartRequests :session="session" />
           </div>
           <div class="row mb-25">
-            <NodeChartDataIn :session="session" />
-            <NodeChartDataOut :session="session" />
+            <NodeChartDataInOut :session="session" />
           </div>
       </div>
       <div v-else-if="!$route.params.nodeAddress" class="container">
@@ -62,8 +61,7 @@ import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination"
 import NodeChartAvailability from "@/components/NodeChartAvailability"
 import NodeChartRequests from "@/components/NodeChartRequests"
-import NodeChartDataIn from "@/components/NodeChartDataIn"
-import NodeChartDataOut from "@/components/NodeChartDataOut"
+import NodeChartDataInOut from "@/components/NodeChartDataInOut"
 import NodeOverview from "@/components/NodeOverview"
 import NodeSummary from "@/components/NodeSummary"
 import NodesTable from "@/components/NodesTable"
@@ -95,8 +93,7 @@ export default {
     Pagination,
     NodeChartAvailability,
     NodeChartRequests,
-    NodeChartDataIn,
-    NodeChartDataOut,
+    NodeChartDataInOut,
     NodeOverview,
     NodeSummary,
     NodesTable,

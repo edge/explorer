@@ -29,6 +29,7 @@
     "@vuelidate/validators": "^2.0.0-alpha.13",
     "autonumeric": "^4.6.0",
     "autoprefixer": "^9.8.6",
+    "chart.js": "^3.7.1",
     "click-outside-vue3": "^4.0.1",
     "core-js": "^3.6.5",
     "detect-browser": "^5.2.0",
@@ -44,6 +45,7 @@
     "superagent": "^6.1.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0",
     "vue": "^3.0.11",
+    "vue-chartjs": "^4.0.5",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {

@@ -2,22 +2,98 @@
   <div class="flex flex-col h-full">
     <h3>Availability</h3>
     <div class="relative max-h-full tile md:pr-50">
-
+      <Line
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :width="width"
+        :height="height"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { Line } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  CategoryScale,
+} from 'chart.js'
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  CategoryScale
+)
+
+const now = new Date()
+console.log(now)
+const nowHour = now.getHours()
+
+const hourLabels = []
+for (let i = 23; i >=0; i--) {
+  let h = nowHour - i
+  if (h < 0) h = 24 - h
+  hourLabels.push(`${h}:00`)
+}
 
 export default {
   name: "NodeChartAvailability",
+  components: { Line },
   props: {
-    session: {
-      type: Object
+    chartId: {
+      type: String,
+      default: 'bar-chart'
+    },
+    datasetIdKey: {
+      type: String,
+      default: 'label'
+    },
+    width: {
+      type: Number,
+      default: 400
+    },
+    height: {
+      type: Number,
+      default: 400
+    },
+    cssClasses: {
+      default: '',
+      type: String
+    },
+    styles: {
+      type: Object,
+      default: () => {}
+    },
+    plugins: {
+      type: Object,
+      default: () => {}
     }
   },
-  computed: {
-
+  data() {
+    return {
+      chartData: {
+        labels: hourLabels,
+        datasets: [ { data: [40, 20, 12] } ]
+      },
+      chartOptions: {
+        responsive: true
+      }
+    }
   }
 }
 </script>

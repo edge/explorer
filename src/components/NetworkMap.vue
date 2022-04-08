@@ -35,14 +35,14 @@ export default {
   name: "NetworkMap",
   data: function() {
     return {
-      // known longtitude offset of map in degrees
+      // known longitude offset of map in degrees
       lngOffset: -3
     }
   },
   props: ['points'],
   methods: {
     convertLatLngToXy(lat, lng, mapWidth, topOffset = 0, leftOffset = 0) {
-      // disallow invalid latitude or longtitude
+      // disallow invalid latitude or longitude
       if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return
 
       // h and w are full height and width of the Robinson map without any cropping - the correct ratio is 1.97165551906973
@@ -54,7 +54,7 @@ export default {
       // R = radius of the globe at scale of map
       const R = mapWidth / 2 / Math.PI / 0.8487
 
-      // longtitude of central point of map in radians
+      // longitude of central point of map in radians
       const lngRad = (lng + this.lngOffset) * Math.PI / 180
 
       // x and y co-ordinates ((0,0) at the top-left corner / (mapWidth,mapHeight) at bottom right corner)

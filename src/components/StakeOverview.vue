@@ -86,8 +86,11 @@ export default {
       return formatXe(amount, true)
     },
     copyToClipboard(input) {
-      if (!!navigator.clipboard) window.alert('Clipboard unavailable. Please copy-paste manually.')
-      return navigator.clipboard.writeText(input)
+      if (!!navigator.clipboard) {
+        window.alert('Clipboard unavailable. Please copy-paste manually.')
+      } else {
+        return navigator.clipboard.writeText(input)
+      }      
     }
   }
 }

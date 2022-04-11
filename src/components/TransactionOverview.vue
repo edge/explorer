@@ -29,8 +29,7 @@
         </div>
         <div class="transactionRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
-            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
             @click.prevent="copyToClipboard(transaction.hash)"
           >
             <ClipboardCopyIcon/>
@@ -152,7 +151,6 @@ export default {
   },
   methods: {
     copyToClipboard(input) {
-      if (!this.canCopy) window.alert('Clipboard unavailable. Please copy-paste manually.')
       return navigator.clipboard.writeText(input)
     },
     formatAmount(amount) {
@@ -165,7 +163,6 @@ export default {
   },
   data: function() {
     return {
-      canCopy: !!navigator.clipboard,
       secondsPending: 0,
       secondsPendingInterval: null,
       etherscanUrl: process.env.VUE_APP_IS_TESTNET === 'true' ? 'https://rinkeby.etherscan.io' : 'https://etherscan.io'

@@ -10,8 +10,7 @@
         </div>
         <div class="stakeRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
-            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
             @click.prevent="copyToClipboard(stake.id)"
           >
             <ClipboardCopyIcon/>
@@ -25,8 +24,7 @@
         </div>
         <div class="stakeRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
-            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
             @click.prevent="copyToClipboard(stake.hash)"
           >
             <ClipboardCopyIcon/>
@@ -75,11 +73,6 @@ export default {
     Tooltip,
     ClipboardCopyIcon
   },
-  data() {
-    return {
-      canCopy: !!navigator.clipboard
-    }
-  },
   props: {
     tx: {
       type: Object
@@ -93,7 +86,6 @@ export default {
       return formatXe(amount, true)
     },
     copyToClipboard(input) {
-      if (!this.canCopy) window.alert('Clipboard unavailable. Please copy-paste manually.')
       return navigator.clipboard.writeText(input)
     }
   }

@@ -25,8 +25,7 @@
         </div>
         <div class="transactionRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
-            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
             @click.prevent="copyToClipboard(block.hash)"
           >
             <ClipboardCopyIcon/>
@@ -42,8 +41,7 @@
         </div>
         <div class="transactionRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
-            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
             @click.prevent="copyToClipboard(block.parent)"
           >
             <ClipboardCopyIcon/>
@@ -55,8 +53,7 @@
         <div class="transactionRow__value">{{ block.dataHash }}</div>
         <div class="transactionRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
-            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
             @click.prevent="copyToClipboard(block.dataHash)"
           >
             <ClipboardCopyIcon/>
@@ -68,8 +65,7 @@
         <div class="transactionRow__value">{{ block.ledgerHash }}</div>
         <div class="transactionRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
-            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
             @click.prevent="copyToClipboard(block.ledgerHash)"
           >
             <ClipboardCopyIcon/>
@@ -106,14 +102,8 @@ export default {
       type: Object
     }
   },
-  data() {
-    return {
-      canCopy: !!navigator.clipboard
-    }
-  },
   methods: {
     copyToClipboard(input) {
-      if (!this.canCopy) window.alert('Clipboard unavailable. Please copy-paste manually.')
       return navigator.clipboard.writeText(input)
     },
     formatAmount(amount) {

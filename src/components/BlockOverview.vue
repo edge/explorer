@@ -104,6 +104,7 @@ export default {
   },
   methods: {
     copyToClipboard(input) {
+      if (!!navigator.clipboard) window.alert('Clipboard unavailable. Please copy-paste manually.')
       return navigator.clipboard.writeText(input)
     },
     formatAmount(amount) {

@@ -95,7 +95,7 @@ export default {
             grid: {display: false},
             title: {
               display: true, 
-              text: 'Availability (%)'
+              text: 'Data (Mbs)'
             }
           },
           x: {
@@ -127,3 +127,5 @@ export default {
     @apply leading-none text-sm2 border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
   }
 </style>
+
+GivenMapOfLastKnownSessionsDataItAltersAnySnapshotToContainDeltaValuesForItsMetricsInsteadOfTheOriginalAbsoluteValuesRetrievedFromStargate

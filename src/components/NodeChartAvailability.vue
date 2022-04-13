@@ -62,7 +62,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 400
+      default: 200
     },
   },
   data() {
@@ -84,8 +84,7 @@ export default {
         cubicInterpolationMode: 'monotone',
         scales: {
           y: {
-            // beginAtZero: true,
-            min: 50,
+            beginAtZero: true,
             grid: {display: false},
             title: {
               display: true, 

@@ -14,7 +14,7 @@
             <NodeChartAvailability :session="session" />
             <NodeChartRequests :session="session" />
           </div>
-          <div class="row mb-25">
+          <div class="row full mb-25">
             <NodeChartDataInOut :session="session" />
           </div>
       </div>
@@ -192,6 +192,10 @@ export default {
 .row {
   @apply grid items-start grid-cols-1 gap-24;
   @apply lg:grid-cols-2;
+}
+
+.row.full {
+  @apply lg:grid-cols-1
 }
 
 .checkbox-container {

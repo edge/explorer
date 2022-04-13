@@ -17,26 +17,17 @@
 
 <script>
 import { Line } from 'vue-chartjs'
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  CategoryScale,
-} from 'chart.js'
+import Chart from 'chart.js/auto';
 
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  CategoryScale
-)
+// ChartJS.register(
+//   Title,
+//   Tooltip,
+//   Legend,
+//   LineElement,
+//   LinearScale,
+//   PointElement,
+//   CategoryScale
+// )
 
 const now = new Date()
 const nowHour = now.getHours()
@@ -46,6 +37,7 @@ const hourLabels = []
 for (let i = 23; i >=0; i--) {
   let h = nowHour - i
   if (h < 0) h = 24 + h
+  if (h < 10) h = '0' + h
   hourLabels.push(`${h}:00`)
 
   const availPc = 90 + (Math.random() * 10)
@@ -82,7 +74,7 @@ export default {
             label: 'Availability',
             data: availabilityData,
             borderColor: '#0ecc5f',
-            backgroundColor: '#0ecc5f',
+            backgroundColor: 'rgba(14, 204, 95, 0.6)',
             fill: true,
           }
         ]

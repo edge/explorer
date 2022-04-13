@@ -8,8 +8,6 @@
         :chart-id="chartId"
         :dataset-id-key="datasetIdKey"
         :plugins="plugins"
-        :css-classes="cssClasses"
-        :styles="styles"
         :width="width"
         :height="height"
       />
@@ -41,14 +39,17 @@ ChartJS.register(
 )
 
 const now = new Date()
-console.log(now)
 const nowHour = now.getHours()
+const availabilityData = []
 
 const hourLabels = []
 for (let i = 23; i >=0; i--) {
   let h = nowHour - i
-  if (h < 0) h = 24 - h
+  if (h < 0) h = 24 + h
   hourLabels.push(`${h}:00`)
+
+  const availPc = 90 + (Math.random() * 10)
+  availabilityData.push(availPc)
 }
 
 export default {
@@ -71,27 +72,47 @@ export default {
       type: Number,
       default: 400
     },
-    cssClasses: {
-      default: '',
-      type: String
-    },
-    styles: {
-      type: Object,
-      default: () => {}
-    },
-    plugins: {
-      type: Object,
-      default: () => {}
-    }
   },
   data() {
     return {
       chartData: {
         labels: hourLabels,
-        datasets: [ { data: [40, 20, 12] } ]
+        datasets: [ 
+          { 
+            label: 'Availability',
+            data: availabilityData,
+            borderColor: '#0ecc5f',
+            backgroundColor: '#0ecc5f',
+            fill: true,
+          }
+        ]
       },
       chartOptions: {
-        responsive: true
+        responsive: true,
+        cubicInterpolationMode: 'monotone',
+        scales: {
+          y: {
+            // beginAtZero: true,
+            min: 50,
+            grid: {display: false},
+            title: {
+              display: true, 
+              text: 'Availability (%)'
+            }
+          },
+          x: {
+            grid: {display: false},
+            title: {
+              display: true, 
+              text: 'Time (hour)'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
       }
     }
   }

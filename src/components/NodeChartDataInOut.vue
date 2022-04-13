@@ -1,23 +1,117 @@
 <template>
   <div class="flex flex-col h-full">
-    <h3>Data In</h3>
+    <h3>Data In/Out</h3>
     <div class="relative max-h-full tile md:pr-50">
-
+      <Line
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :width="width"
+        :height="height"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { Line } from 'vue-chartjs'
+import Chart from 'chart.js/auto';
+
+// ChartJS.register(
+//   Title,
+//   Tooltip,
+//   Legend,
+//   LineElement,
+//   LinearScale,
+//   PointElement,
+//   CategoryScale
+// )
+
+const now = new Date()
+const nowHour = now.getHours()
+const dataInPoints = []
+const dataOutPoints = []
+
+const hourLabels = []
+for (let i = 23; i >=0; i--) {
+  let h = nowHour - i
+  if (h < 0) h = 24 + h
+  if (h < 10) h = '0' + h
+  hourLabels.push(`${h}:00`)
+
+  const dataIn = 90 + (Math.random() * 10)
+  dataInPoints.push(dataIn)
+  const dataOut = 90 + (Math.random() * 10)
+  dataOutPoints.push(dataOut)
+}
 
 export default {
-  name: "NodeChartDataInOut",
+  name: "NodeChartAvailability",
+  components: { Line },
   props: {
-    session: {
-      type: Object
-    }
+    chartId: {
+      type: String,
+      default: 'bar-chart'
+    },
+    datasetIdKey: {
+      type: String,
+      default: 'label'
+    },
+    width: {
+      type: Number,
+      default: 400
+    },
+    height: {
+      type: Number,
+      default: 100
+    },
   },
-  computed: {
-
+  data() {
+    return {
+      chartData: {
+        labels: hourLabels,
+        datasets: [ 
+          { 
+            label: 'Data In',
+            data: dataInPoints,
+            borderColor: '#0ecc5f',
+            backgroundColor: '#0ecc5f',
+          },
+          { 
+            label: 'Data Out',
+            data: dataOutPoints,
+            borderColor: 'blue',
+            backgroundColor: 'blue',
+          }
+        ]
+      },
+      chartOptions: {
+        responsive: true,
+        cubicInterpolationMode: 'monotone',
+        scales: {
+          y: {
+            grid: {display: false},
+            title: {
+              display: true, 
+              text: 'Availability (%)'
+            }
+          },
+          x: {
+            grid: {display: false},
+            title: {
+              display: true, 
+              text: 'Time (hour)'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+          }
+        }
+      }
+    }
   }
 }
 </script>

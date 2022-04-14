@@ -19,16 +19,6 @@
 import { Line } from 'vue-chartjs'
 import Chart from 'chart.js/auto';
 
-// ChartJS.register(
-//   Title,
-//   Tooltip,
-//   Legend,
-//   LineElement,
-//   LinearScale,
-//   PointElement,
-//   CategoryScale
-// )
-
 const now = new Date()
 const nowHour = now.getHours()
 const availabilityData = []
@@ -75,7 +65,7 @@ export default {
             data: availabilityData,
             borderColor: '#0ecc5f',
             backgroundColor: 'rgba(14, 204, 95, 0.6)',
-            fill: true,
+            fill: true
           }
         ]
       },

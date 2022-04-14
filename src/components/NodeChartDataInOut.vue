@@ -19,16 +19,6 @@
 import { Line } from 'vue-chartjs'
 import Chart from 'chart.js/auto';
 
-// ChartJS.register(
-//   Title,
-//   Tooltip,
-//   Legend,
-//   LineElement,
-//   LinearScale,
-//   PointElement,
-//   CategoryScale
-// )
-
 const now = new Date()
 const nowHour = now.getHours()
 const dataInPoints = []
@@ -76,20 +66,22 @@ export default {
           { 
             label: 'Data In',
             data: dataInPoints,
-            borderColor: '#0ecc5f',
-            backgroundColor: '#0ecc5f',
+            borderColor: 'rgb(14, 204, 95)',
+            backgroundColor: 'rgba(14, 204, 95, 0.6)',
+            fill: true
           },
           { 
             label: 'Data Out',
             data: dataOutPoints,
-            borderColor: 'blue',
-            backgroundColor: 'blue',
+            borderColor: 'rgb(255, 0, 0)',
+            backgroundColor: 'rgba(255, 0, 0, 0.6)',
+            fill: true
           }
         ]
       },
       chartOptions: {
         responsive: true,
-        cubicInterpolationMode: 'monotone',
+        // cubicInterpolationMode: 'monotone',
         scales: {
           y: {
             grid: {display: false},
@@ -127,5 +119,3 @@ export default {
     @apply leading-none text-sm2 border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
   }
 </style>
-
-GivenMapOfLastKnownSessionsDataItAltersAnySnapshotToContainDeltaValuesForItsMetricsInsteadOfTheOriginalAbsoluteValuesRetrievedFromStargate

@@ -198,7 +198,7 @@ export default {
       if (this.chartPeriod === 'week') {
         const dayLabels = []
           for (let i = 0; i < 7; i++) {
-            dayLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('dddd'))
+            dayLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('ddd'))
           }
           this.timeSteps = dayLabels
       }

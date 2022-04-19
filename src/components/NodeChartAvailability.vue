@@ -7,7 +7,6 @@
         :chart-data="chartData"
         :chart-id="chartId"
         :dataset-id-key="datasetIdKey"
-        :plugins="plugins"
         :width="width"
         :height="height"
       />
@@ -19,32 +18,25 @@
 import { Line } from 'vue-chartjs'
 import Chart from 'chart.js/auto';
 
-const now = new Date()
-const nowHour = now.getHours()
-const availabilityData = []
-
-const hourLabels = []
-for (let i = 23; i >=0; i--) {
-  let h = nowHour - i
-  if (h < 0) h = 24 + h
-  if (h < 10) h = '0' + h
-  hourLabels.push(`${h}:00`)
-
-  const availPc = 90 + (Math.random() * 10)
-  availabilityData.push(availPc)
-}
-
 export default {
   name: "NodeChartAvailability",
   components: { Line },
   props: {
     chartId: {
       type: String,
-      default: 'bar-chart'
+      default: 'line-chart'
     },
     datasetIdKey: {
       type: String,
       default: 'label'
+    },
+    data: {
+      type: Array,
+      default: []
+    },
+    timeSteps: {
+      type: Array,
+      default: []
     },
     width: {
       type: Number,
@@ -54,15 +46,19 @@ export default {
       type: Number,
       default: 200
     },
+    xLabel: {
+      type: String,
+      default: 'Time (hour)'
+    }
   },
   data() {
     return {
       chartData: {
-        labels: hourLabels,
+        labels: this.timeSteps,
         datasets: [ 
           { 
             label: 'Availability',
-            data: availabilityData,
+            data: this.data,
             borderColor: '#0ecc5f',
             backgroundColor: 'rgba(14, 204, 95, 0.6)',
             fill: true
@@ -75,6 +71,7 @@ export default {
         scales: {
           y: {
             beginAtZero: true,
+            suggestedMax: 100,
             grid: {display: false},
             title: {
               display: true, 
@@ -85,8 +82,8 @@ export default {
             grid: {display: false},
             title: {
               display: true, 
-              text: 'Time (hour)'
-            }
+              text: this.xLabel
+            },
           }
         },
         plugins: {

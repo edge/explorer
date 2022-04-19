@@ -11,11 +11,11 @@
             <NodeSummary :session="session" />
           </div>
           <div class="row mb-25">
-            <NodeChartAvailability :session="session" />
-            <NodeChartRequests :session="session" />
+            <NodeChartAvailability v-if="sessionStats.length" :data="chartAvailabilityMetrics" :xLabel="xLabel" :timeSteps="timeSteps"/>
+            <NodeChartRequests v-if="sessionStats.length" :data="chartRequestsMetrics" :xLabel="xLabel" :timeSteps="timeSteps"/>
           </div>
           <div class="row full mb-25">
-            <NodeChartDataInOut :session="session" />
+            <NodeChartDataInOut v-if="sessionStats.length" :dataIn="chartDataInMetrics" :dataOut="chartDataOutMetrics" :xLabel="xLabel" :timeSteps="timeSteps"/>
           </div>
       </div>
       <div v-else-if="!$route.params.nodeAddress" class="container">
@@ -56,6 +56,7 @@
 
 <script>
 import * as index from '@edge/index-utils'
+import { fetchSessionStats } from '../utils/api'
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination"
@@ -80,10 +81,13 @@ export default {
   },
   data: function () {
     return {
+      chartPeriod: 'day',
       limit: 20,
       loading: false,
       metadata: { totalCount: 0 },
       session: null,
+      sessionStats: [],
+      timeSteps: [],
       iSession: null
     }
   },
@@ -125,9 +129,73 @@ export default {
     },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+
+    chartSteps() {
+      if (this.chartPeriod == 'day') return 24
+      else if (this.chartPeriod == 'week') return 7
+      else if (this.chartPeriod == 'month') return 30
+      else return 24
+    },
+    chartRange() {
+      if (this.chartPeriod == 'day') return 'hourly'
+      else return 'daily'
+    },
+    chartAvailabilityMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        metrics[this.chartSteps - index - 1] = step.uptime * 100 / this.maxUptime
+      })
+      return metrics
+    },
+    chartRequestsMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        metrics[this.chartSteps - index - 1] = step.metrics.cdn.requests
+      })
+      return metrics
+    },
+    chartDataInMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.in / 1024
+      })
+      return metrics
+    },
+    chartDataOutMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.out / 1024
+      })
+      return metrics
+    },
+    maxUptime() {
+      if (this.chartPeriod === 'day') return 3600 * 1000
+      return 86400 * 1000
+    },
+    xLabel() {
+      if (this.chartPeriod === 'day') return 'Time (hour)'
+      return 'Time (day)'
     }
   },
   methods: {
+    
+    getTimeSteps(stats) {
+      const latestSnapshotPeriod = new Date(stats[0].end)
+
+      if (this.chartPeriod === 'day') {
+        const hourLabels = []
+        for (let i = 23; i >=0; i--) {
+          let h = latestSnapshotPeriod.getHours() - i
+          if (h < 0) h = 24 + h
+          if (h < 10) h = '0' + h
+          hourLabels.push(`${h}:00`)
+        }
+        this.timeSteps = hourLabels
+      }
+    },
+
+
     onSessionsUpdate(metadata) {
       this.metadata = metadata
     },
@@ -138,6 +206,14 @@ export default {
       const hideOffline = !this.hideOfflineNodes ? 1 : undefined
       const query = { ...this.$route.query, hideOffline }
       this.$router.replace({ query })
+    },
+    async updateSessionStats() {
+      const options = {
+        range: this.chartRange,
+        count: this.chartSteps
+      }
+      const snapshots = await fetchSessionStats(this.address, options)
+      return snapshots.results
     },
     async updateSession() {
       if (!this.address) return
@@ -163,6 +239,11 @@ export default {
         session.node.wallet = stake.wallet
 
         this.session = session
+
+        // get metrics for charts
+        const stats = await this.updateSessionStats()
+        this.sessionStats = stats
+        this.getTimeSteps(stats)
 
         this.loaded = true
         this.loading = false

@@ -7,7 +7,6 @@
         :chart-data="chartData"
         :chart-id="chartId"
         :dataset-id-key="datasetIdKey"
-        :plugins="plugins"
         :width="width"
         :height="height"
       />
@@ -19,35 +18,29 @@
 import { Line } from 'vue-chartjs'
 import Chart from 'chart.js/auto';
 
-const now = new Date()
-const nowHour = now.getHours()
-const dataInPoints = []
-const dataOutPoints = []
-
-const hourLabels = []
-for (let i = 23; i >=0; i--) {
-  let h = nowHour - i
-  if (h < 0) h = 24 + h
-  if (h < 10) h = '0' + h
-  hourLabels.push(`${h}:00`)
-
-  const dataIn = 90 + (Math.random() * 10)
-  dataInPoints.push(dataIn)
-  const dataOut = 90 + (Math.random() * 10)
-  dataOutPoints.push(dataOut)
-}
-
 export default {
-  name: "NodeChartAvailability",
+  name: "NodeChartDataInOut",
   components: { Line },
   props: {
     chartId: {
       type: String,
-      default: 'bar-chart'
+      default: 'line-chart'
     },
     datasetIdKey: {
       type: String,
       default: 'label'
+    },
+    dataIn: {
+      type: Array,
+      default: []
+    },
+    dataOut: {
+      type: Array,
+      default: []
+    },
+    timeSteps: {
+      type: Array,
+      default: []
     },
     width: {
       type: Number,
@@ -57,40 +50,51 @@ export default {
       type: Number,
       default: 100
     },
+    xLabel: {
+      type: String,
+      default: 'Time (hour)'
+    }
   },
   data() {
     return {
       chartData: {
-        labels: hourLabels,
-        datasets: [ 
+        labels: this.timeSteps,
+        datasets: [
           { 
-            label: 'Data In',
-            data: dataInPoints,
-            borderColor: 'rgb(14, 204, 95)',
-            backgroundColor: 'rgba(14, 204, 95, 0.6)',
+            label: 'Data Out',
+            data: this.dataOut,
+            borderColor: 'rgb(255, 0, 0)',
+            backgroundColor: 'rgba(255, 0, 0, 1)',
             fill: true
           },
           { 
-            label: 'Data Out',
-            data: dataOutPoints,
-            borderColor: 'rgb(255, 0, 0)',
-            backgroundColor: 'rgba(255, 0, 0, 0.6)',
+            label: 'Data In',
+            data: this.dataIn,
+            borderColor: 'rgb(14, 204, 95)',
+            backgroundColor: 'rgba(14, 204, 95, 1)',
             fill: true
           }
         ]
       },
       chartOptions: {
         responsive: true,
-        // cubicInterpolationMode: 'monotone',
+        cubicInterpolationMode: 'monotone',
         scales: {
           y: {
+            beginAtZero: true,
+            suggestedMax: 100,
             grid: {display: false},
             title: {
               display: true, 
-              text: 'Data (Mbs)'
-            }
+              text: 'Data (kb)'
+            },
+            ticks: {
+              stepSize: 1
+            },
+            stacked: true
           },
           x: {
+            beginAtZero: true,
             grid: {display: false},
             title: {
               display: true, 

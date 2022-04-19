@@ -7,7 +7,6 @@
         :chart-data="chartData"
         :chart-id="chartId"
         :dataset-id-key="datasetIdKey"
-        :plugins="plugins"
         :width="width"
         :height="height"
       />
@@ -19,42 +18,25 @@
 import { Line } from 'vue-chartjs'
 import Chart from 'chart.js/auto';
 
-// ChartJS.register(
-//   Title,
-//   Tooltip,
-//   Legend,
-//   LineElement,
-//   LinearScale,
-//   PointElement,
-//   CategoryScale
-// )
-
-const now = new Date()
-const nowHour = now.getHours()
-const requestsData = []
-
-const hourLabels = []
-for (let i = 23; i >=0; i--) {
-  let h = nowHour - i
-  if (h < 0) h = 24 + h
-  if (h < 10) h = '0' + h
-  hourLabels.push(`${h}:00`)
-
-  const availPc = Math.random() * 15
-  requestsData.push(availPc)
-}
-
 export default {
-  name: "NodeChartAvailability",
+  name: "NodeChartRequests",
   components: { Line },
   props: {
     chartId: {
       type: String,
-      default: 'bar-chart'
+      default: 'line-chart'
     },
     datasetIdKey: {
       type: String,
       default: 'label'
+    },
+    data: {
+      type: Array,
+      default: []
+    },
+    timeSteps: {
+      type: Array,
+      default: []
     },
     width: {
       type: Number,
@@ -64,15 +46,19 @@ export default {
       type: Number,
       default: 200
     },
+    xLabel: {
+      type: String,
+      default: 'Time (hour)'
+    }
   },
   data() {
     return {
       chartData: {
-        labels: hourLabels,
+        labels: this.timeSteps,
         datasets: [ 
           { 
             label: 'Requests',
-            data: requestsData,
+            data: this.data,
             borderColor: 'rgb(14, 204, 95)',
             backgroundColor: 'rgba(14, 204, 95, 0.6)',
             fill: true
@@ -85,10 +71,14 @@ export default {
         scales: {
           y: {
             beginAtZero: true,
+            suggestedMax: 10,
             grid: {display: false},
             title: {
               display: true, 
               text: 'Requests'
+            },
+            ticks: {
+              stepSize: 1
             }
           },
           x: {

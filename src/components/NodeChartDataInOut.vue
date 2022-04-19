@@ -88,9 +88,6 @@ export default {
               display: true, 
               text: 'Data (kb)'
             },
-            ticks: {
-              stepSize: 1
-            },
             stacked: true
           },
           x: {

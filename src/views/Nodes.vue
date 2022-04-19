@@ -10,6 +10,7 @@
             <NodeOverview :session="session" />
             <NodeSummary :session="session" />
           </div>
+          <NodeChartTimeToggle :period="chartPeriod" :onPeriodUpdate="updateChartPeriod" />
           <div class="row mb-25">
             <NodeChartAvailability v-if="sessionStats.length" :data="chartAvailabilityMetrics" :xLabel="xLabel" :timeSteps="timeSteps"/>
             <NodeChartRequests v-if="sessionStats.length" :data="chartRequestsMetrics" :xLabel="xLabel" :timeSteps="timeSteps"/>
@@ -56,13 +57,15 @@
 
 <script>
 import * as index from '@edge/index-utils'
+import moment from 'moment'
 import { fetchSessionStats } from '../utils/api'
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination"
 import NodeChartAvailability from "@/components/NodeChartAvailability"
-import NodeChartRequests from "@/components/NodeChartRequests"
 import NodeChartDataInOut from "@/components/NodeChartDataInOut"
+import NodeChartRequests from "@/components/NodeChartRequests"
+import NodeChartTimeToggle from "@/components/NodeChartTimeToggle"
 import NodeOverview from "@/components/NodeOverview"
 import NodeSummary from "@/components/NodeSummary"
 import NodesTable from "@/components/NodesTable"
@@ -81,7 +84,6 @@ export default {
   },
   data: function () {
     return {
-      chartPeriod: 'day',
       limit: 20,
       loading: false,
       metadata: { totalCount: 0 },
@@ -96,8 +98,9 @@ export default {
     HeroPanel,
     Pagination,
     NodeChartAvailability,
-    NodeChartRequests,
     NodeChartDataInOut,
+    NodeChartRequests,
+    NodeChartTimeToggle,
     NodeOverview,
     NodeSummary,
     NodesTable,
@@ -131,6 +134,9 @@ export default {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
     },
 
+    chartPeriod() {
+      return this.$route.query.period || 'day'
+    },
     chartSteps() {
       if (this.chartPeriod == 'day') return 24
       else if (this.chartPeriod == 'week') return 7
@@ -179,28 +185,40 @@ export default {
     }
   },
   methods: {
-    
     getTimeSteps(stats) {
-      const latestSnapshotPeriod = new Date(stats[0].end)
+      let latestSnapshotPeriod = new Date(stats[0].end)
 
       if (this.chartPeriod === 'day') {
         const hourLabels = []
-        for (let i = 23; i >=0; i--) {
-          let h = latestSnapshotPeriod.getHours() - i
-          if (h < 0) h = 24 + h
-          if (h < 10) h = '0' + h
-          hourLabels.push(`${h}:00`)
+        for (let i = 0; i < 24; i++) {
+          hourLabels.unshift(moment(latestSnapshotPeriod).subtract(i, 'hours').format('LT'))
         }
         this.timeSteps = hourLabels
       }
+      if (this.chartPeriod === 'week') {
+        const dayLabels = []
+          for (let i = 0; i < 7; i++) {
+            dayLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('dddd'))
+          }
+          this.timeSteps = dayLabels
+      }
+      if (this.chartPeriod === 'month') {
+        const dateLabels = []
+        for (let i = 0; i < 30; i++) {
+          dateLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('ll'))
+        }
+        this.timeSteps = dateLabels
+      } 
     },
-
-
     onSessionsUpdate(metadata) {
       this.metadata = metadata
     },
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
+    },
+    updateChartPeriod(newPeriod) {
+      const query = { ...this.$route.query, period: newPeriod}
+      this.$router.replace({ query })
     },
     updateHideOfflineNodes() {
       const hideOffline = !this.hideOfflineNodes ? 1 : undefined
@@ -265,6 +283,9 @@ export default {
         if (this.$route.query.page < 1 || !numRegEx.test(this.$route.query.page)) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
       }
       if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
+    },
+    chartPeriod() {
+      this.updateSession()
     }
   }
 }

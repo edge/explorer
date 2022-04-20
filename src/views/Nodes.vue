@@ -11,35 +11,47 @@
             <NodeSummary :session="session" />
           </div>
           <NodeChartTimeToggle :period="chartPeriod" :onPeriodUpdate="updateChartPeriod" />
-          <div class="row mb-25">
+          <div v-if="session.node.type !== 'host'" class="row full mb-25">
             <NodeChartAvailability
               v-if="sessionStats.length"
               :data="chartAvailabilityMetrics"
               :xLabel="xLabel"
               :timeSeries="timeSeries"
-              :height="isSmView ? 400 : 200"
-              :pointRadius="isSmView ? 2 : 3"
-              />
-            <NodeChartRequests
-              v-if="sessionStats.length"
-              :data="chartRequestsMetrics"
-              :xLabel="xLabel"
-              :timeSeries="timeSeries"
-              :height="isSmView ? 400 : 200"
-              :pointRadius="isSmView ? 2 : 3"
-              />
-          </div>
-          <div class="row full mb-25">
-            <NodeChartDataInOut
-              v-if="sessionStats.length"
-              :dataIn="chartDataInMetrics"
-              :dataOut="chartDataOutMetrics"
-              :xLabel="xLabel"
-              :timeSeries="timeSeries"
               :height="isSmView ? 400 : isMdView ? 200 : 100"
               :pointRadius="isSmView ? 2 : 3"
-              :yLabel="chartDataInOutMb ? 'Data (MB)' : 'Data (KB)'"
+            />
+          </div>
+          <div v-else>
+            <div class="row mb-25">
+              <NodeChartAvailability
+                v-if="sessionStats.length"
+                :data="chartAvailabilityMetrics"
+                :xLabel="xLabel"
+                :timeSeries="timeSeries"
+                :height="isSmView ? 400 : 200"
+                :pointRadius="isSmView ? 2 : 3"
               />
+              <NodeChartRequests
+                v-if="sessionStats.length"
+                :data="chartRequestsMetrics"
+                :xLabel="xLabel"
+                :timeSeries="timeSeries"
+                :height="isSmView ? 400 : 200"
+                :pointRadius="isSmView ? 2 : 3"
+              />
+            </div>
+            <div class="row full mb-25">
+              <NodeChartDataInOut
+                v-if="sessionStats.length"
+                :dataIn="chartDataInMetrics"
+                :dataOut="chartDataOutMetrics"
+                :xLabel="xLabel"
+                :timeSeries="timeSeries"
+                :height="isSmView ? 400 : isMdView ? 200 : 100"
+                :pointRadius="isSmView ? 2 : 3"
+                :yLabel="chartDataInOutMb ? 'Data (MB)' : 'Data (KB)'"
+              />
+            </div>
           </div>
       </div>
       <div v-else-if="!$route.params.nodeAddress" class="container">

@@ -172,7 +172,7 @@ export default {
     },
     chartDataInOutMb() {
       return this.sessionStats.some(el => {
-        return el.metrics.cdn.data.in > 1000000 || el.metrics.cdn.data.out > 1000000
+        return el.metrics.cdn.data.in + el.metrics.cdn.data.out > 1000000
       })
     },
     chartPeriod() {

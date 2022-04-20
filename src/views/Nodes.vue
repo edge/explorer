@@ -12,11 +12,11 @@
           </div>
           <NodeChartTimeToggle :period="chartPeriod" :onPeriodUpdate="updateChartPeriod" />
           <div class="row mb-25">
-            <NodeChartAvailability v-if="sessionStats.length" :data="chartAvailabilityMetrics" :xLabel="xLabel" :timeSteps="timeSteps"/>
-            <NodeChartRequests v-if="sessionStats.length" :data="chartRequestsMetrics" :xLabel="xLabel" :timeSteps="timeSteps"/>
+            <NodeChartAvailability v-if="sessionStats.length" :data="chartAvailabilityMetrics" :xLabel="xLabel" :timeSeries="timeSeries"/>
+            <NodeChartRequests v-if="sessionStats.length" :data="chartRequestsMetrics" :xLabel="xLabel" :timeSeries="timeSeries"/>
           </div>
           <div class="row full mb-25">
-            <NodeChartDataInOut v-if="sessionStats.length" :dataIn="chartDataInMetrics" :dataOut="chartDataOutMetrics" :xLabel="xLabel" :timeSteps="timeSteps"/>
+            <NodeChartDataInOut v-if="sessionStats.length" :dataIn="chartDataInMetrics" :dataOut="chartDataOutMetrics" :xLabel="xLabel" :timeSeries="timeSeries"/>
           </div>
       </div>
       <div v-else-if="!$route.params.nodeAddress" class="container">
@@ -89,7 +89,7 @@ export default {
       metadata: { totalCount: 0 },
       session: null,
       sessionStats: [],
-      timeSteps: [],
+      timeSeries: [],
       iSession: null
     }
   },
@@ -124,40 +124,10 @@ export default {
     baseRoute() {
       return this.$route.params.nodeAddress ? 'Node' : 'Nodes'
     },
-    currentPage() {
-      return Math.max(1, parseInt(this.$route.query.page) || 1)
-    },
-    hideOfflineNodes() {
-      return this.$route.query.hideOffline === '1'
-    },
-    lastPage() {
-      return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
-    },
-
-    chartPeriod() {
-      return this.$route.query.period || 'day'
-    },
-    chartSteps() {
-      if (this.chartPeriod == 'day') return 24
-      else if (this.chartPeriod == 'week') return 7
-      else if (this.chartPeriod == 'month') return 30
-      else return 24
-    },
-    chartRange() {
-      if (this.chartPeriod == 'day') return 'hourly'
-      else return 'daily'
-    },
     chartAvailabilityMetrics() {
       const metrics = []
       this.sessionStats.forEach((step, index) => {
         metrics[this.chartSteps - index - 1] = step.uptime * 100 / this.maxUptime
-      })
-      return metrics
-    },
-    chartRequestsMetrics() {
-      const metrics = []
-      this.sessionStats.forEach((step, index) => {
-        metrics[this.chartSteps - index - 1] = step.metrics.cdn.requests
       })
       return metrics
     },
@@ -175,41 +145,50 @@ export default {
       })
       return metrics
     },
+    chartPeriod() {
+      const period = this.$route.query.period
+      const validPeriods = ['day', 'week', 'month']
+      if (validPeriods.includes(period)) return this.$route.query.period
+      else return 'day'
+    },
+    chartRange() {
+      if (this.chartPeriod == 'day') return 'hourly'
+      else return 'daily'
+    },
+    chartRequestsMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        metrics[this.chartSteps - index - 1] = step.metrics.cdn.requests
+      })
+      return metrics
+    },
+    chartSteps() {
+      if (this.chartPeriod == 'day') return 24
+      if (this.chartPeriod == 'week') return 7
+      if (this.chartPeriod == 'month') return 30
+      return 24
+    },
+    currentPage() {
+      return Math.max(1, parseInt(this.$route.query.page) || 1)
+    },
+    hideOfflineNodes() {
+      return this.$route.query.hideOffline === '1'
+    },
+    lastPage() {
+      return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
     maxUptime() {
       if (this.chartPeriod === 'day') return 3600 * 1000
       return 86400 * 1000
     },
     xLabel() {
-      if (this.chartPeriod === 'day') return 'Time (hour)'
-      return 'Time (day)'
+      if (this.chartPeriod === 'day') return 'Time'
+      if (this.chartPeriod === 'week') return 'Day'
+      if (this.chartPeriod === 'month') return 'Date'
+      return 'Time'
     }
   },
   methods: {
-    getTimeSteps(stats) {
-      let latestSnapshotPeriod = new Date(stats[0].end)
-
-      if (this.chartPeriod === 'day') {
-        const hourLabels = []
-        for (let i = 0; i < 24; i++) {
-          hourLabels.unshift(moment(latestSnapshotPeriod).subtract(i, 'hours').format('LT'))
-        }
-        this.timeSteps = hourLabels
-      }
-      if (this.chartPeriod === 'week') {
-        const dayLabels = []
-          for (let i = 0; i < 7; i++) {
-            dayLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('ddd'))
-          }
-          this.timeSteps = dayLabels
-      }
-      if (this.chartPeriod === 'month') {
-        const dateLabels = []
-        for (let i = 0; i < 30; i++) {
-          dateLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('ll'))
-        }
-        this.timeSteps = dateLabels
-      } 
-    },
     onSessionsUpdate(metadata) {
       this.metadata = metadata
     },
@@ -231,7 +210,8 @@ export default {
         count: this.chartSteps
       }
       const snapshots = await fetchSessionStats(this.address, options)
-      return snapshots.results
+      await this.updateTimeSeries(snapshots.results)
+      this.sessionStats = snapshots.results
     },
     async updateSession() {
       if (!this.address) return
@@ -258,19 +238,42 @@ export default {
 
         this.session = session
 
-        // get metrics for charts
-        const stats = await this.updateSessionStats()
-        this.sessionStats = stats
-        this.getTimeSteps(stats)
+        // update metrics for charts
+        await this.updateSessionStats()
 
         this.loaded = true
         this.loading = false
       } catch (e) {
+        console.log(e)
         this.session = null
         clearInterval(this.iSession)
         this.loaded = true
         this.loading = false
         return
+      }
+    },
+    updateTimeSeries(stats) {
+      let latestSnapshotPeriod = new Date(stats[0].end)
+      if (this.chartPeriod === 'day') {
+        const hourLabels = []
+        for (let i = 0; i < 24; i++) {
+          hourLabels.unshift(moment(latestSnapshotPeriod).subtract(i, 'hours').format('LT'))
+        }
+        this.timeSeries = hourLabels
+      }
+      if (this.chartPeriod === 'week') {
+        const dayLabels = []
+          for (let i = 0; i < 7; i++) {
+            dayLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('ddd'))
+          }
+          this.timeSeries = dayLabels
+      }
+      if (this.chartPeriod === 'month') {
+        const dateLabels = []
+        for (let i = 0; i < 30; i++) {
+          dateLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('ll'))
+        }
+        this.timeSeries = dateLabels
       }
     }
   },

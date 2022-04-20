@@ -5,8 +5,7 @@
       <Line
         :chart-options="chartOptions"
         :chart-data="chartData"
-        :chart-id="chartId"
-        :dataset-id-key="datasetIdKey"
+        :chart-id="'NodeAvailabilityChart'"
         :width="width"
         :height="height"
       />
@@ -21,42 +20,12 @@ import Chart from 'chart.js/auto';
 export default {
   name: "NodeChartAvailability",
   components: { Line },
-  props: {
-    chartId: {
-      type: String,
-      default: 'line-chart'
-    },
-    datasetIdKey: {
-      type: String,
-      default: 'label'
-    },
-    data: {
-      type: Array,
-      default: []
-    },
-    timeSteps: {
-      type: Array,
-      default: []
-    },
-    width: {
-      type: Number,
-      default: 400
-    },
-    height: {
-      type: Number,
-      default: 200
-    },
-    xLabel: {
-      type: String,
-      default: 'Time (hour)'
-    }
-  },
   data() {
     return {
       chartData: {
-        labels: this.timeSteps,
-        datasets: [ 
-          { 
+        labels: this.timeSeries,
+        datasets: [
+          {
             label: 'Availability',
             data: this.data,
             borderColor: '#0ecc5f',
@@ -74,14 +43,14 @@ export default {
             suggestedMax: 100,
             grid: {display: false},
             title: {
-              display: true, 
+              display: true,
               text: 'Availability (%)'
             }
           },
           x: {
             grid: {display: false},
             title: {
-              display: true, 
+              display: true,
               text: this.xLabel
             },
           }
@@ -93,18 +62,31 @@ export default {
         }
       }
     }
+  },
+  props: {
+    data: {
+      type: Array,
+      default: []
+    },
+    timeSeries: {
+      type: Array,
+      default: []
+    },
+    width: {
+      type: Number,
+      default: 400
+    },
+    height: {
+      type: Number,
+      default: 200
+    },
+    xLabel: {
+      type: String,
+      default: 'Time (hour)'
+    }
   }
 }
 </script>
 
 <style scoped>
-  .tile {
-    @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
-  }
-  .tile span.emphasis {
-    @apply text-gray-900 font-medium font-mono;
-  }
-  button {
-    @apply leading-none text-sm2 border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
-  }
 </style>

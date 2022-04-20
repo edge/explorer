@@ -5,8 +5,7 @@
       <Line
         :chart-options="chartOptions"
         :chart-data="chartData"
-        :chart-id="chartId"
-        :dataset-id-key="datasetIdKey"
+        :chart-id="'NodeRequestsChart'"
         :width="width"
         :height="height"
       />
@@ -21,42 +20,12 @@ import Chart from 'chart.js/auto';
 export default {
   name: "NodeChartRequests",
   components: { Line },
-  props: {
-    chartId: {
-      type: String,
-      default: 'line-chart'
-    },
-    datasetIdKey: {
-      type: String,
-      default: 'label'
-    },
-    data: {
-      type: Array,
-      default: []
-    },
-    timeSteps: {
-      type: Array,
-      default: []
-    },
-    width: {
-      type: Number,
-      default: 400
-    },
-    height: {
-      type: Number,
-      default: 200
-    },
-    xLabel: {
-      type: String,
-      default: 'Time (hour)'
-    }
-  },
   data() {
     return {
       chartData: {
-        labels: this.timeSteps,
-        datasets: [ 
-          { 
+        labels: this.timeSeries,
+        datasets: [
+          {
             label: 'Requests',
             data: this.data,
             borderColor: 'rgb(14, 204, 95)',
@@ -74,7 +43,7 @@ export default {
             suggestedMax: 10,
             grid: {display: false},
             title: {
-              display: true, 
+              display: true,
               text: 'Requests'
             },
             ticks: {
@@ -84,8 +53,8 @@ export default {
           x: {
             grid: {display: false},
             title: {
-              display: true, 
-              text: 'Time (hour)'
+              display: true,
+              text: this.xLabel
             }
           }
         },
@@ -96,18 +65,31 @@ export default {
         }
       }
     }
+  },
+  props: {
+    data: {
+      type: Array,
+      default: []
+    },
+    timeSeries: {
+      type: Array,
+      default: []
+    },
+    width: {
+      type: Number,
+      default: 400
+    },
+    height: {
+      type: Number,
+      default: 200
+    },
+    xLabel: {
+      type: String,
+      default: 'Time (hour)'
+    }
   }
 }
 </script>
 
 <style scoped>
-  .tile {
-    @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
-  }
-  .tile span.emphasis {
-    @apply text-gray-900 font-medium font-mono;
-  }
-  button {
-    @apply leading-none text-sm2 border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
-  }
 </style>

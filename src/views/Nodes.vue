@@ -10,6 +10,49 @@
             <NodeOverview :session="session" />
             <NodeSummary :session="session" />
           </div>
+          <NodeChartTimeToggle :period="chartPeriod" :onPeriodUpdate="updateChartPeriod" />
+          <div v-if="session.node.type !== 'host'" class="row full mb-25">
+            <NodeChartAvailability
+              v-if="sessionStats.length"
+              :data="chartAvailabilityMetrics"
+              :xLabel="xLabel"
+              :timeSeries="timeSeries"
+              :height="isSmView ? 400 : isMdView ? 200 : 100"
+              :pointRadius="isSmView ? 2 : 3"
+            />
+          </div>
+          <div v-else>
+            <div class="row mb-25">
+              <NodeChartAvailability
+                v-if="sessionStats.length"
+                :data="chartAvailabilityMetrics"
+                :xLabel="xLabel"
+                :timeSeries="timeSeries"
+                :height="isSmView ? 400 : 200"
+                :pointRadius="isSmView ? 2 : 3"
+              />
+              <NodeChartRequests
+                v-if="sessionStats.length"
+                :data="chartRequestsMetrics"
+                :xLabel="xLabel"
+                :timeSeries="timeSeries"
+                :height="isSmView ? 400 : 200"
+                :pointRadius="isSmView ? 2 : 3"
+              />
+            </div>
+            <div class="row full mb-25">
+              <NodeChartDataInOut
+                v-if="sessionStats.length"
+                :dataIn="chartDataInMetrics"
+                :dataOut="chartDataOutMetrics"
+                :xLabel="xLabel"
+                :timeSeries="timeSeries"
+                :height="isSmView ? 400 : isMdView ? 200 : 100"
+                :pointRadius="isSmView ? 2 : 3"
+                :yLabel="chartDataInOutMb ? 'Data (MB)' : 'Data (KB)'"
+              />
+            </div>
+          </div>
       </div>
       <div v-else-if="!$route.params.nodeAddress" class="container">
         <div class="checkbox-container" @click="updateHideOfflineNodes" >
@@ -49,9 +92,15 @@
 
 <script>
 import * as index from '@edge/index-utils'
+import moment from 'moment'
+import { fetchSessionStats } from '../utils/api'
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination"
+import NodeChartAvailability from "@/components/NodeChartAvailability"
+import NodeChartDataInOut from "@/components/NodeChartDataInOut"
+import NodeChartRequests from "@/components/NodeChartRequests"
+import NodeChartTimeToggle from "@/components/NodeChartTimeToggle"
 import NodeOverview from "@/components/NodeOverview"
 import NodeSummary from "@/components/NodeSummary"
 import NodesTable from "@/components/NodesTable"
@@ -74,6 +123,8 @@ export default {
       loading: false,
       metadata: { totalCount: 0 },
       session: null,
+      sessionStats: [],
+      timeSeries: [],
       iSession: null
     }
   },
@@ -81,12 +132,16 @@ export default {
     Header,
     HeroPanel,
     Pagination,
+    NodeChartAvailability,
+    NodeChartDataInOut,
+    NodeChartRequests,
+    NodeChartTimeToggle,
     NodeOverview,
     NodeSummary,
     NodesTable,
   },
   mounted() {
-    if (this.$route.params.nodeAddress) { 
+    if (this.$route.params.nodeAddress) {
       this.updateSession()
       // initiate polling
       this.iSession = setInterval(() => {
@@ -104,14 +159,81 @@ export default {
     baseRoute() {
       return this.$route.params.nodeAddress ? 'Node' : 'Nodes'
     },
+    chartAvailabilityMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        metrics[this.chartSteps - index - 1] = step.uptime * 100 / this.maxUptime
+      })
+      return metrics
+    },
+    chartDataInMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        if (this.chartDataInOutMb) metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.in / 1000000
+        else metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.in / 1000
+      })
+      return metrics
+    },
+    chartDataOutMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        if (this.chartDataInOutMb) metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.out / 1000000
+        else metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.out / 1000
+      })
+      return metrics
+    },
+    chartDataInOutMb() {
+      return this.sessionStats.some(el => {
+        return el.metrics.cdn.data.in + el.metrics.cdn.data.out > 1000000
+      })
+    },
+    chartPeriod() {
+      const period = this.$route.query.period
+      const validPeriods = ['day', 'week', 'month']
+      if (validPeriods.includes(period)) return this.$route.query.period
+      else return 'day'
+    },
+    chartRange() {
+      if (this.chartPeriod == 'day') return 'hourly'
+      else return 'daily'
+    },
+    chartRequestsMetrics() {
+      const metrics = []
+      this.sessionStats.forEach((step, index) => {
+        metrics[this.chartSteps - index - 1] = step.metrics.cdn.requests
+      })
+      return metrics
+    },
+    chartSteps() {
+      if (this.chartPeriod == 'day') return 24
+      if (this.chartPeriod == 'week') return 7
+      if (this.chartPeriod == 'month') return 30
+      return 24
+    },
     currentPage() {
       return Math.max(1, parseInt(this.$route.query.page) || 1)
     },
     hideOfflineNodes() {
       return this.$route.query.hideOffline === '1'
     },
+    isSmView() {
+      return window.innerWidth < 640
+    },
+    isMdView() {
+      return window.innerWidth >= 640 && window.innerWidth < 1000
+    },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+    maxUptime() {
+      if (this.chartPeriod === 'day') return 3600 * 1000
+      return 86400 * 1000
+    },
+    xLabel() {
+      if (this.chartPeriod === 'day') return 'Time'
+      if (this.chartPeriod === 'week') return 'Day'
+      if (this.chartPeriod === 'month') return 'Date'
+      return 'Time'
     }
   },
   methods: {
@@ -121,10 +243,23 @@ export default {
     sliceString(string, symbols) {
       return string.length > symbols ? `${string.slice(0, symbols)}…` : string;
     },
+    updateChartPeriod(newPeriod) {
+      const query = { ...this.$route.query, period: newPeriod}
+      this.$router.replace({ query })
+    },
     updateHideOfflineNodes() {
       const hideOffline = !this.hideOfflineNodes ? 1 : undefined
       const query = { ...this.$route.query, hideOffline }
       this.$router.replace({ query })
+    },
+    async updateSessionStats() {
+      const options = {
+        range: this.chartRange,
+        count: this.chartSteps
+      }
+      const snapshots = await fetchSessionStats(this.address, options)
+      await this.updateTimeSeries(snapshots.results)
+      this.sessionStats = snapshots.results
     },
     async updateSession() {
       if (!this.address) return
@@ -151,6 +286,9 @@ export default {
 
         this.session = session
 
+        // update metrics for charts
+        await this.updateSessionStats()
+
         this.loaded = true
         this.loading = false
       } catch (e) {
@@ -159,6 +297,30 @@ export default {
         this.loaded = true
         this.loading = false
         return
+      }
+    },
+    updateTimeSeries(stats) {
+      let latestSnapshotPeriod = new Date(stats[0].end)
+      if (this.chartPeriod === 'day') {
+        const hourLabels = []
+        for (let i = 0; i < 24; i++) {
+          hourLabels.unshift(moment(latestSnapshotPeriod).subtract(i, 'hours').format('LT'))
+        }
+        this.timeSeries = hourLabels
+      }
+      if (this.chartPeriod === 'week') {
+        const dayLabels = []
+          for (let i = 0; i < 7; i++) {
+            dayLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('ddd'))
+          }
+          this.timeSeries = dayLabels
+      }
+      if (this.chartPeriod === 'month') {
+        const dateLabels = []
+        for (let i = 0; i < 30; i++) {
+          dateLabels.unshift(moment(latestSnapshotPeriod).subtract(i + 1, 'days').format('ll'))
+        }
+        this.timeSeries = dateLabels
       }
     }
   },
@@ -171,6 +333,9 @@ export default {
         if (this.$route.query.page < 1 || !numRegEx.test(this.$route.query.page)) this.$router.replace({ query: { ...this.$route.query, page: 1 } })
       }
       if (this.currentPage > this.lastPage) this.$router.replace({ query: { ...this.$route.query, page: this.lastPage } })
+    },
+    chartPeriod() {
+      this.updateSession()
     }
   }
 }
@@ -179,6 +344,10 @@ export default {
 .row {
   @apply grid items-start grid-cols-1 gap-24;
   @apply lg:grid-cols-2;
+}
+
+.row.full {
+  @apply lg:grid-cols-1
 }
 
 .checkbox-container {

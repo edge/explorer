@@ -26,18 +26,20 @@ export default {
         labels: this.timeSeries,
         datasets: [
           {
-            label: 'Data Out',
-            data: this.dataOut,
+            backgroundColor: 'rgb(255, 0, 0)',
             borderColor: 'rgb(255, 0, 0)',
-            backgroundColor: 'rgba(255, 0, 0, 1)',
-            fill: true
+            data: this.dataOut,
+            fill: true,
+            label: 'Data Out',
+            pointRadius: this.pointRadius
           },
           {
-            label: 'Data In',
-            data: this.dataIn,
+            backgroundColor: 'rgb(14, 204, 95)',
             borderColor: 'rgb(14, 204, 95)',
-            backgroundColor: 'rgba(14, 204, 95, 1)',
-            fill: true
+            data: this.dataIn,
+            fill: true,
+            label: 'Data In',
+            pointRadius: this.pointRadius
           }
         ]
       },
@@ -47,11 +49,10 @@ export default {
         scales: {
           y: {
             beginAtZero: true,
-            suggestedMax: 100,
             grid: {display: false},
             title: {
               display: true,
-              text: 'Data (kb)'
+              text: this.yLabel
             },
             stacked: true
           },
@@ -64,6 +65,21 @@ export default {
             }
           }
         },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            }
+          },
+          hover: {
+            mode: 'index',
+            intersect: false
+          }
+        }
       }
     }
   },
@@ -76,21 +92,25 @@ export default {
       type: Array,
       default: []
     },
+    height: {
+      type: Number,
+      default: 200
+    },
+    pointRadius: {
+      type: Number,
+      defult: 5
+    },
     timeSeries: {
       type: Array,
       default: []
     },
-    width: {
-      type: Number,
-      default: 400
-    },
-    height: {
-      type: Number,
-      default: 100
-    },
     xLabel: {
       type: String,
       default: 'Time (hour)'
+    },
+    yLabel: {
+      type: String,
+      default: 'Data (KB)'
     }
   }
 }

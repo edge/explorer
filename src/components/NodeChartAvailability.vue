@@ -26,11 +26,12 @@ export default {
         labels: this.timeSeries,
         datasets: [
           {
-            label: 'Availability',
-            data: this.data,
-            borderColor: '#0ecc5f',
             backgroundColor: 'rgba(14, 204, 95, 0.6)',
-            fill: true
+            borderColor: '#0ecc5f',
+            data: this.data,
+            fill: true,
+            label: 'Availability',
+            pointRadius: this.pointRadius
           }
         ]
       },
@@ -40,8 +41,8 @@ export default {
         scales: {
           y: {
             beginAtZero: true,
-            suggestedMax: 100,
             grid: {display: false},
+            suggestedMax: 100,
             title: {
               display: true,
               text: 'Availability (%)'
@@ -58,6 +59,12 @@ export default {
         plugins: {
           legend: {
             display: false
+          },
+          tooltip: {
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            }
           }
         }
       }
@@ -68,17 +75,17 @@ export default {
       type: Array,
       default: []
     },
-    timeSeries: {
-      type: Array,
-      default: []
-    },
-    width: {
-      type: Number,
-      default: 400
-    },
     height: {
       type: Number,
       default: 200
+    },
+    pointRadius: {
+      type: Number,
+      defult: 5
+    },
+    timeSeries: {
+      type: Array,
+      default: []
     },
     xLabel: {
       type: String,

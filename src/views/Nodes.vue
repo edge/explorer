@@ -12,11 +12,34 @@
           </div>
           <NodeChartTimeToggle :period="chartPeriod" :onPeriodUpdate="updateChartPeriod" />
           <div class="row mb-25">
-            <NodeChartAvailability v-if="sessionStats.length" :data="chartAvailabilityMetrics" :xLabel="xLabel" :timeSeries="timeSeries"/>
-            <NodeChartRequests v-if="sessionStats.length" :data="chartRequestsMetrics" :xLabel="xLabel" :timeSeries="timeSeries"/>
+            <NodeChartAvailability
+              v-if="sessionStats.length"
+              :data="chartAvailabilityMetrics"
+              :xLabel="xLabel"
+              :timeSeries="timeSeries"
+              :height="isSmView ? 400 : 200"
+              :pointRadius="isSmView ? 2 : 3"
+              />
+            <NodeChartRequests
+              v-if="sessionStats.length"
+              :data="chartRequestsMetrics"
+              :xLabel="xLabel"
+              :timeSeries="timeSeries"
+              :height="isSmView ? 400 : 200"
+              :pointRadius="isSmView ? 2 : 3"
+              />
           </div>
           <div class="row full mb-25">
-            <NodeChartDataInOut v-if="sessionStats.length" :dataIn="chartDataInMetrics" :dataOut="chartDataOutMetrics" :xLabel="xLabel" :timeSeries="timeSeries"/>
+            <NodeChartDataInOut
+              v-if="sessionStats.length"
+              :dataIn="chartDataInMetrics"
+              :dataOut="chartDataOutMetrics"
+              :xLabel="xLabel"
+              :timeSeries="timeSeries"
+              :height="isSmView ? 400 : isMdView ? 200 : 100"
+              :pointRadius="isSmView ? 2 : 3"
+              :yLabel="chartDataInOutMb ? 'Data (MB)' : 'Data (KB)'"
+              />
           </div>
       </div>
       <div v-else-if="!$route.params.nodeAddress" class="container">
@@ -134,16 +157,23 @@ export default {
     chartDataInMetrics() {
       const metrics = []
       this.sessionStats.forEach((step, index) => {
-        metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.in / 1024
+        if (this.chartDataInOutMb) metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.in / 1000000
+        else metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.in / 1000
       })
       return metrics
     },
     chartDataOutMetrics() {
       const metrics = []
       this.sessionStats.forEach((step, index) => {
-        metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.out / 1024
+        if (this.chartDataInOutMb) metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.out / 1000000
+        else metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.out / 1000
       })
       return metrics
+    },
+    chartDataInOutMb() {
+      return this.sessionStats.some(el => {
+        return el.metrics.cdn.data.in > 1000000 || el.metrics.cdn.data.out > 1000000
+      })
     },
     chartPeriod() {
       const period = this.$route.query.period
@@ -173,6 +203,12 @@ export default {
     },
     hideOfflineNodes() {
       return this.$route.query.hideOffline === '1'
+    },
+    isSmView() {
+      return window.innerWidth < 640
+    },
+    isMdView() {
+      return window.innerWidth >= 640 && window.innerWidth < 1000
     },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))

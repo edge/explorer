@@ -45,7 +45,7 @@ export default {
 <!-- See https://medium.com/@brockreece/scoped-styles-with-v-html-c0f6d2dc5d8e for >>> syntax -->
 <style scoped>
   .tile {
-    @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
+    @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded break-words;
   }
   .tile >>> span.emphasis {
     @apply text-gray-900 font-medium font-mono;

@@ -31,17 +31,22 @@ export default {
 <style scoped>
 .toggle-wrapper {
   @apply flex items-center mb-15 justify-end rounded border border-solid;
-  border-color: rgb(14, 204, 95)
+  border-color: #afafaf
 }
 
 .toggle {
-  @apply text-gray p-5 w-80 text-center cursor-pointer border border-solid;
-  border-color: rgb(14, 204, 95)
+  @apply text-gray p-5 w-80 text-center text-xs cursor-pointer border-solid uppercase;
+  border-color: #afafaf
+}
+
+.toggle:nth-child(2) {
+  border-right: solid 1px;
+  border-left: solid 1px;
+  border-color: #afafaf
 }
 
 .toggle.selected {
   @apply text-white;
   background-color: rgb(14, 204, 95);
 }
-
 </style>

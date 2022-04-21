@@ -42,7 +42,7 @@ export default {
 
 <style scoped>
   .tile {
-    @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded md:pr-50;
+    @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded md:pr-50 break-words;
   }
   .tile span.emphasis {
     @apply text-gray-900 font-medium font-mono;

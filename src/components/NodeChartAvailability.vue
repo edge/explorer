@@ -6,7 +6,6 @@
         :chart-options="chartOptions"
         :chart-data="chartData"
         :chart-id="'NodeAvailabilityChart'"
-        :width="width"
         :height="height"
       />
     </div>
@@ -64,6 +63,11 @@ export default {
             interaction: {
               mode: 'index',
               intersect: false,
+              callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.raw.toFixed(2) + ' %'
+                }
+              }
             }
           }
         }
@@ -96,4 +100,7 @@ export default {
 </script>
 
 <style scoped>
+.tile {
+  @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
+}
 </style>

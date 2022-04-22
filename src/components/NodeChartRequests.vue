@@ -6,7 +6,6 @@
         :chart-options="chartOptions"
         :chart-data="chartData"
         :chart-id="'NodeRequestsChart'"
-        :width="width"
         :height="height"
       />
     </div>
@@ -66,7 +65,7 @@ export default {
           tooltip: {
             interaction: {
               mode: 'index',
-              intersect: false,
+              intersect: false
             }
           }
         }
@@ -99,4 +98,7 @@ export default {
 </script>
 
 <style scoped>
+.tile {
+  @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
+}
 </style>

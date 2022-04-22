@@ -6,7 +6,6 @@
         :chart-options="chartOptions"
         :chart-data="chartData"
         :chart-id="'NodeDataInOutChart'"
-        :width="width"
         :height="height"
       />
     </div>
@@ -26,15 +25,15 @@ export default {
         labels: this.timeSeries,
         datasets: [
           {
-            backgroundColor: 'rgb(255, 0, 0)',
-            borderColor: 'rgb(255, 0, 0)',
+            backgroundColor: 'rgb(255,138,138)',
+            borderColor: 'rgb(220, 60, 60)',
             data: this.dataOut,
             fill: true,
             label: 'Data Out',
             pointRadius: this.pointRadius
           },
           {
-            backgroundColor: 'rgb(14, 204, 95)',
+            backgroundColor: 'rgb(110,224,159)',
             borderColor: 'rgb(14, 204, 95)',
             data: this.dataIn,
             fill: true,
@@ -73,6 +72,11 @@ export default {
             interaction: {
               mode: 'index',
               intersect: false,
+              callbacks: {
+                label: (tooltipItem) => {
+                  return tooltipItem.raw.toFixed(2) + ` ${this.unit}`
+                }
+              }
             }
           },
           hover: {
@@ -110,11 +114,19 @@ export default {
     },
     yLabel: {
       type: String,
-      default: 'Data (KB)'
+      default: 'KB'
+    }
+  },
+  computed: {
+    unit() {
+      return this.yLabel.substring(6, 8)
     }
   }
 }
 </script>
 
 <style scoped>
+.tile {
+  @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
+}
 </style>

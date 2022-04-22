@@ -8,8 +8,16 @@
         <div class="nodeRow__value">{{ formattedType }}</div>
       </div>
       <div class="nodeRow">
-        <div class="nodeRow__label">Availability</div>
-        <div class="nodeRow__value">{{ (session.availability * 100).toFixed(2) }}%</div>
+        <div class="nodeRow__label flex items-center space-x-3">Availability
+          <Tooltip
+            class="ml-3 icon-grey" position="right" :wide="true"
+            text="Availability over the previous 24 hours">
+            <InformationCircleIcon class="hidden md:block button__icon w-16" />
+          </Tooltip>
+        </div>
+        <div class="nodeRow__value">
+          {{ (session.availability * 100).toFixed(2) }}%
+        </div>
       </div>
       <div class="nodeRow">
         <div class="nodeRow__label">Status</div>
@@ -52,9 +60,15 @@
 
 <script>
 import moment from 'moment'
+import { InformationCircleIcon } from '@heroicons/vue/solid'
+import Tooltip from '@/components/Tooltip'
 
 export default {
   name: "NodeOverview",
+  components: {
+    InformationCircleIcon,
+    Tooltip
+  },
   props: {
     session: {
       type: Object

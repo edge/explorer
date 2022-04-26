@@ -25,7 +25,7 @@ export default {
         labels: this.timeSeries,
         datasets: [
           {
-            backgroundColor: 'rgba(14, 204, 95, 0.6)',
+            backgroundColor: 'rgba(110,224,159)',
             borderColor: 'rgb(14, 204, 95)',
             data: this.data,
             fill: true,

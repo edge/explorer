@@ -78,6 +78,7 @@ export default {
     TableHeader
   },
   props: [
+    'hideReleasedStakes',
     'limit',
     'page',
     'receiveMetadata',
@@ -106,14 +107,17 @@ export default {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
       const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-created` : '-created'
+      const options = {
+        limit: this.limit,
+        page: this.page,
+        sort: sortQuery
+      }
+      if (this.hideReleasedStakes) options.hideReleased = 1
+
       const stakes = await index.stake.stakes(
         process.env.VUE_APP_INDEX_API_URL,
         this.wallet,
-        {
-          limit: this.limit,
-          page: this.page,
-          sort: sortQuery
-        }
+        options
       )
       this.stakes = stakes.results
       this.receiveMetadata(stakes.metadata)

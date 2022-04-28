@@ -49,7 +49,7 @@
                 :timeSeries="timeSeries"
                 :height="isSmView ? 400 : isMdView ? 200 : 100"
                 :pointRadius="isSmView ? 2 : 3"
-                :yLabel="chartDataInOutMb ? 'Data (MB)' : 'Data (KB)'"
+                :yLabel="isChartDataMb ? 'Data (MB)' : 'Data (KB)'"
               />
             </div>
           </div>
@@ -160,32 +160,19 @@ export default {
       return this.$route.params.nodeAddress ? 'Node' : 'Nodes'
     },
     chartAvailabilityMetrics() {
-      const metrics = []
-      this.sessionStats.forEach((step, index) => {
-        metrics[this.chartSteps - index - 1] = step.uptime * 100 / this.maxUptime
-      })
-      return metrics
+      return this.sessionStats.map(step => step.uptime * 100 / this.maxUptime).reverse()
     },
     chartDataInMetrics() {
-      const metrics = []
-      this.sessionStats.forEach((step, index) => {
-        if (this.chartDataInOutMb) metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.in / 1000000
-        else metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.in / 1000
-      })
-      return metrics
+      return this.sessionStats.map(step => {
+        if (this.isChartDataMb) return step.metrics.cdn.data.in / 1000000
+        else return step.metrics.cdn.data.in / 1000
+      }).reverse()
     },
     chartDataOutMetrics() {
-      const metrics = []
-      this.sessionStats.forEach((step, index) => {
-        if (this.chartDataInOutMb) metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.out / 1000000
-        else metrics[this.chartSteps - index - 1] = step.metrics.cdn.data.out / 1000
-      })
-      return metrics
-    },
-    chartDataInOutMb() {
-      return this.sessionStats.some(el => {
-        return el.metrics.cdn.data.in + el.metrics.cdn.data.out > 1000000
-      })
+      return this.sessionStats.map(step => {
+        if (this.isChartDataMb) return step.metrics.cdn.data.out / 1000000
+        else return step.metrics.cdn.data.out / 1000
+      }).reverse()
     },
     chartPeriod() {
       const period = this.$route.query.period
@@ -198,11 +185,7 @@ export default {
       else return 'daily'
     },
     chartRequestsMetrics() {
-      const metrics = []
-      this.sessionStats.forEach((step, index) => {
-        metrics[this.chartSteps - index - 1] = step.metrics.cdn.requests
-      })
-      return metrics
+      return this.sessionStats.map(step => step.metrics.cdn.requests).reverse()
     },
     chartSteps() {
       if (this.chartPeriod == 'day') return 24
@@ -215,6 +198,9 @@ export default {
     },
     hideOfflineNodes() {
       return this.$route.query.hideOffline === '1'
+    },
+    isChartDataMb() {
+      return this.sessionStats.some(el => el.metrics.cdn.data.in + el.metrics.cdn.data.out > 1000000)
     },
     isSmView() {
       return window.innerWidth < 640

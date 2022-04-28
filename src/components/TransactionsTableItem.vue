@@ -13,7 +13,7 @@
         </span>
       </router-link>
     </td>
-    
+
     <td data-title="From:" :title="item.sender">
       <router-link :to="fromAddressRoute">
         <span class="monospace lg:inline-block">
@@ -40,7 +40,7 @@
       </span></span>
     </td>
 
-    <td data-title="Status:">
+    <td data-title="Status:" :title="statusFormatted">
       <span v-if="isConfirmed" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
@@ -101,7 +101,7 @@
       </span></span>
     </td>
 
-    <td data-title="Status:">
+    <td data-title="Status:" :title="statusFormatted">
       <span v-if="isConfirmed" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>

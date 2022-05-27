@@ -120,17 +120,8 @@ export default {
         undefined,
         options
       )
-      
-      // add stargate address to host sessions
-      const sessions = await Promise.all(sessionsData.results.map(async (session) => {
-        if (session.node.type === 'host') {
-          const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
-          session.node.stargate = gateway.node.stargate
-        }
-        return session
-      }))
-      
-      this.sessions = sessions
+
+      this.sessions = sessionsData.results
       this.receiveMetadata(sessionsData.metadata)
 
       this.loaded = true

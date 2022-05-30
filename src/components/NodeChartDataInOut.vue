@@ -73,9 +73,7 @@ export default {
               mode: 'index',
               intersect: false,
               callbacks: {
-                label: (tooltipItem) => {
-                  return tooltipItem.raw.toFixed(2) + ` ${this.unit}`
-                }
+                label: (tooltipItem) => `${tooltipItem.dataset.label}: ${tooltipItem.raw.toFixed(2)} ${this.unit}`
               }
             }
           },

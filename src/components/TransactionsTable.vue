@@ -12,17 +12,17 @@
           <TableHeader width="15%" header="From" :sortQuery="sortQuery"
             sortParam="sender" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
-          <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
+          <th width="24" class="hidden lg:table-cell">&nbsp;</th>
           <TableHeader width="15%" header="To" :sortQuery="sortQuery"
             sortParam="recipient" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
-          <TableHeader width="23%" header="Memo" :sortQuery="sortQuery"
+          <TableHeader width="30%" header="Memo" :sortQuery="sortQuery"
             sortParam="data.memo" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
-          <TableHeader width="12%" header="Status" :sortQuery="sortQuery"
+          <TableHeader width="125" header="Status" :sortQuery="sortQuery"
             sortParam="block.height" :onSortingUpdate="updateSorting"
           />
-          <TableHeader class="amount-col" width="17%" header="Amount XE" :sortQuery="sortQuery"
+          <TableHeader class="amount-col" width="25%" header="Amount XE" :sortQuery="sortQuery"
             sortParam="amount" :onSortingUpdate="updateSorting"
           />
         </tr>
@@ -30,11 +30,11 @@
           <th width="165">Date</th>
           <th width="15%">Tx Hash</th>
           <th width="15%">From</th>
-          <th width="2%" class="hidden lg:table-cell">&nbsp;</th>
+          <th width="24" class="hidden lg:table-cell">&nbsp;</th>
           <th width="15%">To</th>
-          <th width="25%">Memo</th>
-          <th width="10%">Status</th>
-          <th class="amount-col" width="17%">Amount XE</th>
+          <th width="30%">Memo</th>
+          <th width="125">Status</th>
+          <th class="amount-col" width="25%">Amount XE</th>
         </tr>
       </thead>
       <thead v-else class="hidden lg:table-header-group">
@@ -42,29 +42,29 @@
            <TableHeader width="165" header="Date" :sortQuery="sortQuery"
             sortParam="timestamp" :onSortingUpdate="updateSorting"
           />
-          <TableHeader width="10%" header="Tx Hash" :sortQuery="sortQuery"
+          <TableHeader width="15%" header="Tx Hash" :sortQuery="sortQuery"
             sortParam="hash" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <TableHeader width="30%" header="From/To" :sortQuery="sortQuery"
             sortParam="sortAddress" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
-          <TableHeader width="25%" header="Memo" :sortQuery="sortQuery"
+          <TableHeader width="35%" header="Memo" :sortQuery="sortQuery"
             sortParam="data.memo" :onSortingUpdate="updateSorting"
           />
-          <TableHeader width="10%" header="Status" :sortQuery="sortQuery"
+          <TableHeader width="125" header="Status" :sortQuery="sortQuery"
             sortParam="block.height" :onSortingUpdate="updateSorting"
           />
-          <TableHeader class="amount-col" width="15%" header="Amount XE" :sortQuery="sortQuery"
+          <TableHeader class="amount-col" width="20%" header="Amount XE" :sortQuery="sortQuery"
             sortParam="amount" :onSortingUpdate="updateSorting"
           />
         </tr>
         <tr v-else>
           <th width="165">Date</th>
-          <th width="10%">Tx Hash</th>
+          <th width="15%">Tx Hash</th>
           <th width="30%">From/To</th>
-          <th width="25%">Memo</th>
-          <th width="10%">Status</th>
-          <th class="amount-col" width="15%">Amount XE</th>
+          <th width="35%">Memo</th>
+          <th width="125">Status</th>
+          <th class="amount-col" width="20%">Amount XE</th>
         </tr>
       </thead>
       <tbody v-if="transactions.length">

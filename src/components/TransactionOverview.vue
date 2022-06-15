@@ -11,10 +11,10 @@
         <div class="transactionRow__label">Status</div>
         <div class="transactionRow__value pending">
           <span class="icon icon-grey mb-2"><ClockIcon/></span>
-          <span class="ml-5 inline-block">Pending for {{secondsPending}} seconds</span>
+          <span class="ml-5 inline-block">Pending for {{ secondsPending }} seconds</span>
         </div>
       </div>
-      <div class="transactionRow" v-else>
+      <div class="transactionRow" v-if="transaction.block">
         <div class="transactionRow__label">Block</div>
         <div class="transactionRow__value">
           <router-link :to="{ name: 'Block', params: { blockId: transaction.block.height } }">
@@ -29,7 +29,7 @@
         </div>
         <div class="transactionRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
             @click.prevent="copyToClipboard(transaction.hash)"
           >
             <ClipboardCopyIcon/>
@@ -173,13 +173,12 @@ export default {
   },
   computed: {
     isPending() {
-      return this.transaction.block.height === 0 && this.transaction.confirmations === 0
+      return this.transaction.pending
     }
   },
   mounted() {
-    if (this.transaction.block.height === 0) {
+    if (this.transaction.pending) {
       this.secondsPendingInterval = setInterval(this.updateSecondsPending, 1000)
-      this.refreshTxInterval = setInterval(this.updateTx, 30*1000)
     }
   },
   unmounted() {

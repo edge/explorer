@@ -96,11 +96,6 @@ const fetchData = (url, options = {}, payload) => {
     })
 }
 
-const fetchPendingTransactions = (address, options = {}) => {
-  const url = `${BLOCKCHAIN_API_URL}/transactions/pending/${address}`
-  return fetchData(url)
-}
-
 const fetchStake = (stakeId) => fetchData(`${INDEX_API_URL}/stake/${stakeId}`)
 
 const fetchStakeHistory = (stakeId) => fetchData(`${INDEX_API_URL}/stake/${stakeId}/history?limit=999`)
@@ -152,33 +147,13 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
   if (!options.page) options.page = 1
   if (!options.limit) options.limit = 20
 
-  const pendingTxUrl = `${BLOCKCHAIN_API_URL}/transactions/pending/${address}`
   let txUrl = `${INDEX_API_URL}/transactions/${address}?${qs.encode(options)}`
-  let txResults = []
 
   if (hash) {
     txUrl = `${INDEX_API_URL}/transaction/${hash}`
-
     return fetchData(txUrl)
       .then(async results => {
         if (results.results && Array.isArray(results.results) && !results.results[0]) {
-          const pendingTxs = await fetchData(`${BLOCKCHAIN_API_URL}/transactions/pending`)
-          if (Array.isArray(pendingTxs) && pendingTxs.length > 0) {
-            const pendingTx = pendingTxs.find(tx => tx.hash === hash)
-            if (pendingTx !== undefined) {
-              return {
-                transactions: [{
-                  ...pendingTx,
-                  amount: xeStringFromMicroXe(pendingTx.amount),
-                  memo: pendingTx.data.memo,
-                  date: new Date(pendingTx.timestamp).toLocaleString(),
-                  block: { height: 0, hash: '' },
-                  confirmations: 0
-                }],
-                metadata: {}
-              }
-            }
-          }
           return {
             transactions: [],
             metadata: {}
@@ -201,35 +176,14 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
             sender: tx.sender,
             timestamp: tx.timestamp,
             confirmations: tx.confirmations,
-            pending: false
+            pending: tx.pending
           }],
           metadata: {}
         }
       })
   }
 
-  // On the first page only, fetch pending transactions first.
-  if (options.page === 1) return fetchData(pendingTxUrl)
-    .then(response => {
-      // Pending transactions need to be reversed to show them in the correct order.
-      response = response.reverse()
-
-      txResults = txResults.concat(formatTransactions(address, response, true))
-
-      // Fetch confirmed transactions.
-      return fetchData(txUrl)
-        .then(response => {
-          const { results, metadata } = response
-          txResults = txResults.concat(formatTransactions(address, results))
-
-          return {
-            transactions: txResults,
-            metadata
-          }
-        })
-    })
-
-  // Fetch confirmed transactions.
+  // fetch transactions
   return fetchData(txUrl)
     .then(response => {
       const { results, metadata } = response
@@ -240,9 +194,9 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
     })
 }
 
-const formatTransactions = (address, data, pending) => {
+const formatTransactions = (address, data) => {
   return data.map(tx => {
-    return {
+    const formattedTx = {
       address: tx.sender === address ? tx.recipient : tx.sender,
       amount: xeStringFromMicroXe(tx.amount),
       date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
@@ -252,9 +206,11 @@ const formatTransactions = (address, data, pending) => {
       sender: tx.sender,
       timestamp: tx.timestamp,
       type: tx.sender === address ? 'Sent' : 'Received',
-      confirmations: tx.confirmations,
-      block: tx.block,
-      pending
+    }
+    if (tx.pending) formattedTx.pending = true
+    else {
+      formattedTx.block = tx.block
+      formattedTx.confirmations = tx.confirmations
     }
   })
 }
@@ -308,7 +264,6 @@ const search = async input => {
 
 export {
   fetchBlocks,
-  fetchPendingTransactions,
   fetchSessionStats,
   fetchStake,
   fetchStakeHistory,

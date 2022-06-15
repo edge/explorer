@@ -5,10 +5,10 @@
     <HeroPanel v-else :title="'Transactions'" />
 
     <div class="flex-1 bg-gray-200 py-35">
-      <div v-if="transaction || pendingTransaction" class="container">
-        <div v-if="transaction || pendingTransaction" class="row mb-25">
-          <TransactionOverview :transaction="transaction || pendingTransaction" />
-          <TransactionSummary :transaction="transaction || pendingTransaction" />
+      <div v-if="transaction" class="container">
+        <div v-if="transaction" class="row mb-25">
+          <TransactionOverview :transaction="transaction" />
+          <TransactionSummary :transaction="transaction" />
         </div>
 
         <div v-if="rawData" class="mb-25">
@@ -72,7 +72,6 @@ export default {
       limit: 20,
       loading: false,
       metadata: { totalCount: 0 },
-      pendingTransaction: null,
       pollInterval: 10000,
       polling: null,
       rawData: null,
@@ -99,12 +98,11 @@ export default {
       return this.$route.params.hash
     },
     isTransactionPending() {
-      if (this.transaction && this.transaction.block.height === 0 && this.transaction.confirmations === 0) return true
-      else return false
+      return this.transaction.pending
     }
   },
   mounted() {
-    if (this.hash) { 
+    if (this.hash) {
       this.fetchData().then(() => {
         this.pollData()
       })
@@ -122,23 +120,6 @@ export default {
         const exchangeResult = await fetchExchangeTransaction(this.hash)
 
         this.transaction = transactions[0]
-
-        // if transaction is pending, set a copy of it
-        if (this.isTransactionPending) {
-          this.pendingTransaction = { ...this.transaction, lastSeen: Date.now() }
-        }
-
-        // if in gap between tx pending and tx appearing on index, clear pendingTransaction after 60 secs
-        if (this.pendingTransaction && !this.transaction) {
-          if (Date.now() - this.pendingTransaction.lastSeen > 60000) {
-            this.pendingTransaction = null
-          }
-        }
-
-        // if transaction no longer pending, clear pendingTransaction
-        if (this.transaction && this.pendingTransaction && !this.isTransactionPending) {
-          this.pendingTransaction = null
-        }
 
         if (raw) this.rawData = { ...raw }
         if (exchangeResult && !exchangeResult.metadata) this.transaction.exchangeResult = exchangeResult

@@ -4,7 +4,7 @@
     <div class="tile" v-if="isPending">
       This transaction was sent on <span class="emphasis">{{new Date(transaction.timestamp).toLocaleString().split(',')[0]}}</span> at <span class="emphasis">{{new Date(transaction.timestamp).toLocaleString().split(',')[1]}}</span>. It is currently pending.
     </div>
-    <div class="tile" v-else>
+    <div class="tile" v-if="transaction.block">
       This transaction was sent on <span class="emphasis">{{new Date(transaction.timestamp).toLocaleString().split(',')[0]}}</span> at <span class="emphasis">{{new Date(transaction.timestamp).toLocaleString().split(',')[1]}}</span>. It was first confirmed in block <span class="emphasis">{{ transaction.block.height }}</span>.
       A total of <span class="emphasis">{{formatAmount(transaction.amount)}} XE</span> was sent.
       <span v-if="!transaction.memo">
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     isPending() {
-      return this.transaction.block.height === 0 && this.transaction.confirmations === 0
+      return this.transaction.pending
     }
   },
   methods: {

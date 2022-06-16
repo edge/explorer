@@ -3,10 +3,6 @@
   <SummaryHero />
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div class="row mb-25">
-        <NetworkMap :points="mapPoints" />
-      </div>
-
       <div class="row cols my-25" v-if="isTestnet">
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
         <Faucet />
@@ -15,7 +11,9 @@
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
         <NewsPromo />
       </div>
-
+      <div class="row mb-25">
+        <NetworkMap :points="mapPoints" />
+      </div>
       <div class="row cols mt-15">
         <RecentBlocks :loading="loading" :blocks="blocks" />
         <RecentTransactions :loading="loading" :transactions="transactions" />
@@ -33,7 +31,6 @@ import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
 import SummaryHero from "@/components/SummaryHero"
-
 import superagent from 'superagent'
 import { fetchBlocks, fetchStakeStats, fetchTransactions } from '../utils/api'
 
@@ -125,10 +122,9 @@ export default {
           since: new Date().getTime()-(86400000)
         }
       })
-
       transactionMetadata.recentTransactionsCount = recentTransactionsMetadata.totalCount
       this.transactionMetadata = transactionMetadata
-      this.transactions = recentTransactions.transactions.filter(tx => !tx.pending)
+      this.transactions = recentTransactions.transactions
       this.loading = false
     },
     pollData() {

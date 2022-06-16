@@ -7,7 +7,6 @@ const {
   xeStringFromMicroXe
 } = require('@edge/wallet-utils')
 
-const BLOCKCHAIN_API_URL = process.env.VUE_APP_BLOCKCHAIN_API_URL
 const INDEX_API_URL = process.env.VUE_APP_INDEX_API_URL
 
 const fetchBlocks = async ({ blockId, options = {} }) => {
@@ -212,6 +211,7 @@ const formatTransactions = (address, data) => {
       formattedTx.block = tx.block
       formattedTx.confirmations = tx.confirmations
     }
+    return formattedTx
   })
 }
 

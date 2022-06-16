@@ -125,10 +125,9 @@ export default {
           since: new Date().getTime()-(86400000)
         }
       })
-
       transactionMetadata.recentTransactionsCount = recentTransactionsMetadata.totalCount
       this.transactionMetadata = transactionMetadata
-      this.transactions = recentTransactions.transactions.filter(tx => !tx.pending)
+      this.transactions = recentTransactions.transactions
       this.loading = false
     },
     pollData() {

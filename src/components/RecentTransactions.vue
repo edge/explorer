@@ -61,9 +61,6 @@ export default {
   methods: {
     formatAmount(amount) {
       return formatXe(amount, true)
-    },
-    timeSince(ts) {
-      return moment(ts).fromNow()
     }
   },
   components: {

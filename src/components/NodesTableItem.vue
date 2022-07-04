@@ -1,14 +1,14 @@
 <template>
   <tr>
     <td data-title="Address:" :title="item.node.address">
-      <router-link :to="addressRoute">
-        <span class="monospace lg:inline-block">
+      <router-link :to="addressRoute" class="max-w-max">
+        <span class="monospace max-w-max lg:inline-block">
           {{ item.node.address }}
         </span>
       </router-link>
     </td>
 
-    <td data-title="Gateway:" :title="item.node.gateway">
+    <td v-if="!parentNode" data-title="Gateway:" :title="item.node.gateway">
       <router-link v-if="isOnline && item.node.gateway" :to="gatewayRoute">
         <span class="monospace lg:inline-block">
           {{ item.node.gateway }}
@@ -19,7 +19,7 @@
       </span>
     </td>
 
-    <td data-title="Stargate:" :title="item.node.stargate">
+    <td v-if="!parentNode" data-title="Stargate:" :title="item.node.stargate">
       <router-link v-if="isOnline && item.node.stargate" :to="stargateRoute">
         <span class="monospace lg:inline-block">
           {{ item.node.stargate }}
@@ -73,7 +73,7 @@ import moment from 'moment'
 
 export default {
   name: 'NodesTableItem',
-  props: ['item'],
+  props: ['item', 'parentNode'],
   components: {
     ClockIcon,
     StatusOfflineIcon,

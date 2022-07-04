@@ -11,7 +11,7 @@
             <NodeSummary :session="session" />
           </div>
           <NodeChartTimeToggle :period="chartPeriod" :onPeriodUpdate="updateChartPeriod" />
-          <div v-if="session.node.type !== 'host'" class="row full mb-25">
+          <div v-if="isGateway || isStargate" class="row full mb-25">
             <NodeChartAvailability
               v-if="sessionStats.length"
               :data="chartAvailabilityMetrics"
@@ -19,6 +19,24 @@
               :timeSeries="timeSeries"
               :height="isSmView ? 400 : isMdView ? 200 : 100"
               :pointRadius="isSmView ? 2 : 3"
+            />
+          </div>
+          <div v-if="isGateway || isStargate" class="mb-35">
+            <h3>Connected {{ isGateway ? 'Hosts' : 'Gateways'}}</h3>
+            <NodesTable
+              :hideOfflineNodes="hideOfflineNodes"
+              :limit="limit"
+              :receiveMetadata="onSessionsUpdate"
+              :page="currentPage"
+              :parentNode="session.node.address"
+              :sortable="true"
+            />
+            <Pagination
+              v-if="metadata.totalCount > limit"
+              baseRoute="Node"
+              :currentPage="currentPage"
+              :limit="limit"
+              :totalCount="metadata.totalCount"
             />
           </div>
           <div v-else>
@@ -119,7 +137,6 @@ export default {
   },
   data: function () {
     return {
-      limit: 20,
       loading: false,
       metadata: { totalCount: 0 },
       session: null,
@@ -208,8 +225,17 @@ export default {
     isMdView() {
       return window.innerWidth >= 640 && window.innerWidth < 1000
     },
+    isGateway() {
+      return this.session && this.session.node.type === 'gateway'
+    },
+    isStargate() {
+      return this.session && this.session.node.type === 'stargate'
+    },
     lastPage() {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
+    },
+    limit() {
+      return this.address ? 5 : 20
     },
     maxUptime() {
       if (this.chartPeriod === 'day') return 3600 * 1000

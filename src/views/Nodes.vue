@@ -10,6 +10,17 @@
             <NodeOverview :session="session" />
             <NodeSummary :session="session" />
           </div>
+          <NodeChartTimeToggle :period="chartPeriod" :onPeriodUpdate="updateChartPeriod" />
+          <div v-if="isGateway || isStargate" class="row full mb-25">
+            <NodeChartAvailability
+              v-if="sessionStats.length"
+              :data="chartAvailabilityMetrics"
+              :xLabel="xLabel"
+              :timeSeries="timeSeries"
+              :height="isSmView ? 400 : isMdView ? 200 : 100"
+              :pointRadius="isSmView ? 2 : 3"
+            />
+          </div>
           <div v-if="isGateway || isStargate" class="mb-35">
             <h3>Connected {{ isGateway ? 'Hosts' : 'Gateways'}}</h3>
             <NodesTable
@@ -26,17 +37,6 @@
               :currentPage="currentPage"
               :limit="limit"
               :totalCount="metadata.totalCount"
-            />
-          </div>
-          <NodeChartTimeToggle :period="chartPeriod" :onPeriodUpdate="updateChartPeriod" />
-          <div v-if="session.node.type !== 'host'" class="row full mb-25">
-            <NodeChartAvailability
-              v-if="sessionStats.length"
-              :data="chartAvailabilityMetrics"
-              :xLabel="xLabel"
-              :timeSeries="timeSeries"
-              :height="isSmView ? 400 : isMdView ? 200 : 100"
-              :pointRadius="isSmView ? 2 : 3"
             />
           </div>
           <div v-else>
@@ -235,7 +235,7 @@ export default {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
     },
     limit() {
-      return this.address ? 5 : 30
+      return this.address ? 5 : 20
     },
     maxUptime() {
       if (this.chartPeriod === 'day') return 3600 * 1000

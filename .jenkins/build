@@ -7,7 +7,7 @@ def imagesPushed = ''
 
 def buildAndPushImage(registryCredential, tag, isTestnet, blockchainApi, indexApi) {
   docker.withRegistry("https://registry.edge.network", registryCredential) {
-    def image = docker.build("https://registry.edge.network/$tag",
+    def image = docker.build("registry.edge.network/$tag",
       "--build-arg IS_TESTNET=$isTestnet --build-arg BLOCKCHAIN_API_URL=$blockchainApi --build-arg INDEX_API_URL=$indexApi .")
     image.push()
   }

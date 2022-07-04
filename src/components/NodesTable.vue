@@ -2,16 +2,19 @@
   <table>
     <thead class="hidden lg:table-header-group">
       <tr v-if="sortable">
-        <TableHeader width="16%" header="Address" :sortQuery="sortQuery"
+        <TableHeader :width="parentNode ? '30%' : '16%'"
+          header="Address" :sortQuery="sortQuery"
           sortParam="node.address" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <!-- currently no sorting on gateway and stargate columns as stargate address isn't contained in a host node's data -->
-        <th width="15%">Gateway</th>
-        <th width="15%">Stargate</th>
-        <TableHeader width="8%" header="Type" :sortQuery="sortQuery"
+        <th v-if="!parentNode" width="15%">Gateway</th>
+        <th v-if="!parentNode" width="15%">Stargate</th>
+        <TableHeader width="8%"
+          header="Type" :sortQuery="sortQuery"
           sortParam="node.type" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
-        <TableHeader width="20%" header="Location" :sortQuery="sortQuery"
+        <TableHeader :width="parentNode ? '30%' : '20%'"
+          header="Location" :sortQuery="sortQuery"
           sortParam="node.geo.country,node.geo.city" :onSortingUpdate="updateSorting" :sortAscFirst="true"
         />
         <TableHeader width="98" header="Availability" :sortQuery="sortQuery"
@@ -38,6 +41,7 @@
     <tbody v-if="sessions.length">
       <NodesTableItem
         v-for="item in sessions"
+        :parentNode="parentNode"
         :key="item.id"
         :item="item"
       />
@@ -83,6 +87,7 @@ export default {
     'hideOfflineNodes',
     'limit',
     'page',
+    'parentNode',
     'receiveMetadata',
     'sortable'
   ],
@@ -114,6 +119,7 @@ export default {
         page: this.page,
         sort: sortQuery
       }
+      if (this.parentNode) options.parent = this.parentNode
       if (this.hideOfflineNodes) options.hideOffline = 1
       const sessionsData = await index.session.sessions(
         process.env.VUE_APP_INDEX_API_URL,

@@ -82,7 +82,7 @@ export default {
       if (this.session.gateway) return {name: 'Node', params: {nodeAddress: this.session.gateway.node.address}}
     },
     isOnline() {
-      return Date.now() - this.session.lastActive < 60000
+      return Date.now() - this.session.lastActive < (120 * 1000)
     },
     lastActive() {
       return moment(this.session.lastActive).fromNow()

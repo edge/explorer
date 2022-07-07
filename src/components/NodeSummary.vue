@@ -34,7 +34,7 @@ export default {
       return this.session.node.type.charAt(0).toUpperCase() + this.session.node.type.slice(1)
     },
     isOnline() {
-      return Date.now() - this.session.lastActive < 60000
+      return Date.now() - this.session.lastActive < (120 * 1000)
     },
     lastActive() {
       return moment(this.session.lastActive).fromNow()

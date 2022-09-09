@@ -5,7 +5,15 @@
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
         <div class="transactionRow__label">Timestamp</div>
-        <div class="transactionRow__value">{{ new Date(transaction.timestamp).toLocaleString() }}</div>
+        <div class="transactionRow__value flex items-center" :class="transaction.block.height === 0 ? 'date' : ''">
+          {{ new Date(transaction.timestamp).toLocaleString() }}
+          <Tooltip
+            v-if="transaction.block.height === 0"
+            class="ml-3 icon-grey" position="top" :wide="true"
+            text="This timestamp was mistakenly specified in the genesis transaction in seconds, instead of milliseconds by XE architect Adam K Dean. The actual date was 01/01/2021, 00:00:00">
+            <InformationCircleIcon class="ml-1 button__icon w-16" />
+          </Tooltip>
+        </div>
       </div>
       <div class="transactionRow" v-if="isPending">
         <div class="transactionRow__label">Status</div>
@@ -212,6 +220,11 @@ export default {
 
 .transactionRow__value {
   @apply font-mono col-span-6 text-gray-300 md:col-span-8 truncate;
+}
+.transactionRow__value.date {
+  overflow: unset;
+  text-overflow: unset;
+  white-space: unset
 }
 
 .transactionRow__value.pending {

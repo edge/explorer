@@ -98,7 +98,7 @@ export default {
       else return 'Unknown'
     },
     isOnline() {
-      return Date.now() - this.item.lastActive < (120 * 1000)
+      return this.item.online
     },
     lastActive() {
       const momentOutput = moment(this.item.lastActive).fromNow()

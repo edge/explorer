@@ -72,6 +72,14 @@
           </span>
         </div>
       </div>
+      <div class="transactionRow" v-if="transaction.proposal" >
+        <div class="transactionRow__label">Proposal</div>
+        <div class="transactionRow__value">
+          <a :href="proposalLink" target="_blank">
+            {{ transaction.proposal }}
+          </a>
+        </div>
+      </div>
       <div class="transactionRow" v-if="transaction.confirmations > 0">
         <div class="transactionRow__label flex items-center space-x-3">
           Confirmations
@@ -182,6 +190,9 @@ export default {
   computed: {
     isPending() {
       return this.transaction.pending
+    },
+    proposalLink() {
+      return `${process.env.VUE_APP_GOVERNANCE_URL}/proposal/${this.transaction.proposal}`
     }
   },
   mounted() {
@@ -232,7 +243,7 @@ export default {
 }
 
 .transactionRow__value a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  @apply text-gray-300 leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 .transactionRow__clipboard {

@@ -175,7 +175,8 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
             sender: tx.sender,
             timestamp: tx.timestamp,
             confirmations: tx.confirmations,
-            pending: tx.pending
+            pending: tx.pending,
+            proposal: tx.data.proposal
           }],
           metadata: {}
         }

@@ -5,10 +5,10 @@
 
 def imagesPushed = ''
 
-def buildAndPushImage(registryCredential, tag, isTestnet, blockchainApi, indexApi) {
+def buildAndPushImage(registryCredential, tag, isTestnet, blockchainApi, indexApi, governanceUrl) {
   docker.withRegistry("https://registry.edge.network", registryCredential) {
     def image = docker.build("registry.edge.network/$tag",
-      "--build-arg IS_TESTNET=$isTestnet --build-arg BLOCKCHAIN_API_URL=$blockchainApi --build-arg INDEX_API_URL=$indexApi .")
+      "--build-arg IS_TESTNET=$isTestnet --build-arg BLOCKCHAIN_API_URL=$blockchainApi --build-arg INDEX_API_URL=$indexApi --build-arg GOVERNANCE_URL=$governanceUrl .")
     image.push()
   }
 }
@@ -24,7 +24,7 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          buildAndPushImage(REGISTRY_CREDENTIAL, NAME, IS_TESTNET, BLOCKCHAIN_API_URL, INDEX_API_URL)
+          buildAndPushImage(REGISTRY_CREDENTIAL, NAME, IS_TESTNET, BLOCKCHAIN_API_URL, INDEX_API_URL, GOVERNANCE_URL)
         }
       }
     }

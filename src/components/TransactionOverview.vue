@@ -5,10 +5,10 @@
     <div class="flex flex-col flex-1 space-y-2">
       <div class="transactionRow">
         <div class="transactionRow__label">Timestamp</div>
-        <div class="transactionRow__value flex items-center" :class="transaction.block.height === 0 ? 'date' : ''">
+        <div class="transactionRow__value flex items-center" :class="block.height === 0 ? 'date' : ''">
           {{ new Date(transaction.timestamp).toLocaleString() }}
           <Tooltip
-            v-if="transaction.block.height === 0"
+            v-if="block.height === 0"
             class="ml-3 icon-grey" position="top" :wide="true"
             text="This timestamp was mistakenly specified in the genesis transaction in seconds, instead of milliseconds by XE architect Adam K Dean. The actual date was 01/01/2021, 00:00:00">
             <InformationCircleIcon class="ml-1 button__icon w-16" />
@@ -22,11 +22,11 @@
           <span class="ml-5 inline-block">Pending for {{ secondsPending }} seconds</span>
         </div>
       </div>
-      <div class="transactionRow" v-if="transaction.block">
+      <div class="transactionRow" v-if="!isPending">
         <div class="transactionRow__label">Block</div>
         <div class="transactionRow__value">
-          <router-link :to="{ name: 'Block', params: { blockId: transaction.block.height } }">
-            {{ transaction.block.height }}
+          <router-link :to="{ name: 'Block', params: { blockId: block.height } }">
+            {{ block.height }}
           </router-link>
         </div>
       </div>
@@ -70,6 +70,14 @@
           <span :class="{ 'text-gray-400': !transaction.memo }">
             {{ transaction.memo || 'None' }}
           </span>
+        </div>
+      </div>
+      <div class="transactionRow" v-if="transaction.proposal" >
+        <div class="transactionRow__label">Proposal</div>
+        <div class="transactionRow__value">
+          <a :href="proposalLink" target="_blank">
+            {{ transaction.proposal }}
+          </a>
         </div>
       </div>
       <div class="transactionRow" v-if="transaction.confirmations > 0">
@@ -180,8 +188,14 @@ export default {
     }
   },
   computed: {
+    block() {
+      return this.transaction && this.transaction.block || { hash: '', height: 0 }
+    },
     isPending() {
       return this.transaction.pending
+    },
+    proposalLink() {
+      return `${process.env.VUE_APP_GOVERNANCE_URL}/proposal/${this.transaction.proposal}`
     }
   },
   mounted() {
@@ -232,7 +246,7 @@ export default {
 }
 
 .transactionRow__value a {
-  @apply leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
+  @apply text-gray-300 leading-none border-b border-black border-opacity-25 hover:border-green hover:border-opacity-25 hover:text-green align-middle;
 }
 
 .transactionRow__clipboard {

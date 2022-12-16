@@ -1,6 +1,6 @@
 {
   "name": "explorer",
-  "version": "1.21.6",
+  "version": "1.21.7",
   "description": "Blockchain & network explorer",
   "private": true,
   "license": "SEE LICENSE IN LICENSE.md",
@@ -16,8 +16,8 @@
     "build": "vue-cli-service build",
     "dev": "vue-cli-service --port 8000 serve",
     "start": "node server/index.js",
-    "testnet": "VUE_APP_IS_TESTNET=true VUE_APP_BLOCKCHAIN_API_URL=https://xe1.test.network VUE_APP_INDEX_API_URL=https://index.test.network npm run dev",
-    "mainnet": "VUE_APP_BLOCKCHAIN_API_URL=https://api.xe.network VUE_APP_INDEX_API_URL=https://index.xe.network npm run dev"
+    "testnet": "VUE_APP_IS_TESTNET=true VUE_APP_BLOCKCHAIN_API_URL=https://xe1.test.network VUE_APP_INDEX_API_URL=https://index.test.network VUE_APP_GOVERNANCE_URL=https://governance.test.network npm run dev",
+    "mainnet": "VUE_APP_BLOCKCHAIN_API_URL=https://api.xe.network VUE_APP_INDEX_API_URL=https://index.xe.network VUE_APP_GOVERNANCE_URL=https://governance.edge.network npm run dev"
   },
   "main": "server/index.js",
   "dependencies": {

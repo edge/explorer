@@ -23,7 +23,8 @@
     </td>
 
     <td data-title="Node:" :title="item.device">
-      <router-link :to="nodeRoute" v-if="item.device">
+      <span v-if="item.type === 'governance'" class="text-gray-400">N/A</span>
+      <router-link :to="nodeRoute" v-else-if="item.device">
         <span class="monospace lg:inline-block">
           {{ item.device }}
         </span>

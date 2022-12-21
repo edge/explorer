@@ -106,7 +106,7 @@ export default {
     async updateStakes() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-created` : '-created'
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-type,-created` : '-type,-created'
       const options = {
         limit: this.limit,
         page: this.page,

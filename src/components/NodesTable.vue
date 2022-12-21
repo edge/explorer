@@ -113,7 +113,7 @@ export default {
     async updateSessions() {
       this.loading = true
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
-      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-sortAvailability` : '-sortAvailability'
+      const sortQuery = this.$route.query.sort ? `${this.$route.query.sort},-node.type,-sortAvailability` : '-node.type,-sortAvailability'
       const options = {
         limit: this.limit,
         page: this.page,

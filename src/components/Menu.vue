@@ -56,12 +56,12 @@ export default {
       @apply flex flex-wrap -my-20 md:pl-32;
     }
     .main-nav__link {
-      @apply py-20 px-24 my-0;
+      @apply py-20 px-20 my-0;
     }
   }
   @screen lg {
     .main-nav__link {
-      @apply py-20 px-32;
+      @apply py-20 px-24;
     }
   }
 

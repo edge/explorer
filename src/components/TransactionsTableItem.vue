@@ -23,10 +23,7 @@
     </td>
 
     <td class="arrow-icon">
-      <span class="mr-1 -mt-2 icon icon-green lg:inline-block">
-        <BurnIcon v-if="burn" class="icon inline-icon"/>
-        <ArrowRightIcon v-else />
-      </span>
+      <span class="mr-1 -mt-2 icon icon-green lg:inline-block"><ArrowRightIcon /></span>
     </td>
 
     <td data-title="To:" :title="item.recipient">
@@ -45,7 +42,10 @@
 
     <td data-title="Status:" :title="statusFormatted">
       <span v-if="isConfirmed" class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
+        <span class="mr-1 -mt-2 icon icon-green">
+          <BurnIcon v-if="burn"/>
+          <CheckCircleIcon v-else />
+        </span>
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
@@ -79,10 +79,7 @@
 
     <td v-if="sent" data-title="To:" class="from-to" :title="item.recipient">
       <span>
-        <span class="icon-wrap">
-          <BurnIcon v-if="burn" class="icon inline-icon"/>
-          <ArrowUpIcon v-else class="icon inline-icon icon-red"/>
-        </span>
+        <span class="icon-wrap"><ArrowUpIcon class="icon inline-icon icon-red"/></span>
         <router-link :to="toAddressRoute">
           <span class="monospace lg:inline-block">
             {{ item.recipient }}
@@ -92,10 +89,7 @@
     </td>
     <td v-else data-title="From:" class="from-to" :title="item.sender">
       <span>
-        <span class="icon-wrap">
-          <BurnIcon v-if="burn" class="icon inline-icon"/>
-          <ArrowDownIcon v-else class="icon inline-icon icon-green"/>
-        </span>
+        <span class="icon-wrap"><ArrowDownIcon class="icon inline-icon icon-green"/></span>
         <router-link :to="fromAddressRoute">
           <span class="monospace lg:inline-block">
             {{ item.sender }}
@@ -112,7 +106,10 @@
 
     <td data-title="Status:" :title="statusFormatted">
       <span v-if="isConfirmed" class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
+        <span class="mr-1 -mt-2 icon icon-green">
+          <BurnIcon v-if="burn"/>
+          <CheckCircleIcon v-else />
+        </span>
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
@@ -172,9 +169,18 @@ export default {
     },
     statusFormatted() {
       if (this.item.pending) return 'Pending'
-      if (this.item.confirmations === 1) return `${this.item.confirmations} confirmation`
-      if (this.item.confirmations < 10) return `${this.item.confirmations} confirmations`
-      return 'Confirmed'
+      if (this.item.confirmations === 1) {
+        if (this.burn) return 'Burning'
+        return `${this.item.confirmations} confirmation`
+      }
+      if (this.item.confirmations < 10) {
+        if (this.burn) return 'Burning'
+        return `${this.item.confirmations} confirmations`
+      }
+      else {
+        if (this.burn) return 'Burned'
+        return 'Confirmed'
+      }
     },
     sent() {
       return this.item.sender === this.item.recipient || this.wallet === this.item.sender

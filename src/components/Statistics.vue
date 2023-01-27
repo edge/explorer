@@ -34,13 +34,13 @@
         <span class="stat__label">Staked XE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>
         <span class="stat__value">{{stakedAmount()}}</span>
       </div>
-      <div class="stat additional" v-if="stats.burns">
-        <span class="stat__label">XE Burned</span>
-        <span class="stat__value">{{burnedTotal}}</span>
+      <div class="stat" v-if="stats.burns">
+        <span class="stat__label">Burns</span>
+        <span class="stat__value">{{stats.burns.total.count}}</span>
       </div>
-      <div class="stat additional" v-if="stats.burns">
-        <span class="stat__label">XE Burned <span class="text-gray-400">last 30 days</span></span>
-        <span class="stat__value">{{burned30Days}}</span>
+      <div class="stat" v-if="stats.burns">
+        <span class="stat__label">Burns <span class="text-gray-400">last 30 days</span></span>
+        <span class="stat__value">{{stats.burns['30d'].count}}</span>
       </div>
       <div class="stat additional" v-if="stats.burns">
         <span class="stat__label">XE Burned</span>
@@ -72,10 +72,10 @@ export default {
   },
   computed: {
     burned30Days() {
-      return formatXe(this.stats.burns.total.amount / 1e6).replace(/\.?0+$/, '')
+      return formatXe(this.stats.burns.total.amount / 1e6, true).replace(/\.?0+$/, '')
     },
     burnedTotal() {
-      return formatXe(this.stats.burns['30d'].amount / 1e6).replace(/\.?0+$/, '')
+      return formatXe(this.stats.burns['30d'].amount / 1e6, true).replace(/\.?0+$/, '')
     },
   },
   methods: {

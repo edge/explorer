@@ -1,5 +1,5 @@
 <template>
-  <tr :class="item.pending && 'pending'">
+  <tr :class="!item.block && 'pending'">
     <td data-title="Date:" :title="date">
       <span class="lg:inline-block">
         {{ date }}
@@ -49,7 +49,7 @@
     </td>
 
     <td data-title="Status:" :title="statusFormatted">
-      <span v-if="item.pending" class="lg:inline-block">
+      <span v-if="!item.block" class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
         <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
@@ -106,12 +106,9 @@ export default {
     formattedAmount() {
       return formatXe(this.item.amount / 1e6, true)
     },
-    isConfirmed() {
-      return ((this.item.confirmations || 0) >= 10)
-    },
     statusFormatted() {
       if (!this.item.block) return 'Pending'
-      // if (this.item.block.) return 'Pending'
+      if (this.item.confirmations < 10) return 'Burning'
       return 'Burned'
     }
   }

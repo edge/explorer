@@ -23,7 +23,10 @@
     </td>
 
     <td class="arrow-icon">
-      <span class="mr-1 -mt-2 icon icon-green lg:inline-block"><ArrowRightIcon /></span>
+      <span class="mr-1 -mt-2 icon icon-green lg:inline-block">
+        <BurnIcon v-if="burn" class="icon inline-icon"/>
+        <ArrowRightIcon v-else />
+      </span>
     </td>
 
     <td data-title="To:" :title="item.recipient">
@@ -76,7 +79,10 @@
 
     <td v-if="sent" data-title="To:" class="from-to" :title="item.recipient">
       <span>
-        <span class="icon-wrap"><ArrowUpIcon class="icon inline-icon icon-red"/></span>
+        <span class="icon-wrap">
+          <BurnIcon v-if="burn" class="icon inline-icon"/>
+          <ArrowUpIcon v-else class="icon inline-icon icon-red"/>
+        </span>
         <router-link :to="toAddressRoute">
           <span class="monospace lg:inline-block">
             {{ item.recipient }}
@@ -86,7 +92,10 @@
     </td>
     <td v-else data-title="From:" class="from-to" :title="item.sender">
       <span>
-        <span class="icon-wrap"><ArrowDownIcon class="icon inline-icon icon-green"/></span>
+        <span class="icon-wrap">
+          <BurnIcon v-if="burn" class="icon inline-icon"/>
+          <ArrowDownIcon v-else class="icon inline-icon icon-green"/>
+        </span>
         <router-link :to="fromAddressRoute">
           <span class="monospace lg:inline-block">
             {{ item.sender }}
@@ -122,6 +131,7 @@
 
 <script>
 /*global process*/
+import BurnIcon from './BurnIcon.vue'
 import { formatXe } from '@edge/wallet-utils'
 import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
 
@@ -134,10 +144,14 @@ export default {
     ArrowDownIcon,
     ArrowRightIcon,
     ArrowUpIcon,
+    BurnIcon,
     CheckCircleIcon,
     ClockIcon
   },
   computed: {
+    burn() {
+      return this.item.recipient === 'xe_0000000000000000000000000000000000000000'
+    },
     date() {
       return new Date(this.item.timestamp).toLocaleString()
     },

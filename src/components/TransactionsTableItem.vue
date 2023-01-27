@@ -42,7 +42,10 @@
 
     <td data-title="Status:" :title="statusFormatted">
       <span v-if="isConfirmed" class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
+        <span class="mr-1 -mt-2 icon icon-green">
+          <BurnIcon v-if="burn"/>
+          <CheckCircleIcon v-else />
+        </span>
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
@@ -103,7 +106,10 @@
 
     <td data-title="Status:" :title="statusFormatted">
       <span v-if="isConfirmed" class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-green"><CheckCircleIcon /></span>
+        <span class="mr-1 -mt-2 icon icon-green">
+          <BurnIcon v-if="burn"/>
+          <CheckCircleIcon v-else />
+        </span>
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
@@ -122,6 +128,7 @@
 
 <script>
 /*global process*/
+import BurnIcon from './BurnIcon.vue'
 import { formatXe } from '@edge/wallet-utils'
 import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
 
@@ -134,10 +141,14 @@ export default {
     ArrowDownIcon,
     ArrowRightIcon,
     ArrowUpIcon,
+    BurnIcon,
     CheckCircleIcon,
     ClockIcon
   },
   computed: {
+    burn() {
+      return this.item.recipient === 'xe_0000000000000000000000000000000000000000'
+    },
     date() {
       return new Date(this.item.timestamp).toLocaleString()
     },
@@ -158,9 +169,18 @@ export default {
     },
     statusFormatted() {
       if (this.item.pending) return 'Pending'
-      if (this.item.confirmations === 1) return `${this.item.confirmations} confirmation`
-      if (this.item.confirmations < 10) return `${this.item.confirmations} confirmations`
-      return 'Confirmed'
+      if (this.item.confirmations === 1) {
+        if (this.burn) return 'Burning'
+        return `${this.item.confirmations} confirmation`
+      }
+      if (this.item.confirmations < 10) {
+        if (this.burn) return 'Burning'
+        return `${this.item.confirmations} confirmations`
+      }
+      else {
+        if (this.burn) return 'Burned'
+        return 'Confirmed'
+      }
     },
     sent() {
       return this.item.sender === this.item.recipient || this.wallet === this.item.sender

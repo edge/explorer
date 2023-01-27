@@ -1,15 +1,15 @@
 <template>
   <div class="faucet flex flex-col w-full h-full">
     <h3>Testnet XE Faucet</h3>
-    <div class="flex flex-col flex-1 px-24 py-32 bg-white rounded">
-      <h1 class="faucet-header my-0 pt-50 pb-20">
+    <div class="faucet-content lex flex-col flex-1 px-24 py-10 bg-white rounded">
+      <h1 class="faucet-header my-0 pb-10">
         <img src="assets/faucet.svg" class="inline">
         XE Automated Faucet
       </h1>
-      <p class="flex-1 my-0">
+      <p class="flex-1 my-4">
         To request funds, please make a <a :href="`${twitterUrl}${twitterMsg}`" target="_about" class="tweet">tweet</a> including your XE wallet address, then paste the URL of the tweet into the text box below.
       </p>
-      <p class="flex-1">
+      <p class="flex-1 mb-4">
         <input :disabled="submitting" v-model="url" type="text" placeholder="URL of tweet including your XE address..." class="faucet-input">
       </p>
       <div v-if="displayMessage" class="w-full text-left">
@@ -18,7 +18,7 @@
           <span v-if="error" class="error">Error processing your request: {{ error }}</span>
         </p>
       </div>
-      <div v-else class="w-full text-right pb-50">
+      <div v-else class="w-full text-right">
         <button
           class="request-button py-8 button button--solid"
           :disabled="!urlIsValid || submitting"
@@ -31,11 +31,17 @@
 </template>
 
 <style>
+@screen md {
+  .faucet-content {
+    max-height: 206px;
+  }
+}
+
 .faucet-header {
   font-size: 1.2rem;
-  line-height: 24px;
+  line-height: 20px;
   text-align: center;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
 }
 .faucet-header img {
   width: 24px;

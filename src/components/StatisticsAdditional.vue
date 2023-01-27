@@ -39,10 +39,10 @@ export default {
   },
   computed: {
     burned30Days() {
-      return formatXe(this.stats.burns['30d'].amount / 1e6).replace(/\.?0+$/, '')
+      return formatXe(this.stats.burns['30d'].amount / 1e6, true).replace(/\.?0+$/, '')
     },
     burnedTotal() {
-      return formatXe(this.stats.burns.total.amount / 1e6).replace(/\.?0+$/, '')
+      return formatXe(this.stats.burns.total.amount / 1e6, true).replace(/\.?0+$/, '')
     },
   }
 }

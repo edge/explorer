@@ -34,11 +34,11 @@
         <span class="stat__label">Staked XE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>
         <span class="stat__value">{{stakedAmount()}}</span>
       </div>
-      <div class="stat" v-if="stats.burns">
+      <div class="stat additional" v-if="stats.burns">
         <span class="stat__label">Burns</span>
         <span class="stat__value">{{stats.burns.total.count}}</span>
       </div>
-      <div class="stat" v-if="stats.burns">
+      <div class="stat additional" v-if="stats.burns">
         <span class="stat__label">Burns <span class="text-gray-400">last 30 days</span></span>
         <span class="stat__value">{{stats.burns['30d'].count}}</span>
       </div>

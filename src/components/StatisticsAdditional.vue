@@ -2,12 +2,12 @@
   <div class="w-full">
     <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2" v-if="stats">
       <div class="stat" v-if="stats.burns">
-        <span class="stat__label">XE Burned</span>
-        <span class="stat__value">{{burnedTotal}}</span>
+        <span class="stat__label">Burns</span>
+        <span class="stat__value">{{stats.burns['30d'].count}}</span>
       </div>
       <div class="stat" v-if="stats.burns">
-        <span class="stat__label">XE Burned <span class="text-gray-400">last 30 days</span></span>
-        <span class="stat__value">{{burned30Days}}</span>
+        <span class="stat__label">Burns <span class="text-gray-400">last 30 days</span></span>
+        <span class="stat__value">{{stats.burns.total.count}}</span>
       </div>
       <div class="stat" v-if="stats.burns">
         <span class="stat__label">XE Burned</span>

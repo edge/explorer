@@ -30,8 +30,7 @@
 
 <script>
 /*global process*/
-// import * as index from '@edge/index-utils'
-import * as index from '../../../index-utils'
+import * as index from '@edge/index-utils'
 import Faucet from "@/components/Faucet"
 import Header from "@/components/Header"
 import NetworkMap from "@/components/NetworkMap"
@@ -119,8 +118,7 @@ export default {
     async fetchStats() {
       const stakeStats = await fetchStakeStats()
       const burnStats = await index.burn.stats(
-        'http://localhost:8720',
-        // process.env.VUE_APP_INDEX_API_URL,
+        process.env.VUE_APP_INDEX_API_URL,
       )
 
       this.stats = {

@@ -66,8 +66,7 @@
 
 <script>
 /*global process*/
-// import * as index from '@edge/index-utils'
-import * as index from '../../../index-utils'
+import * as index from '@edge/index-utils'
 import BurnsTableItem from '@/components/BurnsTableItem'
 import TableHeader from '@/components/TableHeader'
 
@@ -115,8 +114,7 @@ export default {
       // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
       const sortQuery = this.sortQuery ? `${this.sortQuery},-timestamp` : '-timestamp'
       const burns = await index.burn.burns(
-        'http://localhost:8720',
-        // process.env.VUE_APP_INDEX_API_URL,
+        process.env.VUE_APP_INDEX_API_URL,
         {
           limit: this.limit,
           page: this.page,

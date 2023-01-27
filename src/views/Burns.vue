@@ -46,8 +46,7 @@
 
 <script>
 /*global process*/
-// import * as index from '@edge/index-utils'
-import * as index from '../../../index-utils'
+import * as index from '@edge/index-utils'
 import Header from "@/components/Header"
 import HeroPanel from "@/components/HeroPanel"
 import Pagination from "@/components/Pagination";
@@ -119,8 +118,7 @@ export default {
 
       if (this.hash) {
         const burn = await index.burn.burn(
-        'http://localhost:8720',
-        // process.env.VUE_APP_INDEX_API_URL,
+        process.env.VUE_APP_INDEX_API_URL,
         this.hash
       )
 

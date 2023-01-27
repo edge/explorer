@@ -5,11 +5,17 @@
     <div class="container">
       <div class="row cols my-25" v-if="isTestnet">
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
-        <Faucet />
+        <div class="grid gap-2">
+          <Faucet />
+          <StatisticsAdditional :stats="stats" class="hidden lg:block" />
+        </div>
       </div>
       <div class="row cols my-25" v-else>
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
-        <NewsPromo />
+        <div class="grid gap-2">
+          <NewsPromo />
+          <StatisticsAdditional :stats="stats" class="hidden lg:block" />
+        </div>
       </div>
       <div class="row mb-25">
         <NetworkMap :points="mapPoints" />
@@ -23,6 +29,9 @@
 </template>
 
 <script>
+/*global process*/
+// import * as index from '@edge/index-utils'
+import * as index from '../../../index-utils'
 import Faucet from "@/components/Faucet"
 import Header from "@/components/Header"
 import NetworkMap from "@/components/NetworkMap"
@@ -30,6 +39,7 @@ import NewsPromo from "@/components/NewsPromo"
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
+import StatisticsAdditional from "@/components/StatisticsAdditional"
 import SummaryHero from "@/components/SummaryHero"
 import superagent from 'superagent'
 import { fetchBlocks, fetchStakeStats, fetchTransactions } from '../utils/api'
@@ -62,6 +72,7 @@ export default {
     RecentBlocks,
     RecentTransactions,
     Statistics,
+    StatisticsAdditional,
     SummaryHero
   },
   mounted() {
@@ -107,7 +118,13 @@ export default {
     },
     async fetchStats() {
       const stakeStats = await fetchStakeStats()
+      const burnStats = await index.burn.stats(
+        'http://localhost:8720',
+        // process.env.VUE_APP_INDEX_API_URL,
+      )
+
       this.stats = {
+        burns: burnStats,
         stakes: stakeStats
       }
     },

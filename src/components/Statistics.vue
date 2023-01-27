@@ -34,6 +34,22 @@
         <span class="stat__label">Staked XE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>
         <span class="stat__value">{{stakedAmount()}}</span>
       </div>
+      <div class="stat additional" v-if="stats.burns">
+        <span class="stat__label">XE Burned</span>
+        <span class="stat__value">{{burnedTotal}}</span>
+      </div>
+      <div class="stat additional" v-if="stats.burns">
+        <span class="stat__label">XE Burned <span class="text-gray-400">last 30 days</span></span>
+        <span class="stat__value">{{burned30Days}}</span>
+      </div>
+      <div class="stat additional" v-if="stats.burns">
+        <span class="stat__label">XE Burned</span>
+        <span class="stat__value">{{burnedTotal}}</span>
+      </div>
+      <div class="stat additional" v-if="stats.burns">
+        <span class="stat__label">XE Burned <span class="text-gray-400">last 30 days</span></span>
+        <span class="stat__value">{{burned30Days}}</span>
+      </div>
     </div>
     <div class="tile md:pr-50" v-else>
       Loading statistics...
@@ -53,6 +69,14 @@ export default {
     return {
       title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
     }
+  },
+  computed: {
+    burned30Days() {
+      return formatXe(this.stats.burns.total.amount / 1e6).replace(/\.?0+$/, '')
+    },
+    burnedTotal() {
+      return formatXe(this.stats.burns['30d'].amount / 1e6).replace(/\.?0+$/, '')
+    },
   },
   methods: {
     calculateBlocksPerHour(blockMetadata) {
@@ -90,6 +114,9 @@ export default {
 .stat {
   @apply p-12 bg-white rounded flex flex-col;
   @apply md:p-16 lg:p-24;
+}
+.stat.additional {
+  @apply lg:hidden
 }
 .stat__label {
   @apply truncate;

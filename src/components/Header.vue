@@ -36,6 +36,10 @@
             text: "Transactions"
           },
           {
+            link: "/burns",
+            text: "Burns"
+          },
+          {
             link: "/stakes",
             text: "Stakes"
           },

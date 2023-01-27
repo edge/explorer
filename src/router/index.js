@@ -4,6 +4,7 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 import Blocks from '@/views/Blocks'
+import Burns from '@/views/Burns'
 import Nodes from '@/views/Nodes'
 import NotFound from '@/views/404'
 import Overview from '@/views/Overview'
@@ -26,6 +27,16 @@ const routes = [
     path: '/blocks/:page(\\d+)?',
     name: 'Blocks',
     component: Blocks
+  },
+  {
+    path: '/burn/:hash',
+    name: 'Burn',
+    component: Burns
+  },
+  {
+    path: '/burns/:page(\\d+)?',
+    name: 'Burns',
+    component: Burns
   },
   {
     path: '/nodes',

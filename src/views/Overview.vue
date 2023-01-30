@@ -161,7 +161,7 @@ export default {
 </script>
 <style scoped>
   .cols {
-    @apply grid items-start grid-cols-1 gap-24;
+    @apply grid items-start grid-cols-1 gap-12;
     @apply lg:grid-cols-2;
   }
 </style>

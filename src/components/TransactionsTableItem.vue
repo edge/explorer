@@ -49,7 +49,10 @@
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
+        <span class="mr-1 -mt-2 icon icon-grey">
+          <BurnIcon v-if="burning" class="filter grayscale"/>
+          <ClockIcon v-else />
+        </span>
         <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
@@ -114,7 +117,7 @@
       </span>
       <span v-else class="lg:inline-block">
         <span class="mr-1 -mt-2 icon icon-grey">
-          <BurnIcon v-if="burning"/>
+          <BurnIcon v-if="burning" class="filter grayscale"/>
           <ClockIcon v-else/>
         </span>
         <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
@@ -153,7 +156,7 @@ export default {
       return this.item.recipient === 'xe_0000000000000000000000000000000000000000'
     },
     burning() {
-      return this.burn && !this.item.pending && this.confirmations < 10
+      return this.burn && this.item.confirmations < 10
     },
     date() {
       return new Date(this.item.timestamp).toLocaleString()

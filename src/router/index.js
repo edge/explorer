@@ -29,7 +29,7 @@ const routes = [
     component: Blocks
   },
   {
-    path: '/burn/:hash',
+    path: '/burn/:burnHash',
     name: 'Burn',
     component: Burns
   },
@@ -59,7 +59,7 @@ const routes = [
     component: Stakes
   },
   {
-    path: '/transaction/:hash',
+    path: '/transaction/:txHash',
     name: 'Transaction',
     component: Transactions
   },

@@ -54,8 +54,8 @@
         <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-green"><BurnIcon /></span>
-        <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
+        <span class="mr-1 -mt-2 icon" :class="burning && 'filter grayscale'"><BurnIcon /></span>
+        <span class="monospace lg:font-sans" :class="burning && 'text-gray-400'">{{ statusFormatted }}</span>
       </span>
 
     </td>
@@ -75,7 +75,7 @@ import { formatXe } from '@edge/wallet-utils'
 import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
 
 export default {
-  name: 'StakesTableItem',
+  name: 'BurnsTableItem',
   props: [
     'item'
   ],
@@ -88,6 +88,9 @@ export default {
     ClockIcon
   },
   computed: {
+    burning() {
+      return this.item.confirmations < 10
+    },
     date() {
       return new Date(this.item.timestamp).toLocaleString()
     },
@@ -98,10 +101,10 @@ export default {
       return {name: 'Wallet', params: {address: this.item.recipient}}
     },
     burnHashRoute() {
-      return {name: 'Burn', params: {hash: this.item.hash}}
+      return {name: 'Burn', params: {burnHash: this.item.hash}}
     },
     parentTxRoute() {
-      return {name: 'Transaction', params: {hash: this.item.parentTx}}
+      return {name: 'Transaction', params: {txHash: this.item.parentTx}}
     },
     formattedAmount() {
       return formatXe(this.item.amount / 1e6, true)

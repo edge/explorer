@@ -34,13 +34,13 @@
         <span class="stat__label">Staked XE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>
         <span class="stat__value">{{stakedAmount()}}</span>
       </div>
-      <div class="stat additional" v-if="stats.burns">
-        <span class="stat__label">Burns</span>
-        <span class="stat__value">{{stats.burns.total.count}}</span>
+      <div class="stat additional" v-if="stats.earnings">
+        <span class="stat__label">Earnings Paid Out</span>
+        <span class="stat__value">{{paymentsTotal}}</span>
       </div>
-      <div class="stat additional" v-if="stats.burns">
-        <span class="stat__label">Burns <span class="text-gray-400">last 30 days</span></span>
-        <span class="stat__value">{{stats.burns['30d'].count}}</span>
+      <div class="stat additional" v-if="stats.earnings">
+        <span class="stat__label">Earnings Paid Out</span>
+        <span class="stat__value">{{payments24Hours}}</span>
       </div>
       <div class="stat additional" v-if="stats.burns">
         <span class="stat__label">XE Burned</span>
@@ -72,11 +72,17 @@ export default {
   },
   computed: {
     burned30Days() {
-      return formatXe(this.stats.burns.total.amount / 1e6, true).replace(/\.?0+$/, '')
+      return formatXe(this.stats.burns.total.amount / 1e6, true).replace(/\.?[0-9]+$/, '')
     },
     burnedTotal() {
-      return formatXe(this.stats.burns['30d'].amount / 1e6, true).replace(/\.?0+$/, '')
+      return formatXe(this.stats.burns['30d'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')
     },
+    payments24Hours() {
+      return formatXe(this.stats.earnings['24h'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+    },
+    paymentsTotal() {
+      return formatXe(this.stats.earnings.allTime.amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+    }
   },
   methods: {
     calculateBlocksPerHour(blockMetadata) {

@@ -49,7 +49,10 @@
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
+        <span class="mr-1 -mt-2 icon icon-grey">
+          <BurnIcon v-if="burning" class="filter grayscale"/>
+          <ClockIcon v-else />
+        </span>
         <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
@@ -113,7 +116,10 @@
         <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-grey"><ClockIcon/></span>
+        <span class="mr-1 -mt-2 icon icon-grey">
+          <BurnIcon v-if="burning" class="filter grayscale"/>
+          <ClockIcon v-else/>
+        </span>
         <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
     </td>
@@ -133,7 +139,7 @@ import { formatXe } from '@edge/wallet-utils'
 import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
 
 export default {
-  name: 'StakesTableItem',
+  name: 'TransactionsTableItem',
   props: [
     'item'
   ],
@@ -149,6 +155,9 @@ export default {
     burn() {
       return this.item.recipient === 'xe_0000000000000000000000000000000000000000'
     },
+    burning() {
+      return this.burn && !this.item.pending && this.item.confirmations < 10
+    },
     date() {
       return new Date(this.item.timestamp).toLocaleString()
     },
@@ -159,7 +168,7 @@ export default {
       return {name: 'Wallet', params: {address: this.item.recipient}}
     },
     txHashRoute() {
-      return {name: 'Transaction', params: {hash: this.item.hash}}
+      return {name: 'Transaction', params: {txHash: this.item.hash}}
     },
     formattedAmount() {
       return formatXe(this.item.amount / 1e6, true)

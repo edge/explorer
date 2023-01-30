@@ -120,9 +120,11 @@ export default {
       const burnStats = await index.burn.stats(
         process.env.VUE_APP_INDEX_API_URL,
       )
+      const earningsStats = await this.updateEarningStats()
 
       this.stats = {
         burns: burnStats,
+        earnings: earningsStats,
         stakes: stakeStats
       }
     },
@@ -149,19 +151,23 @@ export default {
         this.fetchStats()
       }, pollInterval)
     },
+    async updateEarningStats() {
+      const statsResponse = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/v2/stats/earnings`)
+      return statsResponse.body
+    },
     async updateMapPoints() {
       this.loading = true
       const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/mapsessions?limit=500`)
       if (result.body.results.length) this.mapPoints = result.body.results
       this.loaded = true
       this.loading = false
-    },
+    }
   }
 }
 </script>
 <style scoped>
   .cols {
-    @apply grid items-start grid-cols-1 gap-24;
+    @apply grid items-start grid-cols-1 gap-6;
     @apply lg:grid-cols-2;
   }
 </style>

@@ -116,7 +116,7 @@
         <div class="transactionRow__value">
           <router-link
             v-if="transaction.exchangeResult.destToken === 'XE'"
-            :to="{ name: 'Transaction', params: { hash: transaction.exchangeResult.completedTransactionHash } }">
+            :to="{ name: 'Transaction', params: { txHash: transaction.exchangeResult.completedTransactionHash } }">
             {{ transaction.exchangeResult.completedTransactionHash }}
           </router-link>
           <a target="_about" class=""
@@ -135,7 +135,7 @@
         <div class="transactionRow__label">Fee Tx</div>
         <div class="transactionRow__value">
           <router-link
-            :to="{ name: 'Transaction', params: { hash: transaction.exchangeResult.feeTransactionHash } }">
+            :to="{ name: 'Transaction', params: { txHash: transaction.exchangeResult.feeTransactionHash } }">
             {{ transaction.exchangeResult.feeTransactionHash }}
           </router-link>
         </div>

@@ -33,7 +33,7 @@
       <div class="burnRow">
         <div class="burnRow__label">Parent Tx</div>
         <div class="burnRow__value">
-          <router-link :to="{name: 'Transaction', params: {hash: burn.parentTx}}">
+          <router-link :to="{name: 'Transaction', params: {txHash: burn.parentTx}}">
             {{ burn.parentTx }}
           </router-link>
         </div>

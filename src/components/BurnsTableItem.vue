@@ -54,8 +54,8 @@
         <span class="monospace lg:font-sans text-gray-400">{{ statusFormatted }}</span>
       </span>
       <span v-else class="lg:inline-block">
-        <span class="mr-1 -mt-2 icon icon-green"><BurnIcon /></span>
-        <span class="monospace lg:font-sans">{{ statusFormatted }}</span>
+        <span class="mr-1 -mt-2 icon" :class="burning && 'filter grayscale'"><BurnIcon /></span>
+        <span class="monospace lg:font-sans" :class="burning && 'text-gray-400'">{{ statusFormatted }}</span>
       </span>
 
     </td>
@@ -88,6 +88,9 @@ export default {
     ClockIcon
   },
   computed: {
+    burning() {
+      return this.item.confirmations < 10
+    },
     date() {
       return new Date(this.item.timestamp).toLocaleString()
     },

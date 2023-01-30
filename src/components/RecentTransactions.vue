@@ -21,7 +21,7 @@
       <tbody v-if="transactions.length">
         <tr v-for="transaction in transactions" :key="transaction.hash">
           <td data-title="Hash:">
-            <router-link :to="{name: 'Transaction', params: {hash: transaction.hash}}">
+            <router-link :to="{name: 'Transaction', params: {txHash: transaction.hash}}">
               <span class="monospace lg:inline-block">{{ transaction.hash }}</span>
             </router-link>
           </td>

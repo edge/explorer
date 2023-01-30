@@ -75,7 +75,7 @@ import { formatXe } from '@edge/wallet-utils'
 import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
 
 export default {
-  name: 'StakesTableItem',
+  name: 'BurnsTableItem',
   props: [
     'item'
   ],
@@ -101,10 +101,10 @@ export default {
       return {name: 'Wallet', params: {address: this.item.recipient}}
     },
     burnHashRoute() {
-      return {name: 'Burn', params: {hash: this.item.hash}}
+      return {name: 'Burn', params: {burnHash: this.item.hash}}
     },
     parentTxRoute() {
-      return {name: 'Transaction', params: {hash: this.item.parentTx}}
+      return {name: 'Transaction', params: {txHash: this.item.parentTx}}
     },
     formattedAmount() {
       return formatXe(this.item.amount / 1e6, true)

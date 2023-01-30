@@ -96,7 +96,7 @@ export default {
       return Math.max(1, Math.ceil(this.metadata.totalCount / this.limit))
     },
     hash() {
-      return this.$route.params.hash
+      return this.$route.params.burnHash
     },
     isBurnPending() {
       return this.burn.pending

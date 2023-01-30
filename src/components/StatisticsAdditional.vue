@@ -30,7 +30,7 @@ import { formatXe } from '@edge/wallet-utils'
 const totalSupplyMXE = 51000000 * 1e6
 
 export default {
-  name: 'Statistics',
+  name: 'StatisticsAdditional',
   props: ['stats'],
   data() {
     return {

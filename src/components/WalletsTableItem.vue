@@ -46,7 +46,7 @@ export default {
       return {name: 'Wallet', params: {address: this.item.address}}
     },
     latestTxRoute() {
-      return {name: 'Transaction', params: {hash: this.item.latestTransaction.hash}}
+      return {name: 'Transaction', params: {txHash: this.item.latestTransaction.hash}}
     },
     balanceFormatted() {
       return this.formatAmount(this.item.balance)

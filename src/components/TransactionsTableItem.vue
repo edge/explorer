@@ -156,7 +156,7 @@ export default {
       return this.item.recipient === 'xe_0000000000000000000000000000000000000000'
     },
     burning() {
-      return this.burn && this.item.confirmations < 10
+      return this.burn && !this.item.pending && this.item.confirmations < 10
     },
     date() {
       return new Date(this.item.timestamp).toLocaleString()

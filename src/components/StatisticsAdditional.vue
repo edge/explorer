@@ -2,15 +2,15 @@
   <div class="w-full">
     <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2" v-if="stats">
       <div class="stat" v-if="stats.earnings">
-        <span class="stat__label">Earnings Paid Out</span>
+        <span class="stat__label">XE Earned <span class="text-gray-400">total</span></span>
         <span class="stat__value">{{paymentsTotal}}</span>
       </div>
       <div class="stat" v-if="stats.earnings">
-        <span class="stat__label">Earnings Paid Out <span class="text-gray-400">last 24 hours</span></span>
+        <span class="stat__label">XE Earned <span class="text-gray-400">last 24 hrs</span></span>
         <span class="stat__value">{{payments24Hours}}</span>
       </div>
       <div class="stat" v-if="stats.burns">
-        <span class="stat__label">XE Burned</span>
+        <span class="stat__label">XE Burned <span class="text-gray-400">total</span></span>
         <span class="stat__value">{{burnedTotal}}</span>
       </div>
       <div class="stat" v-if="stats.burns">

@@ -3,16 +3,16 @@
     <h3>{{ title }}</h3>
     <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2" v-if="blockMetadata && stats && transactionMetadata">
       <div class="stat">
-        <span class="stat__label">Blocks</span>
+        <span class="stat__label">Blocks <span class="text-gray-400">Total</span></span>
         <span class="stat__value">{{Number(blockMetadata.totalCount).toLocaleString()}}</span>
-      </div>
-      <div class="stat">
-        <span class="stat__label">Transactions</span>
-        <span class="stat__value">{{Number(transactionMetadata.totalCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Blocks <span class="text-gray-400">last 24 hrs</span></span>
         <span class="stat__value">{{blockMetadata.recentBlocksCount && Number(blockMetadata.recentBlocksCount).toLocaleString()}}&nbsp;</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Transactions <span class="text-gray-400">Total</span></span>
+        <span class="stat__value">{{Number(transactionMetadata.totalCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Transactions <span class="text-gray-400">last 24 hrs</span></span>
@@ -27,7 +27,7 @@
         <span class="stat__value">{{calculateBlocksPerHour(blockMetadata)}}</span>
       </div>
       <div class="stat" v-if="stats.stakes">
-        <span class="stat__label">Stakes</span>
+        <span class="stat__label">Stakes <span class="text-gray-400">Total</span></span>
         <span class="stat__value">{{stats.stakes.count}}</span>
       </div>
       <div class="stat" v-if="stats.stakes">
@@ -35,15 +35,15 @@
         <span class="stat__value">{{stakedAmount()}}</span>
       </div>
       <div class="stat additional" v-if="stats.earnings">
-        <span class="stat__label">Earnings Paid Out</span>
+        <span class="stat__label">XE Earned <span class="text-gray-400">total</span></span>
         <span class="stat__value">{{paymentsTotal}}</span>
       </div>
       <div class="stat additional" v-if="stats.earnings">
-        <span class="stat__label">Earnings Paid Out</span>
+        <span class="stat__label">XE Earned <span class="text-gray-400">last 24 hrs</span></span>
         <span class="stat__value">{{payments24Hours}}</span>
       </div>
       <div class="stat additional" v-if="stats.burns">
-        <span class="stat__label">XE Burned</span>
+        <span class="stat__label">XE Burned <span class="text-gray-400">total</span></span>
         <span class="stat__value">{{burnedTotal}}</span>
       </div>
       <div class="stat additional" v-if="stats.burns">

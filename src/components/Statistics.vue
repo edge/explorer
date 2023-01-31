@@ -3,16 +3,16 @@
     <h3>{{ title }}</h3>
     <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2" v-if="blockMetadata && stats && transactionMetadata">
       <div class="stat">
-        <span class="stat__label">Blocks</span>
+        <span class="stat__label">Blocks <span class="text-gray-400">Total</span></span>
         <span class="stat__value">{{Number(blockMetadata.totalCount).toLocaleString()}}</span>
-      </div>
-      <div class="stat">
-        <span class="stat__label">Transactions</span>
-        <span class="stat__value">{{Number(transactionMetadata.totalCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Blocks <span class="text-gray-400">last 24 hrs</span></span>
         <span class="stat__value">{{blockMetadata.recentBlocksCount && Number(blockMetadata.recentBlocksCount).toLocaleString()}}&nbsp;</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Transactions <span class="text-gray-400">Total</span></span>
+        <span class="stat__value">{{Number(transactionMetadata.totalCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Transactions <span class="text-gray-400">last 24 hrs</span></span>
@@ -27,7 +27,7 @@
         <span class="stat__value">{{calculateBlocksPerHour(blockMetadata)}}</span>
       </div>
       <div class="stat" v-if="stats.stakes">
-        <span class="stat__label">Stakes</span>
+        <span class="stat__label">Stakes <span class="text-gray-400">Total</span></span>
         <span class="stat__value">{{stats.stakes.count}}</span>
       </div>
       <div class="stat" v-if="stats.stakes">
@@ -35,20 +35,32 @@
         <span class="stat__value">{{stakedAmount()}}</span>
       </div>
       <div class="stat additional" v-if="stats.earnings">
-        <span class="stat__label">Earnings Paid Out</span>
-        <span class="stat__value">{{paymentsTotal}}</span>
+        <span class="stat__label">XE Earned <span class="text-gray-400">total</span></span>
+        <span class="stat__value">
+          <div class="w-24 text-gray-600"><EarnIcon /></div>
+          <span>{{paymentsTotal}}</span>
+        </span>
       </div>
       <div class="stat additional" v-if="stats.earnings">
-        <span class="stat__label">Earnings Paid Out</span>
-        <span class="stat__value">{{payments24Hours}}</span>
+        <span class="stat__label">XE Earned <span class="text-gray-400">last 24 hrs</span></span>
+        <span class="stat__value">
+          <div class="w-24 text-gray-600"><EarnIcon /></div>
+          <span>{{payments24Hours}}</span>
+        </span>
       </div>
       <div class="stat additional" v-if="stats.burns">
-        <span class="stat__label">XE Burned</span>
-        <span class="stat__value">{{burnedTotal}}</span>
+        <span class="stat__label">XE Burned <span class="text-gray-400">total</span></span>
+        <span class="stat__value">
+          <div class="w-24"><BurnIcon /></div>
+          <span>{{burnedTotal}}</span>
+        </span>
       </div>
       <div class="stat additional" v-if="stats.burns">
         <span class="stat__label">XE Burned <span class="text-gray-400">last 30 days</span></span>
-        <span class="stat__value">{{burned30Days}}</span>
+        <span class="stat__value">
+          <div class="w-24"><BurnIcon /></div>
+          <span>{{burned30Days}}</span>
+        </span>
       </div>
     </div>
     <div class="tile md:pr-50" v-else>
@@ -58,6 +70,8 @@
 </template>
 
 <script>
+import BurnIcon from './BurnIcon.vue'
+import EarnIcon from './EarnIcon.vue'
 import { formatXe } from '@edge/wallet-utils'
 
 const totalSupplyMXE = 51000000 * 1e6
@@ -65,6 +79,10 @@ const totalSupplyMXE = 51000000 * 1e6
 export default {
   name: 'Statistics',
   props: ['blockMetadata', 'stats', 'transactionMetadata'],
+  components: {
+    BurnIcon,
+    EarnIcon
+  },
   data() {
     return {
       title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
@@ -128,6 +146,6 @@ export default {
   @apply truncate;
 }
 .stat__value {
-  @apply text-green text-2xl md:text-3xl leading-none mt-1;
+  @apply text-green text-2xl md:text-3xl leading-none mt-1 flex items-center space-x-4;
 }
 </style>

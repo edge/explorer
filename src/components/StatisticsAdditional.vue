@@ -2,20 +2,42 @@
   <div class="w-full">
     <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-2" v-if="stats">
       <div class="stat" v-if="stats.earnings">
-        <span class="stat__label">XE Earned <span class="text-gray-400">total</span></span>
-        <span class="stat__value">{{paymentsTotal}}</span>
+        <span class="stat__label">
+          <span>XE Earned</span>
+          <span class="text-gray-400">total</span>
+        </span>
+        <span class="stat__value">
+          <div class="w-24 text-gray-600"><EarnIcon /></div>
+          <span>{{paymentsTotal}}</span>
+        </span>
       </div>
       <div class="stat" v-if="stats.earnings">
-        <span class="stat__label">XE Earned <span class="text-gray-400">last 24 hrs</span></span>
-        <span class="stat__value">{{payments24Hours}}</span>
+        <span class="stat__label">
+          <span>XE Earned</span>
+          <span class="text-gray-400">last 24 hrs</span>
+        </span>
+        <span class="stat__value">
+          <div class="w-24 text-gray-600"><EarnIcon /></div>
+          <span>{{payments24Hours}}</span>
+        </span>
       </div>
       <div class="stat" v-if="stats.burns">
-        <span class="stat__label">XE Burned <span class="text-gray-400">total</span></span>
-        <span class="stat__value">{{burnedTotal}}</span>
+        <span class="stat__label">
+          <span>XE Burned</span>
+          <span class="text-gray-400">total</span>
+        </span>
+        <span class="stat__value">
+          <div class="w-24"><BurnIcon /></div>
+          <span>{{burnedTotal}}</span></span>
       </div>
       <div class="stat" v-if="stats.burns">
-        <span class="stat__label">XE Burned <span class="text-gray-400">last 30 days</span></span>
-        <span class="stat__value">{{burned30Days}}</span>
+        <span class="stat__label">
+          <span>XE Burned</span>
+          <span class="text-gray-400">last 30 days</span>
+        </span>
+        <span class="stat__value">
+          <div class="w-24"><BurnIcon /></div>
+          <span>{{burned30Days}}</span></span>
       </div>
     </div>
     <div class="tile md:pr-50" v-else>
@@ -25,11 +47,17 @@
 </template>
 
 <script>
+import BurnIcon from './BurnIcon.vue'
+import EarnIcon from './EarnIcon.vue'
 import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: 'StatisticsAdditional',
   props: ['stats'],
+  components: {
+    BurnIcon,
+    EarnIcon
+  },
   data() {
     return {
       title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
@@ -66,6 +94,6 @@ export default {
   @apply truncate;
 }
 .stat__value {
-  @apply text-green text-2xl md:text-3xl leading-none mt-1;
+  @apply text-green text-2xl md:text-3xl leading-none mt-1 flex items-center space-x-4;
 }
 </style>

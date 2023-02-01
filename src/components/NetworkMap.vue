@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full pb-10 sm:pb-0">
+  <div class="flex flex-col h-full">
     <h3>Network Map</h3>
     <div class="map-container">
       <div class="wrapper">

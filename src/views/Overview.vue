@@ -12,7 +12,7 @@
       </div>
       <div class="row cols my-25" v-else>
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
-        <div class="grid gap-2">
+        <div class="hidden lg:grid gap-2">
           <NewsPromo />
           <StatisticsAdditional :stats="stats" class="hidden lg:block" />
         </div>

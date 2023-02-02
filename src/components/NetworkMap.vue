@@ -6,6 +6,30 @@
         <img ref="mapImage" src="/assets/world-robinson.svg" alt="">
         <svg ref="mapMarkers" id="mapMarkers"></svg>
       </div>
+      <!-- node type toggles -->
+      <div class="type-toggle">
+        <div class="toggle">
+          <span>Stargates <span class="hidden sm:inline-block">({{ countType('stargate') }})</span></span>
+          <label class="switch">
+            <input type="checkbox" v-model="showStargate">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle">
+          <span>Gateways <span class="hidden sm:inline-block">({{ countType('gateway') }})</span></span>
+          <label class="switch">
+            <input type="checkbox" v-model="showGateway">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle">
+          <span>Hosts <span class="hidden sm:inline-block">({{ countType('host') }})</span></span>
+          <label class="switch">
+            <input type="checkbox" v-model="showHost">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -14,7 +38,7 @@
 // The network map uses a Robinson projection map image with slight cropping at the top and bottom of the map - https://simplemaps.com/resources/svg-world
 // co-ordinates are calculated with the following formulas:
 // x = 0.8474 RX (lng - lng0)
-// y = 1.3523 RY
+// y = 1.3520 RY
 // - R is radius of globe at scale of the map, where equator length is 0.8487 of map width
 // - X and Y are coefficient values determined by Robinson at known latitudes, with intermediate values calculated by interpolation
 // (I have used linear interpolation for simplicity, at slight cost of accuracy)
@@ -25,7 +49,7 @@ const latArray = [
   0, 5,      10,     15,     20,     25,     30,     35,     40,     45,     50,     55,     60,     65,     70,     75,     80,     85,     90
 ]
 const XValues = [
-  1, 0.9986, 0.9954, 0.9900, 0.9822, 0.9730, 0.9600, 0.9427, 0.9216, 0.8962, 0.8679, 0.8350, 0.7986, 0.7597, 0.7186, 0.6732, 0.6213, 0.5722, 0.5322
+  1, 0.9986, 0.9954, 0.9900, 0.9822, 0.9730, 0.9600, 0.9427, 0.9212, 0.8962, 0.8679, 0.8350, 0.7986, 0.7597, 0.7186, 0.6732, 0.6213, 0.5722, 0.5322
 ]
 const YValues = [
   0, 0.0620, 0.1240, 0.1860, 0.2480, 0.3100, 0.3720, 0.4340, 0.4958, 0.5571, 0.6176, 0.6769, 0.7346, 0.7903, 0.8435, 0.8936, 0.9394, 0.9761, 1
@@ -36,18 +60,30 @@ export default {
   data: function() {
     return {
       // known longitude offset of map in degrees
-      lngOffset: -3
+      lngOffset: -3,
+      showGateway: true,
+      showHost: true,
+      showStargate: true
     }
   },
   props: ['points'],
+  computed: {
+    showType() {
+      return {
+        gateway: this.showGateway,
+        host: this.showHost,
+        stargate: this.showStargate
+      }
+    }
+  },
   methods: {
     convertLatLngToXy(lat, lng, mapWidth, topOffset = 0, leftOffset = 0) {
       // disallow invalid latitude or longitude
       if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return
 
-      // h and w are full height and width of the Robinson map without any cropping - the correct ratio is 1.97165551906973
+      // h and w are full height and width of the Robinson map without any cropping - the correct ratio is 1.97125551906973
       const w = mapWidth
-      const h = w / 1.97165551906973
+      const h = w / 1.97125551906973
 
       const { X, Y } = this.getXYCoefficients(lat)
 
@@ -61,9 +97,12 @@ export default {
       // xFudge" is a "fudge" value worked out by trial and error to get the markers into the correct position
       const xFudge = 1.02
       const x = (w / 2) + (0.8487 * R * X * lngRad * xFudge) + leftOffset
-      const y = (h / 2) - (1.3523 * R * Y) - topOffset
+      const y = (h / 2) - (1.3520 * R * Y) - topOffset
 
       return { x, y }
+    },
+    countType(type) {
+      return this.points.filter(p => p.type === type).length
     },
     getXYCoefficients(lat) {
       const absoluteLat = Math.abs(lat)
@@ -106,6 +145,8 @@ export default {
       const markersSvg = this.$refs.mapMarkers
       markersSvg.innerHTML = ''
       this.points.forEach(p => {
+        if (!this.showType[p.type]) return
+
         const { x, y } = this.convertLatLngToXy(p.lat, p.lng, mapWidth, topOffset)
 
         // create marker
@@ -140,6 +181,9 @@ export default {
   },
   watch: {
     points() {
+      this.updateMarkers()
+    },
+    showType() {
       this.updateMarkers()
     }
   }
@@ -188,5 +232,63 @@ img {
     object-fit: contain;
     max-height: 100%;
   }
+}
+
+/* node type toggles */
+.type-toggle {
+  @apply hidden sm:flex flex-col space-y-4 items-start absolute left-10 lg:left-20 bottom-8 lg:bottom-16 text-sm text-gray-600;
+  font-size: 0.8125rem;
+  width: 7.5rem;
+}
+.toggle {
+  @apply flex justify-between items-center w-full space-x-4;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 20px;
+  margin: 0;
+}
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 20px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #0ecc5f;
+}
+input:focus + .slider {
+  box-shadow: 0 0 1px #0ecc5f;
+}
+input:checked + .slider:before {
+  -webkit-transform: translateX(12px);
+  -ms-transform: translateX(12px);
+  transform: translateX(12px);
 }
 </style>

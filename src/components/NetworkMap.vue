@@ -236,7 +236,7 @@ img {
 
 /* node type toggles */
 .type-toggle {
-  @apply hidden sm:flex flex-col space-y-4 items-start absolute left-10 lg:left-20 bottom-10 lg:bottom-20 text-sm text-gray-600;
+  @apply hidden sm:flex flex-col space-y-4 items-start absolute left-10 lg:left-20 bottom-8 lg:bottom-16 text-sm text-gray-600;
   font-size: 0.8125rem;
   width: 7.5rem;
 }

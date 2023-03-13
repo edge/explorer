@@ -90,10 +90,10 @@ export default {
   },
   computed: {
     burned30Days() {
-      return formatXe(this.stats.burns.total.amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return formatXe(this.stats.burns['30d'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')
     },
     burnedTotal() {
-      return formatXe(this.stats.burns['30d'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return formatXe(this.stats.burns.total.amount / 1e6, true).replace(/\.?[0-9]+$/, '')
     },
     payments24Hours() {
       return formatXe(this.stats.earnings['24h'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')

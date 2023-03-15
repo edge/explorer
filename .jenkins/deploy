@@ -30,6 +30,7 @@ def deployScript() {
     --env VIRTUAL_HOST=$DOMAIN \
     --env LETSENCRYPT_HOST=$DOMAIN \
     --env LETSENCRYPT_EMAIL="adam@edge.network" \
+    --env INDEX_API_URL=$INDEX_API_URL \
     $IMAGE
   ''')
 }
@@ -63,6 +64,7 @@ pipeline {
               HTTP_PORT=$HTTP_PORT \
               NETWORK_ACCESS=$NETWORK_ACCESS \
               DOMAIN=$DOMAIN \
+              INDEX_API_URL=$INDEX_API_URL \
                 bash -x ./${filename} && \
               rm ${filename}'"
           }

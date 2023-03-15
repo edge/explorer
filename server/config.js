@@ -10,6 +10,6 @@ module.exports = {
   },
   proxy: {
     indexApiBasePath: process.env.INDEX_API_BASE_PATH || '/api',
-    indexBaseUrl: process.env.VUE_APP_INDEX_API_URL || 'https://index.test.network',
+    indexBaseUrl: process.env.INDEX_API_URL || 'https://index.test.network',
   }
 }

@@ -18,13 +18,15 @@ const html = fs.readFileSync(`${www}/index.html`, 'utf8')
 app.use(morgan('dev'))
 app.use('/assets', Express.static(`${www}/assets`))
 
-app.use(config.proxy.indexApiBasePath, createProxyMiddleware({
+app.use(createProxyMiddleware(config.proxy.indexApiBasePath, {
   target: config.proxy.indexBaseUrl,
   changeOrigin: true,
   onProxyReq: (preq, req) => {
     preq.path = req.path.replace(config.proxy.indexApiBasePath, '')
     if (preq.path === '') preq.path = '/'
-    console.log(`GET ${req.path} forwarded to ${config.proxy.indexBaseUrl}${preq.path}`)
+    const qs = req.query ? (new URLSearchParams(req.query)).toString() : ''
+    if (qs) preq.path += `?${qs}`
+    console.log(`GET ${req.path}${qs ? `?${qs}` : ''} forwarded to ${config.proxy.indexBaseUrl}${preq.path}`)
   }
 }))
 

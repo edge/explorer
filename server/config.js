@@ -7,5 +7,9 @@ require('dotenv').config()
 module.exports = {
   http: {
     port: process.env.HTTP_PORT ? parseInt(process.env.HTTP_PORT) : 8000
+  },
+  proxy: {
+    indexApiBasePath: process.env.INDEX_API_BASE_PATH || '/api',
+    indexBaseUrl: process.env.VUE_APP_INDEX_API_URL || 'https://index.test.network',
   }
 }

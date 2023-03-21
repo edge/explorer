@@ -1,8 +1,8 @@
 <template>
-  <div class="w-full">
+  <div class="w-full mb-25">
     <h3>Coin Value</h3>
     <div class="relative max-h-full tile">
-      <div class="flex justify-between mb-12">
+      <div class="flex justify-between mb-12 space-x-4">
         <TokenValueConversion
           v-if="coinValue"
           title="Token Value"

@@ -7,7 +7,7 @@
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartID"
-    :height="height"
+    :height="isSmView ? 400 : 200"
   />
 </template>
 
@@ -109,6 +109,9 @@ export default {
         }
       }
       return options
+    },
+    isSmView() {
+      return window.innerWidth < 640
     }
   },
   mounted() {

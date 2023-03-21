@@ -20,7 +20,7 @@
       <div class="row mb-30">
         <NetworkMap :points="mapPoints" />
       </div>
-      <div class="relative row cols mb-30">
+      <div class="relative row cols mb-5">
         <div class="absolute right-0 -top-8">
           <OverviewChartTimeToggle
             :period="chartPeriod"

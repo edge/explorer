@@ -21,6 +21,7 @@ export default {
     Line
   },
   props: [
+    'beginAtZero',
     'chartID',
     'datasets',
     'timeSeries',
@@ -30,20 +31,23 @@ export default {
   ],
   data() {
     return {
-      chartData: {
-        labels: this.timeSeries,
-        datasets: this.datasets
-      },
       height: 200
     }
   },
   computed: {
+    chartData() {
+      return  {
+        labels: this.timeSeries,
+        datasets: this.datasets
+      }
+    },
     chartOptions() {
       const options = {
         responsive: true,
         cubicInterpolationMode: 'monotone',
         scales: {
           y: {
+            beginAtZero: this.beginAtZero,
             grid: {display: false},
             ticks: {
               font: {
@@ -64,7 +68,9 @@ export default {
             ticks: {
               font: {
                 size: 10
-              }
+              },
+              minRotation: 45,
+              maxRotaion: 45
             }
           }
         },

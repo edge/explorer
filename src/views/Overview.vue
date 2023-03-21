@@ -17,12 +17,18 @@
           <StatisticsAdditional :stats="stats" class="hidden lg:block" />
         </div>
       </div>
-      <div class="row mb-25">
+      <div class="row mb-30">
         <NetworkMap :points="mapPoints" />
       </div>
-      <div class="row cols mb-25">
-        <OverviewChartRevenue />
-        <OverviewChartCoinValue />
+      <div class="relative row cols mb-30">
+        <div class="absolute right-0 -top-8">
+          <OverviewChartTimeToggle
+            :period="chartPeriod"
+            :onPeriodUpdate="updateChartPeriod"
+          />
+        </div>
+        <OverviewChartRevenue :chartPeriod="chartPeriod" />
+        <OverviewChartCoinValue :chartPeriod="chartPeriod" />
       </div>
       <div class="row cols mt-15">
         <RecentBlocks :loading="loading" :blocks="blocks" />
@@ -41,6 +47,7 @@ import NetworkMap from "@/components/NetworkMap"
 import NewsPromo from "@/components/NewsPromo"
 import OverviewChartCoinValue from "@/components/OverviewChartCoinValue"
 import OverviewChartRevenue from "@/components/OverviewChartRevenue"
+import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
@@ -59,6 +66,7 @@ export default {
     return {
       blockMetadata: null,
       blocks: [],
+      chartPeriod: 'month',
       transactionMetadata: null,
       transactions: [],
       loading: false,
@@ -76,6 +84,7 @@ export default {
     NewsPromo,
     OverviewChartCoinValue,
     OverviewChartRevenue,
+    OverviewChartTimeToggle,
     RecentBlocks,
     RecentTransactions,
     Statistics,
@@ -158,6 +167,9 @@ export default {
         this.fetchTransactions()
         this.fetchStats()
       }, pollInterval)
+    },
+    updateChartPeriod(newPeriod) {
+      this.chartPeriod = newPeriod
     },
     async updateEarningStats() {
       const statsResponse = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/v2/stats/earnings`)

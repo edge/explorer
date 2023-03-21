@@ -6,9 +6,9 @@
       {{formattedValue}}
       <span class="currency-unit" v-if="currency === 'xe'"> $XE</span>
     </span>
-    <span v-if="!hideConversion" class="conversion-value">{{btcValue}} BTC</span>
+    <!-- <span v-if="!hideConversion" class="conversion-value">{{btcValue}} BTC</span>
     <span v-if="!hideConversion" class="conversion-value">{{ethValue}} ETH</span>
-    <div v-if="hideConversion" class="hide-conversion"></div>
+    <div v-if="hideConversion" class="hide-conversion"></div> -->
   </div>
 </template>
 
@@ -22,10 +22,8 @@ export default {
       ethPerXE: 0.00006694237756459952,
       usdPerXE: 0.11560145296875564,
       numFormatter: {
-        maximumSignificantDigits: 8,
-        minimumSignificantDigits: 4,
-        maximumFractionDigits: 8,
-        roundingPriority: 'lessPrecision'
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
       }
     }
   },

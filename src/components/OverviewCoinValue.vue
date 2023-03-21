@@ -36,7 +36,7 @@ import moment from 'moment'
 import superagent from 'superagent'
 
 export default {
-  name: 'OverviewChartCoinValue',
+  name: 'OverviewCoinValue',
   components: {
     OverviewTokenChart,
     TokenValueConversion
@@ -110,27 +110,27 @@ export default {
     async updateMarketCap() {
       try {
         const response = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/supply/circulating`)
-        this.marketcap = response['Circulating Supply']
+        this.marketCap = response.body['Circulating Supply'] * this.data[this.data.length - 1].usdPerXE
       }
       catch (error) {
         console.error(error)
       }
     }
   },
-  mounted() {
-    this.updateCoinValue()
+  async mounted() {
+    await this.updateCoinValue()
     this.updateMarketCap()
-    this.intervalID = setInterval(() => {
-      this.updateCoinValue()
+    this.intervalID = setInterval(async () => {
+      await this.updateCoinValue()
       this.updateMarketCap()
-    }, 30000)
+    }, 60000)
   },
   unmounted() {
     clearInterval(this.intervalID)
   },
   watch: {
-    chartPeriod() {
-      this.updateCoinValue()
+    async chartPeriod() {
+      await this.updateCoinValue()
       this.updateMarketCap()
     }
   }

@@ -37,7 +37,7 @@ import moment from 'moment'
 import superagent from 'superagent'
 
 export default {
-  name: 'OverviewChartRevenue',
+  name: 'OverviewRevenue',
   components: {
     OverviewTokenChart,
     TokenValueConversion
@@ -94,7 +94,7 @@ export default {
     this.updateRevenue()
     this.intervalID = setInterval(() => {
       this.updateRevenue()
-    }, 30000)
+    }, 60000)
   },
   unmounted() {
     clearInterval(this.intervalID)

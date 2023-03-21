@@ -27,8 +27,8 @@
             :onPeriodUpdate="updateChartPeriod"
           />
         </div>
-        <OverviewChartRevenue :chartPeriod="chartPeriod" />
-        <OverviewChartCoinValue :chartPeriod="chartPeriod" />
+        <OverviewRevenue :chartPeriod="chartPeriod" />
+        <OverviewCoinValue :chartPeriod="chartPeriod" />
       </div>
       <div class="row cols mt-15">
         <RecentBlocks :loading="loading" :blocks="blocks" />
@@ -45,8 +45,8 @@ import Faucet from "@/components/Faucet"
 import Header from "@/components/Header"
 import NetworkMap from "@/components/NetworkMap"
 import NewsPromo from "@/components/NewsPromo"
-import OverviewChartCoinValue from "@/components/OverviewChartCoinValue"
-import OverviewChartRevenue from "@/components/OverviewChartRevenue"
+import OverviewCoinValue from "@/components/OverviewCoinValue"
+import OverviewRevenue from "@/components/OverviewRevenue"
 import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
@@ -82,8 +82,8 @@ export default {
     Header,
     NetworkMap,
     NewsPromo,
-    OverviewChartCoinValue,
-    OverviewChartRevenue,
+    OverviewCoinValue,
+    OverviewRevenue,
     OverviewChartTimeToggle,
     RecentBlocks,
     RecentTransactions,

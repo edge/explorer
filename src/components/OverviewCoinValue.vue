@@ -84,11 +84,7 @@ export default {
     },
     timeSeries() {
       if (!this.data) return []
-      else return this.data.map(r => {
-          const date = new Date(r.date)
-        if (this.chartPeriod === 'week') return moment(date).format('ddd')
-        if (this.chartPeriod === 'month') return moment(date).format('ll')
-      })
+      else return this.data.map(r => moment(new Date(r.date)).format(this.timeSeriesFormat))
     }
   },
   methods: {
@@ -114,6 +110,8 @@ export default {
           minimumFractionDigits: 6
         })
         this.data = response.body.reverse()
+        if (this.chartPeriod === 'week') this.timeSeriesFormat = 'ddd'
+        if (this.chartPeriod === 'month') this.timeSeriesFormat = 'll'
       } catch (error) {
         console.error(error)
       }

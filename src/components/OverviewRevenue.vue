@@ -82,10 +82,7 @@ export default {
     },
     timeSeries() {
       if (!this.data) return []
-      else return this.data.map(r => {
-        if (this.chartPeriod === 'week') return moment(r.start).format('ddd')
-        if (this.chartPeriod === 'month') return moment(r.start).format('ll')
-      })
+      else return this.data.map(r => moment(r.start).format(this.timeSeriesFormat))
     }
   },
   methods: {
@@ -102,6 +99,8 @@ export default {
       const response = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/revenue${this.query}`)
       const { results } = response.body
       this.data = results.reverse()
+      if (this.chartPeriod === 'week') this.timeSeriesFormat = 'ddd'
+      if (this.chartPeriod === 'month') this.timeSeriesFormat = 'll'
       this.averageRevenue = results.reduce((total, day) => total += day.amount, 0) / results.length / 1e6
       this.totalRevenue = response.body.metadata.allTimeRevenue / 1e6
     }

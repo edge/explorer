@@ -30,6 +30,7 @@
         chartID="Total Revenue"
         :beginAtZero="true"
         :timeSeries="timeSeries"
+        :tooltipCallback="tooltipCallback"
         :datasets="datasets"
         yLabel="Daily XE"
       />
@@ -89,7 +90,10 @@ export default {
   },
   methods: {
     tooltipCallback(tooltipItem) {
-      return tooltipItem.raw.toLocaleString() + ' XE'
+      return tooltipItem.raw.toLocaleString(undefined, {
+        minimumFractionDigits: 6,
+        maximumFractionDigits: 6
+      }) + ' XE'
     },
     updateChartPeriod(newPeriod) {
       this.chartPeriod = newPeriod

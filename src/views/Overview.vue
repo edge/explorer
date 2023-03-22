@@ -20,13 +20,7 @@
       <div class="row mb-30">
         <NetworkMap :points="mapPoints" />
       </div>
-      <div class="relative row cols mb-5">
-        <div class="absolute right-0 -top-8">
-          <OverviewChartTimeToggle
-            :period="chartPeriod"
-            :onPeriodUpdate="updateChartPeriod"
-          />
-        </div>
+      <div class="row cols mb-5">
         <OverviewRevenue :chartPeriod="chartPeriod" />
         <OverviewCoinValue :chartPeriod="chartPeriod" />
       </div>
@@ -47,7 +41,6 @@ import NetworkMap from "@/components/NetworkMap"
 import NewsPromo from "@/components/NewsPromo"
 import OverviewCoinValue from "@/components/OverviewCoinValue"
 import OverviewRevenue from "@/components/OverviewRevenue"
-import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
@@ -66,7 +59,6 @@ export default {
     return {
       blockMetadata: null,
       blocks: [],
-      chartPeriod: 'month',
       transactionMetadata: null,
       transactions: [],
       loading: false,
@@ -84,7 +76,6 @@ export default {
     NewsPromo,
     OverviewCoinValue,
     OverviewRevenue,
-    OverviewChartTimeToggle,
     RecentBlocks,
     RecentTransactions,
     Statistics,
@@ -167,9 +158,6 @@ export default {
         this.fetchTransactions()
         this.fetchStats()
       }, pollInterval)
-    },
-    updateChartPeriod(newPeriod) {
-      this.chartPeriod = newPeriod
     },
     async updateEarningStats() {
       const statsResponse = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/v2/stats/earnings`)

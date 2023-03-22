@@ -1,6 +1,12 @@
 <template>
-  <div class="w-full mb-25">
+  <div class="w-full mb-25 relative">
     <h3>On Chain Revenue</h3>
+    <div class="absolute right-0 -top-8">
+      <OverviewChartTimeToggle
+        :period="chartPeriod"
+        :onPeriodUpdate="updateChartPeriod"
+      />
+    </div>
     <div class="relative max-h-full tile">
       <div class="flex justify-between mb-12 space-x-4">
         <TokenValueConversion
@@ -31,6 +37,7 @@
 </template>
 
 <script>
+import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
 import OverviewTokenChart from '@/components/OverviewTokenChart'
 import TokenValueConversion from '@/components/TokenValueConversion'
 import moment from 'moment'
@@ -39,12 +46,13 @@ import superagent from 'superagent'
 export default {
   name: 'OverviewRevenue',
   components: {
+    OverviewChartTimeToggle,
     OverviewTokenChart,
     TokenValueConversion
   },
-  props: ['chartPeriod'],
   data() {
     return {
+      chartPeriod: 'month',
       averageRevenue: null,
       totalRevenue: null,
       data: null,
@@ -81,6 +89,9 @@ export default {
   methods: {
     tooltipCallback(tooltipItem) {
       return tooltipItem.raw.toLocaleString() + ' XE'
+    },
+    updateChartPeriod(newPeriod) {
+      this.chartPeriod = newPeriod
     },
     async updateRevenue() {
       const response = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/revenue${this.query}`)

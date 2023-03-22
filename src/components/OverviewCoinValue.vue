@@ -1,11 +1,17 @@
 <template>
-  <div class="w-full mb-25">
+  <div class="w-full mb-25 relative">
     <h3>Coin Value</h3>
+    <div class="absolute right-0 -top-8">
+      <OverviewChartTimeToggle
+        :period="chartPeriod"
+        :onPeriodUpdate="updateChartPeriod"
+      />
+    </div>
     <div class="relative max-h-full tile">
       <div class="flex justify-between mb-12 space-x-4">
         <TokenValueConversion
           v-if="coinValue"
-          title="Token Value"
+          title="Current Value"
           :value="coinValue"
           currency="usd"
         />
@@ -30,6 +36,7 @@
 </template>
 
 <script>
+import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
 import OverviewTokenChart from '@/components/OverviewTokenChart'
 import TokenValueConversion from '@/components/TokenValueConversion'
 import moment from 'moment'
@@ -38,12 +45,13 @@ import superagent from 'superagent'
 export default {
   name: 'OverviewCoinValue',
   components: {
+    OverviewChartTimeToggle,
     OverviewTokenChart,
     TokenValueConversion
   },
-  props: ['chartPeriod'],
   data() {
     return {
+      chartPeriod: 'month',
       coinValue: null,
       marketCap: null,
       data: [],
@@ -94,6 +102,9 @@ export default {
         maximumFractionDigits: 8,
         roundingPriority: 'lessPrecision'
       }) + ' ' + currency
+    },
+    updateChartPeriod(newPeriod) {
+      this.chartPeriod = newPeriod
     },
     async updateCoinValue() {
       try {

@@ -17,8 +17,12 @@
           <StatisticsAdditional :stats="stats" class="hidden lg:block" />
         </div>
       </div>
-      <div class="row mb-25">
+      <div class="row mb-30">
         <NetworkMap :points="mapPoints" />
+      </div>
+      <div class="row cols mb-5">
+        <OverviewRevenue />
+        <OverviewCoinValue />
       </div>
       <div class="row cols mt-15">
         <RecentBlocks :loading="loading" :blocks="blocks" />
@@ -35,6 +39,8 @@ import Faucet from "@/components/Faucet"
 import Header from "@/components/Header"
 import NetworkMap from "@/components/NetworkMap"
 import NewsPromo from "@/components/NewsPromo"
+import OverviewCoinValue from "@/components/OverviewCoinValue"
+import OverviewRevenue from "@/components/OverviewRevenue"
 import RecentBlocks from "@/components/RecentBlocks"
 import RecentTransactions from "@/components/RecentTransactions"
 import Statistics from "@/components/Statistics"
@@ -68,6 +74,8 @@ export default {
     Header,
     NetworkMap,
     NewsPromo,
+    OverviewCoinValue,
+    OverviewRevenue,
     RecentBlocks,
     RecentTransactions,
     Statistics,

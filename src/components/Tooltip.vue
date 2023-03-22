@@ -38,22 +38,22 @@ export default {
   }
 
   /* visible states */
-  .tooltip-box .tooltip {
+  .tooltip-box:hover .tooltip {
     @apply opacity-100 visible;
   }
-  .tooltip-box .tooltip.top {
+  .tooltip-box:hover .tooltip.top {
     @apply -translate-y-8;
   }
 
-  .tooltip-box .tooltip.bottom {
+  .tooltip-box:hover .tooltip.bottom {
     @apply translate-y-8;
   }
 
-  .tooltip-box .tooltip.right {
+  .tooltip-box:hover .tooltip.right {
     @apply translate-x-5;
   }
 
-  .tooltip-box .tooltip.left {
+  .tooltip-box:hover .tooltip.left {
     @apply -translate-x-5;
   }
 

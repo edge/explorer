@@ -1,7 +1,7 @@
 <template>
   <div class="tooltip-box">
     <slot />
-    <div class="tooltip" :class="theme === 'dark' ? 'dark' : 'light', position || 'top', wide ? 'wide' : ''">
+    <div class="tooltip" :class="[theme === 'dark' ? 'dark' : 'light', position || 'top', wide ? 'wide' : '']">
       <span class="text">{{ text }}</span>
     </div>
   </div>
@@ -38,22 +38,22 @@ export default {
   }
 
   /* visible states */
-  .tooltip-box:hover .tooltip {
+  .tooltip-box .tooltip {
     @apply opacity-100 visible;
   }
-  .tooltip-box:hover .tooltip.top {
+  .tooltip-box .tooltip.top {
     @apply -translate-y-8;
   }
 
-  .tooltip-box:hover .tooltip.bottom {
+  .tooltip-box .tooltip.bottom {
     @apply translate-y-8;
   }
 
-  .tooltip-box:hover .tooltip.right {
+  .tooltip-box .tooltip.right {
     @apply translate-x-5;
   }
 
-  .tooltip-box:hover .tooltip.left {
+  .tooltip-box .tooltip.left {
     @apply -translate-x-5;
   }
 

@@ -9,14 +9,15 @@
     </div>
     <div class="relative max-h-full tile">
       <div class="flex justify-between mb-12 space-x-4">
-        <TokenValueConversion
+        <OverviewTokenSummary
           v-if="averageRevenue"
           :hideConversion="true"
           title="Average Daily Revenue"
           :value="averageRevenue"
           currency="xe"
+          tooltipText="Average over chart period"
         />
-        <TokenValueConversion
+        <OverviewTokenSummary
           v-if="totalRevenue"
           :hideConversion="true"
           title="Total Revenue"
@@ -39,7 +40,7 @@
 <script>
 import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
 import OverviewTokenChart from '@/components/OverviewTokenChart'
-import TokenValueConversion from '@/components/TokenValueConversion'
+import OverviewTokenSummary from '@/components/OverviewTokenSummary'
 import moment from 'moment'
 import superagent from 'superagent'
 
@@ -48,7 +49,7 @@ export default {
   components: {
     OverviewChartTimeToggle,
     OverviewTokenChart,
-    TokenValueConversion
+    OverviewTokenSummary
   },
   data() {
     return {

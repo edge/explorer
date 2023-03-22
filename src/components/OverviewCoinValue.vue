@@ -9,13 +9,13 @@
     </div>
     <div class="relative max-h-full tile">
       <div class="flex justify-between mb-12 space-x-4">
-        <TokenValueConversion
+        <OverviewTokenSummary
           v-if="coinValue"
           title="Current Value"
           :value="coinValue"
           currency="usd"
         />
-        <TokenValueConversion
+        <OverviewTokenSummary
           v-if="marketCap"
           title="Market Cap"
           :value="marketCap"
@@ -38,7 +38,7 @@
 <script>
 import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
 import OverviewTokenChart from '@/components/OverviewTokenChart'
-import TokenValueConversion from '@/components/TokenValueConversion'
+import OverviewTokenSummary from '@/components/OverviewTokenSummary'
 import moment from 'moment'
 import superagent from 'superagent'
 
@@ -47,7 +47,7 @@ export default {
   components: {
     OverviewChartTimeToggle,
     OverviewTokenChart,
-    TokenValueConversion
+    OverviewTokenSummary
   },
   data() {
     return {

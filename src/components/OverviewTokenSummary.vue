@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col w-full">
-    <span class="text-sm monospace">{{title}}</span>
+    <span class="text-sm monospace">{{title}}
+      <Tooltip v-if="tooltipText" class="icon-grey" position="top" :text="tooltipText">
+        <InformationCircleIcon class="relative top-2 button__icon w-16" />
+      </Tooltip>
+    </span>
     <span class="value">
       <span v-if="currency === 'usd'">$</span>
       {{formattedValue}}
@@ -10,9 +14,16 @@
 </template>
 
 <script>
+import { InformationCircleIcon } from '@heroicons/vue/solid'
+import Tooltip from '@/components/Tooltip'
+
 export default {
-  name: 'TokenValueConversion',
-  props: ['currency', 'hideConversion', 'title', 'value'],
+  name: 'OverviewTokenSummary',
+  props: ['currency', 'hideConversion', 'title', 'tooltipText', 'value'],
+  components: {
+    InformationCircleIcon,
+    Tooltip
+  },
   data() {
     return {
       numFormatter: {

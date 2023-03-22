@@ -21,8 +21,8 @@
         <NetworkMap :points="mapPoints" />
       </div>
       <div class="row cols mb-5">
-        <OverviewRevenue :chartPeriod="chartPeriod" />
-        <OverviewCoinValue :chartPeriod="chartPeriod" />
+        <OverviewRevenue />
+        <OverviewCoinValue />
       </div>
       <div class="row cols mt-15">
         <RecentBlocks :loading="loading" :blocks="blocks" />

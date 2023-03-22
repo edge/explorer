@@ -3,26 +3,26 @@
   <SummaryHero />
   <div class="bg-gray-200 py-35">
     <div class="container">
-      <div class="row cols my-25" v-if="isTestnet">
+      <div class="row cols my-25 mb-38" v-if="isTestnet">
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
         <div class="grid gap-2">
           <Faucet />
           <StatisticsAdditional :stats="stats" class="hidden lg:block" />
         </div>
       </div>
-      <div class="row cols my-25" v-else>
+      <div class="row cols my-25 mb-38" v-else>
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
         <div class="hidden lg:grid gap-2">
           <NewsPromo />
           <StatisticsAdditional :stats="stats" class="hidden lg:block" />
         </div>
       </div>
-      <div class="row mb-30">
-        <NetworkMap :points="mapPoints" />
-      </div>
       <div class="row cols mb-5">
         <OverviewRevenue />
         <OverviewCoinValue />
+      </div>
+      <div class="row mb-30">
+        <NetworkMap :points="mapPoints" />
       </div>
       <div class="row cols mt-15">
         <RecentBlocks :loading="loading" :blocks="blocks" />
@@ -175,7 +175,7 @@ export default {
 </script>
 <style scoped>
   .cols {
-    @apply grid items-start grid-cols-1 gap-6;
+    @apply grid items-start grid-cols-1 gap-12;
     @apply lg:grid-cols-2;
   }
 </style>

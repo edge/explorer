@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mb-25">
+  <div class="w-full">
     <h3>Recent Transactions</h3>
 
     <table class="w-full">
@@ -107,11 +107,11 @@ td::before {
 }
 
 td:first-child {
-  @apply rounded-l-4 pt-8;
+  @apply rounded-t-4 pt-8;
 }
 
 td:last-child {
-  @apply rounded-r-4 pb-8 border-b-4 border-gray-200;
+  @apply rounded-b-4 pb-8 mb-4;
 }
 
 td a {
@@ -148,7 +148,7 @@ td .arrow-icon {
   }
 
   th:first-child {
-    @apply pl-20 pt-13;
+    @apply pl-20 pt-13 rounded-l-4;
   }
 
   td {
@@ -164,7 +164,7 @@ td .arrow-icon {
   }
 
   td:last-child {
-    @apply pr-30 pb-13 border-b-2;
+    @apply pr-30 pb-13 rounded-r-4;
   }
 
   td:before {

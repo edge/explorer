@@ -1,14 +1,15 @@
 <template>
   <div class="flex flex-col w-full">
-    <span class="text-sm monospace">{{title}}
-      <Tooltip v-if="tooltipText" class="icon-grey" position="top" :text="tooltipText">
-        <InformationCircleIcon class="relative top-2 button__icon w-16" />
-      </Tooltip>
+    <span class="text-sm monospace">
+      {{title}}
+      <span class="tooltip-wrapper">
+        <Tooltip v-if="tooltipText" class="icon-grey" position="top" :text="tooltipText">
+          <InformationCircleIcon class="relative right-3 top-3 button__icon w-16" />
+        </Tooltip>
+      </span>
     </span>
     <span class="value">
-      <span v-if="currency === 'usd'">$</span>
-      {{formattedValue}}
-      <span class="currency-unit" v-if="currency === 'xe'"> $XE</span>
+      <span v-if="currency === 'usd'">$</span>{{formattedValue}}<span class="currency-unit" v-if="currency === 'xe'"> XE</span>
     </span>
   </div>
 </template>
@@ -56,5 +57,11 @@ export default {
 
 .hide-conversion {
   height: 27.5px;
+}
+
+@media screen and (max-width: 450px) {
+  .tooltip-wrapper {
+    @apply hidden;
+  }
 }
 </style>

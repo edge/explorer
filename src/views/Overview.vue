@@ -3,28 +3,28 @@
   <SummaryHero />
   <div class="bg-gray-200">
     <div class="container">
-      <div class="row cols my-38" v-if="isTestnet">
+      <div class="row cols" v-if="isTestnet">
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
         <div class="grid gap-2">
           <Faucet />
           <StatisticsAdditional :stats="stats" class="hidden lg:block" />
         </div>
       </div>
-      <div class="row cols my-38" v-else>
+      <div class="row cols" v-else>
         <Statistics :blockMetadata="blockMetadata" :stats="stats" :transactionMetadata="transactionMetadata" />
         <div class="hidden lg:grid gap-2">
           <NewsPromo />
           <StatisticsAdditional :stats="stats" class="hidden lg:block" />
         </div>
       </div>
-      <div class="row cols mb-5">
+      <div class="row cols">
         <OverviewRevenue />
         <OverviewCoinValue />
       </div>
-      <div class="row mb-30">
+      <div class="row">
         <NetworkMap :points="mapPoints" />
       </div>
-      <div class="row cols mt-15">
+      <div class="row cols">
         <RecentBlocks :loading="loading" :blocks="blocks" />
         <RecentTransactions :loading="loading" :transactions="transactions" />
       </div>
@@ -175,7 +175,14 @@ export default {
 </script>
 <style scoped>
   .cols {
-    @apply grid items-start grid-cols-1 gap-12;
-    @apply lg:grid-cols-2;
+    @apply grid items-start grid-cols-1 gap-38;
+    @apply lg:grid-cols-2 lg:gap-12;
+  }
+
+  .row {
+    @apply my-38;
+  }
+  .row:last-child {
+    @apply pb-38;
   }
 </style>

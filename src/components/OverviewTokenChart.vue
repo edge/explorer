@@ -7,7 +7,7 @@
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartID"
-    :height="isSmView ? 400 : 200"
+    :height="isSmView ? 250 : 200"
   />
 </template>
 

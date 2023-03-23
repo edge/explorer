@@ -1,14 +1,14 @@
 <template>
   <div class="w-full mb-25 relative">
     <h3>Coin Value</h3>
-    <div class="absolute right-0 -top-8">
+    <div class="time-toggle">
       <OverviewChartTimeToggle
         :period="chartPeriod"
         :onPeriodUpdate="updateChartPeriod"
       />
     </div>
     <div class="relative max-h-full tile">
-      <div class="flex justify-between mb-12 space-x-4">
+      <div class="summary flex justify-between mb-12 gap-4">
         <OverviewTokenSummary
           v-if="coinValue"
           title="Current Value"
@@ -149,5 +149,19 @@ export default {
 <style>
 .tile {
   @apply flex-1 p-12 md:p-24 text-sm text-gray-300 bg-white rounded;
+}
+.time-toggle {
+  @apply absolute right-0 -top-8;
+}
+
+@media screen and (max-width: 350px) {
+  .time-toggle {
+    @apply relative w-max;
+    right: unset;
+    top: unset;
+  }
+  .summary {
+    @apply flex-col;
+  }
 }
 </style>

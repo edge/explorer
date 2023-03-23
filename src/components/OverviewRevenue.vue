@@ -132,9 +132,7 @@ export default {
 
 @media screen and (max-width: 350px) {
   .time-toggle {
-    @apply relative w-max;
-    right: unset;
-    top: unset;
+    @apply hidden;
   }
   .summary {
     @apply flex-col;

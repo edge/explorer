@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mb-25 relative">
+  <div class="w-full relative">
     <h3>Coin Value</h3>
     <div class="time-toggle">
       <OverviewChartTimeToggle
@@ -70,8 +70,8 @@ export default {
           yAxisID: 'y'
         },
         {
-          backgroundColor: 'rgb(255,138,138)',
-          borderColor: 'rgb(220, 60, 60)',
+          backgroundColor: 'rgb(137,136, 172)',
+          borderColor: 'rgb(97, 96, 144)',
           data: this.data.map(r => r.ethPerXE),
           label: 'Coin Value (ETH)',
           yAxisID: 'y1'
@@ -160,6 +160,7 @@ export default {
   }
   .summary {
     @apply flex-col;
+    color: rgb(3, 52, 76)
   }
 }
 </style>

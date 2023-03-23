@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mb-25 relative">
+  <div class="w-full relative">
     <h3>On Chain Revenue</h3>
     <div class="time-toggle">
       <OverviewChartTimeToggle

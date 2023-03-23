@@ -2,9 +2,11 @@
   <div class="flex flex-col w-full">
     <span class="text-sm monospace">
       {{title}}
-      <Tooltip v-if="tooltipText" class="tooltip icon-grey" position="top" :text="tooltipText">
-        <InformationCircleIcon class="relative right-3 top-3 button__icon w-16" />
-      </Tooltip>
+      <span class="tooltip-wrapper">
+        <Tooltip v-if="tooltipText" class="icon-grey" position="top" :text="tooltipText">
+          <InformationCircleIcon class="relative right-3 top-3 button__icon w-16" />
+        </Tooltip>
+      </span>
     </span>
     <span class="value">
       <span v-if="currency === 'usd'">$</span>{{formattedValue}}<span class="currency-unit" v-if="currency === 'xe'"> XE</span>
@@ -58,7 +60,7 @@ export default {
 }
 
 @media screen and (max-width: 450px) {
-  .tooltip {
+  .tooltip-wrapper {
     @apply hidden;
   }
 }

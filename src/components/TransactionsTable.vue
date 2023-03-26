@@ -1,7 +1,7 @@
 <template>
   <div class="transaction-table">
     <table>
-      <thead v-if="!wallet" class="hidden lg:table-header-group">
+      <thead v-if="!wallet" class="sticky top-0 hidden lg:table-header-group">
         <tr v-if="sortable">
           <TableHeader width="165" header="Date" :sortQuery="sortQuery"
             sortParam="timestamp" :onSortingUpdate="updateSorting"
@@ -37,7 +37,7 @@
           <th class="amount-col" width="25%">Amount XE</th>
         </tr>
       </thead>
-      <thead v-else class="hidden lg:table-header-group">
+      <thead v-else class="sticky top-0 hidden lg:table-header-group">
         <tr v-if="sortable">
            <TableHeader width="165" header="Date" :sortQuery="sortQuery"
             sortParam="timestamp" :onSortingUpdate="updateSorting"

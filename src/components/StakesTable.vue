@@ -1,6 +1,6 @@
 <template>
   <table>
-    <thead class="hidden lg:table-header-group">
+    <thead class="sticky top-0 hidden lg:table-header-group">
       <tr v-if="sortable">
         <TableHeader width="12%" header="ID" :sortQuery="sortQuery"
           sortParam="id" :onSortingUpdate="updateSorting" :sortAscFirst="true"

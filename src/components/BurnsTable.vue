@@ -1,7 +1,7 @@
 <template>
   <div class="transaction-table">
     <table>
-      <thead class="hidden lg:table-header-group">
+      <thead class="sticky top-0 hidden lg:table-header-group">
         <tr v-if="sortable">
            <TableHeader width="165" header="Date" :sortQuery="sortQuery"
             sortParam="timestamp" :onSortingUpdate="updateSorting"

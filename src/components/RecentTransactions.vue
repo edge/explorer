@@ -3,7 +3,7 @@
     <h3>Recent Transactions</h3>
 
     <table class="w-full">
-      <thead class="hidden lg:table-header-group">
+      <thead class="sticky top-0 z-10 hidden lg:table-header-group">
         <tr>
           <th width="20%">Hash</th>
           <th width="25%">From</th>

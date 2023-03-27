@@ -14,10 +14,10 @@
       </span>
     </td>
 
-    <td data-title="Wallet:" :title="item.tx.sender">
+    <td data-title="Wallet:" :title="item.tx.recipient">
       <router-link :to="walletRoute">
         <span class="monospace lg:inline-block">
-          {{ item.tx.sender }}
+          {{ item.tx.recipient }}
         </span>
       </router-link>
     </td>

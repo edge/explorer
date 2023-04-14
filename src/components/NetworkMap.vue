@@ -3,7 +3,7 @@
     <h3>Network Map</h3>
     <div class="map-container">
       <div class="wrapper">
-        <img ref="mapImage" src="/assets/world-robinson.svg" alt="">
+        <img ref="mapImage" src="/world-robinson.svg" alt="">
         <svg ref="mapMarkers" id="mapMarkers"></svg>
       </div>
       <!-- node type toggles -->

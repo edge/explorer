@@ -53,7 +53,7 @@
 <script>
 import moment from 'moment'
 import { ArrowRightIcon } from "@heroicons/vue/outline"
-const { formatXe } = require('@edge/wallet-utils')
+import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: 'RecentTransactions',

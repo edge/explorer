@@ -12,7 +12,7 @@
 import {
   SearchIcon
 } from '@heroicons/vue/solid'
-import Search from '@/components/Search'
+import Search from '@/components/Search.vue'
 
 export default {
   name: "SummaryHero",
@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'Search the Testnet (XE) Blockchain' : 'Search the Edge (XE) Blockchain'
+      title: import.meta.env.VITE_IS_TESTNET === 'true' ? 'Search the Testnet (XE) Blockchain' : 'Search the Edge (XE) Blockchain'
     }
   }
 }

@@ -64,8 +64,8 @@
 <script>
 /*global process*/
 import * as index from '@edge/index-utils'
-import NodesTableItem from '@/components/NodesTableItem'
-import TableHeader from '@/components/TableHeader'
+import NodesTableItem from '@/components/NodesTableItem.vue'
+import TableHeader from '@/components/TableHeader.vue'
 
 const nodesRefreshInterval = 60 * 1000
 
@@ -122,7 +122,7 @@ export default {
       if (this.parentNode) options.parent = this.parentNode
       if (this.hideOfflineNodes) options.hideOffline = 1
       const sessionsData = await index.session.sessions(
-        process.env.VUE_APP_INDEX_API_URL,
+        import.meta.env.VITE_INDEX_API_URL,
         undefined,
         options
       )

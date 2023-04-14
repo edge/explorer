@@ -3,14 +3,14 @@
 // that can be found in the LICENSE.md file. All rights reserved.
 
 import { createRouter, createWebHistory } from 'vue-router'
-import Blocks from '@/views/Blocks'
-import Burns from '@/views/Burns'
-import Nodes from '@/views/Nodes'
-import NotFound from '@/views/404'
-import Overview from '@/views/Overview'
-import Stakes from '@/views/Stakes'
-import Transactions from '@/views/Transactions'
-import Wallets from '@/views/Wallets'
+import Blocks from '@/views/Blocks.vue'
+import Burns from '@/views/Burns.vue'
+import Nodes from '@/views/Nodes.vue'
+import NotFound from '@/views/404.vue'
+import Overview from '@/views/Overview.vue'
+import Stakes from '@/views/Stakes.vue'
+import Transactions from '@/views/Transactions.vue'
+import Wallets from '@/views/Wallets.vue'
 
 const routes = [
   {
@@ -82,7 +82,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 

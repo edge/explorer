@@ -17,7 +17,7 @@
 </template>
 
 <script>
-const { formatXe } = require('@edge/wallet-utils')
+import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: "BlockSummary",

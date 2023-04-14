@@ -16,7 +16,7 @@ const html = fs.readFileSync(`${www}/index.html`, 'utf8')
 
 // Middleware
 app.use(morgan('dev'))
-app.use('/assets', Express.static(`${www}/assets`))
+app.use('/', Express.static(www))
 
 app.use(createProxyMiddleware(config.proxy.indexApiBasePath, {
   target: config.proxy.indexBaseUrl,

@@ -2,12 +2,9 @@
 // Use of this source code is governed by a GNU GPL-style license
 // that can be found in the LICENSE.md file. All rights reserved.
 
-const qs = require('querystring')
-const {
-  xeStringFromMicroXe
-} = require('@edge/wallet-utils')
+import { xeStringFromMicroXe } from '@edge/wallet-utils'
 
-const INDEX_API_URL = process.env.VUE_APP_INDEX_API_URL
+const INDEX_API_URL = import.meta.env.VITE_INDEX_API_URL
 
 const fetchBlocks = async ({ blockId, options = {} }) => {
   if (!options.page) {
@@ -45,7 +42,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
 
         // Add average XE.
         block.average = block.txCount ? parseInt(block.total / block.txCount) : 0
-        
+
         return {
           blocks: [block],
           metadata: {}
@@ -146,7 +143,8 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
   if (!options.page) options.page = 1
   if (!options.limit) options.limit = 20
 
-  let txUrl = `${INDEX_API_URL}/transactions/${address}?${qs.encode(options)}`
+  const qs = new URLSearchParams(options)
+  let txUrl = `${INDEX_API_URL}/transactions/${address}?${qs.toString()}`
 
   if (hash) {
     txUrl = `${INDEX_API_URL}/transaction/${hash}`

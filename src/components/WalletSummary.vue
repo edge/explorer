@@ -7,7 +7,7 @@
 </template>
 
 <script>
-const { xeStringFromMicroXe } = require('@edge/wallet-utils')
+import { xeStringFromMicroXe } from '@edge/wallet-utils'
 
 export default {
   name: "WalletSummary",

@@ -27,8 +27,8 @@
     components: { AnnotationIcon, CreditCardIcon },
     data() {
       return {
-        governanceUrl: process.env.VUE_APP_GOVERNANCE_URL,
-        walletUrl: process.env.VUE_APP_IS_TESTNET === 'true' ? 'https://wallet.test.network' : 'https://wallet.xe.network'
+        governanceUrl: import.meta.env.VITE_GOVERNANCE_URL,
+        walletUrl: import.meta.env.VITE_IS_TESTNET === 'true' ? 'https://wallet.test.network' : 'https://wallet.xe.network'
       }
     }
   }

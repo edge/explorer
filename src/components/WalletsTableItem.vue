@@ -32,7 +32,7 @@
 </template>
 
 <script>
-const { xeStringFromMicroXe } = require('@edge/wallet-utils')
+import { xeStringFromMicroXe } from '@edge/wallet-utils'
 import { BadgeCheckIcon } from '@heroicons/vue/solid'
 
 export default {

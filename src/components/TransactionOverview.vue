@@ -148,8 +148,8 @@
 <script>
 import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
-import Tooltip from '@/components/Tooltip'
-const { formatXe } = require('@edge/wallet-utils')
+import Tooltip from '@/components/Tooltip.vue'
+import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: "TransactionOverview",
@@ -184,7 +184,7 @@ export default {
     return {
       secondsPending: 0,
       secondsPendingInterval: null,
-      etherscanUrl: process.env.VUE_APP_IS_TESTNET === 'true' ? 'https://rinkeby.etherscan.io' : 'https://etherscan.io'
+      etherscanUrl: import.meta.env.VITE_IS_TESTNET === 'true' ? 'https://rinkeby.etherscan.io' : 'https://etherscan.io'
     }
   },
   computed: {
@@ -195,7 +195,7 @@ export default {
       return this.transaction.pending
     },
     proposalLink() {
-      return `${process.env.VUE_APP_GOVERNANCE_URL}/proposal/${this.transaction.proposal}`
+      return `${import.meta.env.VITE_GOVERNANCE_URL}/proposal/${this.transaction.proposal}`
     }
   },
   mounted() {

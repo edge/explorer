@@ -39,9 +39,9 @@
 </template>
 
 <script>
-import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
-import OverviewTokenChart from '@/components/OverviewTokenChart'
-import OverviewTokenSummary from '@/components/OverviewTokenSummary'
+import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle.vue'
+import OverviewTokenChart from '@/components/OverviewTokenChart.vue'
+import OverviewTokenSummary from '@/components/OverviewTokenSummary.vue'
 import moment from 'moment'
 import superagent from 'superagent'
 
@@ -96,7 +96,7 @@ export default {
       this.chartPeriod = newPeriod
     },
     async updateRevenue() {
-      const response = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/revenue${this.query}`)
+      const response = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/revenue${this.query}`)
       const { results } = response.body
       this.data = results.reverse()
       if (this.chartPeriod === 'week') this.timeSeriesFormat = 'ddd'

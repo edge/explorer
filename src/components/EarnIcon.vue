@@ -1,5 +1,5 @@
 <template>
-  <div><img src="/assets/EarnedIcon.png" alt="earn icon"></div>
+  <div><img src="/EarnedIcon.png" alt="earn icon"></div>
 </template>
 
 <script>

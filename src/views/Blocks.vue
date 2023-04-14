@@ -16,7 +16,7 @@
         </div>
 
         <h3 v-if="metadata.totalCount > 0">Block Transactions</h3>
-        <TransactionsTable 
+        <TransactionsTable
           :limit="limit"
           :receiveMetadata="receiveMetaData"
           :page="currentPage"
@@ -66,14 +66,14 @@
 </template>
 
 <script>
-import BlocksTable from "@/components/BlocksTable"
-import BlockOverview from "@/components/BlockOverview"
-import BlockSummary from "@/components/BlockSummary"
-import Header from "@/components/Header"
-import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination"
-import RawData from "@/components/RawData"
-import TransactionsTable from "@/components/TransactionsTable"
+import BlocksTable from "@/components/BlocksTable.vue"
+import BlockOverview from "@/components/BlockOverview.vue"
+import BlockSummary from "@/components/BlockSummary.vue"
+import Header from "@/components/Header.vue"
+import HeroPanel from "@/components/HeroPanel.vue"
+import Pagination from "@/components/Pagination.vue"
+import RawData from "@/components/RawData.vue"
+import TransactionsTable from "@/components/TransactionsTable.vue"
 import { fetchBlocks } from '../utils/api'
 
 export default {

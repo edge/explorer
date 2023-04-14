@@ -16,7 +16,7 @@
 
 <script>
 import { InformationCircleIcon } from '@heroicons/vue/solid'
-import Tooltip from '@/components/Tooltip'
+import Tooltip from '@/components/Tooltip.vue'
 
 export default {
   name: 'OverviewTokenSummary',

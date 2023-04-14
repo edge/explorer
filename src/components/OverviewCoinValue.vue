@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle'
-import OverviewTokenChart from '@/components/OverviewTokenChart'
-import OverviewTokenSummary from '@/components/OverviewTokenSummary'
+import OverviewChartTimeToggle from '@/components/OverviewChartTimeToggle.vue'
+import OverviewTokenChart from '@/components/OverviewTokenChart.vue'
+import OverviewTokenSummary from '@/components/OverviewTokenSummary.vue'
 import moment from 'moment'
 import superagent from 'superagent'
 
@@ -104,7 +104,7 @@ export default {
     },
     async updateCoinValue() {
       try {
-        const response = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/token/daily${this.query}`)
+        const response = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/token/daily${this.query}`)
         this.coinValue = response.body[0].usdPerXE.toLocaleString(undefined, {
           maximumFractionDigits: 6,
           minimumFractionDigits: 6
@@ -118,7 +118,7 @@ export default {
     },
     async updateMarketCap() {
       try {
-        const response = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/supply/circulating`)
+        const response = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/supply/circulating`)
         this.marketCap = response.body['Circulating Supply'] * this.data[this.data.length - 1].usdPerXE
       }
       catch (error) {

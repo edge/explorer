@@ -3,7 +3,7 @@
     <h3>Network Map</h3>
     <div class="map-container">
       <div class="wrapper">
-        <img ref="mapImage" src="/assets/mercator-map.png" alt="">
+        <img ref="mapImage" src="/mercator-map.png" alt="">
         <canvas ref="mapCanvas"></canvas>
       </div>
     </div>

@@ -85,7 +85,7 @@ export default {
   },
   data() {
     return {
-      title: process.env.VUE_APP_IS_TESTNET === 'true' ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
+      title: import.meta.env.VITE_IS_TESTNET === 'true' ? 'TESTNET STATISTICS' : 'MAINNET STATISTICS'
     }
   },
   computed: {

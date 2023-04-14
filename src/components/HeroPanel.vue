@@ -14,7 +14,7 @@
           </div>
           <div v-else-if="address">
             <span class="text-green">Address: </span>
-           {{ address }} 
+           {{ address }}
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
 
 <script>
 
-import Search from '@/components/Search'
+import Search from '@/components/Search.vue'
 
 export default {
   name: "HeroPanel",
@@ -46,7 +46,7 @@ export default {
     determineBlockIdentifier() {
       const blockHeightRegex = /^[0-9]+$/
       const txHashRegex = /[0-9a-f]{64}/
-      
+
       if (this.blockId) {
         if (txHashRegex.test(this.blockId)) {
           this.thisHash = this.blockId

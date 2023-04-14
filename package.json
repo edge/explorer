@@ -13,12 +13,9 @@
     "Jay Whitmore <jay@27.works>"
   ],
   "scripts": {
-    "build": "vue-cli-service build",
-    "dev": "vue-cli-service --port 8000 serve",
-    "start": "node server/index.js",
-    "testnet": "VUE_APP_IS_TESTNET=true VUE_APP_BLOCKCHAIN_API_URL=https://xe1.test.network VUE_APP_INDEX_API_URL=https://index.test.network VUE_APP_GOVERNANCE_URL=https://governance.test.network npm run dev",
-    "mainnet": "VUE_APP_BLOCKCHAIN_API_URL=https://api.xe.network VUE_APP_INDEX_API_URL=https://index.xe.network VUE_APP_GOVERNANCE_URL=https://governance.edge.network npm run dev",
-    "local": "VUE_APP_BLOCKCHAIN_API_URL=https://api.xe.network VUE_APP_INDEX_API_URL=http://localhost:8720 VUE_APP_GOVERNANCE_URL=https://governance.edge.network npm run dev"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "main": "server/index.js",
   "dependencies": {
@@ -27,13 +24,13 @@
     "@heroicons/vue": "^1.0.1",
     "@metamask/detect-provider": "^1.2.0",
     "@metamask/onboarding": "^1.0.0",
+    "@vitejs/plugin-vue": "^4.1.0",
     "@vuelidate/core": "^2.0.0-alpha.16",
     "@vuelidate/validators": "^2.0.0-alpha.13",
     "autonumeric": "^4.6.0",
     "autoprefixer": "^9.8.6",
     "chart.js": "^3.7.1",
     "click-outside-vue3": "^4.0.1",
-    "core-js": "^3.6.5",
     "detect-browser": "^5.2.0",
     "dotenv": "^8.2.0",
     "elliptic": "^6.5.4",
@@ -47,15 +44,12 @@
     "ramda": "^0.27.1",
     "superagent": "^6.1.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0",
+    "vite": "^4.2.1",
     "vue": "^3.0.11",
     "vue-chartjs": "^4.0.5",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-service": "^4.5.13",
-    "@vue/compiler-sfc": "^3.0.0",
     "lodash": "^4.17.21",
     "nodemon": "^2.0.7"
   },

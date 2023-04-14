@@ -80,8 +80,8 @@
 <script>
 import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
-import Tooltip from '@/components/Tooltip'
-const { formatXe } = require('@edge/wallet-utils')
+import Tooltip from '@/components/Tooltip.vue'
+import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: "BurnOverview",

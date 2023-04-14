@@ -46,13 +46,13 @@
 </template>
 
 <script>
-import Header from "@/components/Header"
-import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination";
-import RawData from "@/components/RawData"
-import TransactionOverview from "@/components/TransactionOverview"
-import TransactionSummary from "@/components/TransactionSummary"
-import TransactionsTable from "@/components/TransactionsTable"
+import Header from "@/components/Header.vue"
+import HeroPanel from "@/components/HeroPanel.vue"
+import Pagination from "@/components/Pagination.vue";
+import RawData from "@/components/RawData.vue"
+import TransactionOverview from "@/components/TransactionOverview.vue"
+import TransactionSummary from "@/components/TransactionSummary.vue"
+import TransactionsTable from "@/components/TransactionsTable.vue"
 import { fetchTransactions, fetchExchangeTransaction } from '../utils/api'
 
 const numRegEx = /^[-+]?\d*$/

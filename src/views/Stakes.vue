@@ -59,14 +59,14 @@
 </template>
 
 <script>
-import Header from "@/components/Header"
-import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination";
-import RawData from "@/components/RawData"
-import StakeOverview from "@/components/StakeOverview"
-import StakeSummary from "@/components/StakeSummary"
-import StakesTable from "@/components/StakesTable"
-import TransactionsTable from "@/components/TransactionsTable"
+import Header from "@/components/Header.vue"
+import HeroPanel from "@/components/HeroPanel.vue"
+import Pagination from "@/components/Pagination.vue";
+import RawData from "@/components/RawData.vue"
+import StakeOverview from "@/components/StakeOverview.vue"
+import StakeSummary from "@/components/StakeSummary.vue"
+import StakesTable from "@/components/StakesTable.vue"
+import TransactionsTable from "@/components/TransactionsTable.vue"
 
 import { fetchStake, fetchStakeHistory } from '../utils/api'
 import { xeStringFromMicroXe } from '@edge/wallet-utils'
@@ -105,7 +105,7 @@ export default {
     TransactionsTable
   },
   mounted() {
-    if (this.$route.params.stakeId) { 
+    if (this.$route.params.stakeId) {
       this.fetchData()
     }
   },

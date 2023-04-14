@@ -54,7 +54,7 @@
 <script>
 import { ClockIcon } from "@heroicons/vue/outline"
 import moment from 'moment'
-const { formatXe } = require('@edge/wallet-utils')
+import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: 'RecentBlocks',

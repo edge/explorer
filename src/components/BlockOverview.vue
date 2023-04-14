@@ -97,10 +97,10 @@
 </template>
 
 <script>
-const { formatXe } = require('@edge/wallet-utils')
+import { formatXe } from '@edge/wallet-utils'
 import { ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
-import Tooltip from '@/components/Tooltip'
+import Tooltip from '@/components/Tooltip.vue'
 
 export default {
   name: "BlockOverview",

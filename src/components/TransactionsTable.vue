@@ -93,8 +93,8 @@
 <script>
 /*global process*/
 import * as index from '@edge/index-utils'
-import TableHeader from '@/components/TableHeader'
-import TransactionsTableItem from '@/components/TransactionsTableItem'
+import TableHeader from '@/components/TableHeader.vue'
+import TransactionsTableItem from '@/components/TransactionsTableItem.vue'
 import { fetchBlocks, fetchStakeHistory } from '@/utils/api.js'
 
 const txsRefreshInterval = 5 * 1000
@@ -171,7 +171,7 @@ export default {
         // the sort query sent to index needs to include "-created", but this is hidden from user in browser url
         const sortQuery = this.sortQuery ? `${this.sortQuery},-timestamp` : '-timestamp'
         const transactions = await index.tx.transactions(
-          process.env.VUE_APP_INDEX_API_URL,
+          import.meta.env.VITE_INDEX_API_URL,
           this.wallet,
           {
             limit: this.limit,

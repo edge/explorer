@@ -112,16 +112,16 @@
 import * as index from '@edge/index-utils'
 import moment from 'moment'
 import { fetchSessionStats } from '../utils/api'
-import Header from "@/components/Header"
-import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination"
-import NodeChartAvailability from "@/components/NodeChartAvailability"
-import NodeChartDataInOut from "@/components/NodeChartDataInOut"
-import NodeChartRequests from "@/components/NodeChartRequests"
-import NodeChartTimeToggle from "@/components/NodeChartTimeToggle"
-import NodeOverview from "@/components/NodeOverview"
-import NodeSummary from "@/components/NodeSummary"
-import NodesTable from "@/components/NodesTable"
+import Header from "@/components/Header.vue"
+import HeroPanel from "@/components/HeroPanel.vue"
+import Pagination from "@/components/Pagination.vue"
+import NodeChartAvailability from "@/components/NodeChartAvailability.vue"
+import NodeChartDataInOut from "@/components/NodeChartDataInOut.vue"
+import NodeChartRequests from "@/components/NodeChartRequests.vue"
+import NodeChartTimeToggle from "@/components/NodeChartTimeToggle.vue"
+import NodeOverview from "@/components/NodeOverview.vue"
+import NodeSummary from "@/components/NodeSummary.vue"
+import NodesTable from "@/components/NodesTable.vue"
 
 const nodeRefreshInterval = 5 * 1000
 const numRegEx = /^[-+]?\d*$/
@@ -278,22 +278,22 @@ export default {
       this.loading = true
       try {
         const session = await index.session.session(
-          process.env.VUE_APP_INDEX_API_URL,
+          import.meta.env.VITE_INDEX_API_URL,
           this.address
         )
         // add gateway (if host) and stargate (if host/gateway) data to the node data
         if (session.node.type === 'host') {
-          const gateway = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.gateway)
+          const gateway = await index.session.session(import.meta.env.VITE_INDEX_API_URL, session.node.gateway)
           session.gateway = gateway
-          const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, gateway.node.stargate)
+          const stargate = await index.session.session(import.meta.env.VITE_INDEX_API_URL, gateway.node.stargate)
           session.stargate = stargate
         }
         else if (session.node.type === 'gateway') {
-          const stargate = await index.session.session(process.env.VUE_APP_INDEX_API_URL, session.node.stargate)
+          const stargate = await index.session.session(import.meta.env.VITE_INDEX_API_URL, session.node.stargate)
           session.stargate = stargate
         }
         // add wallet address to node data
-        const stake = await index.stake.stake(process.env.VUE_APP_INDEX_API_URL, session.node.stake)
+        const stake = await index.stake.stake(import.meta.env.VITE_INDEX_API_URL, session.node.stake)
         session.node.wallet = stake.wallet
 
         this.session = session

@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import OverviewItem from "@/components/OverviewItem"
-import Pagination from "@/components/Pagination"
-import TransactionsTable from "@/components/TransactionsTable"
+import OverviewItem from "@/components/OverviewItem.vue"
+import Pagination from "@/components/Pagination.vue"
+import TransactionsTable from "@/components/TransactionsTable.vue"
 
 export default {
   name: "Overviews",

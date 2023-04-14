@@ -81,15 +81,15 @@
 </template>
 
 <script>
-import Header from "@/components/Header"
-import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination";
-import RawData from "@/components/RawData"
-import StakesTable from "@/components/StakesTable"
-import TransactionsTable from "@/components/TransactionsTable"
-import WalletOverview from "@/components/WalletOverview"
-import WalletSummary from "@/components/WalletSummary"
-import WalletsTable from "@/components/WalletsTable"
+import Header from "@/components/Header.vue"
+import HeroPanel from "@/components/HeroPanel.vue"
+import Pagination from "@/components/Pagination.vue";
+import RawData from "@/components/RawData.vue"
+import StakesTable from "@/components/StakesTable.vue"
+import TransactionsTable from "@/components/TransactionsTable.vue"
+import WalletOverview from "@/components/WalletOverview.vue"
+import WalletSummary from "@/components/WalletSummary.vue"
+import WalletsTable from "@/components/WalletsTable.vue"
 import { checksumAddressIsValid } from '@edge/wallet-utils'
 import { fetchWallet } from '../utils/api'
 

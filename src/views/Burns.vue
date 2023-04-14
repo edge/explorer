@@ -47,13 +47,13 @@
 <script>
 /*global process*/
 import * as index from '@edge/index-utils'
-import Header from "@/components/Header"
-import HeroPanel from "@/components/HeroPanel"
-import Pagination from "@/components/Pagination";
-import RawData from "@/components/RawData"
-import BurnOverview from "@/components/BurnOverview"
-import BurnSummary from "@/components/BurnSummary"
-import BurnsTable from "@/components/BurnsTable"
+import Header from "@/components/Header.vue"
+import HeroPanel from "@/components/HeroPanel.vue"
+import Pagination from "@/components/Pagination.vue";
+import RawData from "@/components/RawData.vue"
+import BurnOverview from "@/components/BurnOverview.vue"
+import BurnSummary from "@/components/BurnSummary.vue"
+import BurnsTable from "@/components/BurnsTable.vue"
 import { fetchTransactions, fetchExchangeTransaction } from '../utils/api'
 
 const numRegEx = /^[-+]?\d*$/
@@ -118,7 +118,7 @@ export default {
 
       if (this.hash) {
         const burn = await index.burn.burn(
-        process.env.VUE_APP_INDEX_API_URL,
+        import.meta.env.VITE_INDEX_API_URL,
         this.hash
       )
 

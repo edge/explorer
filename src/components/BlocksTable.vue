@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import BlocksTableItem from '@/components/BlocksTableItem'
-import TableHeader from '@/components/TableHeader'
+import BlocksTableItem from '@/components/BlocksTableItem.vue'
+import TableHeader from '@/components/TableHeader.vue'
 import { fetchBlocks } from '@/utils/api.js'
 
 const blocksRefreshInterval = 5 * 1000

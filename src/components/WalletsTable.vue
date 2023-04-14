@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import TableHeader from '@/components/TableHeader'
-import WalletsTableItem from "@/components/WalletsTableItem";
+import TableHeader from '@/components/TableHeader.vue'
+import WalletsTableItem from "@/components/WalletsTableItem.vue";
 import { fetchWallets } from '@/utils/api.js'
 
 const walletsRefreshInterval = 5 * 1000

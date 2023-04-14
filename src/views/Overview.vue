@@ -35,17 +35,17 @@
 <script>
 /*global process*/
 import * as index from '@edge/index-utils'
-import Faucet from "@/components/Faucet"
-import Header from "@/components/Header"
-import NetworkMap from "@/components/NetworkMap"
-import NewsPromo from "@/components/NewsPromo"
-import OverviewCoinValue from "@/components/OverviewCoinValue"
-import OverviewRevenue from "@/components/OverviewRevenue"
-import RecentBlocks from "@/components/RecentBlocks"
-import RecentTransactions from "@/components/RecentTransactions"
-import Statistics from "@/components/Statistics"
-import StatisticsAdditional from "@/components/StatisticsAdditional"
-import SummaryHero from "@/components/SummaryHero"
+import Faucet from "@/components/Faucet.vue"
+import Header from "@/components/Header.vue"
+import NetworkMap from "@/components/NetworkMap.vue"
+import NewsPromo from "@/components/NewsPromo.vue"
+import OverviewCoinValue from "@/components/OverviewCoinValue.vue"
+import OverviewRevenue from "@/components/OverviewRevenue.vue"
+import RecentBlocks from "@/components/RecentBlocks.vue"
+import RecentTransactions from "@/components/RecentTransactions.vue"
+import Statistics from "@/components/Statistics.vue"
+import StatisticsAdditional from "@/components/StatisticsAdditional.vue"
+import SummaryHero from "@/components/SummaryHero.vue"
 import superagent from 'superagent'
 import { fetchBlocks, fetchStakeStats, fetchTransactions } from '../utils/api'
 
@@ -66,7 +66,7 @@ export default {
       iMapPoints: null,
       polling: null,
       stats: {},
-      isTestnet: process.env.VUE_APP_IS_TESTNET === 'true'
+      isTestnet: import.meta.env.VITE_IS_TESTNET === 'true'
     }
   },
   components: {
@@ -126,7 +126,7 @@ export default {
     async fetchStats() {
       const stakeStats = await fetchStakeStats()
       const burnStats = await index.burn.stats(
-        process.env.VUE_APP_INDEX_API_URL,
+        import.meta.env.VITE_INDEX_API_URL,
       )
       const earningsStats = await this.updateEarningStats()
 
@@ -160,12 +160,12 @@ export default {
       }, pollInterval)
     },
     async updateEarningStats() {
-      const statsResponse = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/v2/stats/earnings`)
+      const statsResponse = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/v2/stats/earnings`)
       return statsResponse.body
     },
     async updateMapPoints() {
       this.loading = true
-      const result = await superagent.get(`${process.env.VUE_APP_INDEX_API_URL}/mapsessions?limit=500`)
+      const result = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/mapsessions?limit=500`)
       if (result.body.results.length) this.mapPoints = result.body.results
       this.loaded = true
       this.loading = false

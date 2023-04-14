@@ -1,5 +1,5 @@
 <template>
-  <div><img src="/assets/BurnIcon.png" alt="burn icon"></div>
+  <div><img src="/BurnIcon.png" alt="burn icon"></div>
 </template>
 
 <script>

@@ -12,10 +12,10 @@
 </template>
 
 <script>
-  import Logo from "@/components/Logo";
-  import Menu from "@/components/Menu";
-  import HeaderTools from "@/components/HeaderTools";
-  import BurgerButton from "@/components/BurgerButton";
+  import Logo from "@/components/Logo.vue";
+  import Menu from "@/components/Menu.vue";
+  import HeaderTools from "@/components/HeaderTools.vue";
+  import BurgerButton from "@/components/BurgerButton.vue";
 
   export default {
     name: "Header",

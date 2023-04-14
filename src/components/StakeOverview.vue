@@ -10,7 +10,7 @@
         </div>
         <div class="stakeRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
             @click.prevent="copyToClipboard(stake.id)"
           >
             <ClipboardCopyIcon/>
@@ -24,7 +24,7 @@
         </div>
         <div class="stakeRow__clipboard">
           <button
-            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"            
+            class="flex-shrink-0 w-24 ml-24 text-green on-clicked-effect"
             @click.prevent="copyToClipboard(stake.hash)"
           >
             <ClipboardCopyIcon/>
@@ -61,7 +61,7 @@
 <script>
 import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
-import Tooltip from '@/components/Tooltip'
+import Tooltip from '@/components/Tooltip.vue'
 import { formatXe } from '@edge/wallet-utils'
 
 export default {

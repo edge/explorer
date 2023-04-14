@@ -21,8 +21,9 @@ COPY *.config.js ./
 COPY package*.json ./
 RUN npm install
 
-COPY src src/
+COPY index.html ./
 COPY public public/
+COPY src src/
 RUN npm run build
 
 #

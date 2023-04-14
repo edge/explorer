@@ -15,7 +15,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "start": "node server/index.js"
   },
   "main": "server/index.js",
   "dependencies": {

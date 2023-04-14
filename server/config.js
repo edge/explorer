@@ -6,10 +6,10 @@ require('dotenv').config()
 
 module.exports = {
   http: {
-    port: import.meta.env.HTTP_PORT ? parseInt(import.meta.env.HTTP_PORT) : 8000
+    port: process.env.HTTP_PORT ? parseInt(process.env.HTTP_PORT) : 8000
   },
   proxy: {
-    indexApiBasePath: import.meta.env.INDEX_API_BASE_PATH || '/api',
-    indexBaseUrl: import.meta.env.INDEX_API_URL || 'https://index.test.network',
+    indexApiBasePath: process.env.INDEX_API_BASE_PATH || '/api',
+    indexBaseUrl: process.env.INDEX_API_URL || 'https://index.test.network',
   }
 }

@@ -8,6 +8,14 @@
 FROM node:lts AS build
 MAINTAINER Adam K Dean <adam@edge.network>
 
+COPY *.config.js ./
+COPY package*.json ./
+RUN npm install
+
+COPY index.html ./
+COPY public public/
+COPY src src/
+
 ARG BLOCKCHAIN_API_URL
 ARG INDEX_API_URL
 ARG IS_TESTNET
@@ -17,13 +25,6 @@ ENV VITE_INDEX_API_URL=$INDEX_API_URL
 ENV VITE_GOVERNANCE_URL=$GOVERNANCE_URL
 ENV VITE_IS_TESTNET=$IS_TESTNET
 
-COPY *.config.js ./
-COPY package*.json ./
-RUN npm install
-
-COPY index.html ./
-COPY public public/
-COPY src src/
 RUN npm run build
 
 #

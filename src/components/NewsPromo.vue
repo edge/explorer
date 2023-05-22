@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-full h-full">
-    <h3 class="md:text-gray-100">Visit the Edge Community Wiki</h3>
+    <h3>&nbsp;</h3>
     <router-link to="/burns" class="rounded">
       <img src="/burned-live.png" class="wiki-image w-full object-cover object-top rounded">
     </router-link>

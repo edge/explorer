@@ -30,6 +30,7 @@
         :tooltipCallback="tooltipCallback"
         yLabel="Price in USD"
         y1Label="Price in ETH"
+        :beginAtZero="true"
       />
     </div>
   </div>

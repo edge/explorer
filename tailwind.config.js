@@ -3,7 +3,9 @@
 // that can be found in the LICENSE.md file. All rights reserved.
 
 module.exports = {
-  purge: [],
+  purge: {
+    content: ['./src/**/*.vue'],
+  },
   darkMode: false,
   theme: {
     extend: {

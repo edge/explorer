@@ -9,5 +9,21 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          chart: [
+            'chart.js',
+            'vue-chartjs'
+          ],
+          edge: [
+            '@edge/index-utils',
+            '@edge/wallet-utils'
+          ]
+        }
+      }
+    }
   }
 })

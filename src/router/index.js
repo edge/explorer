@@ -3,14 +3,8 @@
 // that can be found in the LICENSE.md file. All rights reserved.
 
 import { createRouter, createWebHistory } from 'vue-router'
-import Blocks from '@/views/Blocks.vue'
-import Burns from '@/views/Burns.vue'
-import Nodes from '@/views/Nodes.vue'
 import NotFound from '@/views/404.vue'
 import Overview from '@/views/Overview.vue'
-import Stakes from '@/views/Stakes.vue'
-import Transactions from '@/views/Transactions.vue'
-import Wallets from '@/views/Wallets.vue'
 
 const routes = [
   {
@@ -21,62 +15,62 @@ const routes = [
   {
     path: '/block/:blockId',
     name: 'Block',
-    component: Blocks
+    component: () => import('@/views/Blocks.vue')
   },
   {
     path: '/blocks/:page(\\d+)?',
     name: 'Blocks',
-    component: Blocks
+    component: () => import('@/views/Blocks.vue')
   },
   {
     path: '/burn/:burnHash',
     name: 'Burn',
-    component: Burns
+    component: () => import('@/views/Burns.vue')
   },
   {
     path: '/burns/:page(\\d+)?',
     name: 'Burns',
-    component: Burns
+    component: () => import('@/views/Burns.vue')
   },
   {
     path: '/nodes',
     name: 'Nodes',
-    component: Nodes
+    component: () => import('@/views/Nodes.vue')
   },
   {
     path: '/node/:nodeAddress',
     name: 'Node',
-    component: Nodes
+    component: () => import('@/views/Nodes.vue')
   },
   {
     path: '/stake/:stakeId',
     name: 'Stake',
-    component: Stakes
+    component: () => import('@/views/Stakes.vue')
   },
   {
     path: '/stakes/:page(\\d+)?',
     name: 'Stakes',
-    component: Stakes
+    component: () => import('@/views/Stakes.vue')
   },
   {
     path: '/transaction/:txHash',
     name: 'Transaction',
-    component: Transactions
+    component: () => import('@/views/Transactions.vue')
   },
   {
     path: '/transactions/:page(\\d+)?',
     name: 'Transactions',
-    component: Transactions
+    component: () => import('@/views/Transactions.vue')
   },
   {
     path: '/wallet/:address/:page(\\d+)?',
     name: 'Wallet',
-    component: Wallets
+    component: () => import('@/views/Wallets.vue')
   },
   {
     path: '/wallets/:page(\\d+)?',
     name: 'Wallets',
-    component: Wallets
+    component: () => import('@/views/Wallets.vue')
   },
   { path: '/:catchAll(.*)', component: NotFound }
 ]

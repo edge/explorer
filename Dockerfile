@@ -35,10 +35,11 @@ MAINTAINER Adam K Dean <adam@edge.network>
 
 WORKDIR /edge/xe-explorer
 
-COPY package*.json ./
+COPY server ./
 RUN npm install --only=production
 
-COPY server server/
+ENV WWW_PATH=dist
+
 COPY --from=build dist dist/
 
 CMD ["npm", "start"]

@@ -3,20 +3,19 @@
 // that can be found in the LICENSE.md file. All rights reserved.
 
 const config = require('./config')
-const Express = require('express')
+const express = require('express')
 const morgan = require('morgan')
 const path = require('path')
 const fs = require('fs')
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
 // Create & configure express app
-const app = new Express()
-const www = path.join(__dirname, '..', 'dist')
-const html = fs.readFileSync(`${www}/index.html`, 'utf8')
+const app = new express()
+const html = fs.readFileSync(`${config.www.path}/index.html`, 'utf8')
 
 // Middleware
 app.use(morgan('dev'))
-app.use('/', Express.static(www))
+app.use('/', express.static(config.www.path))
 
 app.use(createProxyMiddleware(config.proxy.indexApiBasePath, {
   target: config.proxy.indexBaseUrl,

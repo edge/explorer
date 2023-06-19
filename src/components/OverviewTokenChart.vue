@@ -91,6 +91,7 @@ export default {
       }
       if (this.datasets.some(d => d.yAxisID === 'y1')) {
         options.scales.y1 = {
+          beginAtZero: this.beginAtZero,
           grid: {display: false},
           position: 'right',
           ticks: {

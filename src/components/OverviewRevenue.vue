@@ -1,21 +1,15 @@
 <template>
   <div class="w-full relative">
     <h3>On Chain Revenue</h3>
-    <div class="time-toggle">
-      <OverviewChartTimeToggle
-        :period="chartPeriod"
-        :onPeriodUpdate="updateChartPeriod"
-      />
-    </div>
     <div class="relative max-h-full tile">
       <div class="summary flex justify-between mb-12 gap-4">
         <OverviewTokenSummary
           v-if="averageRevenue"
           :hideConversion="true"
-          title="Avg Daily Revenue"
+          title="Avg Monthly Revenue"
           :value="averageRevenue"
           currency="xe"
-          tooltipText="Average over chart period"
+          tooltipText="Average over last 12 months"
         />
         <OverviewTokenSummary
           v-if="totalRevenue"
@@ -23,6 +17,7 @@
           title="Total Revenue"
           :value="totalRevenue"
           currency="xe"
+          tooltipText="Total all time revenue"
         />
       </div>
       <OverviewTokenChart
@@ -32,7 +27,7 @@
         :timeSeries="timeSeries"
         :tooltipCallback="tooltipCallback"
         :datasets="datasets"
-        yLabel="Daily XE"
+        yLabel="Monthly XE"
       />
     </div>
   </div>
@@ -54,7 +49,6 @@ export default {
   },
   data() {
     return {
-      chartPeriod: 'month',
       averageRevenue: null,
       totalRevenue: null,
       data: null,
@@ -76,13 +70,9 @@ export default {
         }
       ]
     },
-    query() {
-      if (this.chartPeriod === 'week') return '?count=7'
-      if (this.chartPeriod === 'month') return '?count=30'
-    },
     timeSeries() {
       if (!this.data) return []
-      else return this.data.map(r => moment(r.start).format(this.timeSeriesFormat))
+      else return this.data.map(r => moment(r.start).format('MMM YY'))
     }
   },
   methods: {
@@ -96,11 +86,9 @@ export default {
       this.chartPeriod = newPeriod
     },
     async updateRevenue() {
-      const response = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/revenue${this.query}`)
+      const response = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/revenue`)
       const { results } = response.body
       this.data = results.reverse()
-      if (this.chartPeriod === 'week') this.timeSeriesFormat = 'ddd'
-      if (this.chartPeriod === 'month') this.timeSeriesFormat = 'll'
       this.averageRevenue = results.reduce((total, day) => total += day.amount, 0) / results.length / 1e6
       this.totalRevenue = response.body.metadata.allTimeRevenue / 1e6
     }
@@ -113,11 +101,6 @@ export default {
   },
   unmounted() {
     clearInterval(this.intervalID)
-  },
-  watch: {
-    chartPeriod() {
-      this.updateRevenue()
-    }
   }
 }
 </script>

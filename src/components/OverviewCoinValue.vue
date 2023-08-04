@@ -30,7 +30,7 @@
         :tooltipCallback="tooltipCallback"
         yLabel="Price in USD"
         y1Label="Price in ETH"
-        :beginAtZero="true"
+        :zoom="true"
       />
     </div>
   </div>
@@ -85,7 +85,7 @@ export default {
     },
     timeSeries() {
       if (!this.data) return []
-      else return this.data.map(r => moment(new Date(r.date)).format(this.timeSeriesFormat))
+      else return this.data.map(r => moment.utc(r.date).format(this.timeSeriesFormat))
     }
   },
   methods: {

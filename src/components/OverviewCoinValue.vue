@@ -85,7 +85,7 @@ export default {
     },
     timeSeries() {
       if (!this.data) return []
-      else return this.data.map(r => moment(new Date(r.date)).format(this.timeSeriesFormat))
+      else return this.data.map(r => moment.utc(r.date).format(this.timeSeriesFormat))
     }
   },
   methods: {

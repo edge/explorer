@@ -80,4 +80,9 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach(() => {
+  const menu = document.querySelector('#menu')
+  if (menu) bodyScrollLock.enableBodyScroll(menu)
+})
+
 export default router

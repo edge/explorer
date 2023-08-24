@@ -13,7 +13,7 @@ html {
  font-family: 'Roboto Mono', monospace;
 }
 
-@keyframes dashAnimation {
+@keyframes mapConnections {
   from {
     stroke-dashoffset: 0;
   }

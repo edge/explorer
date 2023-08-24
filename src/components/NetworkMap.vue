@@ -217,7 +217,7 @@ export default {
           line.style["stroke-dasharray"] = "2,4"
           line.style["stroke-dashoffset"] = "0"
           line.style.fill = "transparent"
-          line.style.animation = "dashAnimation 10s linear infinite"
+          line.style.animation = "mapConnections 10s linear infinite"
           line.classList.add("hidden")
           line.classList.add("sm:block")
 

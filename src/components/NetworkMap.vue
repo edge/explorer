@@ -9,13 +9,6 @@
       <!-- node type toggles -->
       <div class="type-toggle">
         <div class="toggle">
-          <span>Connections</span>
-          <label class="switch">
-            <input type="checkbox" v-model="showLines">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="toggle">
           <span>Stargates <span class="hidden sm:inline-block">({{ countType('stargate') }})</span></span>
           <label class="switch">
             <input type="checkbox" v-model="showStargate">
@@ -33,6 +26,13 @@
           <span>Hosts <span class="hidden sm:inline-block">({{ countType('host') }})</span></span>
           <label class="switch">
             <input type="checkbox" v-model="showHost">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle">
+          <span>Connections</span>
+          <label class="switch">
+            <input type="checkbox" v-model="showLines">
             <span class="slider"></span>
           </label>
         </div>
@@ -91,6 +91,12 @@ export default {
     }
   },
   methods: {
+    // calculate the distance between two points on the map (using x and y, not lat and lng)
+    calcDistance(p1, p2) {
+      const dx = p2.x - p1.x
+      const dy = p2.y - p1.y
+      return Math.sqrt(dx * dx + dy * dy)
+    },
     convertLatLngToXy(lat, lng, mapWidth, topOffset = 0, leftOffset = 0) {
       // disallow invalid latitude or longitude
       if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return
@@ -193,6 +199,9 @@ export default {
           // get x and y of node's parent gateway/stargate
           const to = this.convertLatLngToXy(parentNode.lat, parentNode.lng, mapWidth, topOffset)
 
+          // for performance, don't render short lines (they will likely not be visible anyway)
+          if (this.calcDistance({ x, y }, to) < 10) return
+
           // create line
           const line = document.createElementNS("http://www.w3.org/2000/svg", 'line')
 
@@ -203,12 +212,14 @@ export default {
           line.setAttribute("y2", to.y)
 
           // set styles
-          line.style.stroke = "gray"
+          line.style.stroke = "#6EE09F"
           line.style["stroke-width"] = "1"
           line.style["stroke-dasharray"] = "2,4"
           line.style["stroke-dashoffset"] = "0"
           line.style.fill = "transparent"
-          line.style.animation = "dashAnimation 5s linear infinite"
+          line.style.animation = "dashAnimation 10s linear infinite"
+          line.classList.add("hidden")
+          line.classList.add("sm:block")
 
           lines.push(line)
         }

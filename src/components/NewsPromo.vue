@@ -2,7 +2,7 @@
   <div class="flex flex-col w-full h-full">
     <h3>&nbsp;</h3>
     <router-link to="/burns" class="rounded">
-      <img src="/burned-live.png" class="wiki-image w-full object-cover object-top rounded">
+      <img src="/msmnxe_2.png" class="wiki-image w-full object-cover object-top rounded">
     </router-link>
     <!-- <a href="https://wiki.edge.network/" class="rounded">
       <img src="/e-wiki-promo.png" class="wiki-image w-full object-cover object-top rounded">

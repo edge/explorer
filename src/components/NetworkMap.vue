@@ -142,15 +142,13 @@ export default {
       const topOffset = 5 / 515 * mapHeight
 
       // clear SVG and then re-draw markers
-      const markersSvg = this.$refs.mapMarkers
-      markersSvg.innerHTML = ''
+      const mapSvg = this.$refs.mapMarkers
+      mapSvg.innerHTML = ''
 
 
-
-
+      /** @todo update index so that stargate/gateway position also indicated */
       const stargates = this.points.filter(p => p.type === 'stargate')
       const gateways = this.points.filter(p => p.type === 'gateway')
-
       function calculateDistance(point1, point2) {
         // Convert latitude and longitude to radians
         const radLat1 = (Math.PI / 180) * point1.lat
@@ -170,12 +168,13 @@ export default {
         return distance
       }
 
-
+      let lines = []
+      let markers = []
 
       this.points.forEach(p => {
         if (!this.showType[p.type]) return
 
-        // get x and y of node
+        // get x and y of node for marker position on map
         const { x, y } = this.convertLatLngToXy(p.lat, p.lng, mapWidth, topOffset)
 
         // create marker
@@ -186,14 +185,12 @@ export default {
         marker.setAttribute("cy", y)
         marker.setAttribute("r", markerRadius)
 
-        // set colour
+        // set styles
         marker.style.stroke = "#5cbd64"
         marker.style["stroke-width"] = "1"
         marker.style.fill = "#0ecc5f"
 
-        // add marker to SVG
-        markersSvg.appendChild(marker)
-
+        markers.push(marker)
 
         // draw lines between node and it's parent (gateway for hosts, stargate for gateways)
         let parentNode
@@ -214,6 +211,7 @@ export default {
           // create line
           const line = document.createElementNS("http://www.w3.org/2000/svg", 'line')
 
+          // set start and end point of line
           line.setAttribute("x1", x)
           line.setAttribute("y1", y)
           line.setAttribute("x2", to.x)
@@ -227,10 +225,14 @@ export default {
           line.style.fill = "transparent"
           line.style.animation = "dashAnimation 5s linear infinite"
 
-          // add line to SVG
-          markersSvg.appendChild(line)
+          lines.push(line)
         }
       })
+
+      // add lines and markers to SVG
+      // lines added first so that markers sit on top of them (z-index not possible with SVG elements)
+      lines.forEach(line => mapSvg.appendChild(line))
+      markers.forEach(marker => mapSvg.appendChild(marker))
     },
     onResize() {
       if (this.resizeTimeout) clearTimeout(this.resizeTimeout)

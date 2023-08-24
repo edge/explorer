@@ -144,9 +144,38 @@ export default {
       // clear SVG and then re-draw markers
       const markersSvg = this.$refs.mapMarkers
       markersSvg.innerHTML = ''
+
+
+
+
+      const stargates = this.points.filter(p => p.type === 'stargate')
+      const gateways = this.points.filter(p => p.type === 'gateway')
+
+      function calculateDistance(point1, point2) {
+        // Convert latitude and longitude to radians
+        const radLat1 = (Math.PI / 180) * point1.lat
+        const radLng1 = (Math.PI / 180) * point1.lng
+        const radLat2 = (Math.PI / 180) * point2.lat
+        const radLng2 = (Math.PI / 180) * point2.lng
+
+        // Haversine formula to calculate distance between two points on a sphere
+        const dLat = radLat2 - radLat1
+        const dLng = radLng2 - radLng1
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(radLat1) * Math.cos(radLat2) * Math.sin(dLng / 2) * Math.sin(dLng / 2)
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        const distance = 6371000 * c // Earth's radius in meters
+
+        return distance
+      }
+
+
+
       this.points.forEach(p => {
         if (!this.showType[p.type]) return
 
+        // get x and y of node
         const { x, y } = this.convertLatLngToXy(p.lat, p.lng, mapWidth, topOffset)
 
         // create marker
@@ -164,6 +193,43 @@ export default {
 
         // add marker to SVG
         markersSvg.appendChild(marker)
+
+
+        // draw lines between node and it's parent (gateway for hosts, stargate for gateways)
+        let parentNode
+        if (['host', 'gateway'].includes(p.type)) {
+          const parentNodes = p.type === 'host' ? gateways : stargates
+          parentNodes.forEach(pn => {
+            const pnDis = calculateDistance(p, pn)
+            let curDis = Infinity
+            if (parentNode) curDis = calculateDistance(p, parentNode)
+            if (pnDis < curDis) parentNode = pn
+          })
+        }
+
+        if (parentNode) {
+          // get x and y of node's parent gateway/stargate
+          const to = this.convertLatLngToXy(parentNode.lat, parentNode.lng, mapWidth, topOffset)
+
+          // create line
+          const line = document.createElementNS("http://www.w3.org/2000/svg", 'line')
+
+          line.setAttribute("x1", x)
+          line.setAttribute("y1", y)
+          line.setAttribute("x2", to.x)
+          line.setAttribute("y2", to.y)
+
+          // set styles
+          line.style.stroke = "gray"
+          line.style["stroke-width"] = "1"
+          line.style["stroke-dasharray"] = "2,4"
+          line.style["stroke-dashoffset"] = "0"
+          line.style.fill = "transparent"
+          line.style.animation = "dashAnimation 5s linear infinite"
+
+          // add line to SVG
+          markersSvg.appendChild(line)
+        }
       })
     },
     onResize() {

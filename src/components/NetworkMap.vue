@@ -9,6 +9,13 @@
       <!-- node type toggles -->
       <div class="type-toggle">
         <div class="toggle">
+          <span>Connections</span>
+          <label class="switch">
+            <input type="checkbox" v-model="showLines">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle">
           <span>Stargates <span class="hidden sm:inline-block">({{ countType('stargate') }})</span></span>
           <label class="switch">
             <input type="checkbox" v-model="showStargate">
@@ -63,17 +70,24 @@ export default {
       lngOffset: -3,
       showGateway: true,
       showHost: true,
+      showLines: true,
       showStargate: true
     }
   },
   props: ['points'],
   computed: {
+    gateways() {
+      return this.points.filter(p => p.type === 'gateway')
+    },
     showType() {
       return {
         gateway: this.showGateway,
         host: this.showHost,
         stargate: this.showStargate
       }
+    },
+    stargates() {
+      return this.points.filter(p => p.type === 'stargate')
     }
   },
   methods: {
@@ -141,36 +155,12 @@ export default {
       // topOffset is number of pixels cropped from top of map when map, calculated as being 5 pixels when map at full height of 515
       const topOffset = 5 / 515 * mapHeight
 
-      // clear SVG and then re-draw markers
+      // clear SVG and then re-draw markers and line
       const mapSvg = this.$refs.mapMarkers
       mapSvg.innerHTML = ''
 
-
-      /** @todo update index so that stargate/gateway position also indicated */
-      const stargates = this.points.filter(p => p.type === 'stargate')
-      const gateways = this.points.filter(p => p.type === 'gateway')
-      function calculateDistance(point1, point2) {
-        // Convert latitude and longitude to radians
-        const radLat1 = (Math.PI / 180) * point1.lat
-        const radLng1 = (Math.PI / 180) * point1.lng
-        const radLat2 = (Math.PI / 180) * point2.lat
-        const radLng2 = (Math.PI / 180) * point2.lng
-
-        // Haversine formula to calculate distance between two points on a sphere
-        const dLat = radLat2 - radLat1
-        const dLng = radLng2 - radLng1
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(radLat1) * Math.cos(radLat2) * Math.sin(dLng / 2) * Math.sin(dLng / 2)
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-        const distance = 6371000 * c // Earth's radius in meters
-
-        return distance
-      }
-
       let lines = []
       let markers = []
-
       this.points.forEach(p => {
         if (!this.showType[p.type]) return
 
@@ -193,16 +183,11 @@ export default {
         markers.push(marker)
 
         // draw lines between node and it's parent (gateway for hosts, stargate for gateways)
-        let parentNode
-        if (['host', 'gateway'].includes(p.type)) {
-          const parentNodes = p.type === 'host' ? gateways : stargates
-          parentNodes.forEach(pn => {
-            const pnDis = calculateDistance(p, pn)
-            let curDis = Infinity
-            if (parentNode) curDis = calculateDistance(p, parentNode)
-            if (pnDis < curDis) parentNode = pn
-          })
-        }
+        if (!this.showLines) return
+        const parentNode =
+          p.type === 'host' ? this.gateways.find(gw => gw.address === p.gateway) :
+          p.type === 'gateway' ? this.stargates.find(sg => sg.address === p.stargate) :
+          undefined
 
         if (parentNode) {
           // get x and y of node's parent gateway/stargate
@@ -249,6 +234,9 @@ export default {
   },
   watch: {
     points() {
+      this.updateMarkers()
+    },
+    showLines() {
       this.updateMarkers()
     },
     showType() {

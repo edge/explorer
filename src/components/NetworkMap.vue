@@ -29,6 +29,13 @@
             <span class="slider"></span>
           </label>
         </div>
+        <div class="toggle">
+          <span>Connections</span>
+          <label class="switch">
+            <input type="checkbox" v-model="showLines">
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -63,20 +70,33 @@ export default {
       lngOffset: -3,
       showGateway: true,
       showHost: true,
+      showLines: true,
       showStargate: true
     }
   },
   props: ['points'],
   computed: {
+    gateways() {
+      return this.points.filter(p => p.type === 'gateway')
+    },
     showType() {
       return {
         gateway: this.showGateway,
         host: this.showHost,
         stargate: this.showStargate
       }
+    },
+    stargates() {
+      return this.points.filter(p => p.type === 'stargate')
     }
   },
   methods: {
+    // calculate the distance between two points on the map (using x and y, not lat and lng)
+    calcDistance(p1, p2) {
+      const dx = p2.x - p1.x
+      const dy = p2.y - p1.y
+      return Math.sqrt(dx * dx + dy * dy)
+    },
     convertLatLngToXy(lat, lng, mapWidth, topOffset = 0, leftOffset = 0) {
       // disallow invalid latitude or longitude
       if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return
@@ -141,12 +161,16 @@ export default {
       // topOffset is number of pixels cropped from top of map when map, calculated as being 5 pixels when map at full height of 515
       const topOffset = 5 / 515 * mapHeight
 
-      // clear SVG and then re-draw markers
-      const markersSvg = this.$refs.mapMarkers
-      markersSvg.innerHTML = ''
+      // clear SVG and then re-draw markers and line
+      const mapSvg = this.$refs.mapMarkers
+      mapSvg.innerHTML = ''
+
+      let lines = []
+      let markers = []
       this.points.forEach(p => {
         if (!this.showType[p.type]) return
 
+        // get x and y of node for marker position on map
         const { x, y } = this.convertLatLngToXy(p.lat, p.lng, mapWidth, topOffset)
 
         // create marker
@@ -157,14 +181,54 @@ export default {
         marker.setAttribute("cy", y)
         marker.setAttribute("r", markerRadius)
 
-        // set colour
+        // set styles
         marker.style.stroke = "#5cbd64"
         marker.style["stroke-width"] = "1"
         marker.style.fill = "#0ecc5f"
 
-        // add marker to SVG
-        markersSvg.appendChild(marker)
+        markers.push(marker)
+
+        // draw lines between node and it's parent (gateway for hosts, stargate for gateways)
+        if (!this.showLines) return
+        const parentNode =
+          p.type === 'host' ? this.gateways.find(gw => gw.address === p.gateway) :
+          p.type === 'gateway' ? this.stargates.find(sg => sg.address === p.stargate) :
+          undefined
+
+        if (parentNode) {
+          // get x and y of node's parent gateway/stargate
+          const to = this.convertLatLngToXy(parentNode.lat, parentNode.lng, mapWidth, topOffset)
+
+          // for performance, don't render short lines (they will likely not be visible anyway)
+          if (this.calcDistance({ x, y }, to) < 10) return
+
+          // create line
+          const line = document.createElementNS("http://www.w3.org/2000/svg", 'line')
+
+          // set start and end point of line
+          line.setAttribute("x1", x)
+          line.setAttribute("y1", y)
+          line.setAttribute("x2", to.x)
+          line.setAttribute("y2", to.y)
+
+          // set styles
+          line.style.stroke = "#6EE09F"
+          line.style["stroke-width"] = "1"
+          line.style["stroke-dasharray"] = "2,4"
+          line.style["stroke-dashoffset"] = "0"
+          line.style.fill = "transparent"
+          line.style.animation = "mapConnections 10s linear infinite"
+          line.classList.add("hidden")
+          line.classList.add("sm:block")
+
+          lines.push(line)
+        }
       })
+
+      // add lines and markers to SVG
+      // lines added first so that markers sit on top of them (z-index not possible with SVG elements)
+      lines.forEach(line => mapSvg.appendChild(line))
+      markers.forEach(marker => mapSvg.appendChild(marker))
     },
     onResize() {
       if (this.resizeTimeout) clearTimeout(this.resizeTimeout)
@@ -181,6 +245,9 @@ export default {
   },
   watch: {
     points() {
+      this.updateMarkers()
+    },
+    showLines() {
       this.updateMarkers()
     },
     showType() {

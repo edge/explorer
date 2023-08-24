@@ -214,7 +214,8 @@ export default {
       return Math.max(1, parseInt(this.$route.query.page) || 1)
     },
     hideOfflineNodes() {
-      return this.$route.query.hideOffline === '1'
+      // query string uses showOffline rather than hideOffline so default (no query) is for hide offline to be selected
+      return this.$route.query.showOffline !== '1'
     },
     isChartDataMb() {
       return this.sessionStats.some(el => el.metrics.cdn.data.in + el.metrics.cdn.data.out > 1000000)
@@ -260,8 +261,9 @@ export default {
       this.$router.replace({ query })
     },
     updateHideOfflineNodes() {
-      const hideOffline = !this.hideOfflineNodes ? 1 : undefined
-      const query = { ...this.$route.query, hideOffline }
+      // query string uses showOffline rather than hideOffline so default (no query) is for hide offline to be selected
+      const showOffline = this.hideOfflineNodes ? 1 : undefined
+      const query = { ...this.$route.query, showOffline }
       this.$router.replace({ query })
     },
     async updateSessionStats() {

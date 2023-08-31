@@ -40,6 +40,7 @@ export default {
       return moment(this.session.lastActive).fromNow()
     },
     location() {
+      if (!this.session.node.geo) return 'Unknown'
       if (this.session.node.geo.city) return `${this.session.node.geo.city}, ${this.session.node.geo.country}`
       else if (this.session.node.geo.country) return this.session.node.geo.country
       else return 'Unknown'

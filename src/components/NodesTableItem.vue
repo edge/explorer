@@ -93,6 +93,7 @@ export default {
       return this.item.node.type.charAt(0).toUpperCase() + this.item.node.type.slice(1)
     },
     location() {
+      if (!this.item.node.geo) return 'Unknown'
       if (this.item.node.geo.city) return `${this.item.node.geo.city}, ${this.item.node.geo.country}`
       else if (this.item.node.geo.country) return this.item.node.geo.country
       else return 'Unknown'

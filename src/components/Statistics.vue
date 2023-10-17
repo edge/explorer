@@ -28,7 +28,7 @@
       </div>
       <div class="stat" v-if="stats.stakes">
         <span class="stat__label">Stakes <span class="text-gray-400">Total</span></span>
-        <span class="stat__value">{{stats.stakes.count}}</span>
+        <span class="stat__value">{{Number(stats.stakes.count).toLocaleString()}}</span>
       </div>
       <div class="stat" v-if="stats.stakes">
         <span class="stat__label">Staked XE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>

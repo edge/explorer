@@ -5,7 +5,7 @@
 #
 # 1. Build the Vue app
 #
-FROM node:lts AS build
+FROM node:16 AS build
 MAINTAINER Adam K Dean <adam@edge.network>
 
 COPY *.config.js ./
@@ -30,7 +30,7 @@ RUN npm run build
 #
 # 2. Copy the files over and run it
 #
-FROM node:lts
+FROM node:16
 MAINTAINER Adam K Dean <adam@edge.network>
 
 WORKDIR /edge/xe-explorer

@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import Header from "@/components/Header.vue"
 import HeroPanel from "@/components/HeroPanel.vue"
 import Pagination from "@/components/Pagination.vue";
@@ -69,7 +70,6 @@ import StakesTable from "@/components/StakesTable.vue"
 import TransactionsTable from "@/components/TransactionsTable.vue"
 
 import { fetchStake, fetchStakeHistory } from '../utils/api'
-import { xeStringFromMicroXe } from '@edge/wallet-utils'
 
 const numRegEx = /^[-+]?\d*$/
 
@@ -145,7 +145,7 @@ export default {
       if (lastTx !== undefined) this.lastTx = lastTx
       this.txs = transactions.map(tx => ({
         address: tx.sender === lastTx.recipient ? tx.recipient : tx.sender,
-        amount: xeStringFromMicroXe(tx.amount),
+        amount: xe.xe.formatMxe(tx.amount),
         date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
         memo: tx.data.memo,
         hash: tx.hash,

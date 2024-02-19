@@ -59,10 +59,10 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip.vue'
-import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: "StakeOverview",
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return xe.xe.format(amount, true)
     },
     copyToClipboard(input) {
       if (!!navigator.clipboard) {

@@ -134,8 +134,8 @@
 
 <script>
 /*global process*/
+import * as xe from '@edge/xe-utils'
 import BurnIcon from './BurnIcon.vue'
-import { formatXe } from '@edge/wallet-utils'
 import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from '@heroicons/vue/outline'
 
 export default {
@@ -171,7 +171,7 @@ export default {
       return {name: 'Transaction', params: {txHash: this.item.hash}}
     },
     formattedAmount() {
-      return formatXe(this.item.amount / 1e6, true)
+      return xe.xe.formatMxe(this.item.amount, true)
     },
     isConfirmed() {
       return ((this.item.confirmations || 0) >= 10)

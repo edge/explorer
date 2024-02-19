@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import Header from "@/components/Header.vue"
 import HeroPanel from "@/components/HeroPanel.vue"
 import Pagination from "@/components/Pagination.vue";
@@ -90,7 +91,6 @@ import TransactionsTable from "@/components/TransactionsTable.vue"
 import WalletOverview from "@/components/WalletOverview.vue"
 import WalletSummary from "@/components/WalletSummary.vue"
 import WalletsTable from "@/components/WalletsTable.vue"
-import { checksumAddressIsValid } from '@edge/wallet-utils'
 import { fetchWallet } from '../utils/api'
 
 const numRegEx = /^[-+]?\d*$/
@@ -102,8 +102,8 @@ export default {
     const last = parts[parts.length - 1]
     const secondToLast = parts[parts.length - 2]
     let walletAddress = ''
-    if (checksumAddressIsValid(last)) walletAddress = last
-    else if (checksumAddressIsValid(secondToLast)) walletAddress = secondToLast
+    if (xe.wallet.validateAddress(last)) walletAddress = last
+    else if (xe.wallet.validateAddress(secondToLast)) walletAddress = secondToLast
     else return 'Wallets'
 
     return `Wallet ${walletAddress}`
@@ -176,7 +176,7 @@ export default {
         this.loading = true
         const wallet = await fetchWallet(this.address)
         if (wallet.address) this.wallet = wallet
-        else if (checksumAddressIsValid(this.address)) {
+        else if (xe.wallet.validateAddress(this.address)) {
           this.wallet = {
             address: this.address,
             balance: 0,

@@ -86,7 +86,7 @@
       </div>
       <div class="blockRow">
         <div class="blockRow__label">Total XE</div>
-        <div class="blockRow__value">{{ formatAmount(block.total) }} XE</div>
+        <div class="blockRow__value">{{ totalXe }} XE</div>
       </div>
       <div class="blockRow">
         <div class="blockRow__label">Nonce</div>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { formatXe } from '@edge/wallet-utils'
+import * as xe from '@edge/xe-utils'
 import { ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip.vue'
@@ -114,15 +114,17 @@ export default {
       type: Object
     }
   },
+  computed: {
+    totalXe() {
+      return xe.xe.formatMxe(this.block.total, true)
+    }
+  },
   methods: {
     copyToClipboard(input) {
       if (!!navigator.clipboard) {
         return navigator.clipboard.writeText(input)
       }
       window.alert('Clipboard unavailable. Please copy-paste manually.')
-    },
-    formatAmount(amount) {
-      return formatXe(amount / 1e6, true)
     }
   }
 }

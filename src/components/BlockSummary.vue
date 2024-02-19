@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { formatXe } from '@edge/wallet-utils'
+import * as xe from '@edge/xe-utils'
 
 export default {
   name: "BlockSummary",
@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     formatAmount(amount) {
-      return formatXe(amount / 1e6, true)
+      return xe.xe.formatMxe(amount, true)
     }
   }
 }

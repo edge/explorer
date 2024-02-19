@@ -35,7 +35,7 @@
             <span class="monospace lg:inline-block">{{ block.transactions.length }}</span>
           </td>
           <td data-title="Total XE:" class="amount-col">
-            <span class="monospace lg:inline-block">{{ formatAmount(block.total) }}</span>
+            <span class="monospace lg:inline-block">{{ formatBlockTotal(block.total) }}</span>
           </td>
           <td data-title="Mined:">
             <span class="lg:inline-block">
@@ -52,16 +52,16 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import { ClockIcon } from "@heroicons/vue/outline"
 import moment from 'moment'
-import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: 'RecentBlocks',
   props: ['blocks', 'loading'],
   methods: {
-    formatAmount(amount) {
-      return formatXe(amount / 1e6, true)
+    formatBlockTotal(total) {
+      return xe.xe.formatMxe(total, true)
     },
     timeSince(ts) {
       return moment(ts).fromNow()

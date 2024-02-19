@@ -49,8 +49,8 @@
 
 <script>
 /*global process*/
+import * as xe from '@edge/xe-utils'
 import moment from 'moment'
-import { formatXe } from '@edge/wallet-utils'
 import { ClockIcon } from '@heroicons/vue/outline'
 
 export default {
@@ -72,15 +72,10 @@ export default {
       return {name: 'Block', params: {blockId: this.item.hash}}
     },
     formattedTotal() {
-      return formatXe(this.item.total / 1e6, true)
+      return xe.xe.formatMxe(this.item.total, true)
     },
     timeSince() {
       return moment(this.item.timestamp).fromNow()
-    }
-  },
-  methods: {
-    formatAmount(amount) {
-      return formatXe(amount, true)
     }
   }
 }

@@ -70,9 +70,9 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import BurnIcon from './BurnIcon.vue'
 import EarnIcon from './EarnIcon.vue'
-import { formatXe } from '@edge/wallet-utils'
 
 const totalSupplyMXE = 51000000 * 1e6
 
@@ -90,16 +90,16 @@ export default {
   },
   computed: {
     burned30Days() {
-      return formatXe(this.stats.burns['30d'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.burns['30d'], true).replace(/\.?[0-9]+$/, '')
     },
     burnedTotal() {
-      return formatXe(this.stats.burns.total.amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.burns.total.amount, true).replace(/\.?[0-9]+$/, '')
     },
     payments24Hours() {
-      return formatXe(this.stats.earnings['24h'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.earnings['24h'].amount, true).replace(/\.?[0-9]+$/, '')
     },
     paymentsTotal() {
-      return formatXe(this.stats.earnings.allTime.amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.earnings.allTime.amount, true).replace(/\.?[0-9]+$/, '')
     }
   },
   methods: {
@@ -118,7 +118,7 @@ export default {
       return Number((1440 / blockMetadata.recentBlocksCount) * 60).toFixed(0)
     },
     stakedAmount() {
-      return formatXe(this.stats.stakes.stakedAmount / 1e6, true).replace(/\.?0+$/, '')
+      return xe.xe.formatMxe(this.stats.stakes.stakedAmount, true).replace(/\.?0+$/, '')
     },
     stakedPercent() {
       const dec = this.stats.stakes.stakedAmount / totalSupplyMXE

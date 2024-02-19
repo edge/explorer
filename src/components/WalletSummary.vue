@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { xeStringFromMicroXe } from '@edge/wallet-utils'
+import * as xe from '@edge/xe-utils'
 
 export default {
   name: "WalletSummary",
@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     formatAmount(amount) {
-      return xeStringFromMicroXe(amount, true)
+      return xe.xe.formatMxe(amount, true)
     },
     generateWalletSummary() {
       if (this.wallet) {

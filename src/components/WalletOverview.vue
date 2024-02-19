@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { xeStringFromMicroXe } from '@edge/wallet-utils'
+import * as xe from '@edge/xe-utils'
 import { BadgeCheckIcon } from '@heroicons/vue/solid'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip.vue'
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     formatAmount(amount) {
-      return xeStringFromMicroXe(amount, true)
+      return xe.xe.formatMxe(amount, true)
     }
   }
 }

@@ -146,10 +146,10 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip.vue'
-import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: "TransactionOverview",
@@ -173,7 +173,7 @@ export default {
       window.alert('Clipboard unavailable. Please copy-paste manually.')
     },
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return xe.xe.format(amount, true)
     },
     updateSecondsPending() {
       const ms = Date.now() - this.transaction.timestamp

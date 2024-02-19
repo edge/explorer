@@ -35,9 +35,9 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import BurnIcon from './BurnIcon.vue'
 import EarnIcon from './EarnIcon.vue'
-import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: 'StatisticsAdditional',
@@ -53,16 +53,16 @@ export default {
   },
   computed: {
     burned30Days() {
-      return formatXe(this.stats.burns['30d'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.burns['30d'].amount, true).replace(/\.?[0-9]+$/, '')
     },
     burnedTotal() {
-      return formatXe(this.stats.burns.total.amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.burns.total.amount, true).replace(/\.?[0-9]+$/, '')
     },
     payments24Hours() {
-      return formatXe(this.stats.earnings['24h'].amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.earnings['24h'].amount, true).replace(/\.?[0-9]+$/, '')
     },
     paymentsTotal() {
-      return formatXe(this.stats.earnings.allTime.amount / 1e6, true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.earnings.allTime.amount, true).replace(/\.?[0-9]+$/, '')
     }
   }
 }

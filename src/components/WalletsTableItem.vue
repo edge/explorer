@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { xeStringFromMicroXe } from '@edge/wallet-utils'
+import * as xe from '@edge/xe-utils'
 import { BadgeCheckIcon } from '@heroicons/vue/solid'
 
 export default {
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     formatAmount(amount) {
-      return xeStringFromMicroXe(amount, true)
+      return xe.xe.formatMxe(amount, true)
     },
     formatNumber(number) {
       return number.toLocaleString('en-US')

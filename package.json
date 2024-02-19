@@ -1,6 +1,6 @@
 {
   "name": "explorer",
-  "version": "1.27.3",
+  "version": "1.28.0",
   "description": "Blockchain & network explorer",
   "private": true,
   "license": "SEE LICENSE IN LICENSE.md",
@@ -21,7 +21,7 @@
   "main": "server/index.js",
   "dependencies": {
     "@edge/index-utils": "^0.7.1",
-    "@edge/wallet-utils": "0.13.0",
+    "@edge/xe-utils": "^1.11.1",
     "@heroicons/vue": "^1.0.1",
     "chart.js": "^3.7.1",
     "click-outside-vue3": "^4.0.1",

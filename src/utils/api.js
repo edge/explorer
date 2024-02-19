@@ -2,7 +2,7 @@
 // Use of this source code is governed by a GNU GPL-style license
 // that can be found in the LICENSE.md file. All rights reserved.
 
-import { xeStringFromMicroXe } from '@edge/wallet-utils'
+import * as xe from '@edge/xe-utils'
 
 const INDEX_API_URL = import.meta.env.VITE_INDEX_API_URL
 
@@ -164,7 +164,7 @@ const fetchTransactions = async ({ address, hash, options = {} }) => {
             ...tx
           },
           transactions: [{
-            amount: xeStringFromMicroXe(tx.amount),
+            amount: xe.xe.formatMxe(tx.amount),
             block: tx.block,
             date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
             memo: tx.data.memo,
@@ -196,7 +196,7 @@ const formatTransactions = (address, data) => {
   return data.map(tx => {
     const formattedTx = {
       address: tx.sender === address ? tx.recipient : tx.sender,
-      amount: xeStringFromMicroXe(tx.amount),
+      amount: xe.xe.formatMxe(tx.amount),
       date: new Date(tx.timestamp).toLocaleString(), // '16/04/2021 13:06',
       memo: tx.data.memo,
       hash: tx.hash,

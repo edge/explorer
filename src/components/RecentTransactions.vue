@@ -51,16 +51,16 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import moment from 'moment'
 import { ArrowRightIcon } from "@heroicons/vue/outline"
-import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: 'RecentTransactions',
   props: ['loading', 'transactions'],
   methods: {
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return xe.xe.format(amount, true)
     }
   },
   components: {

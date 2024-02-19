@@ -65,7 +65,7 @@
 
 <script>
 /*global process*/
-import { formatXe } from '@edge/wallet-utils'
+import * as xe from '@edge/xe-utils'
 import { ArrowCircleDownIcon, CheckCircleIcon, ClockIcon, DotsCircleHorizontalIcon } from '@heroicons/vue/outline'
 
 export default {
@@ -93,7 +93,7 @@ export default {
       return {name: 'Wallet', params: {address: this.item.tx.sender}}
     },
     formattedAmount() {
-      return formatXe(this.item.amount / 1e6, true)
+      return xe.xe.formatMxe(this.item.amount, true)
     },
     formattedType() {
       return this.item.type.charAt(0).toUpperCase() + this.item.type.slice(1)

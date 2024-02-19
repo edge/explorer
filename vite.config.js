@@ -20,7 +20,7 @@ export default defineConfig({
           ],
           edge: [
             '@edge/index-utils',
-            '@edge/wallet-utils'
+            '@edge/xe-utils'
           ]
         }
       }

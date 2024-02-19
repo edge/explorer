@@ -64,7 +64,7 @@
       </div>
       <div class="burnRow">
         <div class="burnRow__label">Amount</div>
-        <div class="burnRow__value">{{ formatAmount(burn.amount / 1e6) }} XE</div>
+        <div class="burnRow__value">{{ formatAmount(burn.amount) }} XE</div>
       </div>
       <div class="burnRow">
         <div class="burnRow__label">Description</div>
@@ -78,10 +78,10 @@
 </template>
 
 <script>
+import * as xe from '@edge/xe-utils'
 import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip.vue'
-import { formatXe } from '@edge/wallet-utils'
 
 export default {
   name: "BurnOverview",
@@ -105,7 +105,7 @@ export default {
       window.alert('Clipboard unavailable. Please copy-paste manually.')
     },
     formatAmount(amount) {
-      return formatXe(amount, true)
+      return xe.xe.formatMxe(amount, true)
     },
     updateSecondsPending() {
       const ms = Date.now() - this.burn.timestamp

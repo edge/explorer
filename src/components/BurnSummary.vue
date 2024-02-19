@@ -6,13 +6,13 @@
     </div>
     <div class="tile" v-else>
       This burn was sent on <span class="emphasis">{{new Date(burn.timestamp).toLocaleString().split(',')[0]}}</span> at <span class="emphasis">{{new Date(burn.timestamp).toLocaleString().split(',')[1]}}</span>.
-      A total of <span class="emphasis">{{formatAmount(burn.amount / 1e6)}} XE</span> was burned. The burn description reads <span class="emphasis">{{ burn.description }}</span>.
+      A total of <span class="emphasis">{{formattedAmount}} XE</span> was burned. The burn description reads <span class="emphasis">{{ burn.description }}</span>.
     </div>
   </div>
 </template>
 
 <script>
-import { formatXe } from '@edge/wallet-utils'
+import * as xe from '@edge/xe-utils'
 
 export default {
   name: "BurnSummary",
@@ -24,12 +24,13 @@ export default {
   computed: {
     isPending() {
       return this.burn.pending
+    },
+    formattedAmount() {
+      return xe.xe.formatMxe(this.burn.amount, true)
     }
   },
   methods: {
-    formatAmount(amount) {
-      return formatXe(amount, true)
-    }
+
   }
 }
 </script>

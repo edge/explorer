@@ -106,6 +106,7 @@ export default {
     async updateCoinValue() {
       try {
         const response = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/token/daily${this.query}`)
+        if (!response.body || response.body.length === 0) return
         this.coinValue = response.body[0].usdPerXE.toLocaleString(undefined, {
           maximumFractionDigits: 6,
           minimumFractionDigits: 6
@@ -118,6 +119,7 @@ export default {
       }
     },
     async updateMarketCap() {
+      if (this.data.length === 0) return
       try {
         const response = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/supply/circulating`)
         this.marketCap = response.body['Circulating Supply'] * this.data[this.data.length - 1].usdPerXE

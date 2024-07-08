@@ -19,11 +19,11 @@
         <span class="stat__value">{{transactionMetadata.recentTransactionsCount && Number(transactionMetadata.recentTransactionsCount).toLocaleString()}}</span>
       </div>
       <div class="stat">
-        <span class="stat__label">Block Time <span class="text-gray-400">avg</span></span>
+        <span class="stat__label">Block Time <span class="text-gray-400">last 24 hrs</span></span>
         <span class="stat__value">{{calculateBlockTime(blockMetadata)}}s</span>
       </div>
       <div class="stat">
-        <span class="stat__label">Blocks / Hour <span class="text-gray-400">avg</span></span>
+        <span class="stat__label">Blocks / Hour <span class="text-gray-400">last 24 hrs</span></span>
         <span class="stat__value">{{calculateBlocksPerHour(blockMetadata)}}</span>
       </div>
       <div class="stat" v-if="stats.stakes">

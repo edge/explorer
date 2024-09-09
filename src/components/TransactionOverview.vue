@@ -99,6 +99,10 @@
             <CheckCircleIcon class="mr-4 w-16 icon-green" />
             Completed
           </span>
+          <span v-else-if="transaction.exchangeResult.returned" class="flex items-center space-x-3">
+            <ReceiptRefundIcon class="mr-4 w-16 icon-grey" />
+            Returned
+          </span>
           <span v-else class="flex items-center space-x-3">
             <ClockIcon class="mr-4 w-16 icon-grey" />
             Pending
@@ -147,7 +151,7 @@
 
 <script>
 import * as xe from '@edge/xe-utils'
-import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon } from '@heroicons/vue/outline'
+import { CheckCircleIcon, ClockIcon, ClipboardCopyIcon, ReceiptRefundIcon } from '@heroicons/vue/outline'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip.vue'
 
@@ -158,6 +162,7 @@ export default {
     CheckCircleIcon,
     ClockIcon,
     InformationCircleIcon,
+    ReceiptRefundIcon,
     Tooltip
   },
   props: {

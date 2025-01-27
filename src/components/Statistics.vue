@@ -90,7 +90,7 @@ export default {
   },
   computed: {
     burned30Days() {
-      return xe.xe.formatMxe(this.stats.burns['30d'], true).replace(/\.?[0-9]+$/, '')
+      return xe.xe.formatMxe(this.stats.burns['30d'].amount, true).replace(/\.?[0-9]+$/, '')
     },
     burnedTotal() {
       return xe.xe.formatMxe(this.stats.burns.total.amount, true).replace(/\.?[0-9]+$/, '')

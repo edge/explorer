@@ -15,7 +15,7 @@
             <InformationCircleIcon class="hidden md:block button__icon w-16" />
           </Tooltip>
         </div>
-        <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.balance : 0) }} XE</div>
+        <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.balance : 0) }} XE<LockClosedIcon v-if="wallet.locked" class="locked" /></div>
       </div>
       <div v-if="wallet.stakedAmount" class="overviewRow">
         <div class="overviewRow__label flex items-center space-x-3">
@@ -42,7 +42,7 @@
 
 <script>
 import * as xe from '@edge/xe-utils'
-import { BadgeCheckIcon } from '@heroicons/vue/solid'
+import { BadgeCheckIcon, LockClosedIcon } from '@heroicons/vue/solid'
 import { InformationCircleIcon } from '@heroicons/vue/solid'
 import Tooltip from '@/components/Tooltip.vue'
 
@@ -55,6 +55,7 @@ export default {
   },
   components: {
     BadgeCheckIcon,
+    LockClosedIcon,
     InformationCircleIcon,
     Tooltip
   },
@@ -67,8 +68,14 @@ export default {
 </script>
 
 <style scoped>
-  .trusted {
-    @apply w-18 h-18 inline-block ml-2 -mt-2 text-green;
+  .trusted, .locked {
+    @apply w-18 h-18 inline-block ml-2 -mt-2;
+    &.trusted {
+      @apply text-green;
+    }
+    &.locked {
+      @apply text-yellow-400;
+    }
   }
   .overviewRow {
     @apply px-12 md:px-24 py-12 text-sm bg-white rounded w-full grid grid-cols-12 items-center;

@@ -4,7 +4,10 @@
       <router-link :to="addressRoute">
         <span class="monospace lg:inline-block">{{ item.address }}</span>
       </router-link>
-      <span class="icon-wrap"><BadgeCheckIcon v-if="item.trusted" class="trusted" /></span>
+      <span class="icon-wrap">
+        <LockClosedIcon v-if="item.locked" class="locked" />
+        <BadgeCheckIcon v-else-if="item.trusted" class="trusted" />
+      </span>
     </td>
 
     <td data-title="Latest Tx:">
@@ -33,13 +36,14 @@
 
 <script>
 import * as xe from '@edge/xe-utils'
-import { BadgeCheckIcon } from '@heroicons/vue/solid'
+import { BadgeCheckIcon, LockClosedIcon } from '@heroicons/vue/solid'
 
 export default {
   name: "WalletsTableItem",
   props: ['item'],
   components: {
-    BadgeCheckIcon
+    BadgeCheckIcon,
+    LockClosedIcon
   },
   computed: {
     addressRoute() {
@@ -118,8 +122,15 @@ td a {
   @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
 }
 
-.trusted {
-  @apply w-18 h-18 inline-block ml-2 text-green mb-2 lg:mb-0;
+.trusted, .locked {
+  @apply w-18 h-18 inline-block ml-2 mb-2 lg:mb-0;
+
+  &.trusted {
+    @apply text-green;
+  }
+  &.locked {
+    @apply text-yellow-400;
+  }
 }
 
 .icon-wrap {

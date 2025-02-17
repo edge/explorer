@@ -305,7 +305,7 @@ img {
 .type-toggle {
   @apply hidden sm:flex flex-col space-y-4 items-start absolute left-10 lg:left-20 bottom-8 lg:bottom-16 text-sm text-gray-600;
   font-size: 0.8125rem;
-  width: 7.5rem;
+  width: 8.5rem;
 }
 .toggle {
   @apply flex justify-between items-center w-full space-x-4;

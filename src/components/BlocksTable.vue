@@ -16,7 +16,7 @@
             sortParam="ledgerHash" :onSortingUpdate="updateSorting" :sortAscFirst="true"
           />
           <th width="5%">Txs</th>
-          <th class="amount-col" width="16%">Total XE</th>
+          <th class="amount-col" width="16%">Total $EDGE</th>
           <TableHeader width="16%" header="Mined" :sortQuery="sortQuery"
             sortParam="timestamp" :onSortingUpdate="updateSorting"
           />

@@ -31,32 +31,32 @@
         <span class="stat__value">{{Number(stats.stakes.count).toLocaleString()}}</span>
       </div>
       <div class="stat" v-if="stats.stakes">
-        <span class="stat__label">Staked XE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>
+        <span class="stat__label">Staked $EDGE <span class="text-gray-400">{{stakedPercent()}}% of supply</span></span>
         <span class="stat__value">{{stakedAmount()}}</span>
       </div>
       <div class="stat additional" v-if="stats.earnings">
-        <span class="stat__label">XE Earned <span class="text-gray-400">total</span></span>
+        <span class="stat__label">$EDGE Earned <span class="text-gray-400">total</span></span>
         <span class="stat__value">
           <div class="w-24 text-gray-600"><EarnIcon /></div>
           <span>{{paymentsTotal}}</span>
         </span>
       </div>
       <div class="stat additional" v-if="stats.earnings">
-        <span class="stat__label">XE Earned <span class="text-gray-400">last 24 hrs</span></span>
+        <span class="stat__label">$EDGE Earned <span class="text-gray-400">last 24 hrs</span></span>
         <span class="stat__value">
           <div class="w-24 text-gray-600"><EarnIcon /></div>
           <span>{{payments24Hours}}</span>
         </span>
       </div>
       <div class="stat additional" v-if="stats.burns">
-        <span class="stat__label">XE Burned <span class="text-gray-400">total</span></span>
+        <span class="stat__label">$EDGE Burned <span class="text-gray-400">total</span></span>
         <span class="stat__value">
           <div class="w-24"><BurnIcon /></div>
           <span>{{burnedTotal}}</span>
         </span>
       </div>
       <div class="stat additional" v-if="stats.burns">
-        <span class="stat__label">XE Burned <span class="text-gray-400">last 30 days</span></span>
+        <span class="stat__label">$EDGE Burned <span class="text-gray-400">last 30 days</span></span>
         <span class="stat__value">
           <div class="w-24"><BurnIcon /></div>
           <span>{{burned30Days}}</span>

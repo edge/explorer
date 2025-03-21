@@ -62,7 +62,7 @@
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Amount</div>
-        <div class="transactionRow__value">{{ formatAmount(transaction.amount) }} XE</div>
+        <div class="transactionRow__value">{{ formatAmount(transaction.amount) }} $EDGE</div>
       </div>
       <div class="transactionRow">
         <div class="transactionRow__label">Memo</div>

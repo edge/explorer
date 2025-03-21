@@ -19,7 +19,7 @@
         <TableHeader width="8%" header="Status" :sortQuery="sortQuery"
           sortParam="released,unlockRequested" :onSortingUpdate="updateSorting"
         />
-        <TableHeader class="amount-col" width="15%" header="Amount XE" :sortQuery="sortQuery"
+        <TableHeader class="amount-col" width="15%" header="Amount $EDGE" :sortQuery="sortQuery"
           sortParam="amount" :onSortingUpdate="updateSorting"
         />
       </tr>
@@ -30,7 +30,7 @@
         <th width="20%">Node</th>
         <th width="8%">Type</th>
         <th width="8%">Status</th>
-        <th class="amount-col" width="15%">Amount XE</th>
+        <th class="amount-col" width="15%">Amount $EDGE</th>
       </tr>
     </thead>
     <tbody v-if="stakes.length">

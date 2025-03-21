@@ -15,7 +15,7 @@
             <InformationCircleIcon class="hidden md:block button__icon w-16" />
           </Tooltip>
         </div>
-        <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.balance : 0) }} XE<LockClosedIcon v-if="wallet.locked" class="locked" /></div>
+        <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.balance : 0) }} $EDGE<LockClosedIcon v-if="wallet.locked" class="locked" /></div>
       </div>
       <div v-if="wallet.stakedAmount" class="overviewRow">
         <div class="overviewRow__label flex items-center space-x-3">
@@ -26,7 +26,7 @@
             <InformationCircleIcon class="hidden md:block button__icon w-16" />
           </Tooltip>
         </div>
-        <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.stakedAmount : 0) }} XE</div>
+        <div class="overviewRow__value">{{ formatAmount(wallet ? wallet.stakedAmount : 0) }} $EDGE</div>
       </div>
       <div class="overviewRow">
         <div class="overviewRow__label">Nonce</div>

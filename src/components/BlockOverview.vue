@@ -85,8 +85,8 @@
         <div class="blockRow__value">{{ block.txCount }}</div>
       </div>
       <div class="blockRow">
-        <div class="blockRow__label">Total XE</div>
-        <div class="blockRow__value">{{ totalXe }} XE</div>
+        <div class="blockRow__label">Total $EDGE</div>
+        <div class="blockRow__value">{{ totalXe }} $EDGE</div>
       </div>
       <div class="blockRow">
         <div class="blockRow__label">Nonce</div>

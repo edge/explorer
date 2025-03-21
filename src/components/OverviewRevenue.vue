@@ -8,7 +8,7 @@
           :hideConversion="true"
           title="Avg Monthly Revenue"
           :value="averageRevenue"
-          currency="xe"
+          currency="edge"
           tooltipText="Average over last 12 months"
         />
         <OverviewTokenSummary
@@ -16,7 +16,7 @@
           :hideConversion="true"
           title="Total Revenue"
           :value="totalRevenue"
-          currency="xe"
+          currency="edge"
           tooltipText="Total all time revenue"
         />
       </div>
@@ -27,7 +27,7 @@
         :timeSeries="timeSeries"
         :tooltipCallback="tooltipCallback"
         :datasets="datasets"
-        yLabel="Monthly XE"
+        yLabel="Monthly $EDGE"
       />
     </div>
   </div>
@@ -66,7 +66,7 @@ export default {
           borderColor: 'rgb(14, 204, 95)',
           data,
           fill: true,
-          label: 'Total Revenue (XE)'
+          label: 'Total Revenue ($EDGE)'
         }
       ]
     },
@@ -80,7 +80,7 @@ export default {
       return tooltipItem.raw.toLocaleString(undefined, {
         minimumFractionDigits: 6,
         maximumFractionDigits: 6
-      }) + ' XE'
+      }) + ' $EDGE'
     },
     updateChartPeriod(newPeriod) {
       this.chartPeriod = newPeriod

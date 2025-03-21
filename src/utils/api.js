@@ -40,7 +40,7 @@ const fetchBlocks = async ({ blockId, options = {} }) => {
         }
         const block = { ...results }
 
-        // Add average XE.
+        // Add average $EDGE.
         block.average = block.txCount ? parseInt(block.total / block.txCount) : 0
 
         return {

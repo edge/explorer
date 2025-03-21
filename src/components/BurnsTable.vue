@@ -25,7 +25,7 @@
           <TableHeader width="125" header="Status" :sortQuery="sortQuery"
             sortParam="pending" :onSortingUpdate="updateSorting"
           />
-          <TableHeader class="amount-col" width="25%" header="Amount XE" :sortQuery="sortQuery"
+          <TableHeader class="amount-col" width="25%" header="Amount $EDGE" :sortQuery="sortQuery"
             sortParam="amount" :onSortingUpdate="updateSorting"
           />
         </tr>
@@ -38,7 +38,7 @@
           <th width="15%">To</th> -->
           <th width="20%">Description</th>
           <th width="100">Status</th>
-          <th class="amount-col" width="20%">Amount XE</th>
+          <th class="amount-col" width="20%">Amount $EDGE</th>
         </tr>
       </thead>
       <tbody v-if="burns.length">

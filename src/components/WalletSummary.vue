@@ -22,10 +22,10 @@ export default {
     },
     generateWalletSummary() {
       if (this.wallet) {
-        let summary = `The wallet with address <span class="emphasis word-break">${this.wallet.address}</span> has a balance of <span class="emphasis">${this.formatAmount(this.wallet.balance)}</span> XE. `
+        let summary = `The wallet with address <span class="emphasis word-break">${this.wallet.address}</span> has a balance of <span class="emphasis">${this.formatAmount(this.wallet.balance)}</span> $EDGE. `
         summary += `It has <span class="emphasis">${this.wallet.txCount.toLocaleString()}</span> ${this.wallet.txCount === 1 ? 'transaction' : 'transactions'} associated with it. `
         if (this.wallet.staked) {
-          summary += `It has <span class="emphasis">${this.wallet.stakeCount}</span> ${this.wallet.stakeCount === 1 ? 'stake' : 'stakes'} with a total value of <span class="emphasis">${this.formatAmount(this.wallet.staked)}</span> XE. `
+          summary += `It has <span class="emphasis">${this.wallet.stakeCount}</span> ${this.wallet.stakeCount === 1 ? 'stake' : 'stakes'} with a total value of <span class="emphasis">${this.formatAmount(this.wallet.staked)}</span> $EDGE. `
         }
         summary += `The nonce is <span class="emphasis">${this.wallet.nonce}</span>. `
 

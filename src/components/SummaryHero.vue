@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      title: import.meta.env.VITE_IS_TESTNET === 'true' ? 'Search the Testnet (XE) Blockchain' : 'Search the Edge (XE) Blockchain'
+      title: import.meta.env.VITE_IS_TESTNET === 'true' ? 'Search the XE Testnet' : 'Search the XE Blockchain'
     }
   }
 }

@@ -32,7 +32,7 @@
       <span class="monospace lg:inline-block">{{ item.txCount }}</span>
     </td>
 
-    <td data-title="XE:" class="amount-col" :title="formattedTotal">
+    <td data-title="$EDGE:" class="amount-col" :title="formattedTotal">
       <span class="lg:inline-block monospace">{{ formattedTotal }}</span>
     </td>
 

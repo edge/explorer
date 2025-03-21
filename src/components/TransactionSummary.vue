@@ -6,7 +6,7 @@
     </div>
     <div class="tile" v-if="transaction.block">
       This transaction was sent on <span class="emphasis">{{new Date(transaction.timestamp).toLocaleString().split(',')[0]}}</span> at <span class="emphasis">{{new Date(transaction.timestamp).toLocaleString().split(',')[1]}}</span>. It was first confirmed in block <span class="emphasis">{{ transaction.block.height }}</span>.
-      A total of <span class="emphasis">{{formatAmount(transaction.amount)}} XE</span> was sent.
+      A total of <span class="emphasis">{{formatAmount(transaction.amount)}} $EDGE</span> was sent.
       <span v-if="!transaction.memo">
         It did not contain a memo.
       </span>

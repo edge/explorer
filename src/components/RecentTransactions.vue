@@ -8,7 +8,7 @@
           <th width="20%">Hash</th>
           <th width="25%">From</th>
           <th width="25%"><span class="pl-5">To</span></th>
-          <th width="30%" class="amount-col">Amount XE</th>
+          <th width="30%" class="amount-col">Amount $EDGE</th>
         </tr>
       </thead>
       <tbody v-if="loading">
@@ -39,7 +39,7 @@
               </span>
             </router-link>
           </td>
-          <td class="amount-col" data-title="Amount XE:">
+          <td class="amount-col" data-title="Amount $EDGE:">
             <span class="monospace lg:inline-block">
               {{ formatAmount(transaction.amount) }}
             </span>

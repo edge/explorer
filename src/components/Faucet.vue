@@ -4,10 +4,10 @@
     <div class="faucet-content lex flex-col flex-1 px-24 py-10 bg-white rounded">
       <h1 class="faucet-header my-0 pb-10">
         <img src="/faucet.svg" class="inline">
-        XE Automated Faucet
+        Automated Faucet
       </h1>
       <p class="flex-1 my-4">
-        To request funds, please make a <a :href="`${twitterUrl}${twitterMsg}`" target="_about" class="tweet">tweet</a> including your XE wallet address, then paste the URL of the tweet into the text box below.
+        To request $EDGE, please make a <a :href="`${twitterUrl}${twitterMsg}`" target="_about" class="tweet">tweet</a> including your XE wallet address, then paste the URL of the tweet into the text box below.
       </p>
       <p class="flex-1 mb-4">
         <input :disabled="submitting" v-model="url" type="text" placeholder="URL of tweet including your XE address..." class="faucet-input">
@@ -23,7 +23,7 @@
           class="request-button py-8 button button--solid"
           :disabled="!urlIsValid || submitting"
           @click="requestXE">
-          {{ submitting ? 'Submitting' : 'Request XE' }}
+          {{ submitting ? 'Submitting' : 'Request $EDGE' }}
         </button>
       </div>
     </div>

@@ -8,7 +8,7 @@
           :hideConversion="true"
           title="Avg Monthly Revenue"
           :value="averageRevenue"
-          currency="xe"
+          currency="edge"
           tooltipText="Average over last 12 months"
         />
         <OverviewTokenSummary
@@ -16,7 +16,7 @@
           :hideConversion="true"
           title="Total Revenue"
           :value="totalRevenue"
-          currency="xe"
+          currency="edge"
           tooltipText="Total all time revenue"
         />
       </div>
@@ -27,7 +27,7 @@
         :timeSeries="timeSeries"
         :tooltipCallback="tooltipCallback"
         :datasets="datasets"
-        yLabel="Monthly XE"
+        yLabel="Monthly $EDGE"
       />
     </div>
   </div>

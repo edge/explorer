@@ -13,10 +13,10 @@
         <TableHeader width="8%" header="Stakes" :sortQuery="sortQuery"
           sortParam="sortStakeCount" :onSortingUpdate="updateSorting"
         />
-        <TableHeader class="amount-col" width="17%" header="Staked XE" :sortQuery="sortQuery"
+        <TableHeader class="amount-col" width="17%" header="Staked $EDGE" :sortQuery="sortQuery"
           sortParam="sortStakedTotal" :onSortingUpdate="updateSorting"
         />
-        <TableHeader class="amount-col" width="17%" header="Balance XE" :sortQuery="sortQuery"
+        <TableHeader class="amount-col" width="17%" header="Balance $EDGE" :sortQuery="sortQuery"
           sortParam="balance" :onSortingUpdate="updateSorting"
         />
       </tr>

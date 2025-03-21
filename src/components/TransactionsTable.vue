@@ -22,7 +22,7 @@
           <TableHeader width="125" header="Status" :sortQuery="sortQuery"
             sortParam="block.height" :onSortingUpdate="updateSorting"
           />
-          <TableHeader class="amount-col" width="25%" header="Amount XE" :sortQuery="sortQuery"
+          <TableHeader class="amount-col" width="25%" header="Amount $EDGE" :sortQuery="sortQuery"
             sortParam="amount" :onSortingUpdate="updateSorting"
           />
         </tr>
@@ -34,7 +34,7 @@
           <th width="15%">To</th>
           <th width="30%">Memo</th>
           <th width="125">Status</th>
-          <th class="amount-col" width="25%">Amount XE</th>
+          <th class="amount-col" width="25%">Amount $EDGE</th>
         </tr>
       </thead>
       <thead v-else class="hidden lg:table-header-group">
@@ -54,7 +54,7 @@
           <TableHeader width="125" header="Status" :sortQuery="sortQuery"
             sortParam="block.height" :onSortingUpdate="updateSorting"
           />
-          <TableHeader class="amount-col" width="20%" header="Amount XE" :sortQuery="sortQuery"
+          <TableHeader class="amount-col" width="20%" header="Amount $EDGE" :sortQuery="sortQuery"
             sortParam="amount" :onSortingUpdate="updateSorting"
           />
         </tr>
@@ -64,7 +64,7 @@
           <th width="30%">From/To</th>
           <th width="35%">Memo</th>
           <th width="125">Status</th>
-          <th class="amount-col" width="20%">Amount XE</th>
+          <th class="amount-col" width="20%">Amount $EDGE</th>
         </tr>
       </thead>
       <tbody v-if="transactions.length">

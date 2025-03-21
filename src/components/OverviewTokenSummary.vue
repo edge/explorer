@@ -9,7 +9,7 @@
       </span>
     </span>
     <span class="value">
-      <span v-if="currency === 'usd'">$</span>{{formattedValue}}<span class="currency-unit" v-if="currency === 'xe'"> XE</span>
+      <span v-if="currency === 'usd'">$</span>{{formattedValue}}<span class="currency-unit" v-if="currency === 'edge'"> $EDGE</span>
     </span>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
   computed: {
     formattedValue() {
       if (this.currency === 'usd') return this.value.toLocaleString(undefined, this.numFormatter)
-      else if (this.currency === 'xe') return this.value.toLocaleString(undefined, this.numFormatter)
+      else if (this.currency === 'edge') return this.value.toLocaleString(undefined, this.numFormatter)
     }
   }
 }

@@ -24,11 +24,11 @@
       <span class="monospace lg:inline-block">{{ stakeCountFormatted }}</span>
     </td>
 
-    <td data-title="Staked XE:" class="amount-col">
+    <td data-title="Staked $EDGE:" class="amount-col">
       <span class="monospace lg:inline-block">{{ stakedFormatted }}</span>
     </td>
 
-    <td data-title="Balance (XE):" class="amount-col">
+    <td data-title="Balance ($EDGE):" class="amount-col">
       <span class="monospace lg:inline-block">{{ balanceFormatted }}</span>
     </td>
   </tr>

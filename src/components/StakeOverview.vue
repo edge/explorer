@@ -51,7 +51,7 @@
       </div>
       <div class="stakeRow">
         <div class="stakeRow__label">Amount</div>
-        <div class="stakeRow__value">{{ formatAmount(stake.amount / 1e6) }} XE</div>
+        <div class="stakeRow__value">{{ formatAmount(stake.amount / 1e6) }} $EDGE</div>
       </div>
     </div>
 

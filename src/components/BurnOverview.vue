@@ -64,7 +64,7 @@
       </div>
       <div class="burnRow">
         <div class="burnRow__label">Amount</div>
-        <div class="burnRow__value">{{ formatAmount(burn.amount) }} XE</div>
+        <div class="burnRow__value">{{ formatAmount(burn.amount) }} $EDGE</div>
       </div>
       <div class="burnRow">
         <div class="burnRow__label">Description</div>

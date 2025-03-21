@@ -66,7 +66,7 @@ export default {
           borderColor: 'rgb(14, 204, 95)',
           data,
           fill: true,
-          label: 'Total Revenue (XE)'
+          label: 'Total Revenue ($EDGE)'
         }
       ]
     },
@@ -80,7 +80,7 @@ export default {
       return tooltipItem.raw.toLocaleString(undefined, {
         minimumFractionDigits: 6,
         maximumFractionDigits: 6
-      }) + ' XE'
+      }) + ' $EDGE'
     },
     updateChartPeriod(newPeriod) {
       this.chartPeriod = newPeriod

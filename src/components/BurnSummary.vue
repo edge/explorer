@@ -6,7 +6,7 @@
     </div>
     <div class="tile" v-else>
       This burn was sent on <span class="emphasis">{{new Date(burn.timestamp).toLocaleString().split(',')[0]}}</span> at <span class="emphasis">{{new Date(burn.timestamp).toLocaleString().split(',')[1]}}</span>.
-      A total of <span class="emphasis">{{formattedAmount}} XE</span> was burned. The burn description reads <span class="emphasis">{{ burn.description }}</span>.
+      A total of <span class="emphasis">{{formattedAmount}} $EDGE</span> was burned. The burn description reads <span class="emphasis">{{ burn.description }}</span>.
     </div>
   </div>
 </template>

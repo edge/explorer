@@ -28,7 +28,7 @@ export default defineConfig({
   },
   server: {
     watch: {
-      usePolling: true
+      usePolling: process.env.NODE_ENV === 'development'
     }
   }
 })

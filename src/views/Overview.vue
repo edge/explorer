@@ -164,11 +164,15 @@ export default {
       return statsResponse.body
     },
     async updateMapPoints() {
-      this.loading = true
-      const result = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/mapsessions`)
-      if (result.body.results.length) this.mapPoints = result.body.results
-      this.loaded = true
-      this.loading = false
+      try {
+        this.loading = true
+        const result = await superagent.get(`${import.meta.env.VITE_INDEX_API_URL}/mapsessions`)
+        if (result.body.results.length) this.mapPoints = result.body.results
+        this.loaded = true
+      }
+      finally {
+        this.loading = false
+      }
     }
   }
 }

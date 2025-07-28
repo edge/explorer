@@ -30,6 +30,13 @@
           </label>
         </div>
         <div class="toggle">
+          <span>Shield <span class="hidden sm:inline-block">({{ countType('shield') }})</span></span>
+          <label class="switch">
+            <input type="checkbox" v-model="showShield">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle">
           <span>Connections</span>
           <label class="switch">
             <input type="checkbox" v-model="showLines">
@@ -71,6 +78,7 @@ export default {
       showGateway: true,
       showHost: true,
       showLines: true,
+      showShield: true,
       showStargate: true
     }
   },
@@ -83,6 +91,7 @@ export default {
       return {
         gateway: this.showGateway,
         host: this.showHost,
+        shield: this.showShield,
         stargate: this.showStargate
       }
     },

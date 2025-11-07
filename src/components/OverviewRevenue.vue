@@ -9,7 +9,7 @@
           title="Avg Monthly Revenue"
           :value="averageRevenue"
           currency="edge"
-          tooltipText="Average over last 12 months"
+          :tooltipText="avgTooltipText"
         />
         <OverviewTokenSummary
           v-if="totalRevenue"
@@ -73,6 +73,11 @@ export default {
     timeSeries() {
       if (!this.data) return []
       else return this.data.map(r => moment(r.start).format('MMM YY'))
+    },
+    avgTooltipText() {
+      if (!this.data) return 'Average monthly revenue'
+      const count = this.data.length
+      return `Average over last ${count} month${count !== 1 ? 's' : ''}`
     }
   },
   methods: {

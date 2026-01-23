@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col w-full h-full">
     <h3>&nbsp;</h3>
-    <!-- <router-link to="https://account.edge.network" class="rounded"> -->
-    <a href="https://account.edge.network" class="rounded">
+    <!-- <router-link to="https://portal.edge.network" class="rounded"> -->
+    <a href="https://portal.edge.network" class="rounded">
       <img src="/vm-promo.png" class="wiki-image w-full object-cover object-top rounded">
     </a>
     <!-- </router-link> -->

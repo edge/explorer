@@ -28,7 +28,7 @@
     data() {
       return {
         governanceUrl: import.meta.env.VITE_GOVERNANCE_URL,
-        walletUrl: import.meta.env.VITE_IS_TESTNET === 'true' ? 'https://wallet.test.network' : 'https://wallet.xe.network'
+        walletUrl: import.meta.env.VITE_IS_TESTNET === 'true' ? 'https://wallet.test.network' : 'https://wallet.edge.network'
       }
     }
   }

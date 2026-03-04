@@ -103,10 +103,11 @@ jobs:
             --network core-network \
             --expose 8000 \
             --env HTTP_PORT="8000" \
-            --env VIRTUAL_HOST="${{ vars.DOMAIN }}" \
-            --env LETSENCRYPT_HOST="${{ vars.DOMAIN }}" \
+            --env INDEX_API_URL="${{ vars.INDEX_API_URL }}" \
             --env LETSENCRYPT_EMAIL="${{ vars.LETSENCRYPT_EMAIL }}" \
+            --env LETSENCRYPT_HOST="${{ vars.DOMAIN }}" \
             --env NETWORK_ACCESS="external" \
+            --env VIRTUAL_HOST="${{ vars.DOMAIN }}" \
             "$IMAGE"
 
       - name: Verify
